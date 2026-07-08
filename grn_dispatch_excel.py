@@ -1,336 +1,200 @@
 """GRN Dispatch Note Excel writer.
 
-Recreates the exact layout, styling and pagination of the resort's official
-"GRN DISPATCH NOTE" workbook (one sheet per month, 30 line-items per printed
-dispatch page, Outrigger logo top-right of every page, signature block,
-landscape print layout with a manual page-break every 44 rows).
+Reproduces the resort's official "GRN DISPATCH NOTE" workbook EXACTLY by
+cloning a real page of that workbook cell-for-cell (fonts, fills, every
+border, merges, row heights, column widths, number formats, the Outrigger
+logo's exact anchor, page setup) from `assets/grn_dispatch_template.xlsx`,
+then only overwriting the handful of cells that actually change per page:
+the title's month/year, the DISPATCH #, and the 30 line-item rows.
+
+This is a template-cloning implementation on purpose (rather than a
+hand-built style reconstruction): copying the reference file's own cell
+styles guarantees pixel-for-pixel fidelity instead of relying on a manual
+re-creation that can drift from the original (borders/fills on blank
+cells, exact fonts per column, etc. are all preserved automatically this
+way). The template was produced by extracting rows 1-44 of the resort's
+reference workbook "GRN DISPATCH NOTE APRIL - 2026.xlsx" verbatim.
 
 Public entry point: write_grn_dispatch_workbook(...)
 """
 from __future__ import annotations
 
+import copy
 import os
-import re
 from datetime import datetime
-from typing import Dict, Iterable, List, Optional, Tuple
+from typing import Dict, List, Optional, Tuple
 
-from openpyxl import Workbook
+from openpyxl import Workbook, load_workbook
 from openpyxl.drawing.image import Image as XLImage
-from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
+from openpyxl.drawing.spreadsheet_drawing import AnchorMarker, OneCellAnchor
+from openpyxl.drawing.xdr import XDRPositiveSize2D
 from openpyxl.utils import get_column_letter
-from openpyxl.worksheet.page import PageMargins
+from openpyxl.utils.units import pixels_to_EMU
 from openpyxl.worksheet.pagebreak import Break
 
 # ---------------------------------------------------------------------------
-# Layout constants -- measured directly from the reference workbook
-# "GRN DISPATCH NOTE APRIL - 2026.xlsx" so the output is pixel/cell-for-cell
-# the same template.
+# Layout constants -- measured directly from the reference workbook.
 # ---------------------------------------------------------------------------
 ROWS_PER_PAGE = 30          # line items per dispatch page
 BLOCK_HEIGHT = 44           # total rows (incl. blanks + signature) per page
+TEMPLATE_COLS = 11          # A..K
+
+# Row offsets (1-indexed, relative to a page's own block start = row 1)
+TITLE_ROW = 4
+DATE_ROW = 6
+DISPATCH_NO_COL = 8         # H
+HEADER_ROW1 = 8
+DATA_START_ROW = 10
+DATA_END_ROW = 39           # inclusive -- 30 rows (10..39)
+
 CURRENCIES = ["usd", "mvr", "eur", "gbp", "sgd"]
-CURRENCY_LABELS = ["USD", "MVR", "EUR", "GBP", "SGD"]
 CURRENCY_COLS = [6, 7, 8, 9, 10]   # F, G, H, I, J (1-indexed)
-
-ACCOUNTING_FMT = '_-* #,##0.00_-;\\-* #,##0.00_-;_-* "-"??_-;_-@_-'
-DATE_FMT = "d-mmm-yy"
-
-HEADER_FILL = PatternFill(fill_type="solid", fgColor="E7E6E6")
-WHITE_FILL = PatternFill(fill_type="solid", fgColor="FFFFFF")
-
-FONT_BASE = "Arial Narrow"
-COL_WIDTHS = {"A": 4.5546875, "B": 9.33203125, "C": 37.44140625,
-              "D": 30.44140625, "E": 18.88671875, "F": 9.88671875,
-              "G": 11.109375, "H": 9.109375, "K": 45.0}
-
-LOGO_ANCHOR_COL = "K"
-LOGO_SIZE = (468, 91)  # px, native size of the reference logo image
 
 PLACEHOLDER_PO = "MAM-0000"
 PLACEHOLDER_GRN = "RC-MAM-0000"
 
-_MEDIUM = Side(style="medium")
-_THIN = Side(style="thin")
-_DOTTED = Side(style="dotted")
+_MODULE_DIR = os.path.dirname(os.path.abspath(__file__))
+_DEFAULT_TEMPLATE_PATH = os.path.join(_MODULE_DIR, "assets", "grn_dispatch_template.xlsx")
 
 
-def _month_year_from_date_str(value) -> Tuple[int, int]:
-    """Best-effort (year, month) extraction from a row's date value.
-    Accepts 'DD.MM.YYYY' strings (the app's native format), datetime/date
-    objects, or falls back to today's month/year if unparseable."""
-    if isinstance(value, datetime):
-        return value.year, value.month
-    if hasattr(value, "year") and hasattr(value, "month"):
-        return value.year, value.month
-    if isinstance(value, str):
-        s = value.strip()
-        m = re.match(r"^(\d{1,2})[.\-/](\d{1,2})[.\-/](\d{4})$", s)
-        if m:
-            day, month, year = int(m.group(1)), int(m.group(2)), int(m.group(3))
-            if 1 <= month <= 12:
-                return year, month
-    now = datetime.now()
-    return now.year, now.month
+def _load_template(template_path: str):
+    """Loads the reference-page template workbook and returns its single
+    worksheet plus the embedded logo image (bytes + native size + anchor
+    offsets) so both can be cloned per page."""
+    wb = load_workbook(template_path, data_only=False)
+    ws = wb.worksheets[0]
+    if not ws._images:
+        raise RuntimeError(f"Template '{template_path}' has no embedded logo image.")
+    img = ws._images[0]
+    frm = img.anchor._from
+    logo_info = {
+        "col": frm.col, "row": frm.row, "colOff": frm.colOff, "rowOff": frm.rowOff,
+        "width": img.width, "height": img.height,
+        "path": img.ref if isinstance(img.ref, str) else None,
+        "image_bytes": img._data() if hasattr(img, "_data") else None,
+    }
+    return wb, ws, logo_info
 
 
-def _group_rows_by_month(rows: List[Dict]) -> "dict":
-    """Groups rows into one bucket per (year, month) found in their date
-    field -- this is what lets the export intelligently split a mixed batch
-    of invoices into one correctly-named sheet per month, exactly like the
-    reference workbook (a fresh sheet per month, e.g. 'APRIL')."""
-    buckets: Dict[Tuple[int, int], List[Dict]] = {}
-    for r in rows:
-        key = _month_year_from_date_str(r.get("date"))
-        buckets.setdefault(key, []).append(r)
-    # Sort months chronologically, and rows within a month by date then by
-    # original order (stable sort keeps AI-extraction order for same date).
-    for key in buckets:
-        buckets[key].sort(key=lambda r: _date_sort_key(r.get("date")))
-    return dict(sorted(buckets.items(), key=lambda kv: kv[0]))
+def _clone_block(template_ws, target_ws, row_offset: int):
+    """Copies the full 44-row x 11-col template block (styles, values,
+    merges, row heights) onto `target_ws`, shifted down by `row_offset`
+    rows. Column widths are the caller's responsibility (set once)."""
+    for r in range(1, BLOCK_HEIGHT + 1):
+        for c in range(1, TEMPLATE_COLS + 1):
+            src = template_ws.cell(row=r, column=c)
+            dst = target_ws.cell(row=r + row_offset, column=c, value=src.value)
+            dst.font = copy.copy(src.font)
+            dst.fill = copy.copy(src.fill)
+            dst.border = copy.copy(src.border)
+            dst.alignment = copy.copy(src.alignment)
+            dst.number_format = src.number_format
+            dst.protection = copy.copy(src.protection)
+
+        h = template_ws.row_dimensions[r].height
+        if h is not None:
+            target_ws.row_dimensions[r + row_offset].height = h
+
+    for m in template_ws.merged_cells.ranges:
+        target_ws.merge_cells(
+            start_row=m.min_row + row_offset, start_column=m.min_col,
+            end_row=m.max_row + row_offset, end_column=m.max_col,
+        )
 
 
-def _date_sort_key(value):
-    y, m = 0, 0
-    d = 0
-    if isinstance(value, str):
-        mm = re.match(r"^(\d{1,2})[.\-/](\d{1,2})[.\-/](\d{4})$", value.strip())
-        if mm:
-            d, m, y = int(mm.group(1)), int(mm.group(2)), int(mm.group(3))
-    elif hasattr(value, "year"):
-        y, m, d = value.year, value.month, getattr(value, "day", 0)
-    return (y, m, d)
+def _add_logo(target_ws, logo_info: dict, logo_path: str, row_offset: int):
+    """Re-adds the Outrigger logo at the exact same relative anchor
+    position/size the template uses, shifted to this page's block."""
+    img = XLImage(logo_path)
+    img.width, img.height = logo_info["width"], logo_info["height"]
+    marker = AnchorMarker(
+        col=logo_info["col"], colOff=logo_info["colOff"],
+        row=logo_info["row"] + row_offset, rowOff=logo_info["rowOff"],
+    )
+    size = XDRPositiveSize2D(cx=pixels_to_EMU(img.width), cy=pixels_to_EMU(img.height))
+    img.anchor = OneCellAnchor(_from=marker, ext=size)
+    target_ws.add_image(img)
 
 
-def _chunk(seq: List[Dict], size: int) -> Iterable[List[Dict]]:
-    for i in range(0, len(seq), size):
-        yield seq[i:i + size]
+def _write_page(template_ws, target_ws, page_index: int, month_label: str, year: int,
+                 dispatch_no: int, batch: List[Dict], logo_info: dict, logo_path: Optional[str]):
+    row_offset = page_index * BLOCK_HEIGHT
+    _clone_block(template_ws, target_ws, row_offset)
 
+    # -- Dynamic overwrites (everything else is already correct from the clone) --
+    title_cell = target_ws.cell(row=TITLE_ROW + row_offset, column=1)
+    title_cell.value = f"GRN DISPATCH {month_label}- {year}"
 
-def _sheet_name(year: int, month: int) -> str:
-    return datetime(year, month, 1).strftime("%B").upper()
+    dispatch_cell = target_ws.cell(row=DATE_ROW + row_offset, column=DISPATCH_NO_COL)
+    dispatch_cell.value = dispatch_no
 
-
-def _set_col_widths(ws):
-    for col, width in COL_WIDTHS.items():
-        ws.column_dimensions[col].width = width
-
-
-def _font(size=10, bold=False, italic=False):
-    return Font(name=FONT_BASE, size=size, bold=bold, italic=italic, color="FF000000")
-
-
-def _center(wrap=False, vertical="center"):
-    return Alignment(horizontal="center", vertical=vertical, wrap_text=wrap)
-
-
-def _apply_box_border(ws, row, col, left=None, right=None, top=None, bottom=None):
-    cell = ws.cell(row=row, column=col)
-    cell.border = Border(left=left or Side(style=None), right=right or Side(style=None),
-                          top=top or Side(style=None), bottom=bottom or Side(style=None))
-
-
-def _write_page(ws, block_start_row: int, month_label: str, year: int,
-                 dispatch_no: int, batch: List[Dict], logo_path: Optional[str]):
-    """Writes ONE 44-row dispatch page starting at `block_start_row`
-    (1-indexed), matching the reference template exactly."""
-    title_row = block_start_row + 3
-    date_row = block_start_row + 5
-    hdr1_row = block_start_row + 7
-    hdr2_row = hdr1_row + 1
-    data_start = hdr1_row + 2
-    sig_row = block_start_row + 42
-    handed_row = block_start_row + 43
-
-    # -- Title (merged, 2 rows tall, cols A:G) --------------------------
-    ws.merge_cells(start_row=title_row, start_column=1, end_row=title_row + 1, end_column=7)
-    tcell = ws.cell(row=title_row, column=1, value=f"GRN DISPATCH {month_label}- {year}")
-    tcell.font = _font(size=20, bold=True, italic=True)
-    tcell.alignment = _center(wrap=True)
-    tcell.fill = WHITE_FILL
-    tcell.border = Border(left=_MEDIUM, right=_THIN, top=_THIN, bottom=_THIN)
-    ws.row_dimensions[title_row].height = 15
-    ws.row_dimensions[title_row + 1].height = 15
-
-    # -- DATE / DISPATCH row --------------------------------------------
-    ws.row_dimensions[date_row].height = 15
-    lbl = ws.cell(row=date_row, column=1, value="DATE")
-    lbl.font = _font(bold=True)
-    lbl.alignment = _center()
-    lbl.fill = WHITE_FILL
-    lbl.border = Border(left=_MEDIUM, top=_THIN, bottom=_THIN)
-    lbl.number_format = DATE_FMT
-
-    dval = ws.cell(row=date_row, column=3, value="=TODAY()")
-    dval.font = _font(bold=True, italic=True)
-    dval.alignment = _center()
-    dval.fill = WHITE_FILL
-    dval.border = Border(left=_THIN, right=_THIN, top=_THIN, bottom=_THIN)
-    dval.number_format = DATE_FMT
-
-    ws.merge_cells(start_row=date_row, start_column=6, end_row=date_row, end_column=7)
-    dlbl = ws.cell(row=date_row, column=6, value="DISPATCH")
-    dlbl.font = _font(bold=True)
-    dlbl.alignment = _center(wrap=True)
-    dlbl.fill = WHITE_FILL
-    dlbl.border = Border(left=_THIN, right=_THIN, top=_THIN, bottom=_THIN)
-    dlbl.number_format = ACCOUNTING_FMT
-
-    dno = ws.cell(row=date_row, column=8, value=dispatch_no)
-    dno.font = _font(bold=True)
-    dno.alignment = _center()
-    dno.fill = WHITE_FILL
-    dno.border = Border(left=_THIN, right=_THIN, top=_THIN, bottom=_THIN)
-
-    # -- Header row 1 (merged 2 rows for most cols) ----------------------
-    headers = ["NO - #", "INVOICE DATE", "SUPPLIER NAME", "PURCHASE ORDER #", "INVOICE #"]
-    for i, text in enumerate(headers, start=1):
-        ws.merge_cells(start_row=hdr1_row, start_column=i, end_row=hdr2_row, end_column=i)
-        c = ws.cell(row=hdr1_row, column=i, value=text)
-        c.font = _font(bold=True)
-        c.alignment = _center(wrap=True)
-        c.fill = HEADER_FILL
-        c.number_format = DATE_FMT
-        left = _MEDIUM if i == 1 else _THIN
-        c.border = Border(left=left, right=_THIN, top=_THIN, bottom=_THIN)
-
-    ws.merge_cells(start_row=hdr1_row, start_column=6, end_row=hdr1_row, end_column=10)
-    gamt = ws.cell(row=hdr1_row, column=6, value="GRN AMOUNT")
-    gamt.font = _font(bold=True)
-    gamt.alignment = _center(wrap=True)
-    gamt.fill = HEADER_FILL
-    gamt.number_format = ACCOUNTING_FMT
-    gamt.border = Border(left=_THIN, right=_THIN, top=_THIN, bottom=_THIN)
-
-    ws.merge_cells(start_row=hdr1_row, start_column=11, end_row=hdr2_row, end_column=11)
-    grnno = ws.cell(row=hdr1_row, column=11, value="GRN NO.")
-    grnno.font = _font(bold=True)
-    grnno.alignment = _center(wrap=True)
-    grnno.fill = HEADER_FILL
-    grnno.number_format = DATE_FMT
-    grnno.border = Border(left=_THIN, right=_MEDIUM, top=_THIN, bottom=_THIN)
-
-    for i, label in zip(CURRENCY_COLS, CURRENCY_LABELS):
-        c = ws.cell(row=hdr2_row, column=i, value=label)
-        c.font = _font(bold=True)
-        c.alignment = _center(wrap=True)
-        c.fill = HEADER_FILL
-        c.number_format = ACCOUNTING_FMT
-        c.border = Border(left=_THIN, right=_THIN, top=_THIN, bottom=_THIN)
-
-    # -- Data rows (always exactly ROWS_PER_PAGE, padded with placeholders) --
     for i in range(ROWS_PER_PAGE):
-        row = data_start + i
+        row = DATA_START_ROW + row_offset + i
         rec = batch[i] if i < len(batch) else None
 
-        no_cell = ws.cell(row=row, column=1, value=i + 1)
-        no_cell.font = _font()
-        no_cell.alignment = _center()
-        no_cell.fill = WHITE_FILL
-        no_cell.border = Border(left=_MEDIUM, right=_DOTTED, top=_DOTTED, bottom=_DOTTED)
-
-        inv_date = rec.get("date", "") if rec else ""
-        b = ws.cell(row=row, column=2, value=inv_date)
-        b.font = _font()
-        b.alignment = _center()
-        b.fill = WHITE_FILL
-        b.border = Border(left=_DOTTED, right=_DOTTED, top=_DOTTED, bottom=_DOTTED)
+        target_ws.cell(row=row, column=2).value = rec.get("date", "") if rec else ""
 
         supplier = (rec.get("supplier", "") or "UNKNOWN SUPPLIER") if rec else ""
-        c = ws.cell(row=row, column=3, value=supplier)
-        c.font = _font()
-        c.alignment = Alignment(horizontal="left", vertical=None)
-        c.fill = WHITE_FILL
-        c.border = Border(left=_DOTTED, right=_DOTTED, top=_DOTTED, bottom=_DOTTED)
+        target_ws.cell(row=row, column=3).value = supplier
 
         po = (rec.get("po", "") or PLACEHOLDER_PO) if rec else PLACEHOLDER_PO
-        d = ws.cell(row=row, column=4, value=po)
-        d.font = _font()
-        d.alignment = _center()
-        d.fill = WHITE_FILL
-        d.border = Border(left=_DOTTED, right=_DOTTED, top=_DOTTED, bottom=_DOTTED)
+        target_ws.cell(row=row, column=4).value = po
 
         invoice = rec.get("invoice", "") if rec else ""
         if isinstance(invoice, str) and invoice.upper() == "NO-INVOICE":
             invoice = ""
-        e = ws.cell(row=row, column=5, value=invoice)
-        e.font = _font()
-        e.alignment = Alignment(horizontal="left", vertical=None)
-        e.fill = WHITE_FILL
-        e.border = Border(left=_DOTTED, right=_DOTTED, top=_DOTTED, bottom=_DOTTED)
+        target_ws.cell(row=row, column=5).value = invoice
 
         for col_idx, cur in zip(CURRENCY_COLS, CURRENCIES):
+            cell = target_ws.cell(row=row, column=col_idx)
             val = rec.get(cur, "") if rec else ""
-            cc = ws.cell(row=row, column=col_idx)
-            cc.font = _font()
-            cc.alignment = _center()
-            cc.fill = WHITE_FILL
-            cc.border = Border(left=_DOTTED, right=_DOTTED, top=_DOTTED, bottom=_DOTTED)
-            cc.number_format = ACCOUNTING_FMT
             if val not in ("", None):
                 try:
-                    cc.value = float(str(val).replace(",", ""))
+                    cell.value = float(str(val).replace(",", ""))
                 except (ValueError, TypeError):
-                    cc.value = val
+                    cell.value = val
             else:
-                cc.value = ""
+                cell.value = ""
 
         grn = (rec.get("grn", "") or PLACEHOLDER_GRN) if rec else PLACEHOLDER_GRN
-        k = ws.cell(row=row, column=11, value=grn)
-        k.font = _font()
-        k.alignment = _center()
-        k.fill = WHITE_FILL
-        k.border = Border(left=_DOTTED, right=_MEDIUM, top=_DOTTED, bottom=_DOTTED)
+        target_ws.cell(row=row, column=11).value = grn
 
-    # -- Signature block --------------------------------------------------
-    sdots1 = ws.cell(row=sig_row, column=3, value="\u2026...............................................")
-    sdots1.font = _font(size=11, bold=True)
-    sdots1.alignment = _center()
-
-    sdots2 = ws.cell(row=sig_row, column=5, value="\u2026..........................................")
-    sdots2.font = _font(size=11, bold=True)
-    sdots2.alignment = Alignment(horizontal="center")
-
-    handed = ws.cell(row=handed_row, column=3, value="HANDED OVER BY")
-    handed.font = _font(size=11, bold=True)
-    handed.alignment = Alignment(horizontal="center")
-    handed.border = Border(bottom=_MEDIUM)
-
-    received = ws.cell(row=handed_row, column=5, value="RECEIVED BY")
-    received.font = _font(size=11, bold=True)
-    received.alignment = Alignment(horizontal="center")
-    received.border = Border(bottom=_MEDIUM)
-
-    ws.row_dimensions[hdr1_row].height = 15
-    ws.row_dimensions[handed_row].height = 15
-
-    # -- Outrigger logo, top-right of this page ---------------------------
-    if logo_path and os.path.isfile(logo_path):
-        img = XLImage(logo_path)
-        img.width, img.height = LOGO_SIZE
-        ws.add_image(img, f"{LOGO_ANCHOR_COL}{block_start_row + 1}")
+    if logo_path:
+        _add_logo(target_ws, logo_info, logo_path, row_offset)
 
 
-def _write_month_sheet(wb: Workbook, month_label: str, year: int, rows: List[Dict],
-                        start_dispatch_no: int, logo_path: Optional[str]) -> int:
-    sheet_name = _sheet_name(year, month := datetime.strptime(month_label, "%B").month)[:31]
-    ws = wb.create_sheet(title=_sheet_name(year, month))
-    ws.sheet_view.showGridLines = True
-    ws.page_setup.orientation = "landscape"
-    ws.page_setup.fitToWidth = 1
-    ws.page_setup.fitToHeight = 0
-    ws.sheet_properties.pageSetUpPr.fitToPage = True
-    ws.page_margins = PageMargins(left=0.5, right=0.5, top=0.75, bottom=0.75, header=0.3, footer=0.3)
-    _set_col_widths(ws)
-    ws.row_dimensions[1].height = 15
+def _chunk(seq: List[Dict], size: int):
+    for i in range(0, len(seq), size):
+        yield seq[i:i + size]
+
+
+def _write_sheet(wb: Workbook, sheet_name: str, template_ws, logo_info: dict,
+                  logo_path: Optional[str], month_label: str, year: int,
+                  rows: List[Dict], start_dispatch_no: int) -> int:
+    ws = wb.create_sheet(title=sheet_name[:31])
+
+    for c in range(1, TEMPLATE_COLS + 1):
+        letter = get_column_letter(c)
+        src_dim = template_ws.column_dimensions.get(letter)
+        if src_dim and src_dim.width:
+            ws.column_dimensions[letter].width = src_dim.width
+
+    ws.sheet_view.showGridLines = template_ws.sheet_view.showGridLines
+    ws.page_setup.orientation = template_ws.page_setup.orientation
+    ws.page_setup.fitToWidth = template_ws.page_setup.fitToWidth
+    ws.page_setup.fitToHeight = template_ws.page_setup.fitToHeight
+    ws.page_setup.scale = template_ws.page_setup.scale
+    if template_ws.sheet_properties.pageSetUpPr is not None:
+        ws.sheet_properties.pageSetUpPr.fitToPage = template_ws.sheet_properties.pageSetUpPr.fitToPage
+    ws.page_margins = copy.copy(template_ws.page_margins)
 
     batches = list(_chunk(rows, ROWS_PER_PAGE)) or [[]]
     dispatch_no = start_dispatch_no
     for page_idx, batch in enumerate(batches):
-        block_start_row = 1 + page_idx * BLOCK_HEIGHT
-        _write_page(ws, block_start_row, month_label, year, dispatch_no, batch, logo_path)
+        _write_page(template_ws, ws, page_idx, month_label, year, dispatch_no, batch, logo_info, logo_path)
         dispatch_no += 1
         if page_idx < len(batches) - 1:
-            ws.row_breaks.append(Break(id=block_start_row + BLOCK_HEIGHT - 1))
+            ws.row_breaks.append(Break(id=(page_idx + 1) * BLOCK_HEIGHT))
 
     last_row = len(batches) * BLOCK_HEIGHT
     ws.print_area = f"A1:K{last_row}"
@@ -338,28 +202,46 @@ def _write_month_sheet(wb: Workbook, month_label: str, year: int, rows: List[Dic
 
 
 def write_grn_dispatch_workbook(rows: List[Dict], start_dispatch_no: int,
-                                 out_path: str, logo_path: Optional[str] = None) -> Tuple[str, int]:
-    """Builds the full multi-sheet GRN Dispatch Note workbook -- one sheet
-    per month found in `rows` (e.g. 'APRIL', 'MAY'), each laid out exactly
-    like the reference "GRN DISPATCH NOTE" workbook: 30 line-items per
-    printed page, a running DISPATCH number, the Outrigger logo top-right of
-    every page, and a signature block, ready to print in landscape.
+                                 out_path: str, logo_path: Optional[str] = None,
+                                 month_label: Optional[str] = None,
+                                 year: Optional[int] = None,
+                                 template_path: Optional[str] = None) -> Tuple[str, int]:
+    """Builds the GRN Dispatch Note workbook, cloned cell-for-cell from the
+    reference "GRN DISPATCH NOTE" template: 30 line-items per printed page,
+    a running DISPATCH number, the Outrigger logo top-right of every page,
+    and the exact signature block -- ready to print in landscape.
+
+    All `rows` go into ONE sheet (named after `month_label`/`year`, default
+    today's month/year) chunked into 30-row pages, in the order given --
+    matching the reference file, whose pages mix invoice dates from
+    different months freely (the sheet/title reflects the DISPATCH month,
+    not each line's own invoice date).
 
     rows: list of dicts with keys date, supplier, po, invoice, usd, mvr,
           eur, gbp, sgd, grn (same shape the AI Extract tab already uses).
-    start_dispatch_no: first DISPATCH number to use; increments by 1 for
-          every page written (across all months, in chronological order).
+    start_dispatch_no: first DISPATCH number to use; increments by 1 per
+          page written.
+    logo_path: path to the Outrigger logo PNG to embed (defaults to the
+          bundled assets/outrigger_logo.png next to this module).
+    template_path: override for the reference template workbook (defaults
+          to assets/grn_dispatch_template.xlsx next to this module).
     Returns (saved_path, next_dispatch_no) so the caller can persist the
     next starting number for the following export.
     """
+    now = datetime.now()
+    year = year or now.year
+    month_label = (month_label or now.strftime("%B")).upper()
+    template_path = template_path or _DEFAULT_TEMPLATE_PATH
+    logo_path = logo_path or os.path.join(_MODULE_DIR, "assets", "outrigger_logo.png")
+
+    template_wb, template_ws, logo_info = _load_template(template_path)
+
     wb = Workbook()
     wb.remove(wb.active)  # drop the default blank sheet
 
-    grouped = _group_rows_by_month(rows)
-    dispatch_no = start_dispatch_no
-    for (year, month), month_rows in grouped.items():
-        month_label = datetime(year, month, 1).strftime("%B").upper()
-        dispatch_no = _write_month_sheet(wb, month_label, year, month_rows, dispatch_no, logo_path)
+    sheet_name = month_label
+    next_dispatch_no = _write_sheet(wb, sheet_name, template_ws, logo_info, logo_path,
+                                     month_label, year, rows, start_dispatch_no)
 
     out_dir = os.path.dirname(out_path)
     if out_dir:
@@ -371,4 +253,4 @@ def write_grn_dispatch_workbook(rows: List[Dict], start_dispatch_no: int,
         final_path = f"{base}_{cnt}{ext}"
         cnt += 1
     wb.save(final_path)
-    return final_path, dispatch_no
+    return final_path, next_dispatch_no
