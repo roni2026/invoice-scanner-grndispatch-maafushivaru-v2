@@ -1,4 +1,12 @@
-# maafushivaru_hub.py
+# maafmorev3.py
+# =============================================================================
+# DEPRECATED — DO NOT IMPORT OR USE.
+# This file is a legacy copy of maafushivaru_hub.py (v5.0).
+# It is missing the OCR word corrector import and other updates present in the
+# main hub. It is kept only for historical reference and will be removed in a
+# future release. All new code should use maafushivaru_hub.py instead.
+# =============================================================================
+# Original header:
 # Maafushivaru - Document Processing Hub
 # v5.0 - Watchdog auto-ingest, desktop notifications, confidence scoring,
 #         supplier learning, scroll fix, live status bar, professional UI

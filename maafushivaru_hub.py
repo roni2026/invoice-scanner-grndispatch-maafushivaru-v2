@@ -19,15 +19,57 @@ from pathlib import Path
 from typing import Optional, List, Dict, Tuple
 import tkinter as tk
 from tkinter import ttk, filedialog, messagebox
-import pytesseract
-import fitz
-import cv2
-import numpy as np
-from PIL import Image, ImageTk, Image as PILImage
-from rapidfuzz import process, fuzz
-from difflib import SequenceMatcher
-from openpyxl import Workbook
-from openpyxl.styles import Font, Alignment
+
+# Optional dependencies — graceful degradation if missing
+try:
+    import pytesseract
+    PYTESSERACT_AVAILABLE = True
+except ImportError:
+    PYTESSERACT_AVAILABLE = False
+    pytesseract = None
+
+try:
+    import fitz  # PyMuPDF
+    FITZ_AVAILABLE = True
+except ImportError:
+    FITZ_AVAILABLE = False
+    fitz = None
+
+try:
+    import cv2
+    import numpy as np
+    CV2_AVAILABLE = True
+except ImportError:
+    CV2_AVAILABLE = False
+    cv2 = None
+    np = None
+
+try:
+    from PIL import Image, ImageTk, Image as PILImage
+    PIL_AVAILABLE = True
+except ImportError:
+    PIL_AVAILABLE = False
+    Image = ImageTk = PILImage = None
+
+try:
+    from rapidfuzz import process, fuzz
+    RAPIDFUZZ_AVAILABLE = True
+except ImportError:
+    RAPIDFUZZ_AVAILABLE = False
+    process = fuzz = None
+
+try:
+    from difflib import SequenceMatcher
+except ImportError:
+    SequenceMatcher = None
+
+try:
+    from openpyxl import Workbook
+    from openpyxl.styles import Font, Alignment
+    OPENPYXL_AVAILABLE = True
+except ImportError:
+    OPENPYXL_AVAILABLE = False
+    Workbook = Font = Alignment = None
 
 # ---------------------------------------------------------------------------
 # OPTIONAL DEPENDENCIES
@@ -168,7 +210,7 @@ _INVOICE_CURRENCY_TOKENS = {
 _REPORT_INVOICE_TOTAL_PAT = re.compile(
     r"\bI?NVOICE\s*TOTAL\s*[:\-]?\s*"
     r"(?:(USD|MVR|MYR|RF|MRF|EUR|GBP|SGD|US\$|S\$|\$|€|£)\s*)?"
-    r"([\d,]+(?:\.\d{1,2})?)"
+    r"(\d{1,3}(?:,\d{3})*(?:\.\d{1,2})?|\d+(?:\.\d{1,2})?)"
     r"(?:\s*(USD|MVR|MYR|RF|MRF|EUR|GBP|SGD|US\$|S\$|\$|€|£))?",
     re.IGNORECASE,
 )
@@ -224,7 +266,7 @@ SUPPLIER_INVOICE_HINTS = {
     "COSMO":        [r"[A-Z]{2,4}[-\/]\d{4,10}\/\d{4}", r"[A-Z]{2,4}[-\/]\d{4,10}"],
     "EMPARAL":      [r"\d{5,10}", r"[A-Z]{2,4}[-\/]\d{4,10}"],
     "HAPPY MARKET": [r"\d{5,10}"],
-    "SAWHNEY":      [r"[A-Z]{2,4}\/\d+\/\d{4}", r"[A-Z]{2,4}[-]\d{4,10}"],
+    "SAWHNEY":      [r"[A-Z]{2,4}\/\d{1,10}\/\d{4}", r"[A-Z]{2,4}[-]\d{4,10}"],
     "EASTERN":      [r"[A-Z]{2,4}[-\/]\d{4,10}", r"\d{5,10}"],
     "FOOD SPECIAL": [r"\d{5,10}", r"[A-Z]{2,4}[-\/]\d{4,10}"],
     "CHEF":         [r"[A-Z]{2,4}[-\/]\d{4,10}", r"\d{5,10}"],
@@ -450,18 +492,24 @@ class ScannedFolderHandler:
         self._debounce = debounce_seconds
         self._pending: Dict[str, threading.Timer] = {}
         self._lock = threading.Lock()
+        self._stopped = False
 
     def _schedule(self, path: str):
         with self._lock:
+            if self._stopped:
+                return
             if path in self._pending:
                 self._pending[path].cancel()
             t = threading.Timer(self._debounce, self._fire, args=(path,))
+            t.daemon = True
             self._pending[path] = t
             t.start()
 
     def _fire(self, path: str):
         with self._lock:
             self._pending.pop(path, None)
+        if self._stopped:
+            return
         if os.path.exists(path) and path.lower().endswith(".pdf"):
             self._on_new_pdf(path)
 
@@ -472,6 +520,14 @@ class ScannedFolderHandler:
         src = getattr(event, "src_path", "")
         if src.lower().endswith(".pdf"):
             self._schedule(src)
+
+    def shutdown(self):
+        """Cancel all pending debounce timers. Call before discarding the handler."""
+        with self._lock:
+            self._stopped = True
+            for timer in self._pending.values():
+                timer.cancel()
+            self._pending.clear()
 
 
 if WATCHDOG_AVAILABLE:
@@ -678,40 +734,42 @@ class OCRWorkerMixin:
 
         try:
             doc = fitz.open(pdf_path)
-            for page in doc:
-                page_text = ""
+            try:
+                for page in doc:
+                    page_text = ""
 
-                # --- Step 1: try native PDF text ---
-                if use_native_flag:
-                    native = page.get_text("text").upper()
-                    if len(native.strip()) >= 50:
-                        page_text = native
-                        full += page_text + "\n"
-                        continue   # Native text is good — skip OCR entirely
+                    # --- Step 1: try native PDF text ---
+                    if use_native_flag:
+                        native = page.get_text("text").upper()
+                        if len(native.strip()) >= 50:
+                            page_text = native
+                            full += page_text + "\n"
+                            continue   # Native text is good — skip OCR entirely
 
-                # --- Step 2: Zone OCR (targeted regions only) ---
-                zone_texts = []
-                success_count = 0
-                for zone_name, (top, bottom, left, right) in ZONE_OCR_REGIONS.items():
-                    zt = self._ocr_zone(page, scale, top, bottom, left, right)
-                    if len(zt.strip()) >= _ZONE_MIN_CHARS:
-                        success_count += 1
-                    zone_texts.append(zt)
+                    # --- Step 2: Zone OCR (targeted regions only) ---
+                    zone_texts = []
+                    success_count = 0
+                    for zone_name, (top, bottom, left, right) in ZONE_OCR_REGIONS.items():
+                        zt = self._ocr_zone(page, scale, top, bottom, left, right)
+                        if len(zt.strip()) >= _ZONE_MIN_CHARS:
+                            success_count += 1
+                        zone_texts.append(zt)
 
-                combined_zones = "\n".join(zone_texts)
+                    combined_zones = "\n".join(zone_texts)
 
-                # --- Step 3: Fall back to full-page OCR if zones are sparse ---
-                if success_count < _ZONE_MIN_SUCCESS:
-                    logging.debug(f"Zone OCR insufficient ({success_count} zones) — falling back to full page")
-                    pix = page.get_pixmap(matrix=fitz.Matrix(scale, scale))
-                    arr = self._preprocess_image(pix)
-                    arr = self._correct_rotation(arr)
-                    page_text = self._run_ocr(arr).upper()
-                else:
-                    page_text = combined_zones
+                    # --- Step 3: Fall back to full-page OCR if zones are sparse ---
+                    if success_count < _ZONE_MIN_SUCCESS:
+                        logging.debug(f"Zone OCR insufficient ({success_count} zones) — falling back to full page")
+                        pix = page.get_pixmap(matrix=fitz.Matrix(scale, scale))
+                        arr = self._preprocess_image(pix)
+                        arr = self._correct_rotation(arr)
+                        page_text = self._run_ocr(arr).upper()
+                    else:
+                        page_text = combined_zones
 
-                full += page_text + "\n"
-            doc.close()
+                    full += page_text + "\n"
+            finally:
+                doc.close()
         except Exception as e:
             logging.error(f"Zone text extraction failed [{pdf_path}]: {e}")
         return full
@@ -721,22 +779,34 @@ class OCRWorkerMixin:
         fb = self.cfg["app_settings"].get("ocr_fallback_to_tesseract", True)
         if eng == "paddleocr":
             try:
-                r = self._get_engine_instance("paddleocr").ocr(arr, cls=True)
+                instance = self._get_engine_instance("paddleocr")
+                if instance is None:
+                    raise RuntimeError("PaddleOCR engine not available")
+                r = instance.ocr(arr, cls=True)
                 return " ".join(l[1][0] for l in r[0]).upper() if r and r[0] else ""
             except Exception as e:
                 logging.warning(f"PaddleOCR failed:{e}")
                 if not fb:
                     return ""
+                logging.info("Falling back to Tesseract OCR")
         elif eng == "easyocr":
             try:
-                return " ".join(self._get_engine_instance("easyocr").readtext(arr, detail=0)).upper()
+                instance = self._get_engine_instance("easyocr")
+                if instance is None:
+                    raise RuntimeError("EasyOCR engine not available")
+                return " ".join(instance.readtext(arr, detail=0)).upper()
             except Exception as e:
                 logging.warning(f"EasyOCR failed:{e}")
                 if not fb:
                     return ""
+                logging.info("Falling back to Tesseract OCR")
         psm = self.cfg["app_settings"].get("ocr_psm", 6)
         oem = self.cfg["app_settings"].get("ocr_oem", 3)
-        return pytesseract.image_to_string(arr, config=f"--oem {oem} --psm {psm}").upper()
+        try:
+            return pytesseract.image_to_string(arr, config=f"--oem {oem} --psm {psm}").upper()
+        except Exception as e:
+            logging.error(f"Tesseract OCR failed: {e}")
+            return ""
 
     def _extract_text(self, pdf_path: str) -> str:
         """
@@ -756,36 +826,38 @@ class OCRWorkerMixin:
 
         try:
             doc = fitz.open(pdf_path)
-            for page in doc:
-                pt = ""
-                use_native = (mode in ("auto", "pdf_text_only")) and use_native_flag
-                if use_native:
-                    pt = page.get_text("text").upper()
+            try:
+                for page in doc:
+                    pt = ""
+                    use_native = (mode in ("auto", "pdf_text_only")) and use_native_flag
+                    if use_native:
+                        pt = page.get_text("text").upper()
 
-                need_ocr = False
-                if mode == "image_only":
-                    need_ocr = True
-                elif mode == "auto":
-                    if len(pt.strip()) < 50:
-                        need_ocr = True
-                elif mode == "pdf_text_only":
                     need_ocr = False
+                    if mode == "image_only":
+                        need_ocr = True
+                    elif mode == "auto":
+                        if len(pt.strip()) < 50:
+                            need_ocr = True
+                    elif mode == "pdf_text_only":
+                        need_ocr = False
 
-                if need_ocr:
-                    scan_enabled = self.cfg["app_settings"].get("page_scan_region_enabled", False)
-                    scan_pct     = self.cfg["app_settings"].get("page_scan_region_percent", 100)
-                    if scan_enabled and scan_pct < 100:
-                        rect  = page.rect
-                        clip  = fitz.Rect(0, 0, rect.width, rect.height * scan_pct / 100.0)
-                        pix   = page.get_pixmap(matrix=fitz.Matrix(scale, scale), clip=clip)
-                    else:
-                        pix   = page.get_pixmap(matrix=fitz.Matrix(scale, scale))
-                    arr = self._preprocess_image(pix)
-                    arr = self._correct_rotation(arr)
-                    pt = self._run_ocr(arr).upper()
+                    if need_ocr:
+                        scan_enabled = self.cfg["app_settings"].get("page_scan_region_enabled", False)
+                        scan_pct     = self.cfg["app_settings"].get("page_scan_region_percent", 100)
+                        if scan_enabled and scan_pct < 100:
+                            rect  = page.rect
+                            clip  = fitz.Rect(0, 0, rect.width, rect.height * scan_pct / 100.0)
+                            pix   = page.get_pixmap(matrix=fitz.Matrix(scale, scale), clip=clip)
+                        else:
+                            pix   = page.get_pixmap(matrix=fitz.Matrix(scale, scale))
+                        arr = self._preprocess_image(pix)
+                        arr = self._correct_rotation(arr)
+                        pt = self._run_ocr(arr).upper()
 
-                full += (pt or "") + "\n"
-            doc.close()
+                    full += (pt or "") + "\n"
+            finally:
+                doc.close()
         except Exception as e:
             logging.error(f"Text extraction failed [{pdf_path}]: {e}")
         return full
@@ -1076,59 +1148,63 @@ class OCRWorkerMixin:
 
         try:
             doc = fitz.open(pdf_path)
-            for page in doc:
-                pt = page.get_text("text").upper() if use else ""
-                if len(pt.strip()) < 50:
-                    pix = page.get_pixmap(matrix=fitz.Matrix(scale, scale))
-                    pt = self._run_ocr(self._preprocess_image(pix))
+            try:
+                for page in doc:
+                    pt = page.get_text("text").upper() if use else ""
+                    if len(pt.strip()) < 50:
+                        pix = page.get_pixmap(matrix=fitz.Matrix(scale, scale))
+                        pt = self._run_ocr(self._preprocess_image(pix))
 
-                if (
-                    "RECEIVING REPORT" not in pt
-                    and "RECEIVING RECORD" not in pt
-                    and "INVOICE" not in pt
-                ):
-                    continue
+                    if (
+                        "RECEIVING REPORT" not in pt
+                        and "RECEIVING RECORD" not in pt
+                        and "INVOICE" not in pt
+                    ):
+                        continue
 
-                rect = page.rect
-                h_limit = rect.height * 0.25
-                third_w = rect.width / 3.0
+                    rect = page.rect
+                    h_limit = rect.height * 0.25
+                    third_w = rect.width / 3.0
 
-                try:
-                    words = page.get_text("words")
-                    words_left   = [w[4] for w in words if w[1] < h_limit and w[0] < third_w]
-                    words_center = [w[4] for w in words if w[1] < h_limit and third_w <= w[0] < 2 * third_w]
-                    words_right  = [w[4] for w in words if w[1] < h_limit and w[0] >= 2 * third_w]
-                    words_all    = [w[4] for w in words if w[1] < h_limit]
-                except Exception:
-                    words_left = words_center = words_right = words_all = []
-
-                zones = [
-                    ("above-left",   fitz.Rect(0, 0, third_w, h_limit),              " ".join(words_left)),
-                    ("above-center", fitz.Rect(third_w, 0, 2 * third_w, h_limit),    " ".join(words_center)),
-                    ("above-right",  fitz.Rect(2 * third_w, 0, rect.width, h_limit), " ".join(words_right)),
-                    ("above-full",   fitz.Rect(0, 0, rect.width, h_limit),            " ".join(words_all)),
-                ]
-
-                for zone_label, clip, native_zone_text in zones:
-                    zone_ocr_text = ""
                     try:
-                        px = page.get_pixmap(matrix=fitz.Matrix(scale, scale), clip=clip)
-                        if px.h > 0 and px.w > 0:
-                            zone_ocr_text = self._run_ocr(self._preprocess_image(px))
-                    except Exception as e:
-                        logging.warning(f"Zone render error [{zone_label}]:{e}")
+                        words = page.get_text("words")
+                        words_left   = [w[4] for w in words if w[1] < h_limit and w[0] < third_w]
+                        words_center = [w[4] for w in words if w[1] < h_limit and third_w <= w[0] < 2 * third_w]
+                        words_right  = [w[4] for w in words if w[1] < h_limit and w[0] >= 2 * third_w]
+                        words_all    = [w[4] for w in words if w[1] < h_limit]
+                    except Exception:
+                        words_left = words_center = words_right = words_all = []
 
-                    combined = (zone_ocr_text + "\n" + native_zone_text).upper()
-                    for line in combined.splitlines():
-                        line = line.strip()
-                        if len(line) < 4:
-                            continue
-                        mt = process.extractOne(line, cands, scorer=fuzz.token_sort_ratio)
-                        if mt and mt[1] >= thr:
-                            doc.close()
-                            return self._resolve_alias(mt[0], aliases)
+                    zones = [
+                        ("above-left",   fitz.Rect(0, 0, third_w, h_limit),              " ".join(words_left)),
+                        ("above-center", fitz.Rect(third_w, 0, 2 * third_w, h_limit),    " ".join(words_center)),
+                        ("above-right",  fitz.Rect(2 * third_w, 0, rect.width, h_limit), " ".join(words_right)),
+                        ("above-full",   fitz.Rect(0, 0, rect.width, h_limit),            " ".join(words_all)),
+                    ]
 
-            doc.close()
+                    for zone_label, clip, native_zone_text in zones:
+                        zone_ocr_text = ""
+                        try:
+                            px = page.get_pixmap(matrix=fitz.Matrix(scale, scale), clip=clip)
+                            if px.h > 0 and px.w > 0:
+                                zone_ocr_text = self._run_ocr(self._preprocess_image(px))
+                        except Exception as e:
+                            logging.warning(f"Zone render error [{zone_label}]:{e}")
+
+                        combined = (zone_ocr_text + "\n" + native_zone_text).upper()
+                        for line in combined.splitlines():
+                            line = line.strip()
+                            if len(line) < 4:
+                                continue
+                            mt = process.extractOne(line, cands, scorer=fuzz.token_sort_ratio)
+                            if mt and mt[1] >= thr:
+                                doc.close()
+                                return self._resolve_alias(mt[0], aliases)
+            finally:
+                try:
+                    doc.close()
+                except Exception:
+                    pass
         except Exception as e:
             logging.error(f"Invoice page extraction failed [{pdf_path}]:{e}", exc_info=True)
 
@@ -1160,59 +1236,60 @@ class OCRWorkerMixin:
 
         try:
             doc = fitz.open(pdf_path)
-            for i, page in enumerate(doc):
-                native = ""
-                ocr_text = ""
+            try:
+                for i, page in enumerate(doc):
+                    native = ""
+                    ocr_text = ""
 
-                use_native = (mode in ("auto", "pdf_text_only")) and use_native_flag
-                if use_native:
-                    native = page.get_text("text").upper()
+                    use_native = (mode in ("auto", "pdf_text_only")) and use_native_flag
+                    if use_native:
+                        native = page.get_text("text").upper()
 
-                combined = native
+                    combined = native
 
-                need_ocr = False
-                if mode == "image_only":
-                    need_ocr = True
-                elif mode == "auto":
-                    if not self._is_receiving_report_text(native):
-                        need_ocr = True
-                elif mode == "pdf_text_only":
                     need_ocr = False
+                    if mode == "image_only":
+                        need_ocr = True
+                    elif mode == "auto":
+                        if not self._is_receiving_report_text(native):
+                            need_ocr = True
+                    elif mode == "pdf_text_only":
+                        need_ocr = False
 
-                if need_ocr:
-                    rect = page.rect
-                    header_clip = fitz.Rect(0, 0, rect.width, rect.height * 0.28)
-                    try:
-                        pix_header = page.get_pixmap(matrix=fitz.Matrix(scale, scale), clip=header_clip)
-                        if pix_header.w > 0 and pix_header.h > 0:
-                            arr_header = self._preprocess_image(pix_header)
-                            arr_header = self._correct_rotation(arr_header)
-                            ocr_header = self._run_ocr(arr_header).upper()
-                        else:
+                    if need_ocr:
+                        rect = page.rect
+                        header_clip = fitz.Rect(0, 0, rect.width, rect.height * 0.28)
+                        try:
+                            pix_header = page.get_pixmap(matrix=fitz.Matrix(scale, scale), clip=header_clip)
+                            if pix_header.w > 0 and pix_header.h > 0:
+                                arr_header = self._preprocess_image(pix_header)
+                                arr_header = self._correct_rotation(arr_header)
+                                ocr_header = self._run_ocr(arr_header).upper()
+                            else:
+                                ocr_header = ""
+                        except Exception:
                             ocr_header = ""
-                    except Exception:
-                        ocr_header = ""
 
-                    try:
-                        pix_full = page.get_pixmap(matrix=fitz.Matrix(scale, scale))
-                        arr_full = self._preprocess_image(pix_full)
-                        arr_full = self._correct_rotation(arr_full)
-                        ocr_full = self._run_ocr(arr_full).upper()
-                    except Exception:
-                        ocr_full = ""
+                        try:
+                            pix_full = page.get_pixmap(matrix=fitz.Matrix(scale, scale))
+                            arr_full = self._preprocess_image(pix_full)
+                            arr_full = self._correct_rotation(arr_full)
+                            ocr_full = self._run_ocr(arr_full).upper()
+                        except Exception:
+                            ocr_full = ""
 
-                    ocr_text = (ocr_header + "\n" + ocr_full).strip()
+                        ocr_text = (ocr_header + "\n" + ocr_full).strip()
 
-                combined = (native + "\n" + ocr_text).upper() if ocr_text else native
+                    combined = (native + "\n" + ocr_text).upper() if ocr_text else native
 
-                if self._is_receiving_report_text(combined):
-                    pages.append({
-                        "index": i,
-                        "text": combined,
-                        "native_text": native,
-                    })
-
-            doc.close()
+                    if self._is_receiving_report_text(combined):
+                        pages.append({
+                            "index": i,
+                            "text": combined,
+                            "native_text": native,
+                        })
+            finally:
+                doc.close()
         except Exception as e:
             logging.error(f"Receiving page collection failed [{pdf_path}]:{e}", exc_info=True)
 
@@ -1261,12 +1338,20 @@ class OCRWorkerMixin:
         target_len = int(pats.get("grn_digits", 9))
         min_len = int(pats.get("grn_min_digits", 4))
         max_len = int(pats.get("grn_max_digits", 12))
+        # Strip non-digits; also fix common OCR letter->digit confusions
         digits = re.sub(r"\D", "", raw_digits or "")
 
         if not digits or len(digits) < min_len:
             return None
+        # If we have way too many digits (noisy OCR duplicated them), take only
+        # the first max_len to avoid garbage
         if len(digits) > max_len:
             digits = digits[:max_len]
+        # If the digit string starts with many leading zeros from OCR noise,
+        # strip excess leading zeros (keep at least one) before padding
+        if len(digits) > target_len and digits.startswith("00"):
+            stripped = digits.lstrip("0")
+            digits = stripped if stripped and len(stripped) >= min_len else digits
         if len(digits) >= target_len:
             return digits[:target_len]
         if digits.startswith("0000") and len(digits) < target_len:
@@ -1561,14 +1646,16 @@ class OCRWorkerMixin:
         full = ""
         try:
             doc = fitz.open(pdf_path)
-            for page in doc:
-                rect = page.rect
-                crop = fitz.Rect(0, 0, rect.width, min(rect.height, 650))
-                pix = page.get_pixmap(matrix=fitz.Matrix(3, 3), clip=crop)
-                img = PILImage.open(io.BytesIO(pix.tobytes("png")))
-                full += pytesseract.image_to_string(img, config="--psm 6 --oem 3") + "\n"
-                img.close()
-            doc.close()
+            try:
+                for page in doc:
+                    rect = page.rect
+                    crop = fitz.Rect(0, 0, rect.width, min(rect.height, 650))
+                    pix = page.get_pixmap(matrix=fitz.Matrix(3, 3), clip=crop)
+                    img = PILImage.open(io.BytesIO(pix.tobytes("png")))
+                    full += pytesseract.image_to_string(img, config="--psm 6 --oem 3") + "\n"
+                    img.close()
+            finally:
+                doc.close()
         except Exception as e:
             logging.error(f"Legacy text extraction [{pdf_path}]:{e}")
         return full.upper()
@@ -1788,7 +1875,7 @@ class OCRWorkerMixin:
                 cnt += 1
 
             if not dry_run:
-                shutil.move(pdf_path, dest)
+                _safe_file_move(pdf_path, dest)
                 rd["status"] = "success"
                 rd["dest_path"] = dest
             else:
@@ -1805,7 +1892,7 @@ class OCRWorkerMixin:
             logging.error(f"Rename failed [{fname}]:{e}", exc_info=True)
             rd["status"] = "error"
             try:
-                shutil.move(pdf_path, os.path.join(failed, fname))
+                _safe_file_move(pdf_path, os.path.join(failed, fname))
             except Exception:
                 pass
         return rd
@@ -1854,6 +1941,83 @@ def resource_path(relative_path):
     except Exception:
         base = Path(__file__).parent
     return base / relative_path
+
+
+def _safe_file_move(src: str, dest: str, max_retries: int = 3, retry_delay: float = 0.5) -> None:
+    """
+    Move a file with retry logic for locked files (common on Windows).
+
+    Tries shutil.move first; on PermissionError or OSError (indicating the
+    file may be locked by another process), retries with a small delay.
+    Falls back to copy+delete if move keeps failing.
+    """
+    import time
+    last_err = None
+    for attempt in range(max_retries):
+        try:
+            shutil.move(src, dest)
+            return
+        except (PermissionError, OSError) as e:
+            last_err = e
+            if attempt < max_retries - 1:
+                time.sleep(retry_delay * (attempt + 1))
+    # Last resort: copy then delete (works if the lock is on the move operation)
+    try:
+        shutil.copy2(src, dest)
+        os.remove(src)
+    except Exception as e:
+        logging.error(f"Safe file move failed [{src} -> {dest}]: {e}")
+        raise last_err if last_err else e
+
+
+def _safe_file_copy(src: str, dest: str, max_retries: int = 3, retry_delay: float = 0.5) -> None:
+    """
+    Copy a file with retry logic for locked files (common on Windows).
+    """
+    import time
+    last_err = None
+    for attempt in range(max_retries):
+        try:
+            shutil.copy2(src, dest)
+            return
+        except (PermissionError, OSError) as e:
+            last_err = e
+            if attempt < max_retries - 1:
+                time.sleep(retry_delay * (attempt + 1))
+    raise last_err if last_err else OSError(f"Failed to copy {src} -> {dest}")
+
+
+def _validate_path(path: str, must_exist: bool = False, allow_relative: bool = True) -> str:
+    """
+    Validate a user-provided path. Returns the resolved absolute path.
+    Raises ValueError if the path is empty, contains null bytes, or is outside
+    the allowed base directory.
+    """
+    if not path or not isinstance(path, str):
+        raise ValueError("Path must be a non-empty string")
+    if "\x00" in path:
+        raise ValueError("Path contains null bytes")
+    p = Path(path)
+    if not allow_relative and not p.is_absolute():
+        raise ValueError(f"Path must be absolute: {path}")
+    resolved = str(p.resolve() if p.exists() else p.absolute())
+    if must_exist and not os.path.exists(resolved):
+        raise ValueError(f"Path does not exist: {resolved}")
+    return resolved
+
+
+# File-level lock to prevent concurrent processing of the same PDF
+_file_locks: Dict[str, threading.Lock] = {}
+_file_locks_guard = threading.Lock()
+
+
+def _get_file_lock(path: str) -> threading.Lock:
+    """Get or create a per-file lock for preventing concurrent processing."""
+    key = os.path.abspath(path)
+    with _file_locks_guard:
+        if key not in _file_locks:
+            _file_locks[key] = threading.Lock()
+        return _file_locks[key]
 
 
 # ---------------------------------------------------------------------------
@@ -2025,7 +2189,7 @@ class MaafushivaruHub(tk.Tk, OCRWorkerMixin):
                 "timeout_seconds": 20
             },
             "ocr_space": {
-                "api_key": "K88109865088957",
+                "api_key": "",
                 "language": "eng",
                 "isOverlayRequired": False,
                 "detectOrientation": True,
@@ -2068,7 +2232,63 @@ class MaafushivaruHub(tk.Tk, OCRWorkerMixin):
         if s.get("auto_ingest_offline") and s.get("auto_ingest_api"):
             s["auto_ingest_offline"] = False
 
+        # --- Validate critical config values -------------------------------
+        self._validate_config(cfg)
+
         return cfg
+
+    def _validate_config(self, cfg: dict):
+        """Validate and sanitize config values on startup."""
+        s = cfg.setdefault("app_settings", {})
+        # Clamp numeric values to safe ranges
+        try:
+            s["max_threads"] = max(1, min(int(s.get("max_threads", 4)), 16))
+        except (ValueError, TypeError):
+            s["max_threads"] = 4
+        try:
+            s["image_scale_factor"] = max(1, min(int(s.get("image_scale_factor", 2)), 10))
+        except (ValueError, TypeError):
+            s["image_scale_factor"] = 2
+        try:
+            s["fuzzy_match_threshold"] = max(0, min(int(s.get("fuzzy_match_threshold", 85)), 100))
+        except (ValueError, TypeError):
+            s["fuzzy_match_threshold"] = 85
+        try:
+            s["confidence_warn_threshold"] = max(0, min(int(s.get("confidence_warn_threshold", 80)), 100))
+        except (ValueError, TypeError):
+            s["confidence_warn_threshold"] = 80
+        try:
+            s["page_scan_region_percent"] = max(1, min(int(s.get("page_scan_region_percent", 100)), 100))
+        except (ValueError, TypeError):
+            s["page_scan_region_percent"] = 100
+        # Validate OCR engine name
+        if s.get("ocr_engine", "tesseract") not in ENGINE_LABELS:
+            s["ocr_engine"] = "tesseract"
+        # Validate processing mode
+        if s.get("processing_mode", "legacy") not in ("legacy", "custom"):
+            s["processing_mode"] = "legacy"
+        # Validate extraction source
+        if s.get("extraction_source", "auto") not in ("auto", "pdf_text_only", "image_only"):
+            s["extraction_source"] = "auto"
+        # Validate ocr_mode
+        if s.get("ocr_mode", "full") not in ("full", "zone"):
+            s["ocr_mode"] = "full"
+        # Ensure suppliers is a list
+        if not isinstance(cfg.get("suppliers"), list):
+            cfg["suppliers"] = []
+        # Ensure aliases is a dict
+        if not isinstance(cfg.get("aliases"), dict):
+            cfg["aliases"] = {}
+        # Ensure patterns has expected keys
+        pats = cfg.setdefault("patterns", {})
+        try:
+            pats["grn_digits"] = int(pats.get("grn_digits", 9))
+            pats["grn_min_digits"] = int(pats.get("grn_min_digits", 4))
+            pats["grn_max_digits"] = int(pats.get("grn_max_digits", 12))
+        except (ValueError, TypeError):
+            pats["grn_digits"] = 9
+            pats["grn_min_digits"] = 4
+            pats["grn_max_digits"] = 12
 
 
     def _save_config(self):
@@ -2102,8 +2322,32 @@ class MaafushivaruHub(tk.Tk, OCRWorkerMixin):
 
     def _configure_tesseract(self):
         cmd = self.cfg.get("tesseract_cmd")
-        if cmd:
+        if cmd and os.path.isfile(cmd):
             pytesseract.pytesseract.tesseract_cmd = cmd
+        else:
+            # Try common install locations as fallback (non-Windows or alternate paths)
+            for candidate in (
+                "tesseract",
+                "/usr/bin/tesseract",
+                "/usr/local/bin/tesseract",
+                r"C:\Program Files\Tesseract-OCR\tesseract.exe",
+                r"C:\Program Files (x86)\Tesseract-OCR\tesseract.exe",
+            ):
+                try:
+                    import shutil as _sh
+                    found = _sh.which(candidate) if candidate == "tesseract" else (
+                        candidate if os.path.isfile(candidate) else None
+                    )
+                    if found:
+                        pytesseract.pytesseract.tesseract_cmd = found
+                        logging.info(f"Tesseract configured from fallback: {found}")
+                        return
+                except Exception:
+                    continue
+            logging.warning(
+                "Tesseract binary not found in config or common paths. "
+                "OCR will fail unless tesseract is on the system PATH."
+            )
 
     def _setup_logging(self):
         os.makedirs(self.dirs["logs"], exist_ok=True)
@@ -2164,6 +2408,12 @@ class MaafushivaruHub(tk.Tk, OCRWorkerMixin):
             except Exception as e:
                 logging.warning(f"[WATCHER] Stop error: {e}")
             self._watcher_observer = None
+        if self._watcher_handler:
+            try:
+                self._watcher_handler.shutdown()
+            except Exception as e:
+                logging.warning(f"[WATCHER] Handler shutdown error: {e}")
+            self._watcher_handler = None
         self._watcher_badge_var.set("")
         self._set_status("Auto-ingest stopped.")
 
@@ -2886,7 +3136,7 @@ class MaafushivaruHub(tk.Tk, OCRWorkerMixin):
                 d = f"{base}_{cnt}{ext}"
                 cnt += 1
             try:
-                shutil.move(s, d)
+                _safe_file_move(s, d)
                 moved += 1
             except Exception as e:
                 failed += 1
@@ -4315,7 +4565,19 @@ class MaafushivaruHub(tk.Tk, OCRWorkerMixin):
             if state["doc"]:
                 pass
 
+        def _on_preview_close():
+            """Ensure the fitz document is closed when the preview window is destroyed."""
+            doc = state.get("doc")
+            if doc:
+                try:
+                    doc.close()
+                except Exception:
+                    pass
+                state["doc"] = None
+            win.destroy()
+
         canvas.bind("<Configure>", on_resize)
+        win.protocol("WM_DELETE_WINDOW", _on_preview_close)
         threading.Thread(target=load, daemon=True).start()
 
     def _on_rename_preview_by_rowid(self, row_id: str):
@@ -4383,7 +4645,7 @@ class MaafushivaruHub(tk.Tk, OCRWorkerMixin):
         moved = 0
         for fn in failed_pdfs:
             try:
-                shutil.move(os.path.join(failed_dir, fn), os.path.join(scanned_dir, fn))
+                _safe_file_move(os.path.join(failed_dir, fn), os.path.join(scanned_dir, fn))
                 moved += 1
             except Exception as e:
                 logging.error(f"Retry move failed [{fn}]: {e}")
@@ -4995,7 +5257,7 @@ class MaafushivaruHub(tk.Tk, OCRWorkerMixin):
                 nd = f"{base}_{cnt}{ext}"
                 cnt += 1
             try:
-                shutil.move(dp, nd)
+                _safe_file_move(dp, nd)
                 result["dest_path"] = nd
                 vals[0] = os.path.basename(nd)
                 vals[1] = os.path.basename(nd)
@@ -5282,7 +5544,7 @@ class MaafushivaruHub(tk.Tk, OCRWorkerMixin):
                         cnt += 1
 
                     if new_path != pdf_path:
-                        shutil.move(pdf_path, new_path)
+                        _safe_file_move(pdf_path, new_path)
 
                     result["raw_path"] = new_path
                     result["file"] = new_name
@@ -5486,6 +5748,20 @@ class MaafushivaruHub(tk.Tk, OCRWorkerMixin):
     # UNIFIED EXTRACT & PROCESS
     # ------------------------------------------------------------------
     def _extract_core_fields_for_file(self, pdf_path: str, mode: str) -> Dict:
+        file_lock = _get_file_lock(pdf_path)
+        if not file_lock.acquire(timeout=30):
+            logging.warning(f"File already being processed (lock timeout): {pdf_path}")
+            return {
+                "supplier": "UNKNOWN SUPPLIER", "grn": "RC-MAM-0000",
+                "invoice": "", "po": "MAM-0000", "date": "",
+                "confidence": 0.0, "error": "File is being processed by another thread",
+            }
+        try:
+            return self._extract_core_fields_for_file_unlocked(pdf_path, mode)
+        finally:
+            file_lock.release()
+
+    def _extract_core_fields_for_file_unlocked(self, pdf_path: str, mode: str) -> Dict:
         text = self._extract_text(pdf_path)
         if len((text or "").strip()) < 40:
             ai_ocr_text = self._extract_text_via_ai_ocrspace(pdf_path)
@@ -5680,7 +5956,7 @@ class MaafushivaruHub(tk.Tk, OCRWorkerMixin):
 
             dry_run = self.cfg.get("app_settings", {}).get("dry_run", False)
             if not dry_run:
-                shutil.move(pdf_path, dest)
+                _safe_file_move(pdf_path, dest)
                 rename_result["status"]    = "success"
                 rename_result["dest_path"] = dest
             else:
@@ -5696,7 +5972,7 @@ class MaafushivaruHub(tk.Tk, OCRWorkerMixin):
             rename_result["status"] = "error"
             logging.error(f"Unified process failed [{src_name}]: {e}", exc_info=True)
             try:
-                shutil.move(pdf_path, os.path.join(failed, src_name))
+                _safe_file_move(pdf_path, os.path.join(failed, src_name))
             except Exception:
                 pass
             dispatch_result = self._build_dispatch_from_rename_result(rename_result, scan_index)
@@ -6278,13 +6554,29 @@ class MaafushivaruHub(tk.Tk, OCRWorkerMixin):
 
         threading.Thread(target=run, daemon=True).start()
 
+    # ------------------------------------------------------------------
+    # CLEANUP ON EXIT
+    # ------------------------------------------------------------------
+    def _cleanup_on_exit(self):
+        """Stop watcher, cancel pending timers, and release resources on app exit."""
+        try:
+            self._stop_watcher()
+        except Exception as e:
+            logging.warning(f"Cleanup: watcher stop failed: {e}")
+        # Signal any running workers to stop
+        self._cancel_requested = True
+        logging.info("Application shutdown complete.")
+
 
 # ---------------------------------------------------------------------------
 # ENTRY POINT
 # ---------------------------------------------------------------------------
 def main():
     app = MaafushivaruHub()
-    app.mainloop()
+    try:
+        app.mainloop()
+    finally:
+        app._cleanup_on_exit()
 
 
 if __name__ == "__main__":

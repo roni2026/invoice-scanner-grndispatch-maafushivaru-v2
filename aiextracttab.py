@@ -213,8 +213,10 @@ def _aix_compress_pdf_to_size(src_path: str, dest_path: str, target_mb: float = 
     # --- Pass 1: lossless cleanup (strip junk, recompress streams) ---
     try:
         doc = fitz.open(src_path)
-        doc.save(dest_path, garbage=4, deflate=True, deflate_images=True, clean=True)
-        doc.close()
+        try:
+            doc.save(dest_path, garbage=4, deflate=True, deflate_images=True, clean=True)
+        finally:
+            doc.close()
     except Exception as e:
         logging.warning(f"[AI EXTRACT] lossless compress failed [{src_path}]: {e}")
         shutil.copy2(src_path, dest_path)
@@ -227,20 +229,28 @@ def _aix_compress_pdf_to_size(src_path: str, dest_path: str, target_mb: float = 
         try:
             doc = fitz.open(src_path)
             out = fitz.open()
-            for page in doc:
-                pix = page.get_pixmap(matrix=fitz.Matrix(scale, scale), alpha=False)
-                img = Image.frombytes("RGB", (pix.width, pix.height), pix.samples)
-                buf = io.BytesIO()
-                img.save(buf, format="JPEG", quality=quality)
-                jpeg_bytes = buf.getvalue()
+            try:
+                for page in doc:
+                    pix = page.get_pixmap(matrix=fitz.Matrix(scale, scale), alpha=False)
+                    img = Image.frombytes("RGB", (pix.width, pix.height), pix.samples)
+                    buf = io.BytesIO()
+                    img.save(buf, format="JPEG", quality=quality)
+                    jpeg_bytes = buf.getvalue()
 
-                rect = page.rect
-                new_page = out.new_page(width=rect.width, height=rect.height)
-                new_page.insert_image(rect, stream=jpeg_bytes)
+                    rect = page.rect
+                    new_page = out.new_page(width=rect.width, height=rect.height)
+                    new_page.insert_image(rect, stream=jpeg_bytes)
 
-            out.save(dest_path, garbage=4, deflate=True)
-            out.close()
-            doc.close()
+                out.save(dest_path, garbage=4, deflate=True)
+            finally:
+                try:
+                    out.close()
+                except Exception:
+                    pass
+                try:
+                    doc.close()
+                except Exception:
+                    pass
         except Exception as e:
             logging.error(f"[AI EXTRACT] rasterize compress failed [{src_path}] @ scale {scale}: {e}")
             continue
@@ -583,25 +593,27 @@ def _aix_find_receiving_pages(app, pdf_path: str) -> List[int]:
     keep = []
     try:
         doc = fitz.open(pdf_path)
-        for i, page in enumerate(doc):
-            native = page.get_text("text") or ""
-            text = native
+        try:
+            for i, page in enumerate(doc):
+                native = page.get_text("text") or ""
+                text = native
 
-            if len(native.strip()) < 50:
-                try:
-                    rect = page.rect
-                    clip = fitz.Rect(0, 0, rect.width, rect.height * 0.40)
-                    scale = app.cfg["app_settings"].get("image_scale_factor", 2)
-                    pix = page.get_pixmap(matrix=fitz.Matrix(scale, scale), clip=clip)
-                    arr = app._preprocess_image(pix)
-                    arr = app._correct_rotation(arr)
-                    text = app._run_ocr(arr)
-                except Exception as e:
-                    logging.debug(f"[AI EXTRACT] page OCR failed p{i}: {e}")
+                if len(native.strip()) < 50:
+                    try:
+                        rect = page.rect
+                        clip = fitz.Rect(0, 0, rect.width, rect.height * 0.40)
+                        scale = app.cfg["app_settings"].get("image_scale_factor", 2)
+                        pix = page.get_pixmap(matrix=fitz.Matrix(scale, scale), clip=clip)
+                        arr = app._preprocess_image(pix)
+                        arr = app._correct_rotation(arr)
+                        text = app._run_ocr(arr)
+                    except Exception as e:
+                        logging.debug(f"[AI EXTRACT] page OCR failed p{i}: {e}")
 
-            if _page_is_receiving_report(text):
-                keep.append(i)
-        doc.close()
+                if _page_is_receiving_report(text):
+                    keep.append(i)
+        finally:
+            doc.close()
     except Exception as e:
         logging.error(f"[AI EXTRACT] page scan failed [{pdf_path}]: {e}", exc_info=True)
     return keep
@@ -609,12 +621,16 @@ def _aix_find_receiving_pages(app, pdf_path: str) -> List[int]:
 
 def _aix_write_trimmed_pdf(src_path: str, keep_indices: List[int], dest_path: str):
     src = fitz.open(src_path)
-    out = fitz.open()
-    for i in keep_indices:
-        out.insert_pdf(src, from_page=i, to_page=i)
-    out.save(dest_path)
-    out.close()
-    src.close()
+    try:
+        out = fitz.open()
+        try:
+            for i in keep_indices:
+                out.insert_pdf(src, from_page=i, to_page=i)
+            out.save(dest_path)
+        finally:
+            out.close()
+    finally:
+        src.close()
 
 
 # ---------------------------------------------------------------------------

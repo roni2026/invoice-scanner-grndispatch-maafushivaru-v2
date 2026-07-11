@@ -42,10 +42,10 @@ PROVIDERS = {
 # OCR.SPACE CONFIGURATION
 # ---------------------------------------------------------------------------
 OCR_SPACE_API_URL = "https://api.ocr.space/parse/image"
-OCR_SPACE_API_KEY = "K88109865088957"
+OCR_SPACE_API_KEY = ""  # Must be set in config.json -> ocr_space.api_key
 
 OCR_SPACE_DEFAULTS = {
-    "api_key": OCR_SPACE_API_KEY,
+    "api_key": "",
     "language": "eng",
     "isOverlayRequired": False,
     "detectOrientation": True,
@@ -167,8 +167,10 @@ class OCRSpaceExtractor:
 
         try:
             doc = fitz.open(pdf_path)
-            doc.save(best_path, garbage=4, deflate=True, clean=True)
-            doc.close()
+            try:
+                doc.save(best_path, garbage=4, deflate=True, clean=True)
+            finally:
+                doc.close()
             if os.path.getsize(best_path) <= max_bytes:
                 return best_path
         except Exception as e:
@@ -195,19 +197,23 @@ class OCRSpaceExtractor:
 
     def _raster_rebuild_pdf(self, src_pdf: str, out_pdf: str, dpi: int = 140, jpg_quality: int = 72):
         src = fitz.open(src_pdf)
-        out = fitz.open()
-        zoom = dpi / 72.0
+        try:
+            out = fitz.open()
+            try:
+                zoom = dpi / 72.0
 
-        for page in src:
-            pix = page.get_pixmap(matrix=fitz.Matrix(zoom, zoom), alpha=False)
-            img_bytes = pix.tobytes("jpg", jpg_quality)
-            rect = page.rect
-            new_page = out.new_page(width=rect.width, height=rect.height)
-            new_page.insert_image(rect, stream=img_bytes)
+                for page in src:
+                    pix = page.get_pixmap(matrix=fitz.Matrix(zoom, zoom), alpha=False)
+                    img_bytes = pix.tobytes("jpg", jpg_quality)
+                    rect = page.rect
+                    new_page = out.new_page(width=rect.width, height=rect.height)
+                    new_page.insert_image(rect, stream=img_bytes)
 
-        out.save(out_pdf, garbage=4, deflate=True, clean=True)
-        out.close()
-        src.close()
+                out.save(out_pdf, garbage=4, deflate=True, clean=True)
+            finally:
+                out.close()
+        finally:
+            src.close()
 
     def _build_payload(self, base64_image: str = "", url: str = "", filetype: str = "") -> bytes:
         fields: Dict[str, str] = {
@@ -233,33 +239,59 @@ class OCRSpaceExtractor:
 
         return urllib.parse.urlencode(fields).encode("utf-8")
 
-    def _post(self, payload: bytes) -> Tuple[str, str]:
-        req = urllib.request.Request(
-            OCR_SPACE_API_URL,
-            data=payload,
-            headers={"Content-Type": "application/x-www-form-urlencoded"},
-            method="POST",
-        )
+    def _post(self, payload: bytes, max_retries: int = 3) -> Tuple[str, str]:
+        """Send request to OCR.space with retry logic and exponential backoff."""
+        import time as _time
 
-        try:
-            with urllib.request.urlopen(req, timeout=self.timeout) as resp:
-                raw = resp.read().decode("utf-8")
-        except urllib.error.HTTPError as e:
-            body = ""
+        last_err = ""
+        for attempt in range(max_retries):
+            req = urllib.request.Request(
+                OCR_SPACE_API_URL,
+                data=payload,
+                headers={"Content-Type": "application/x-www-form-urlencoded"},
+                method="POST",
+            )
+
             try:
-                body = e.read().decode("utf-8")
-            except Exception:
-                pass
+                with urllib.request.urlopen(req, timeout=self.timeout) as resp:
+                    raw = resp.read().decode("utf-8")
+            except urllib.error.HTTPError as e:
+                body = ""
+                try:
+                    body = e.read().decode("utf-8")
+                except Exception:
+                    pass
 
-            if e.code in (401, 403):
-                return "", f"Auth error (HTTP {e.code}): invalid API key"
-            if e.code == 429:
-                return "", f"Rate-limit / quota exceeded (HTTP {e.code})"
-            return "", f"HTTP {e.code}: {body[:500]}"
-        except urllib.error.URLError as e:
-            return "", f"Network error: {e.reason}"
-        except Exception as e:
-            return "", f"Unexpected request error: {e}"
+                if e.code in (401, 403):
+                    return "", f"Auth error (HTTP {e.code}): invalid API key"
+                if e.code == 429:
+                    last_err = f"Rate-limit / quota exceeded (HTTP {e.code})"
+                    if attempt < max_retries - 1:
+                        backoff = 2 ** (attempt + 1)  # 2s, 4s, 8s
+                        self._log(f"Rate limited, retrying in {backoff}s (attempt {attempt + 1}/{max_retries})")
+                        _time.sleep(backoff)
+                        continue
+                    return "", last_err
+                return "", f"HTTP {e.code}: {body[:500]}"
+            except urllib.error.URLError as e:
+                last_err = f"Network error: {e.reason}"
+                if attempt < max_retries - 1:
+                    backoff = 2 ** attempt  # 1s, 2s, 4s
+                    self._log(f"Network error, retrying in {backoff}s (attempt {attempt + 1}/{max_retries})")
+                    _time.sleep(backoff)
+                    continue
+                return "", last_err
+            except Exception as e:
+                last_err = f"Unexpected request error: {e}"
+                if attempt < max_retries - 1:
+                    backoff = 2 ** attempt
+                    self._log(f"Request error, retrying in {backoff}s (attempt {attempt + 1}/{max_retries})")
+                    _time.sleep(backoff)
+                    continue
+                return "", last_err
+
+            # Success — parse response
+            break
 
         try:
             data = json.loads(raw)

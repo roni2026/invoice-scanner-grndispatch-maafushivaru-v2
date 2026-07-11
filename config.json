@@ -590,7 +590,7 @@
         "timeout_seconds": 20
     },
     "ocr_space": {
-        "api_key": "K88109865088957",
+        "api_key": "",
         "language": "eng",
         "isOverlayRequired": false,
         "detectOrientation": true,
