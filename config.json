@@ -34,7 +34,8 @@
         "ocr_mode": "zone",
         "ocr_word_correction_enabled": false,
         "smart_cross_match_enabled": false,
-        "grn_next_dispatch_no": 1
+        "grn_next_dispatch_no": 1,
+        "processed_transfer_path": ""
     },
     "folders": {
         "base": ".",

@@ -133,7 +133,7 @@ except ImportError:
 # CONSTANTS / COLORS
 # ---------------------------------------------------------------------------
 APP_TITLE   = "Maafushivaru - Document Processing Hub"
-APP_VERSION = "v5.0"
+APP_VERSION = "v5.1"
 
 # Color palette — professional dark theme
 BG       = "#0A0F1E"          # deepest background
@@ -2290,6 +2290,15 @@ class MaafushivaruHub(tk.Tk, OCRWorkerMixin):
             pats["grn_min_digits"] = 4
             pats["grn_max_digits"] = 12
 
+        # Transfer destination for processed PDFs (Dashboard)
+        s.setdefault("processed_transfer_path", s.get("processed_transfer_path", "") or "")
+        try:
+            s["grn_next_dispatch_no"] = int(s.get("grn_next_dispatch_no", 1) or 1)
+            if s["grn_next_dispatch_no"] < 1:
+                s["grn_next_dispatch_no"] = 1
+        except (TypeError, ValueError):
+            s["grn_next_dispatch_no"] = 1
+
 
     def _save_config(self):
         with open(self.config_path, "w", encoding="utf-8") as f:
@@ -2844,12 +2853,37 @@ class MaafushivaruHub(tk.Tk, OCRWorkerMixin):
         canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
         sb.pack(side=tk.RIGHT, fill=tk.Y)
 
+        def _on_mousewheel(ev):
+            # Windows / macOS
+            if getattr(ev, "delta", 0):
+                canvas.yview_scroll(int(-1 * (ev.delta / 120)), "units")
+            return "break"
+
+        def _on_linux_up(_ev):
+            canvas.yview_scroll(-1, "units")
+            return "break"
+
+        def _on_linux_down(_ev):
+            canvas.yview_scroll(1, "units")
+            return "break"
+
         def _bind_mw(_):
-            canvas.bind_all("<MouseWheel>", lambda ev: canvas.yview_scroll(int(-1 * (ev.delta / 120)), "units"))
+            canvas.bind_all("<MouseWheel>", _on_mousewheel, add="+")
+            canvas.bind_all("<Button-4>", _on_linux_up, add="+")
+            canvas.bind_all("<Button-5>", _on_linux_down, add="+")
+
         def _unbind_mw(_):
             canvas.unbind_all("<MouseWheel>")
+            canvas.unbind_all("<Button-4>")
+            canvas.unbind_all("<Button-5>")
+
         canvas.bind("<Enter>", _bind_mw)
         canvas.bind("<Leave>", _unbind_mw)
+        # Also bind directly so scrolling works even if bind_all is contested
+        canvas.bind("<MouseWheel>", _on_mousewheel)
+        canvas.bind("<Button-4>", _on_linux_up)
+        canvas.bind("<Button-5>", _on_linux_down)
+        inner.bind("<MouseWheel>", _on_mousewheel)
         return inner
 
     def _section(self, parent, title, subtitle=""):
@@ -2949,52 +2983,116 @@ class MaafushivaruHub(tk.Tk, OCRWorkerMixin):
         self._stat_archived_var  = self._make_stat_card(sr, "Archived",  "-", "ARCH",  ACCENT2)
         self._stat_failed_var    = self._make_stat_card(sr, "Failed",    "-", "FAIL",  ERROR)
 
+        # ------------------------------------------------------------------
+        # Processed PDF Transfer — dedicated card (path picker always visible)
+        # ------------------------------------------------------------------
+        xfer = self._section(
+            frame,
+            "Processed PDF Transfer",
+            "Choose where Transfer moves finished PDFs from PROCESSED",
+        )
+
+        # Path row: buttons packed on the RIGHT first so they never clip off-screen
+        path_row = tk.Frame(xfer, bg=PANEL)
+        path_row.pack(fill=tk.X, padx=20, pady=(0, 8))
+
+        self._processed_transfer_var = tk.StringVar(
+            value=self.cfg.get("app_settings", {}).get("processed_transfer_path", "")
+        )
+
+        btn_col = tk.Frame(path_row, bg=PANEL)
+        btn_col.pack(side=tk.RIGHT)
+        ttk.Button(
+            btn_col, text="📂  Set Transfer Path", style="Accent.TButton",
+            command=self._browse_transfer_path,
+        ).pack(side=tk.LEFT, padx=(6, 0))
+        ttk.Button(btn_col, text="Open", command=self._open_transfer_path).pack(side=tk.LEFT, padx=(6, 0))
+        ttk.Button(btn_col, text="Clear", command=self._clear_transfer_path).pack(side=tk.LEFT, padx=(6, 0))
+
+        left_col = tk.Frame(path_row, bg=PANEL)
+        left_col.pack(side=tk.LEFT, fill=tk.X, expand=True, padx=(0, 8))
+        tk.Label(
+            left_col, text="Destination folder",
+            bg=PANEL, fg=MUTED, font=("Segoe UI", 9, "bold"), anchor="w",
+        ).pack(fill=tk.X)
+        entry_row = tk.Frame(left_col, bg=PANEL)
+        entry_row.pack(fill=tk.X, pady=(4, 0))
+        self._processed_transfer_entry = tk.Entry(
+            entry_row, textvariable=self._processed_transfer_var,
+            bg=PANEL2, fg=TEXT, insertbackground=TEXT, relief="flat",
+            font=("Segoe UI", 10), bd=0, highlightthickness=1,
+            highlightbackground=PANEL3, highlightcolor=ACCENT,
+        )
+        self._processed_transfer_entry.pack(side=tk.LEFT, fill=tk.X, expand=True, ipady=6)
+        self._processed_transfer_entry.bind("<FocusOut>", lambda _e: self._save_transfer_path(quiet=True))
+        self._processed_transfer_entry.bind("<Return>",   lambda _e: self._save_transfer_path())
+
+        hint = tk.Label(
+            xfer,
+            text="Tip: click  Set Transfer Path  to pick a folder. Transfer moves every PDF out of PROCESSED into that folder.",
+            bg=PANEL, fg=MUTED, font=("Segoe UI", 8), anchor="w", justify="left",
+        )
+        hint.pack(fill=tk.X, padx=20, pady=(0, 10))
+
+        action_row = tk.Frame(xfer, bg=PANEL)
+        action_row.pack(fill=tk.X, padx=20, pady=(0, 16))
+        ttk.Button(
+            action_row, text="📦  Transfer Processed PDFs Now", style="Success.TButton",
+            command=self._transfer_processed_pdfs,
+        ).pack(side=tk.LEFT)
+        self._transfer_status_var = tk.StringVar(value=self._transfer_path_summary())
+        tk.Label(
+            action_row, textvariable=self._transfer_status_var,
+            bg=PANEL, fg=ACCENT, font=("Segoe UI", 9), anchor="w",
+        ).pack(side=tk.LEFT, padx=(14, 0), fill=tk.X, expand=True)
+
         # Quick actions
         qa = self._section(frame, "Quick Actions")
         row = tk.Frame(qa, bg=PANEL)
-        row.pack(fill=tk.X, padx=20, pady=(0, 16))
-        ttk.Button(row, text="↺  Refresh Stats",   command=self._refresh_dashboard_stats).pack(side=tk.LEFT, padx=(0, 8))
+        row.pack(fill=tk.X, padx=20, pady=(0, 8))
+        ttk.Button(row, text="↻  Refresh Stats",   command=self._refresh_dashboard_stats).pack(side=tk.LEFT, padx=(0, 8))
         ttk.Button(row, text="📂  Open SCANNED",   command=lambda: self._open_folder(self.dirs["scanned"])).pack(side=tk.LEFT, padx=4)
         ttk.Button(row, text="📂  Open PROCESSED", command=lambda: self._open_folder(self.dirs["processed"])).pack(side=tk.LEFT, padx=4)
         ttk.Button(row, text="📂  Open FAILED",    command=lambda: self._open_folder(self.dirs["failed"])).pack(side=tk.LEFT, padx=4)
         ttk.Button(row, text="📋  Open Logs",      command=lambda: self._open_folder(self.dirs["logs"])).pack(side=tk.LEFT, padx=4)
-        ttk.Button(row, text="📦  Transfer Processed Pdf", style="Accent.TButton",
-                   command=self._transfer_processed_pdfs).pack(side=tk.LEFT, padx=4)
+
+        row2 = tk.Frame(qa, bg=PANEL)
+        row2.pack(fill=tk.X, padx=20, pady=(0, 16))
+        ttk.Button(
+            row2, text="📦  Transfer Processed PDFs", style="Accent.TButton",
+            command=self._transfer_processed_pdfs,
+        ).pack(side=tk.LEFT, padx=(0, 8))
+        ttk.Button(
+            row2, text="📂  Set Transfer Path",
+            command=self._browse_transfer_path,
+        ).pack(side=tk.LEFT, padx=4)
 
         # Directories
         info = self._section(frame, "System Directories")
         for k in ("base", "scanned", "processed", "archive", "failed", "logs"):
             r = tk.Frame(info, bg=PANEL)
             r.pack(fill=tk.X, padx=20, pady=3)
-            tk.Label(r, text=f"{k.upper()}:", bg=PANEL, fg=MUTED, font=("Segoe UI", 9, "bold"), width=12, anchor="w").pack(side=tk.LEFT)
-            tk.Label(r, text=self.dirs.get(k, ""), bg=PANEL, fg=ACCENT, font=("Segoe UI", 9)).pack(side=tk.LEFT)
-
-        # --- Processed Pdf Transfer destination (editable + persistent) ---
-        tr = tk.Frame(info, bg=PANEL)
-        tr.pack(fill=tk.X, padx=20, pady=(8, 3))
-        tk.Label(tr, text="PROCESSED PDF TRANSFER:", bg=PANEL, fg=MUTED,
-                 font=("Segoe UI", 9, "bold"), width=24, anchor="w").pack(side=tk.LEFT)
-        self._processed_transfer_var = tk.StringVar(
-            value=self.cfg.get("app_settings", {}).get("processed_transfer_path", "")
-        )
-        _tr_entry = tk.Entry(
-            tr, textvariable=self._processed_transfer_var,
-            bg=PANEL2, fg=TEXT, insertbackground=TEXT, relief="flat",
-            font=("Segoe UI", 9), bd=0, highlightthickness=1,
-            highlightbackground=PANEL3, highlightcolor=ACCENT, width=52,
-        )
-        _tr_entry.pack(side=tk.LEFT, ipady=3, padx=(0, 6))
-        # Persist when the user finishes editing (focus out / Enter).
-        _tr_entry.bind("<FocusOut>", lambda _e: self._save_transfer_path())
-        _tr_entry.bind("<Return>",   lambda _e: self._save_transfer_path())
-        ttk.Button(tr, text="Browse", command=self._browse_transfer_path).pack(side=tk.LEFT, padx=(0, 4))
-        ttk.Button(tr, text="Save",   command=self._save_transfer_path).pack(side=tk.LEFT)
+            tk.Label(
+                r, text=f"{k.upper()}:", bg=PANEL, fg=MUTED,
+                font=("Segoe UI", 9, "bold"), width=12, anchor="w",
+            ).pack(side=tk.LEFT)
+            path_lbl = tk.Label(
+                r, text=self.dirs.get(k, ""), bg=PANEL, fg=ACCENT,
+                font=("Segoe UI", 9), anchor="w",
+            )
+            path_lbl.pack(side=tk.LEFT, fill=tk.X, expand=True)
+            ttk.Button(
+                r, text="Open", width=6,
+                command=lambda p=self.dirs.get(k, ""): self._open_folder(p),
+            ).pack(side=tk.RIGHT, padx=(6, 0))
 
         # --- GRN Dispatch Note: next DISPATCH number (editable + persistent) ---
         gd = tk.Frame(info, bg=PANEL)
-        gd.pack(fill=tk.X, padx=20, pady=(8, 3))
-        tk.Label(gd, text="GRN DISPATCH NEXT NO:", bg=PANEL, fg=MUTED,
-                 font=("Segoe UI", 9, "bold"), width=24, anchor="w").pack(side=tk.LEFT)
+        gd.pack(fill=tk.X, padx=20, pady=(12, 3))
+        tk.Label(
+            gd, text="GRN DISPATCH NEXT NO:", bg=PANEL, fg=MUTED,
+            font=("Segoe UI", 9, "bold"), width=22, anchor="w",
+        ).pack(side=tk.LEFT)
         self._grn_dispatch_no_var = tk.StringVar(
             value=str(self.cfg.get("app_settings", {}).get("grn_next_dispatch_no", 1))
         )
@@ -3008,24 +3106,86 @@ class MaafushivaruHub(tk.Tk, OCRWorkerMixin):
         _gd_entry.bind("<FocusOut>", lambda _e: self._save_grn_dispatch_no())
         _gd_entry.bind("<Return>",   lambda _e: self._save_grn_dispatch_no())
         ttk.Button(gd, text="Save", command=self._save_grn_dispatch_no).pack(side=tk.LEFT)
-        tk.Label(gd, text="  Starting DISPATCH # for the next \"Export Excel\" -- auto-advances after each export.",
-                 bg=PANEL, fg=MUTED, font=("Segoe UI", 8)).pack(side=tk.LEFT, padx=(8, 0))
+        tk.Label(
+            gd,
+            text='  Starting DISPATCH # for the next "Export Excel" — auto-advances after each export.',
+            bg=PANEL, fg=MUTED, font=("Segoe UI", 8),
+        ).pack(side=tk.LEFT, padx=(8, 0))
 
         tk.Frame(info, bg=PANEL).pack(pady=8)
 
     # ------------------------------------------------------------------
     # PROCESSED PDF TRANSFER
     # ------------------------------------------------------------------
-    def _save_transfer_path(self):
-        """Persist the 'Processed Pdf Transfer' destination to config."""
+    def _transfer_path_summary(self) -> str:
+        raw = ""
+        try:
+            raw = (self._processed_transfer_var.get() or "").strip()
+        except Exception:
+            raw = (self.cfg.get("app_settings", {}) or {}).get("processed_transfer_path", "") or ""
+        if not raw:
+            return "No destination set — click Set Transfer Path"
+        resolved = self._resolve_user_path(raw, must_exist=False)
+        return f"Ready → {resolved}"
+
+    def _resolve_user_path(self, path: str, must_exist: bool = False) -> str:
+        """Resolve a user path (absolute or relative-to-base) to a normalized absolute path."""
+        p = (path or "").strip()
+        if not p:
+            return ""
+        p = os.path.expandvars(os.path.expanduser(p))
+        if not os.path.isabs(p):
+            base = self.dirs.get("base") or os.getcwd()
+            p = os.path.join(base, p)
+        p = os.path.normpath(p)
+        if must_exist and not os.path.isdir(p):
+            return ""
+        return p
+
+    def _save_transfer_path(self, quiet: bool = False):
+        """Persist the Processed PDF Transfer destination to config."""
         path = (self._processed_transfer_var.get() or "").strip()
+        # Prefer storing absolute paths so relaunch is stable
+        resolved = self._resolve_user_path(path, must_exist=False) if path else ""
+        if resolved:
+            path = resolved
+            try:
+                self._processed_transfer_var.set(path)
+            except Exception:
+                pass
         self.cfg.setdefault("app_settings", {})["processed_transfer_path"] = path
         try:
-            self._save_config()
-            self._set_status(f"Processed Pdf Transfer path saved: {path or '(empty)'}", SUCCESS)
+            # Avoid recursive "Settings saved." noise from _save_config status
+            with open(self.config_path, "w", encoding="utf-8") as f:
+                json.dump(self.cfg, f, indent=4)
+            if hasattr(self, "_transfer_status_var"):
+                self._transfer_status_var.set(self._transfer_path_summary())
+            if not quiet:
+                self._set_status(f"Transfer path saved: {path or '(empty)'}", SUCCESS)
         except Exception as e:
             logging.error(f"Could not save transfer path: {e}", exc_info=True)
             self._set_status(f"Could not save transfer path: {e}", ERROR)
+
+    def _clear_transfer_path(self):
+        self._processed_transfer_var.set("")
+        self._save_transfer_path()
+
+    def _open_transfer_path(self):
+        dest = self._resolve_user_path(
+            (self._processed_transfer_var.get() or "").strip(), must_exist=False
+        )
+        if not dest:
+            messagebox.showinfo(
+                "Transfer Path",
+                "No transfer destination is set yet.\n\nClick  Set Transfer Path  to choose a folder.",
+            )
+            return
+        try:
+            os.makedirs(dest, exist_ok=True)
+        except Exception as e:
+            messagebox.showerror("Open Transfer Path", f"Could not open/create:\n{dest}\n\n{e}")
+            return
+        self._open_folder(dest)
 
     def _save_grn_dispatch_no(self):
         """Persist the starting DISPATCH # for the next GRN Excel export."""
@@ -3047,24 +3207,17 @@ class MaafushivaruHub(tk.Tk, OCRWorkerMixin):
             self._set_status(f"Could not save GRN dispatch no: {e}", ERROR)
 
     def _browse_transfer_path(self):
-        """Open the OS folder picker to choose the 'Processed Pdf Transfer'
-        destination.
+        """Open the OS folder picker to choose the Processed PDF Transfer destination.
 
-        Bugfix: `self.dirs["processed"]` (and the saved transfer path) are
-        often RELATIVE paths (e.g. "PROCESSED" from config.json). Passing a
-        relative -- or simply nonexistent -- path as `initialdir` makes
-        Windows' native folder dialog open in a broken state with nothing
-        selectable. We now resolve every candidate to an absolute path and
-        only use the first one that actually exists, always falling back to
-        a directory guaranteed to exist (the user's home folder) so the
-        dialog is never left with no selectable option."""
-        base = self.dirs.get("base", "") or os.getcwd()
-
-        def _resolve(p):
+        Relative / missing initialdir values break the native Windows dialog, so
+        every candidate is resolved to an existing absolute directory first.
+        """
+        def _resolve_existing(p):
             if not p:
                 return None
-            p = os.path.expanduser(p)
+            p = os.path.expandvars(os.path.expanduser(str(p)))
             if not os.path.isabs(p):
+                base = self.dirs.get("base") or os.getcwd()
                 p = os.path.join(base, p)
             p = os.path.normpath(p)
             return p if os.path.isdir(p) else None
@@ -3076,85 +3229,152 @@ class MaafushivaruHub(tk.Tk, OCRWorkerMixin):
             os.path.expanduser("~"),
             os.getcwd(),
         ]
-        start = next((r for r in (_resolve(c) for c in candidates) if r), os.path.expanduser("~"))
+        start = next((r for r in (_resolve_existing(c) for c in candidates) if r), os.path.expanduser("~"))
 
         try:
-            chosen = filedialog.askdirectory(initialdir=start, mustexist=True)
+            # Parent the dialog to this window; mustexist=False lets user type a new folder name on some OS dialogs
+            chosen = filedialog.askdirectory(
+                parent=self,
+                title="Select Processed PDF Transfer destination",
+                initialdir=start,
+                mustexist=True,
+            )
         except Exception as e:
             logging.error(f"Could not open folder picker: {e}", exc_info=True)
-            messagebox.showerror("Transfer Processed Pdf", f"Could not open the folder picker:\n\n{e}")
+            messagebox.showerror("Set Transfer Path", f"Could not open the folder picker:\n\n{e}")
             return
 
-        if chosen:
-            self._processed_transfer_var.set(chosen)
-            self._save_transfer_path()
+        if not chosen:
+            return
+
+        chosen = os.path.normpath(chosen)
+        self._processed_transfer_var.set(chosen)
+        self._save_transfer_path()
+        self._set_status(f"Transfer destination set: {chosen}", SUCCESS)
 
     def _transfer_processed_pdfs(self):
-        """Move every PDF from the PROCESSED folder to the user-defined
-        'Processed Pdf Transfer' destination."""
-        dest = (self._processed_transfer_var.get() or "").strip()
-        if not dest:
-            messagebox.showwarning(
-                "Transfer Processed Pdf",
-                "Set a 'Processed Pdf Transfer' destination path on the Dashboard first.",
-            )
+        """Move every PDF from PROCESSED to the configured transfer destination."""
+        if getattr(self, "_transfer_running", False):
+            messagebox.showinfo("Transfer Processed PDFs", "A transfer is already in progress.")
             return
 
+        dest_raw = (self._processed_transfer_var.get() or "").strip()
+        if not dest_raw:
+            if messagebox.askyesno(
+                "Transfer Processed PDFs",
+                "No transfer destination is set yet.\n\n"
+                "Click Yes to choose a folder now, then transfer.",
+            ):
+                self._browse_transfer_path()
+                dest_raw = (self._processed_transfer_var.get() or "").strip()
+            if not dest_raw:
+                return
+
+        dest = self._resolve_user_path(dest_raw, must_exist=False)
         src = self.dirs.get("processed", "")
         if not src or not os.path.isdir(src):
-            messagebox.showerror("Transfer Processed Pdf", f"PROCESSED folder not found:\n{src}")
+            messagebox.showerror("Transfer Processed PDFs", f"PROCESSED folder not found:\n{src}")
             return
 
         try:
             os.makedirs(dest, exist_ok=True)
         except Exception as e:
-            messagebox.showerror("Transfer Processed Pdf", f"Could not create destination:\n{dest}\n\n{e}")
+            messagebox.showerror(
+                "Transfer Processed PDFs",
+                f"Could not create destination:\n{dest}\n\n{e}",
+            )
             return
 
-        if os.path.abspath(dest) == os.path.abspath(src):
-            messagebox.showwarning("Transfer Processed Pdf", "Destination is the same as the PROCESSED folder.")
+        try:
+            if os.path.samefile(dest, src):
+                messagebox.showwarning(
+                    "Transfer Processed PDFs",
+                    "Destination is the same as the PROCESSED folder.",
+                )
+                return
+        except OSError:
+            if os.path.abspath(dest) == os.path.abspath(src):
+                messagebox.showwarning(
+                    "Transfer Processed PDFs",
+                    "Destination is the same as the PROCESSED folder.",
+                )
+                return
+
+        try:
+            pdfs = sorted(
+                f for f in os.listdir(src)
+                if f.lower().endswith(".pdf") and os.path.isfile(os.path.join(src, f))
+            )
+        except Exception as e:
+            messagebox.showerror("Transfer Processed PDFs", f"Could not read PROCESSED folder:\n{e}")
             return
 
-        pdfs = [f for f in os.listdir(src) if f.lower().endswith(".pdf")]
         if not pdfs:
-            messagebox.showinfo("Transfer Processed Pdf", "No processed PDFs to transfer.")
+            messagebox.showinfo("Transfer Processed PDFs", "No processed PDFs to transfer.")
             return
 
         if not messagebox.askyesno(
-            "Transfer Processed Pdf",
-            f"Move {len(pdfs)} processed PDF(s) to:\n{dest}?",
+            "Transfer Processed PDFs",
+            f"Move {len(pdfs)} processed PDF(s) to:\n\n{dest}\n\nContinue?",
         ):
             return
 
-        moved, failed = 0, 0
-        for fn in pdfs:
-            s = os.path.join(src, fn)
-            d = os.path.join(dest, fn)
-            base, ext = os.path.splitext(d)
-            cnt = 1
-            while os.path.exists(d):
-                d = f"{base}_{cnt}{ext}"
-                cnt += 1
-            try:
-                _safe_file_move(s, d)
-                moved += 1
-            except Exception as e:
-                failed += 1
-                logging.error(f"Transfer failed for {fn}: {e}", exc_info=True)
+        # Persist dest in case user typed it without saving
+        self._processed_transfer_var.set(dest)
+        self._save_transfer_path(quiet=True)
 
-        self._refresh_dashboard_stats()
-        self._set_status(
-            f"Transferred {moved} PDF(s) to {dest} ({failed} failed).",
-            SUCCESS if failed == 0 else WARNING,
-        )
-        messagebox.showinfo(
-            "Transfer Processed Pdf",
-            f"Done.\n\nMoved: {moved}\nFailed: {failed}\nDestination:\n{dest}",
-        )
+        self._transfer_running = True
+        self._set_status(f"Transferring {len(pdfs)} PDF(s)…", WARNING)
+        if hasattr(self, "_transfer_status_var"):
+            self._transfer_status_var.set(f"Transferring 0/{len(pdfs)}…")
 
-    # ------------------------------------------------------------------
-    # OCR RENAMER TAB
-    # ------------------------------------------------------------------
+        def _worker():
+            moved, failed = 0, 0
+            errors = []
+            total = len(pdfs)
+            for idx, fn in enumerate(pdfs, 1):
+                s = os.path.join(src, fn)
+                d = os.path.join(dest, fn)
+                base_n, ext = os.path.splitext(d)
+                cnt = 1
+                while os.path.exists(d):
+                    d = f"{base_n}_{cnt}{ext}"
+                    cnt += 1
+                try:
+                    _safe_file_move(s, d)
+                    moved += 1
+                except Exception as e:
+                    failed += 1
+                    errors.append(f"{fn}: {e}")
+                    logging.error(f"Transfer failed for {fn}: {e}", exc_info=True)
+                if idx == 1 or idx == total or idx % 5 == 0:
+                    def _prog(i=idx, t=total):
+                        if hasattr(self, "_transfer_status_var"):
+                            self._transfer_status_var.set(f"Transferring {i}/{t}…")
+                    self.after(0, _prog)
+
+            def _done():
+                self._transfer_running = False
+                self._refresh_dashboard_stats()
+                if hasattr(self, "_transfer_status_var"):
+                    self._transfer_status_var.set(
+                        f"Last transfer: {moved} moved, {failed} failed → {dest}"
+                    )
+                self._set_status(
+                    f"Transferred {moved} PDF(s) to {dest} ({failed} failed).",
+                    SUCCESS if failed == 0 else WARNING,
+                )
+                detail = f"Done.\n\nMoved: {moved}\nFailed: {failed}\nDestination:\n{dest}"
+                if errors:
+                    detail += "\n\nErrors:\n" + "\n".join(errors[:8])
+                    if len(errors) > 8:
+                        detail += f"\n… and {len(errors) - 8} more (see log)"
+                messagebox.showinfo("Transfer Processed PDFs", detail)
+
+            self.after(0, _done)
+
+        threading.Thread(target=_worker, daemon=True, name="pdf-transfer").start()
+
     def _build_renamer_tab(self):
         frame = self._make_tab("OCR Renamer")
         frame.configure(style="TFrame")
@@ -4201,8 +4421,17 @@ class MaafushivaruHub(tk.Tk, OCRWorkerMixin):
 
     def _open_folder(self, path):
         try:
+            if not path:
+                raise ValueError("No folder path provided")
             os.makedirs(path, exist_ok=True)
-            os.startfile(path)
+            if hasattr(os, "startfile"):
+                os.startfile(path)  # Windows
+            elif sys.platform == "darwin":
+                import subprocess
+                subprocess.Popen(["open", path])
+            else:
+                import subprocess
+                subprocess.Popen(["xdg-open", path])
         except Exception as e:
             messagebox.showerror("Open Folder Failed", str(e))
 
