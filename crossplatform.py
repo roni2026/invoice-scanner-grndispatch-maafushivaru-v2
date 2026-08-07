@@ -27,9 +27,11 @@ from inside the cloned repo folder (same folder as maafushivaru_hub.py).
 import json
 import os
 import platform
+import re
 import shutil
 import subprocess
 import sys
+import time
 
 # ----------------------------------------------------------------------
 # Colors (ANSI). Auto-disabled on terminals that don't support them
@@ -225,24 +227,141 @@ def find_tesseract(system):
     return None
 
 
-def install_packages(pip_names):
+def check_internet():
+    import socket
+    try:
+        socket.setdefaulttimeout(5)
+        socket.gethostbyname("pypi.org")
+        return True
+    except Exception:
+        return False
+
+
+_PROGRESS_LINE_HINTS = ("B/s", "MB", "kB", "GB", "eta")
+
+
+def _looks_like_pip_progress_line(line):
+    """
+    True for pip's own live download-progress refreshes (the
+    '|#######    | 4.1/20.6 MB 5.3 MB/s eta 0:00:03' style lines),
+    False for ordinary informational lines ('Collecting numpy', ...).
+    pip writes progress refreshes with a bare '\\r' rather than '\\n';
+    Python's universal-newline translation turns each of those '\\r'
+    refreshes into its own line when we iterate proc.stdout below, so
+    we see them one at a time and can redraw them ourselves live.
+    """
+    s = line.strip()
+    return bool(s) and ("#" in s or "|" in s) and any(h in s for h in _PROGRESS_LINE_HINTS)
+
+
+def render_hash_bar(current, total, width=30):
+    """rpm/apt-style hash bar: [#################-----------]  57%"""
+    total = max(total, 1)
+    current = max(0, min(current, total))
+    filled = int(width * current / total)
+    pct = int(100 * current / total)
+    bar = "#" * filled + "-" * (width - filled)
+    color = C.GREEN if C.ON else ""
+    reset = C.RESET if C.ON else ""
+    return f"[{color}{bar}{reset}] {pct:3d}%"
+
+
+def install_packages(pip_names, max_attempts=3):
+    """
+    Install packages ONE AT A TIME, retrying each one on failure. This
+    matters because a single flaky download (DNS blip, dropped wifi,
+    a package needing to build from source) shouldn't wipe out an
+    otherwise-successful batch install of ten other packages — pip
+    aborts the whole invocation on the first failure when given a list.
+
+    Shows two live hash-style progress bars while it works, similar to
+    apt/rpm/yum on Linux:
+      - a per-file DOWNLOAD bar, which is pip's own real progress
+        (enabled with --progress-bar ascii and streamed live instead
+        of only being shown after a failure)
+      - an OVERALL bar tracking how many of the requested packages
+        have completed so far
+
+    Returns (succeeded, failed) — both lists of pip package names.
+    """
+    succeeded, failed = [], []
+    total = len(pip_names)
+
+    for idx, pip_name in enumerate(pip_names, start=1):
+        print()
+        print(f"  {C.BOLD}Overall{C.RESET}  {render_hash_bar(idx - 1, total)}  "
+              f"{C.DIM}({idx-1}/{total} packages){C.RESET}")
+        info(f"Installing {pip_name} ...")
+
+        last_tail = []
+        installed_ok = False
+
+        for attempt in range(1, max_attempts + 1):
+            if attempt > 1:
+                delay = 3 * (attempt - 1)
+                info(f"  retry {attempt}/{max_attempts} in {delay}s ...")
+                time.sleep(delay)
+
+            proc = subprocess.Popen(
+                [sys.executable, "-m", "pip", "install",
+                 "--retries", "3", "--timeout", "20",
+                 "--progress-bar", "ascii", pip_name],
+                stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+                text=True, bufsize=1,
+            )
+
+            tail = []
+            bar_open = False  # a progress line is currently occupying the row
+            for raw_line in proc.stdout:
+                line = raw_line.rstrip("\n")
+                if _looks_like_pip_progress_line(line):
+                    # Live-redraw pip's real download progress on one row.
+                    text = line.strip()[:78]
+                    sys.stdout.write("\r  " + C.CYAN + "downloading" + C.RESET +
+                                      "  " + text.ljust(78))
+                    sys.stdout.flush()
+                    bar_open = True
+                else:
+                    if bar_open:
+                        sys.stdout.write("\n")
+                        bar_open = False
+                    if line.strip():
+                        info(line.strip())
+                    tail.append(line)
+                    tail = tail[-8:]
+            if bar_open:
+                sys.stdout.write("\n")
+            proc.wait()
+            last_tail = tail
+
+            if proc.returncode == 0:
+                # The actual "installing collected package" step pip does
+                # after downloading is near-instant and reports no progress
+                # of its own, so give it a quick rpm/apt-style hash fill —
+                # purely cosmetic, but matches the visual you're after.
+                width = 30
+                for filled in range(0, width + 1, 3):
+                    bar = "#" * filled + "-" * (width - filled)
+                    sys.stdout.write(f"\r  {C.CYAN}installing{C.RESET}   "
+                                      f"[{bar}] {pip_name}".ljust(90))
+                    sys.stdout.flush()
+                    time.sleep(0.02)
+                sys.stdout.write("\n")
+                ok(f"{pip_name} installed.")
+                succeeded.append(pip_name)
+                installed_ok = True
+                break
+
+        if not installed_ok:
+            bad(f"{pip_name} failed after {max_attempts} attempts.")
+            for line in last_tail:
+                print(f"    {C.DIM}{line}{C.RESET}")
+            failed.append(pip_name)
+
     print()
-    info(f"Installing: {', '.join(pip_names)}")
-    info("(this can take a minute, especially opencv-python / numpy)")
-    print()
-    proc = subprocess.Popen(
-        [sys.executable, "-m", "pip", "install", *pip_names],
-        stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
-        text=True, bufsize=1,
-    )
-    tail = []
-    for line in proc.stdout:
-        line = line.rstrip()
-        tail.append(line)
-        tail = tail[-15:]
-        print(f"  {C.DIM}{line}{C.RESET}")
-    proc.wait()
-    return proc.returncode == 0, tail
+    print(f"  {C.BOLD}Overall{C.RESET}  {render_hash_bar(total, total)}  "
+          f"{C.DIM}({total}/{total} packages){C.RESET}")
+    return succeeded, failed
 
 
 def _normalize_windows_path_value(value):
