@@ -277,8 +277,8 @@ def install_packages(pip_names, max_attempts=3):
     Shows two live hash-style progress bars while it works, similar to
     apt/rpm/yum on Linux:
       - a per-file DOWNLOAD bar, which is pip's own real progress
-        (enabled with --progress-bar ascii and streamed live instead
-        of only being shown after a failure)
+        (enabled with --progress-bar on and parsed into a custom live bar
+        showing percentage, downloaded size, speed, and ETA)
       - an OVERALL bar tracking how many of the requested packages
         have completed so far
 
@@ -305,30 +305,106 @@ def install_packages(pip_names, max_attempts=3):
             proc = subprocess.Popen(
                 [sys.executable, "-m", "pip", "install",
                  "--retries", "3", "--timeout", "20",
-                 "--progress-bar", "ascii", pip_name],
+                 "--progress-bar", "on", pip_name],
                 stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
                 text=True, bufsize=1,
             )
 
             tail = []
-            bar_open = False  # a progress line is currently occupying the row
+            bar_open = False
+
+            # pip's progress text normally contains something like:
+            #   |########----| 4.1/20.6 MB 5.3 MB/s eta 0:00:03
+            # or:
+            #   42.3/100.0 MB 8.1 MB/s eta 0:00:07
+            progress_re = re.compile(
+                r"(?P<current>[0-9]+(?:\\.[0-9]+)?)\\s*"
+                r"(?P<current_unit>[kKmMgG]?[bB])?\\s*/\\s*"
+                r"(?P<total>[0-9]+(?:\\.[0-9]+)?)\\s*"
+                r"(?P<total_unit>[kKmMgG]?[bB])?"
+                r".*?(?P<speed>[0-9]+(?:\\.[0-9]+)?)\\s*"
+                r"(?P<speed_unit>[kKmMgG]?[bB]/s)"
+                r".*?(?:eta\\s+)?(?P<eta>[0-9]+:[0-9]{2}(?::[0-9]{2})?)",
+                re.IGNORECASE,
+            )
+
+            def _unit_factor(unit):
+                if not unit:
+                    return 1.0
+                unit = unit.lower()
+                return {
+                    "b": 1.0,
+                    "kb": 1024.0,
+                    "mb": 1024.0 ** 2,
+                    "gb": 1024.0 ** 3,
+                }.get(unit, 1.0)
+
+            def _fmt_size(value, unit):
+                if not unit:
+                    return f"{value:.1f} B"
+                return f"{value:.1f} {unit.upper()}"
+
+            def _draw_download_bar(current, total, current_unit, total_unit,
+                                   speed, speed_unit, eta, width=34):
+                current_bytes = current * _unit_factor(current_unit)
+                total_bytes = total * _unit_factor(total_unit or current_unit)
+                pct = 0 if total_bytes <= 0 else min(100.0, current_bytes / total_bytes * 100)
+                filled = int(width * pct / 100)
+                bar = "#" * filled + "-" * (width - filled)
+
+                current_text = _fmt_size(current, current_unit or "")
+                total_text = _fmt_size(total, total_unit or current_unit or "")
+                speed_text = f"{speed:.1f} {speed_unit.upper()}"
+                return (
+                    f"\\r  {C.CYAN}Downloading{C.RESET}  "
+                    f"[{C.GREEN if C.ON else ''}{bar}{C.RESET if C.ON else ''}] "
+                    f"{pct:6.2f}%  {current_text} / {total_text}  "
+                    f"{speed_text}  ETA {eta}"
+                )
+
             for raw_line in proc.stdout:
                 line = raw_line.rstrip("\n")
-                if _looks_like_pip_progress_line(line):
-                    # Live-redraw pip's real download progress on one row.
-                    text = line.strip()[:78]
-                    sys.stdout.write("\r  " + C.CYAN + "downloading" + C.RESET +
-                                      "  " + text.ljust(78))
+                stripped = line.strip()
+                match = progress_re.search(stripped)
+
+                if match:
+                    current = float(match.group("current"))
+                    total = float(match.group("total"))
+                    speed = float(match.group("speed"))
+                    eta = match.group("eta")
+                    current_unit = match.group("current_unit") or match.group("total_unit") or "B"
+                    total_unit = match.group("total_unit") or current_unit
+                    speed_unit = match.group("speed_unit")
+
+                    text = _draw_download_bar(
+                        current, total, current_unit, total_unit,
+                        speed, speed_unit, eta
+                    )
+                    sys.stdout.write(text[:150].ljust(155))
                     sys.stdout.flush()
                     bar_open = True
-                else:
-                    if bar_open:
-                        sys.stdout.write("\n")
-                        bar_open = False
-                    if line.strip():
-                        info(line.strip())
-                    tail.append(line)
-                    tail = tail[-8:]
+                    continue
+
+                if _looks_like_pip_progress_line(stripped):
+                    # Fallback for pip progress formats that don't match the
+                    # numeric parser above. Still show the live pip line.
+                    sys.stdout.write(
+                        "\r  " + C.CYAN + "Downloading" + C.RESET +
+                        "  " + stripped[:145].ljust(145)
+                    )
+                    sys.stdout.flush()
+                    bar_open = True
+                    continue
+
+                if bar_open:
+                    sys.stdout.write("\n")
+                    bar_open = False
+
+                if stripped:
+                    info(stripped)
+                tail.append(stripped)
+                tail = tail[-8:]
+
             if bar_open:
                 sys.stdout.write("\n")
             proc.wait()
