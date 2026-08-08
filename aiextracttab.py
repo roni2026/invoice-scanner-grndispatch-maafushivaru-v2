@@ -466,6 +466,20 @@ def add_ai_extract_tab(app):
     app._aix_tree.configure(yscrollcommand=ys.set, xscrollcommand=xs.set)
 
     app._aix_tree.grid(row=0, column=0, sticky="nsew")
+
+    ```python
+# DEBUG: test whether the Treeview receives mouse clicks
+app._aix_tree.bind(
+    "<Button-1>",
+    lambda e: print("AI TREE LEFT CLICK"),
+    add="+"
+)
+
+app._aix_tree.bind(
+    "<Double-Button-1>",
+    lambda e: print("AI TREE DOUBLE CLICK"),
+    add="+"
+)
     ys.grid(row=0, column=1, sticky="ns")
     xs.grid(row=1, column=0, sticky="ew")
     tf.rowconfigure(0, weight=1)
