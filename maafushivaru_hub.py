@@ -4461,118 +4461,184 @@ class MaafushivaruHub(tk.Tk, OCRWorkerMixin):
     # ------------------------------------------------------------------
     def _make_tree_editable(self, tree, on_edit_callback=None, editable_cols=None, pre_edit_fn=None):
         """
-        Bind double-click editing to a Treeview.
+        Make Treeview cells editable by double-clicking.
 
-        Column 0 is reserved for PDF preview (handled by the caller via
-        on_preview_callback).  All other editable columns open an inline
-        Entry widget.
-
-        We store the callback refs on the tree widget itself so the binding
-        is never replaced by a second call.
+        Column 0 can be used for PDF preview when a preview callback
+        is assigned to tree._edit_on_preview_cb.
         """
-        # Attach metadata to the tree so we can retrieve it from the handler
-        tree._edit_editable_cols   = editable_cols
-        tree._edit_on_edit_cb      = on_edit_callback
-        tree._edit_pre_edit_fn     = pre_edit_fn
+
+        tree._edit_editable_cols = editable_cols
+        tree._edit_on_edit_cb = on_edit_callback
+        tree._edit_pre_edit_fn = pre_edit_fn
+        tree._edit_entry = None
+
+        def close_editor():
+            entry = getattr(tree, "_edit_entry", None)
+            if entry is not None:
+                try:
+                    if entry.winfo_exists():
+                        entry.destroy()
+                except Exception:
+                    pass
+            tree._edit_entry = None
 
         def on_double_click(event):
-            logging.info(f"[EDIT-DEBUG] Double-1 fired on tree={tree} at x={event.x},y={event.y}")
-            region = tree.identify("region", event.x, event.y)
-            logging.info(f"[EDIT-DEBUG] region={region}")
-            if region != "cell":
-                logging.info("[EDIT-DEBUG] EXIT: region is not 'cell'")
-                return
+            # Only edit when the mouse is actually over a cell.
+            if tree.identify("region", event.x, event.y) != "cell":
+                return "break"
 
             col_id = tree.identify_column(event.x)
             row_id = tree.identify_row(event.y)
-            logging.info(f"[EDIT-DEBUG] col_id={col_id} row_id={row_id!r}")
-            if not row_id:
-                logging.info("[EDIT-DEBUG] EXIT: no row_id")
-                return
 
-            ci = int(col_id[1:]) - 1   # 0-based column index
-            logging.info(f"[EDIT-DEBUG] ci={ci}")
+            if not row_id or not col_id:
+                return "break"
 
-            # Column 0 → PDF preview only if a preview callback is registered
+            ci = int(col_id[1:]) - 1
+
+            # Column 0 = PDF preview when a preview callback exists.
             if ci == 0:
-                preview_cb = getattr(tree, '_edit_on_preview_cb', None)
-                logging.info(f"[EDIT-DEBUG] col 0: preview_cb={preview_cb}")
+                preview_cb = getattr(tree, "_edit_on_preview_cb", None)
                 if preview_cb is not None:
                     preview_cb(row_id)
-                    logging.info("[EDIT-DEBUG] EXIT: called preview_cb")
-                    return
-                # No preview callback = treat col 0 as editable (e.g. supplier tree)
-				
+                    return "break"
 
-            # Check editable
-            ec = tree._edit_editable_cols
-            logging.info(f"[EDIT-DEBUG] editable_cols={ec}")
-            if ec is not None and ci not in ec:
-                logging.info(f"[EDIT-DEBUG] EXIT: ci={ci} not in editable_cols")
+            # Check whether this column is editable.
+            if (
+                tree._edit_editable_cols is not None
+                and ci not in tree._edit_editable_cols
+            ):
+                return "break"
+
+            values = list(tree.item(row_id, "values"))
+
+            if ci >= len(values):
+                return "break"
+
+            current_value = str(values[ci])
+
+            # Give Tkinter time to finish processing the double-click
+            # before placing the Entry widget.
+            def create_editor():
+                if not tree.winfo_exists():
+                    return
+
+                bbox = tree.bbox(row_id, col_id)
+
+                if not bbox:
+                    return
+
+                close_editor()
+
+                bx, by, bw, bh = bbox
+
+                display_value = current_value
+
+                if tree._edit_pre_edit_fn:
+                    try:
+                        display_value = tree._edit_pre_edit_fn(
+                            ci, current_value
+                        )
+                    except Exception:
+                        display_value = current_value
+
+                var = tk.StringVar(value=display_value)
+
+                entry = tk.Entry(
+                    tree,
+                    textvariable=var,
+                    background=PANEL2,
+                    foreground=TEXT,
+                    insertbackground=TEXT,
+                    relief="flat",
+                    font=("Segoe UI", 9, "bold"),
+                    bd=2,
+                    highlightthickness=1,
+                    highlightbackground=ACCENT,
+                    highlightcolor=ACCENT,
+                )
+
+                tree._edit_entry = entry
+
+                entry.place(
+                    x=bx,
+                    y=by,
+                    width=bw,
+                    height=bh
+                )
+
+                entry.focus_force()
+                entry.select_range(0, tk.END)
+
+                finished = [False]
+
+                def commit(event=None):
+                    if finished[0]:
+                        return "break"
+
+                    finished[0] = True
+
+                    new_value = var.get().strip()
+
+                    close_editor()
+
+                    # Nothing changed.
+                    if new_value == display_value:
+                        return "break"
+
+                    # Empty value = cancel.
+                    if new_value == "":
+                        return "break"
+
+                    callback = tree._edit_on_edit_cb
+
+                    if callback:
+                        callback(
+                            row_id,
+                            ci,
+                            current_value,
+                            new_value
+                        )
+                    else:
+                        values[ci] = new_value
+                        tree.item(row_id, values=values)
+
+                    return "break"
+
+                def cancel(event=None):
+                    finished[0] = True
+                    close_editor()
+                    return "break"
+
+                entry.bind("<Return>", commit)
+                entry.bind("<KP_Enter>", commit)
+                entry.bind("<Escape>", cancel)
+
+                # IMPORTANT:
+                # Do NOT bind FocusOut to commit.
+                # This was causing the editor to disappear unexpectedly
+                # on some Tk/macOS/Windows combinations.
+
+            tree.after_idle(create_editor)
+
+            return "break"
+
+        # Use add="+" so this doesn't destroy any other Treeview bindings.
+        tree.bind("<Double-1>", on_double_click, add="+")
+
+        # Clicking somewhere else finishes the edit cleanly.
+        def click_elsewhere(event):
+            entry = getattr(tree, "_edit_entry", None)
+
+            if entry is None:
                 return
 
-            vals = list(tree.item(row_id, "values"))
-            logging.info(f"[EDIT-DEBUG] vals len={len(vals)} vals={vals}")
-            if ci >= len(vals):
-                logging.info("[EDIT-DEBUG] EXIT: ci >= len(vals)")
+            if event.widget is entry:
                 return
 
-            cur         = str(vals[ci])
-            pre_fn      = tree._edit_pre_edit_fn
-            display_val = pre_fn(ci, cur) if pre_fn else cur
+            # Don't immediately destroy the editor during the double-click.
+            tree.after_idle(close_editor)
 
-            bbox = tree.bbox(row_id, col_id)
-            logging.info(f"[EDIT-DEBUG] bbox={bbox}")
-            if not bbox:
-                logging.info("[EDIT-DEBUG] EXIT: no bbox (row not visible?)")
-                return
-            bx, by, bw, bh = bbox
-
-            ev  = tk.StringVar(value=display_val)
-            ent = tk.Entry(
-                tree, textvariable=ev,
-                background=PANEL2, foreground=TEXT,
-                insertbackground=TEXT, relief="flat",
-                font=("Segoe UI", 9, "bold"), bd=2,
-                highlightthickness=1,
-                highlightbackground=ACCENT, highlightcolor=ACCENT,
-            )
-            ent.place(x=bx, y=by, width=bw, height=bh)
-            logging.info("[EDIT-DEBUG] Entry box placed and shown.")
-            ent.focus_set()
-            ent.select_range(0, tk.END)
-            done = [False]
-
-            def commit(e=None):
-                logging.info(f"[EDIT-DEBUG] commit() called, event={e}, done={done[0]}")
-                if done[0]:
-                    return
-                done[0] = True
-                nv = ev.get().strip()
-                ent.destroy()
-                if not nv or nv == display_val:
-                    logging.info(f"[EDIT-DEBUG] commit: no-op (nv={nv!r}, display_val={display_val!r})")
-                    return
-                cb = tree._edit_on_edit_cb
-                if cb:
-                    cb(row_id, ci, cur, nv)
-                else:
-                    vals[ci] = nv
-                    tree.item(row_id, values=vals)
-                logging.info(f"[EDIT-DEBUG] commit: applied nv={nv!r}")
-
-            def cancel(e=None):
-                logging.info("[EDIT-DEBUG] cancel() called")
-                done[0] = True
-                ent.destroy()
-
-            ent.bind("<Return>",   commit)
-            ent.bind("<KP_Enter>", commit)
-            ent.bind("<Escape>",   cancel)
-            ent.bind("<FocusOut>", commit)
-
-        # Single binding — no duplicate
-        tree.bind("<Double-1>", on_double_click)
+        tree.bind("<Button-1>", click_elsewhere, add="+")
 
     # ------------------------------------------------------------------
     # DRY RUN PREVIEW POPUP
