@@ -467,7 +467,6 @@ def add_ai_extract_tab(app):
 
     app._aix_tree.grid(row=0, column=0, sticky="nsew")
 
-    ```python
 # DEBUG: test whether the Treeview receives mouse clicks
 app._aix_tree.bind(
     "<Button-1>",
