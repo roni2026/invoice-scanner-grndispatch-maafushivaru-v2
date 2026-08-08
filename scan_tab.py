@@ -1,4 +1,5 @@
 # scan_tab.py
+<<<<<<< HEAD
 # Adds a "Scan" tab to an existing Tkinter app (MaafushivaruHub).
 #
 # Two capture methods, selectable from a dropdown:
@@ -16,11 +17,19 @@
 # Requires: Windows; pip install pywin32 pillow pypdf2
 # Optional: pip install pywinauto  (lets HP mode find/teach/press buttons
 #           in modern Store apps like HP Smart / HP Scan and Capture)
+=======
+# Adds a "Scan" tab to an existing Tkinter app (MaafushivaruHub) using Windows WIA via pywin32.
+# Supports: save-as, item type, page sides, page size, color mode, auto-orient, send-to folder, preview.
+# Requires: Windows + WIA driver, and: pip install pywin32 pillow pypdf2
+>>>>>>> 5f9889c6ac069d498b62d3e60d0f5e205c269590
 
 import os
 import io
 import sys
+<<<<<<< HEAD
 import re
+=======
+>>>>>>> 5f9889c6ac069d498b62d3e60d0f5e205c269590
 import time
 import threading
 import traceback
@@ -36,6 +45,7 @@ from PyPDF2 import PdfWriter
 try:
     import pythoncom
     import win32com.client  # pywin32
+<<<<<<< HEAD
     import win32api
     import win32gui
     import win32con
@@ -45,6 +55,11 @@ except ImportError:
     win32api = None
     win32gui = None
     win32con = None
+=======
+except ImportError:
+    pythoncom = None
+    win32com = None
+>>>>>>> 5f9889c6ac069d498b62d3e60d0f5e205c269590
 
 
 # --- WIA constants (subset) ---
@@ -76,6 +91,7 @@ INTENT_COLOR     = 0x0001
 INTENT_GRAYSCALE = 0x0002
 INTENT_TEXT      = 0x0004  # often B/W
 
+<<<<<<< HEAD
 # Scan methods shown in the dropdown
 METHOD_WIA = "wia"
 METHOD_HP  = "hp"
@@ -92,6 +108,8 @@ DEFAULT_HP_BUTTON_TEXT  = "Scan"
 # How long teach mode listens for your click
 TEACH_TIMEOUT_SECONDS = 60
 
+=======
+>>>>>>> 5f9889c6ac069d498b62d3e60d0f5e205c269590
 
 def _ensure_pywin32():
     if win32com is None or pythoncom is None:
@@ -119,6 +137,7 @@ def list_wia_scanners():
         pythoncom.CoUninitialize()
 
 
+<<<<<<< HEAD
 # ----------------------------------------------------------------------
 # Finding and pressing the HP software's Scan button
 # ----------------------------------------------------------------------
@@ -529,6 +548,9 @@ def _own_title(our_root_hwnd):
 # ----------------------------------------------------------------------
 # WIA acquisition
 # ----------------------------------------------------------------------
+=======
+
+>>>>>>> 5f9889c6ac069d498b62d3e60d0f5e205c269590
 def _set_prop(props, pid, val):
     try:
         props.Item(pid).Value = val
@@ -671,8 +693,12 @@ def _save_images(images, out_path, fmt):
 def add_scan_tab(app):
     """
     Mounts a 'Scan' tab into the existing ttk.Notebook on the given app (MaafushivaruHub).
+<<<<<<< HEAD
     Expects: app.notebook, app.dirs, app._set_status, app._show_pdf_preview (optional),
     and (optional) app.cfg / app._save_config for remembering settings.
+=======
+    Expects: app.notebook, app.dirs, app._set_status, app._show_pdf_preview (optional).
+>>>>>>> 5f9889c6ac069d498b62d3e60d0f5e205c269590
     """
     # Styles/colors already defined by the host app; reuse their constants if present
     BG       = getattr(app, "BG", "#0A0F1E") if hasattr(app, "BG") else "#0A0F1E"
@@ -685,6 +711,7 @@ def add_scan_tab(app):
     WARNING  = getattr(app, "WARNING", "#F59E0B") if hasattr(app, "WARNING") else "#F59E0B"
     ERROR    = getattr(app, "ERROR", "#EF4444") if hasattr(app, "ERROR") else "#EF4444"
 
+<<<<<<< HEAD
     # ---- persisted settings (remembered between runs) ----------------------
     def _settings():
         cfg = getattr(app, "cfg", None)
@@ -724,6 +751,8 @@ def add_scan_tab(app):
 
     saved = _settings()
 
+=======
+>>>>>>> 5f9889c6ac069d498b62d3e60d0f5e205c269590
     # Create tab
     tab = ttk.Frame(app.notebook)
     app.notebook.add(tab, text="  Scan  ")
@@ -735,13 +764,18 @@ def add_scan_tab(app):
     body = tk.Frame(tab, bg=PANEL)
     body.pack(fill=tk.BOTH, expand=True)
 
+<<<<<<< HEAD
     tk.Label(top, text="Scan Documents", bg=PANEL2, fg=TEXT,
+=======
+    tk.Label(top, text="Scan Documents (WIA)", bg=PANEL2, fg=TEXT,
+>>>>>>> 5f9889c6ac069d498b62d3e60d0f5e205c269590
              font=("Segoe UI", 11, "bold")).pack(side=tk.LEFT, padx=16, pady=14)
 
     # Controls frame
     ctrl = tk.Frame(body, bg=PANEL)
     ctrl.pack(fill=tk.X, padx=16, pady=12)
 
+<<<<<<< HEAD
     # Left column (method + device + options)
     left = tk.Frame(ctrl, bg=PANEL)
     left.pack(side=tk.LEFT, fill=tk.X, expand=True, padx=(0, 8))
@@ -768,6 +802,22 @@ def add_scan_tab(app):
     scanner_var = tk.StringVar(value="")
     scanner_cb = ttk.Combobox(left, textvariable=scanner_var, state="readonly", width=40)
     scanner_cb.grid(row=1, column=1, sticky="w", padx=(8, 0), pady=(2, 6))
+=======
+    # Left column (device + options)
+    left = tk.Frame(ctrl, bg=PANEL)
+    left.pack(side=tk.LEFT, fill=tk.X, expand=True, padx=(0, 8))
+
+    # Right column (destination)
+    right = tk.Frame(ctrl, bg=PANEL)
+    right.pack(side=tk.LEFT, fill=tk.X, expand=True, padx=(8, 0))
+
+    # Scanner selection
+    dev_lbl = tk.Label(left, text="Scanner:", bg=PANEL, fg=MUTED, font=("Segoe UI", 9, "bold"))
+    dev_lbl.grid(row=0, column=0, sticky="w", pady=(2, 6))
+    scanner_var = tk.StringVar(value="")
+    scanner_cb = ttk.Combobox(left, textvariable=scanner_var, state="readonly", width=40)
+    scanner_cb.grid(row=0, column=1, sticky="w", padx=(8, 0), pady=(2, 6))
+>>>>>>> 5f9889c6ac069d498b62d3e60d0f5e205c269590
 
     def refresh_scanners():
         try:
@@ -779,6 +829,7 @@ def add_scan_tab(app):
         except Exception as e:
             messagebox.showerror("WIA Error", f"Could not enumerate scanners:\n\n{e}")
 
+<<<<<<< HEAD
     refresh_btn = ttk.Button(left, text="Refresh", command=refresh_scanners)
     refresh_btn.grid(row=1, column=2, padx=8, pady=(2, 6))
 
@@ -882,6 +933,54 @@ def add_scan_tab(app):
     # decides itself where scanned files go)
     dest_lbl = tk.Label(right, text="Send to folder:", bg=PANEL, fg=MUTED, font=("Segoe UI", 9, "bold"))
     dest_lbl.grid(row=0, column=0, sticky="w", pady=(2, 6))
+=======
+    ttk.Button(left, text="Refresh", command=refresh_scanners).grid(row=0, column=2, padx=8, pady=(2, 6))
+
+    # Item type (document/photo)
+    tk.Label(left, text="Item type:", bg=PANEL, fg=MUTED, font=("Segoe UI", 9, "bold")).grid(row=1, column=0, sticky="w", pady=6)
+    item_type_var = tk.StringVar(value="Document")
+    ttk.Combobox(left, textvariable=item_type_var, values=["Document", "Photo"], state="readonly", width=20)\
+        .grid(row=1, column=1, sticky="w", padx=(8, 0), pady=6)
+
+    # Page sides
+    tk.Label(left, text="Page sides:", bg=PANEL, fg=MUTED, font=("Segoe UI", 9, "bold")).grid(row=2, column=0, sticky="w", pady=6)
+    sides_var = tk.StringVar(value="Simplex")
+    ttk.Combobox(left, textvariable=sides_var, values=["Simplex", "Duplex"], state="readonly", width=20)\
+        .grid(row=2, column=1, sticky="w", padx=(8, 0), pady=6)
+
+    # Page size
+    tk.Label(left, text="Page size:", bg=PANEL, fg=MUTED, font=("Segoe UI", 9, "bold")).grid(row=3, column=0, sticky="w", pady=6)
+    page_size_var = tk.StringVar(value="A4")
+    ttk.Combobox(left, textvariable=page_size_var, values=["A4", "Letter", "Auto"], state="readonly", width=20)\
+        .grid(row=3, column=1, sticky="w", padx=(8, 0), pady=6)
+
+    # DPI
+    tk.Label(left, text="DPI:", bg=PANEL, fg=MUTED, font=("Segoe UI", 9, "bold")).grid(row=4, column=0, sticky="w", pady=6)
+    dpi_var = tk.IntVar(value=300)
+    ttk.Spinbox(left, from_=100, to=600, textvariable=dpi_var, width=8)\
+        .grid(row=4, column=1, sticky="w", padx=(8, 0), pady=6)
+
+    # Color mode
+    tk.Label(left, text="Color mode:", bg=PANEL, fg=MUTED, font=("Segoe UI", 9, "bold")).grid(row=5, column=0, sticky="w", pady=6)
+    color_var = tk.StringVar(value="Color")
+    ttk.Combobox(left, textvariable=color_var, values=["Color", "Grayscale", "Black & White"], state="readonly", width=20)\
+        .grid(row=5, column=1, sticky="w", padx=(8, 0), pady=6)
+
+    # Source (ADF/Flatbed)
+    tk.Label(left, text="Source:", bg=PANEL, fg=MUTED, font=("Segoe UI", 9, "bold")).grid(row=6, column=0, sticky="w", pady=6)
+    source_var = tk.StringVar(value="ADF")
+    ttk.Combobox(left, textvariable=source_var, values=["ADF", "Flatbed"], state="readonly", width=20)\
+        .grid(row=6, column=1, sticky="w", padx=(8, 0), pady=6)
+
+    # Auto orient
+    auto_orient_var = tk.BooleanVar(value=True)
+    ttk.Checkbutton(left, text="Auto orient (if supported)", variable=auto_orient_var)\
+        .grid(row=7, column=1, sticky="w", padx=(6, 0), pady=6)
+
+    # Destination controls
+    tk.Label(right, text="Send to folder:", bg=PANEL, fg=MUTED, font=("Segoe UI", 9, "bold"))\
+        .grid(row=0, column=0, sticky="w", pady=(2, 6))
+>>>>>>> 5f9889c6ac069d498b62d3e60d0f5e205c269590
     out_dir_var = tk.StringVar(value=app.dirs.get("scanned", app.dirs.get("base", ".")))
 
     out_entry = tk.Entry(right, textvariable=out_dir_var, bg=PANEL2, fg=TEXT,
@@ -895,6 +994,7 @@ def add_scan_tab(app):
         if d:
             out_dir_var.set(d)
 
+<<<<<<< HEAD
     browse_btn = ttk.Button(right, text="Browse", command=choose_folder)
     browse_btn.grid(row=0, column=2, padx=8, pady=(2, 6))
 
@@ -917,6 +1017,27 @@ def add_scan_tab(app):
     preview_var = tk.BooleanVar(value=True)
     preview_chk = ttk.Checkbutton(right, text="Show viewer after scan", variable=preview_var)
     preview_chk.grid(row=3, column=1, sticky="w", padx=(6, 0), pady=6)
+=======
+    ttk.Button(right, text="Browse", command=choose_folder).grid(row=0, column=2, padx=8, pady=(2, 6))
+
+    # Save as
+    tk.Label(right, text="Save as:", bg=PANEL, fg=MUTED, font=("Segoe UI", 9, "bold"))\
+        .grid(row=1, column=0, sticky="w", pady=6)
+    save_as_var = tk.StringVar(value="PDF")
+    ttk.Combobox(right, textvariable=save_as_var, values=["PDF", "PNG"], state="readonly", width=12)\
+        .grid(row=1, column=1, sticky="w", padx=(8, 0), pady=6)
+
+    # File name base
+    tk.Label(right, text="File name:", bg=PANEL, fg=MUTED, font=("Segoe UI", 9, "bold"))\
+        .grid(row=2, column=0, sticky="w", pady=6)
+    fname_var = tk.StringVar(value="SCAN")
+    ttk.Entry(right, textvariable=fname_var, width=24).grid(row=2, column=1, sticky="w", padx=(8, 0), pady=6)
+
+    # Show preview after scan
+    preview_var = tk.BooleanVar(value=True)
+    ttk.Checkbutton(right, text="Show viewer after scan", variable=preview_var)\
+        .grid(row=3, column=1, sticky="w", padx=(6, 0), pady=6)
+>>>>>>> 5f9889c6ac069d498b62d3e60d0f5e205c269590
 
     # Progress + buttons
     foot = tk.Frame(body, bg=PANEL)
@@ -957,6 +1078,7 @@ def add_scan_tab(app):
     def status_cb(txt):
         set_status(txt)
 
+<<<<<<< HEAD
     # ---- Which widgets belong to which mode ---------------------------------
     wia_widgets = [scanner_cb, refresh_btn, item_type_cb, sides_cb, psize_cb,
                    dpi_spin, color_cb, source_cb, auto_orient_chk,
@@ -1120,6 +1242,9 @@ def add_scan_tab(app):
 
     # ---- WIA method (original flow) ------------------------------------------
     def do_wia_scan():
+=======
+    def do_scan():
+>>>>>>> 5f9889c6ac069d498b62d3e60d0f5e205c269590
         try:
             cancel_flag["stop"] = False
             pbar.configure(value=0, maximum=10)
@@ -1164,6 +1289,7 @@ def add_scan_tab(app):
             ts = time.strftime("%Y%m%d_%H%M%S")
             if save_as_var.get() == "PDF":
                 out_path = os.path.join(out_dir, f"{base}_{ts}.pdf")
+<<<<<<< HEAD
                 saved_files = _save_images(imgs, out_path, "PDF")
             else:
                 out_path = os.path.join(out_dir, f"{base}_{ts}.png")
@@ -1171,12 +1297,25 @@ def add_scan_tab(app):
 
             pbar.configure(value=pbar["maximum"])
             set_status(f"Scan complete — saved: {', '.join(os.path.basename(x) for x in saved_files)}", SUCCESS)
+=======
+                saved = _save_images(imgs, out_path, "PDF")
+            else:
+                out_path = os.path.join(out_dir, f"{base}_{ts}.png")
+                saved = _save_images(imgs, out_path, "PNG")
+
+            pbar.configure(value=pbar["maximum"])
+            set_status(f"Scan complete — saved: {', '.join(os.path.basename(x) for x in saved)}", SUCCESS)
+>>>>>>> 5f9889c6ac069d498b62d3e60d0f5e205c269590
 
             # Preview first output (PDF preferred)
             if preview_var.get() and hasattr(app, "_show_pdf_preview"):
                 try:
                     if save_as_var.get() == "PDF":
+<<<<<<< HEAD
                         app._show_pdf_preview(saved_files[0])
+=======
+                        app._show_pdf_preview(saved[0])
+>>>>>>> 5f9889c6ac069d498b62d3e60d0f5e205c269590
                     else:
                         # When PNG, quickly wrap into a temp one-page PDF for preview using existing viewer
                         tmp_pdf = os.path.join(out_dir, f"{base}_{ts}_preview.pdf")
@@ -1193,6 +1332,7 @@ def add_scan_tab(app):
             messagebox.showerror("Scan Error", str(e))
             set_status(f"Scan failed: {e}", ERROR)
 
+<<<<<<< HEAD
     def do_scan():
         if method_key_var.get() == METHOD_HP:
             try:
@@ -1221,13 +1361,24 @@ def add_scan_tab(app):
                     pass
 
         t = threading.Thread(target=worker, daemon=True)
+=======
+    def on_scan_click():
+        scan_btn.configure(state="disabled")
+        cancel_btn.configure(state="normal")
+        t = threading.Thread(target=lambda: (do_scan(), scan_btn.configure(state="normal")), daemon=True)
+>>>>>>> 5f9889c6ac069d498b62d3e60d0f5e205c269590
         t.start()
 
     scan_btn.configure(command=on_scan_click)
 
+<<<<<<< HEAD
     # Populate scanners on open (WIA mode needs the list; harmless in HP mode)
     if method_key_var.get() == METHOD_WIA:
         refresh_scanners()
     _apply_method_ui()
+=======
+    # Populate scanners on open
+    refresh_scanners()
+>>>>>>> 5f9889c6ac069d498b62d3e60d0f5e205c269590
 
     return tab

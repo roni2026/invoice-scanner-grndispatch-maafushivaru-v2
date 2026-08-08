@@ -1,5 +1,9 @@
 {
+<<<<<<< HEAD
     "tesseract_cmd": "Program Files/Tesseract-OCR/tesseract.exe",
+=======
+    "tesseract_cmd": "C:\\Program Files\\Tesseract-OCR\\tesseract.exe",
+>>>>>>> 5f9889c6ac069d498b62d3e60d0f5e205c269590
     "invoice_prefix_fixes": {
         "MSL": "MSI",
         "MS1": "MSI"
@@ -602,4 +606,8 @@
         "timeout_seconds": 30,
         "max_upload_mb": 1.0
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 5f9889c6ac069d498b62d3e60d0f5e205c269590
