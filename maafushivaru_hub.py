@@ -4483,6 +4483,7 @@ class MaafushivaruHub(tk.Tk, OCRWorkerMixin):
             tree._edit_entry = None
 
         def on_double_click(event):
+            print("!!! DOUBLE CLICK RECEIVED !!!")
             # Only edit when the mouse is actually over a cell.
             if tree.identify("region", event.x, event.y) != "cell":
                 return "break"
