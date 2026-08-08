@@ -530,6 +530,20 @@ def _aix_start_scan_trim(app):
 
                 keep_indices = _aix_find_receiving_pages(app, src)
 
+                # OCR.space's free/lite tier rejects requests over 3 pages.
+                # If more than 3 receiving-report pages were found, keep only
+                # the first 3 for the TEMP API PDFS copy — the original in
+                # SCANNED/ is never touched, so nothing is lost.
+                if len(keep_indices) > 3:
+                    _aix_clog(
+                        app,
+                        f"[{datetime.now().strftime('%H:%M:%S')}]  {fname}: "
+                        f"found {len(keep_indices)} receiving-report pages "
+                        f"{keep_indices} — OCR.space allows max 3 per request, "
+                        f"keeping first 3: {keep_indices[:3]}"
+                    )
+                    keep_indices = keep_indices[:3]
+
                 if not keep_indices:
                     skipped += 1
                     skip_msg = (
@@ -631,6 +645,47 @@ def _aix_write_trimmed_pdf(src_path: str, keep_indices: List[int], dest_path: st
             out.close()
     finally:
         src.close()
+
+
+def _aix_limit_pdf_pages(src_path: str, dest_path: str, max_pages: int = 3) -> bool:
+    """
+    Safety-net page cap for OCR.space's 3-page-per-request limit.
+
+    Ensures dest_path has at most `max_pages` pages, keeping the FIRST
+    `max_pages` pages of src_path. Safe to call with src_path == dest_path
+    (used to shrink an already-prepared TEMP API PDFS copy in place) — the
+    trimmed version is written to a distinct temp file first, then swapped
+    in atomically with os.replace(), so the file is never left half-written.
+
+    Returns True if trimming actually happened, False if the file already
+    had <= max_pages pages (nothing to do, left untouched / just copied).
+
+    IMPORTANT: this only ever operates on files passed in explicitly by the
+    caller (the TEMP API PDFS copy). It never touches the original file in
+    SCANNED/ — callers are responsible for only pointing it at temp copies.
+    """
+    doc = fitz.open(src_path)
+    try:
+        total_pages = doc.page_count
+        if total_pages <= max_pages:
+            if src_path != dest_path:
+                shutil.copy2(src_path, dest_path)
+            return False
+
+        out = fitz.open()
+        tmp_out = dest_path + ".pagelimit.tmp"
+        try:
+            out.insert_pdf(doc, from_page=0, to_page=max_pages - 1)
+            out.save(tmp_out)
+        finally:
+            out.close()
+    finally:
+        doc.close()
+
+    # doc is closed now, so it's safe to atomically replace dest_path
+    # (even when dest_path == src_path).
+    os.replace(tmp_out, dest_path)
+    return True
 
 
 # ---------------------------------------------------------------------------
@@ -789,6 +844,37 @@ def _aix_start_process(app, auto=False):
                         _aix_log(app, "COMPRESS", f"{fname}: {_src_mb:.2f} MB <= {target_mb:.2f} MB limit -> sent as-is")
                 except Exception:
                     pass
+
+                # --- Enforce OCR.space's 3-page-per-request limit ---
+                # Safety net: even if Scan & Trim already capped pages, this
+                # step also runs for files that reached here via a fresh
+                # compress (never trimmed) or a stale/reused temp copy, so it
+                # guarantees no upload ever exceeds 3 pages. Only ever
+                # touches the copy in TEMP API PDFS — src_path (the SCANNED/
+                # original) is never opened for writing here.
+                try:
+                    _pdoc = fitz.open(temp_path)
+                    _pcount_before = _pdoc.page_count
+                    _pdoc.close()
+                except Exception:
+                    _pcount_before = 1
+
+                if _pcount_before > 3:
+                    app._set_status(
+                        f"[AI EXTRACT] {fname} has {_pcount_before} pages — trimming temp copy to first 3 for OCR...",
+                        ACCENT,
+                    )
+                    try:
+                        trimmed = _aix_limit_pdf_pages(temp_path, temp_path, max_pages=3)
+                        if trimmed:
+                            was_modified = True
+                            _aix_log(
+                                app, "COMPRESS",
+                                f"{fname}: {_pcount_before} pages > OCR.space 3-page limit "
+                                f"-> trimmed TEMP copy to first 3 pages (original in SCANNED untouched)"
+                            )
+                    except Exception as e:
+                        logging.error(f"[AI EXTRACT] page-limit trim failed [{fname}]: {e}", exc_info=True)
 
                 # --- Count pages for usage/credit tracking ---
                 try:

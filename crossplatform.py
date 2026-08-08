@@ -53,7 +53,7 @@ launch_hub.py
 Terminal launcher for the Maafushivaru Document Processing Hub
 (https://github.com/roni2026/invoice-scanner-grndispatch-maafushivaru-v2).
 
-No GUI toolkit required (no tkinter) — everything happens in the terminal.
+# No GUI toolkit required (no tkinter) — everything happens in the terminal.
 
 What it does:
   1. Detects your OS (Windows / macOS / Linux).

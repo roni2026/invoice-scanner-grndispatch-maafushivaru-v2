@@ -300,14 +300,47 @@ class OCRSpaceExtractor:
 
         if data.get("IsErroredOnProcessing", False):
             msgs = []
-            for p in data.get("ParsedResults", []):
-                em = p.get("ErrorMessage", "Unknown")
+
+            # Top-level error fields (outside ParsedResults) often carry the
+            # actual reason and were previously ignored entirely.
+            top_em = data.get("ErrorMessage")
+            if isinstance(top_em, list):
+                msgs.extend(str(x).strip() for x in top_em if str(x).strip())
+            elif top_em:
+                s = str(top_em).strip()
+                if s:
+                    msgs.append(s)
+
+            top_details = data.get("ErrorDetails")
+            if top_details:
+                s = str(top_details).strip()
+                if s:
+                    msgs.append(s)
+
+            for p in data.get("ParsedResults", []) or []:
+                em = p.get("ErrorMessage")
                 if isinstance(em, list):
-                    msgs.extend(str(x) for x in em)
-                else:
-                    msgs.append(str(em))
+                    msgs.extend(str(x).strip() for x in em if str(x).strip())
+                elif em:
+                    s = str(em).strip()
+                    if s:
+                        msgs.append(s)
+                details = p.get("ErrorDetails")
+                if details:
+                    s = str(details).strip()
+                    if s:
+                        msgs.append(s)
+                exit_code = p.get("FileParseExitCode")
+                if exit_code not in (None, "", 1, "1"):
+                    msgs.append(f"FileParseExitCode={exit_code}")
+
+            ocr_exit_code = data.get("OCRExitCode")
+            if ocr_exit_code not in (None, "", 1, "1"):
+                msgs.append(f"OCRExitCode={ocr_exit_code}")
+
             if not msgs:
-                msgs = ["Unknown OCR.space processing error"]
+                msgs = [f"Unknown OCR.space processing error (raw response: {raw[:300]})"]
+
             return "", "OCR.space processing error: " + "; ".join(msgs)
 
         texts: List[str] = []

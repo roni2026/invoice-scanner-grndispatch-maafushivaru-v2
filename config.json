@@ -1,46 +1,4 @@
 {
-<<<<<<< HEAD
-    "tesseract_cmd": "Program Files/Tesseract-OCR/tesseract.exe",
-=======
-    "tesseract_cmd": "C:\\Program Files\\Tesseract-OCR\\tesseract.exe",
->>>>>>> 5f9889c6ac069d498b62d3e60d0f5e205c269590
-    "invoice_prefix_fixes": {
-        "MSL": "MSI",
-        "MS1": "MSI"
-    },
-    "app_settings": {
-        "ocr_engine": "tesseract",
-        "ocr_fallback_to_tesseract": true,
-        "extract_text_before_ocr": true,
-        "extraction_source": "auto",
-        "enhance_images": true,
-        "image_scale_factor": 5,
-        "ocr_psm": 11,
-        "ocr_oem": 3,
-        "fuzzy_match_threshold": 85,
-        "enable_multi_threading": true,
-        "max_threads": 4,
-        "archive_processed": false,
-        "move_failed_files": false,
-        "supplier_extraction_method": "receiving_report_field",
-        "processing_mode": "legacy",
-        "dry_run": false,
-        "desktop_notifications": true,
-        "auto_ingest_watcher": false,
-        "auto_ingest_offline": false,
-        "auto_ingest_api": false,
-        "receiving_label_fuzzy": true,
-        "delete_temp_after_send": true,
-        "confidence_warn_threshold": 80,
-        "page_scan_region_enabled": false,
-        "page_scan_region_percent": 100,
-        "supplier_match_strategy": "combined",
-        "ocr_mode": "zone",
-        "ocr_word_correction_enabled": false,
-        "smart_cross_match_enabled": false,
-        "grn_next_dispatch_no": 1,
-        "processed_transfer_path": ""
-    },
     "folders": {
         "base": ".",
         "scanned": "SCANNED",
@@ -586,8 +544,45 @@
         "po_prefix": "MAM-",
         "po_min_digits": 5
     },
+    "app_settings": {
+        "processing_mode": "custom",
+        "supplier_extraction_method": "both",
+        "dry_run": false,
+        "desktop_notifications": true,
+        "auto_ingest_watcher": true,
+        "auto_ingest_offline": false,
+        "auto_ingest_api": true,
+        "receiving_label_fuzzy": true,
+        "delete_temp_after_send": true,
+        "confidence_warn_threshold": 80,
+        "page_scan_region_enabled": false,
+        "page_scan_region_percent": 100,
+        "supplier_match_strategy": "combined",
+        "ocr_mode": "zone",
+        "ocr_word_correction_enabled": false,
+        "smart_cross_match_enabled": false,
+        "ocr_engine": "tesseract",
+        "extract_text_before_ocr": true,
+        "enhance_images": true,
+        "ocr_fallback_to_tesseract": true,
+        "enable_multi_threading": true,
+        "max_threads": 4,
+        "fuzzy_match_threshold": 85,
+        "image_scale_factor": 2,
+        "extraction_source": "auto",
+        "processed_transfer_path": "C:\\Users\\MAM-STORES\\OneDrive - outrigger.com\\Stores Shared\\STORE\\SCAN STORES\\2026",
+        "grn_next_dispatch_no": 1,
+        "scan_method": "wia",
+        "hp_window_title": "HP",
+        "hp_button_text": "Scan",
+        "hp_captured_backend": "",
+        "hp_captured_window_title": "",
+        "hp_captured_button_text": "",
+        "hp_captured_button_class": "",
+        "hp_captured_control_type": ""
+    },
     "ai_settings": {
-        "enabled": true,
+        "enabled": false,
         "provider": "openai",
         "model": "gpt-4o-mini",
         "api_key": "",
@@ -595,7 +590,7 @@
         "timeout_seconds": 20
     },
     "ocr_space": {
-        "api_key": "",
+        "api_key": "K88580411388957",
         "language": "eng",
         "isOverlayRequired": false,
         "detectOrientation": true,
@@ -605,9 +600,9 @@
         "filetype": "PDF",
         "timeout_seconds": 30,
         "max_upload_mb": 1.0
+    },
+    "invoice_prefix_fixes": {
+        "MSL": "MSI",
+        "MS1": "MSI"
     }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 5f9889c6ac069d498b62d3e60d0f5e205c269590

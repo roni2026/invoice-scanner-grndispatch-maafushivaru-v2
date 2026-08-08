@@ -4476,33 +4476,45 @@ class MaafushivaruHub(tk.Tk, OCRWorkerMixin):
         tree._edit_pre_edit_fn     = pre_edit_fn
 
         def on_double_click(event):
+            logging.info(f"[EDIT-DEBUG] Double-1 fired on tree={tree} at x={event.x},y={event.y}")
             region = tree.identify("region", event.x, event.y)
+            logging.info(f"[EDIT-DEBUG] region={region}")
             if region != "cell":
+                logging.info("[EDIT-DEBUG] EXIT: region is not 'cell'")
                 return
 
             col_id = tree.identify_column(event.x)
             row_id = tree.identify_row(event.y)
+            logging.info(f"[EDIT-DEBUG] col_id={col_id} row_id={row_id!r}")
             if not row_id:
+                logging.info("[EDIT-DEBUG] EXIT: no row_id")
                 return
 
             ci = int(col_id[1:]) - 1   # 0-based column index
+            logging.info(f"[EDIT-DEBUG] ci={ci}")
 
             # Column 0 → PDF preview only if a preview callback is registered
             if ci == 0:
                 preview_cb = getattr(tree, '_edit_on_preview_cb', None)
+                logging.info(f"[EDIT-DEBUG] col 0: preview_cb={preview_cb}")
                 if preview_cb is not None:
                     preview_cb(row_id)
+                    logging.info("[EDIT-DEBUG] EXIT: called preview_cb")
                     return
                 # No preview callback = treat col 0 as editable (e.g. supplier tree)
 				
 
             # Check editable
             ec = tree._edit_editable_cols
+            logging.info(f"[EDIT-DEBUG] editable_cols={ec}")
             if ec is not None and ci not in ec:
+                logging.info(f"[EDIT-DEBUG] EXIT: ci={ci} not in editable_cols")
                 return
 
             vals = list(tree.item(row_id, "values"))
+            logging.info(f"[EDIT-DEBUG] vals len={len(vals)} vals={vals}")
             if ci >= len(vals):
+                logging.info("[EDIT-DEBUG] EXIT: ci >= len(vals)")
                 return
 
             cur         = str(vals[ci])
@@ -4510,7 +4522,9 @@ class MaafushivaruHub(tk.Tk, OCRWorkerMixin):
             display_val = pre_fn(ci, cur) if pre_fn else cur
 
             bbox = tree.bbox(row_id, col_id)
+            logging.info(f"[EDIT-DEBUG] bbox={bbox}")
             if not bbox:
+                logging.info("[EDIT-DEBUG] EXIT: no bbox (row not visible?)")
                 return
             bx, by, bw, bh = bbox
 
@@ -4524,17 +4538,20 @@ class MaafushivaruHub(tk.Tk, OCRWorkerMixin):
                 highlightbackground=ACCENT, highlightcolor=ACCENT,
             )
             ent.place(x=bx, y=by, width=bw, height=bh)
+            logging.info("[EDIT-DEBUG] Entry box placed and shown.")
             ent.focus_set()
             ent.select_range(0, tk.END)
             done = [False]
 
             def commit(e=None):
+                logging.info(f"[EDIT-DEBUG] commit() called, event={e}, done={done[0]}")
                 if done[0]:
                     return
                 done[0] = True
                 nv = ev.get().strip()
                 ent.destroy()
                 if not nv or nv == display_val:
+                    logging.info(f"[EDIT-DEBUG] commit: no-op (nv={nv!r}, display_val={display_val!r})")
                     return
                 cb = tree._edit_on_edit_cb
                 if cb:
@@ -4542,8 +4559,10 @@ class MaafushivaruHub(tk.Tk, OCRWorkerMixin):
                 else:
                     vals[ci] = nv
                     tree.item(row_id, values=vals)
+                logging.info(f"[EDIT-DEBUG] commit: applied nv={nv!r}")
 
             def cancel(e=None):
+                logging.info("[EDIT-DEBUG] cancel() called")
                 done[0] = True
                 ent.destroy()
 
@@ -6810,5 +6829,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
