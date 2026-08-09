@@ -2965,8 +2965,8 @@ class MaafushivaruHub(tk.Tk, OCRWorkerMixin):
             return "break"
 
         tree.bind("<MouseWheel>", _on_mw)
-        tree.bind("<Button-4>",  lambda e: (tree.yview_scroll(-1, "units"), "break"))  # Linux
-        tree.bind("<Button-5>",  lambda e: (tree.yview_scroll( 1, "units"), "break"))  # Linux
+        tree.bind("<Button-4>",  lambda e: tree.yview_scroll(-1, "units") or "break")   # Linux
+        tree.bind("<Button-5>",  lambda e: tree.yview_scroll( 1, "units") or "break")   # Linux
 
     # ------------------------------------------------------------------
     # DASHBOARD TAB
@@ -4467,10 +4467,20 @@ class MaafushivaruHub(tk.Tk, OCRWorkerMixin):
         is assigned to tree._edit_on_preview_cb.
         """
 
+    def _make_tree_editable(self, tree, on_edit_callback=None, editable_cols=None, pre_edit_fn=None):
+        """
+        Make Treeview cells editable by double-clicking or right-clicking.
+
+        Column 0 can be used for PDF preview when a preview callback
+        is assigned to tree._edit_on_preview_cb.
+        """
+
         tree._edit_editable_cols = editable_cols
         tree._edit_on_edit_cb = on_edit_callback
         tree._edit_pre_edit_fn = pre_edit_fn
         tree._edit_entry = None
+        tree._edit_active_row = None
+        tree._edit_active_col = None
 
         def close_editor():
             entry = getattr(tree, "_edit_entry", None)
@@ -4481,18 +4491,13 @@ class MaafushivaruHub(tk.Tk, OCRWorkerMixin):
                 except Exception:
                     pass
             tree._edit_entry = None
+            tree._edit_active_row = None
+            tree._edit_active_col = None
 
-        def on_double_click(event):
-            print("!!! DOUBLE CLICK RECEIVED !!!")
-            # Only edit when the mouse is actually over a cell.
-            if tree.identify("region", event.x, event.y) != "cell":
-                return "break"
-
-            col_id = tree.identify_column(event.x)
-            row_id = tree.identify_row(event.y)
-
-            if not row_id or not col_id:
-                return "break"
+        def open_editor(row_id, col_id, from_event="double"):
+            """Open an inline Entry editor for a specific tree cell."""
+            if not tree.winfo_exists():
+                return
 
             ci = int(col_id[1:]) - 1
 
@@ -4501,44 +4506,44 @@ class MaafushivaruHub(tk.Tk, OCRWorkerMixin):
                 preview_cb = getattr(tree, "_edit_on_preview_cb", None)
                 if preview_cb is not None:
                     preview_cb(row_id)
-                    return "break"
+                    return
 
             # Check whether this column is editable.
             if (
                 tree._edit_editable_cols is not None
                 and ci not in tree._edit_editable_cols
             ):
-                return "break"
+                return
 
             values = list(tree.item(row_id, "values"))
-
             if ci >= len(values):
-                return "break"
+                return
 
             current_value = str(values[ci])
 
-            # Give Tkinter time to finish processing the double-click
-            # before placing the Entry widget.
+            # If an editor is already open on the SAME cell, don't re-create it.
+            if tree._edit_active_row == row_id and tree._edit_active_col == ci:
+                entry = getattr(tree, "_edit_entry", None)
+                if entry and entry.winfo_exists():
+                    entry.focus_force()
+                    return
+
             def create_editor():
                 if not tree.winfo_exists():
                     return
 
                 bbox = tree.bbox(row_id, col_id)
-
                 if not bbox:
                     return
 
                 close_editor()
 
                 bx, by, bw, bh = bbox
-
                 display_value = current_value
 
                 if tree._edit_pre_edit_fn:
                     try:
-                        display_value = tree._edit_pre_edit_fn(
-                            ci, current_value
-                        )
+                        display_value = tree._edit_pre_edit_fn(ci, current_value)
                     except Exception:
                         display_value = current_value
 
@@ -4559,14 +4564,10 @@ class MaafushivaruHub(tk.Tk, OCRWorkerMixin):
                 )
 
                 tree._edit_entry = entry
+                tree._edit_active_row = row_id
+                tree._edit_active_col = ci
 
-                entry.place(
-                    x=bx,
-                    y=by,
-                    width=bw,
-                    height=bh
-                )
-
+                entry.place(x=bx, y=by, width=bw, height=bh)
                 entry.focus_force()
                 entry.select_range(0, tk.END)
 
@@ -4575,34 +4576,21 @@ class MaafushivaruHub(tk.Tk, OCRWorkerMixin):
                 def commit(event=None):
                     if finished[0]:
                         return "break"
-
                     finished[0] = True
-
                     new_value = var.get().strip()
-
                     close_editor()
 
-                    # Nothing changed.
                     if new_value == display_value:
                         return "break"
-
-                    # Empty value = cancel.
                     if new_value == "":
                         return "break"
 
                     callback = tree._edit_on_edit_cb
-
                     if callback:
-                        callback(
-                            row_id,
-                            ci,
-                            current_value,
-                            new_value
-                        )
+                        callback(row_id, ci, current_value, new_value)
                     else:
                         values[ci] = new_value
                         tree.item(row_id, values=values)
-
                     return "break"
 
                 def cancel(event=None):
@@ -4614,44 +4602,93 @@ class MaafushivaruHub(tk.Tk, OCRWorkerMixin):
                 entry.bind("<KP_Enter>", commit)
                 entry.bind("<Escape>", cancel)
 
-                # IMPORTANT:
-                # Do NOT bind FocusOut to commit.
-                # This was causing the editor to disappear unexpectedly
-                # on some Tk/macOS/Windows combinations.
-
             tree.after_idle(create_editor)
 
+        def on_double_click(event):
+            if tree.identify("region", event.x, event.y) != "cell":
+                return "break"
+            col_id = tree.identify_column(event.x)
+            row_id = tree.identify_row(event.y)
+            if not row_id or not col_id:
+                return "break"
+            open_editor(row_id, col_id, from_event="double")
             return "break"
+
+        def on_right_click(event):
+            """Show a context menu on right-click with Edit / Preview options."""
+            if tree.identify("region", event.x, event.y) != "cell":
+                return
+            col_id = tree.identify_column(event.x)
+            row_id = tree.identify_row(event.y)
+            if not row_id or not col_id:
+                return
+
+            ci = int(col_id[1:]) - 1
+            menu = tk.Menu(tree, tearoff=0, bg=PANEL2, fg=TEXT,
+                           activebackground=ACCENT, activeforeground="white",
+                           font=("Segoe UI", 9))
+
+            # Preview option for column 0
+            preview_cb = getattr(tree, "_edit_on_preview_cb", None)
+            if ci == 0 and preview_cb is not None:
+                menu.add_command(label="👁 Preview PDF", command=lambda: preview_cb(row_id))
+                menu.add_separator()
+
+            # Edit option for editable columns
+            is_editable = (
+                tree._edit_editable_cols is None
+                or ci in tree._edit_editable_cols
+            )
+            if is_editable:
+                menu.add_command(label="✏️ Edit", command=lambda: open_editor(row_id, col_id, from_event="right"))
+            else:
+                menu.add_command(label="🔒 Read-only", state="disabled")
+
+            menu.tk_popup(event.x_root, event.y_root)
 
         # Use add="+" so this doesn't destroy any other Treeview bindings.
         tree.bind("<Double-1>", on_double_click, add="+")
+        tree.bind("<Button-3>", on_right_click, add="+")   # Windows / Linux right-click
+        tree.bind("<Button-2>", on_right_click, add="+")   # macOS right-click (Ctrl+click)
 
         # Clicking somewhere else finishes the edit cleanly.
         def click_elsewhere(event):
             entry = getattr(tree, "_edit_entry", None)
-
             if entry is None:
                 return
-
             if event.widget is entry:
                 return
-
-            # Don't immediately destroy the editor during the double-click.
+            # Don't close if we're clicking on the same cell that has the editor.
+            try:
+                if tree.identify("region", event.x, event.y) == "cell":
+                    rid = tree.identify_row(event.y)
+                    cid = tree.identify_column(event.x)
+                    if rid and cid:
+                        ci = int(cid[1:]) - 1
+                        if rid == tree._edit_active_row and ci == tree._edit_active_col:
+                            return
+            except Exception:
+                pass
             tree.after_idle(close_editor)
 
         tree.bind("<Button-1>", click_elsewhere, add="+")
 
     # ------------------------------------------------------------------
-    # DRY RUN PREVIEW POPUP
+    # DRY RUN PREVIEW DIALOG
     # ------------------------------------------------------------------
-    def _show_dry_run_preview(self, previews: List[Dict]) -> bool:
+    def _show_dry_run_preview(self, previews) -> bool:
+        """
+        Show a preview dialog listing proposed file renames before any
+        files are actually moved/renamed. Returns True if the user
+        clicks Proceed, False if they cancel.
+        """
         win = tk.Toplevel(self)
-        win.title("Dry Run Preview — Proposed Filenames")
-        win.geometry("1080x580")
+        win.title("Dry Run Preview")
+        win.geometry("1200x700")
         win.configure(bg=BG)
-        win.grab_set()
 
-        tk.Label(win, text="Review proposed renames below.",
+        tk.Label(win,
+                 text="Dry Run Preview — Review Before Processing",
                  bg=BG, fg=TEXT, font=("Segoe UI", 12, "bold")).pack(anchor="w", padx=20, pady=(16, 2))
         tk.Label(win,
                  text="Click  ✓ Proceed  to move files, or  ✕ Cancel  to abort. Orange rows have duplicate invoice warnings.",
