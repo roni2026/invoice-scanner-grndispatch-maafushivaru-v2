@@ -29,11 +29,15 @@ except ImportError:
     pytesseract = None
 
 try:
-    import fitz  # PyMuPDF
+    import pymupdf as fitz  # PyMuPDF — new import name (avoids deprecation warning)
     FITZ_AVAILABLE = True
 except ImportError:
-    FITZ_AVAILABLE = False
-    fitz = None
+    try:
+        import fitz  # PyMuPDF — legacy import name (older pymupdf versions)
+        FITZ_AVAILABLE = True
+    except ImportError:
+        FITZ_AVAILABLE = False
+        fitz = None
 
 try:
     import cv2
@@ -2333,15 +2337,21 @@ class MaafushivaruHub(tk.Tk, OCRWorkerMixin):
         cmd = self.cfg.get("tesseract_cmd")
         if cmd and os.path.isfile(cmd):
             pytesseract.pytesseract.tesseract_cmd = cmd
+            return
         else:
             # Try common install locations as fallback (non-Windows or alternate paths)
-            for candidate in (
+            candidates = [
                 "tesseract",
                 "/usr/bin/tesseract",
                 "/usr/local/bin/tesseract",
                 r"C:\Program Files\Tesseract-OCR\tesseract.exe",
                 r"C:\Program Files (x86)\Tesseract-OCR\tesseract.exe",
-            ):
+            ]
+            # Per-user installs (winget/choco sometimes install here instead of Program Files)
+            localappdata = os.environ.get("LOCALAPPDATA")
+            if localappdata:
+                candidates.append(os.path.join(localappdata, "Programs", "Tesseract-OCR", "tesseract.exe"))
+            for candidate in candidates:
                 try:
                     import shutil as _sh
                     found = _sh.which(candidate) if candidate == "tesseract" else (
@@ -2354,8 +2364,12 @@ class MaafushivaruHub(tk.Tk, OCRWorkerMixin):
                 except Exception:
                     continue
             logging.warning(
-                "Tesseract binary not found in config or common paths. "
-                "OCR will fail unless tesseract is on the system PATH."
+                "Tesseract binary not found in config or common paths. OCR will fail "
+                "until Tesseract is installed. Download it from "
+                "https://github.com/UB-Mannheim/tesseract/wiki, then either add its "
+                "install folder to your system PATH, or set the full path to "
+                "tesseract.exe in config.json under \"tesseract_cmd\" "
+                "(e.g. \"C:\\\\Program Files\\\\Tesseract-OCR\\\\tesseract.exe\")."
             )
 
     def _setup_logging(self):
@@ -3049,23 +3063,12 @@ class MaafushivaruHub(tk.Tk, OCRWorkerMixin):
         # Quick actions
         qa = self._section(frame, "Quick Actions")
         row = tk.Frame(qa, bg=PANEL)
-        row.pack(fill=tk.X, padx=20, pady=(0, 8))
+        row.pack(fill=tk.X, padx=20, pady=(0, 16))
         ttk.Button(row, text="↻  Refresh Stats",   command=self._refresh_dashboard_stats).pack(side=tk.LEFT, padx=(0, 8))
         ttk.Button(row, text="📂  Open SCANNED",   command=lambda: self._open_folder(self.dirs["scanned"])).pack(side=tk.LEFT, padx=4)
         ttk.Button(row, text="📂  Open PROCESSED", command=lambda: self._open_folder(self.dirs["processed"])).pack(side=tk.LEFT, padx=4)
         ttk.Button(row, text="📂  Open FAILED",    command=lambda: self._open_folder(self.dirs["failed"])).pack(side=tk.LEFT, padx=4)
         ttk.Button(row, text="📋  Open Logs",      command=lambda: self._open_folder(self.dirs["logs"])).pack(side=tk.LEFT, padx=4)
-
-        row2 = tk.Frame(qa, bg=PANEL)
-        row2.pack(fill=tk.X, padx=20, pady=(0, 16))
-        ttk.Button(
-            row2, text="📦  Transfer Processed PDFs", style="Accent.TButton",
-            command=self._transfer_processed_pdfs,
-        ).pack(side=tk.LEFT, padx=(0, 8))
-        ttk.Button(
-            row2, text="📂  Set Transfer Path",
-            command=self._browse_transfer_path,
-        ).pack(side=tk.LEFT, padx=4)
 
         # Directories
         info = self._section(frame, "System Directories")
