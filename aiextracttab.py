@@ -225,7 +225,10 @@ def _aix_compress_pdf_to_size(src_path: str, dest_path: str, target_mb: float = 
         return True
 
     # --- Pass 2: rasterize pages at decreasing quality until under target ---
-    for scale, quality in [(1.6, 75), (1.3, 65), (1.0, 55), (0.8, 45), (0.6, 35)]:
+    # Starts high — this now only ever runs against the (already-trimmed to
+    # <=3 pages) upload copy, so a much smaller size budget per page is
+    # available before quality has to drop.
+    for scale, quality in [(2.0, 85), (1.6, 75), (1.3, 65), (1.0, 55), (0.8, 45), (0.6, 35)]:
         try:
             doc = fitz.open(src_path)
             out = fitz.open()
@@ -477,9 +480,94 @@ def add_ai_extract_tab(app):
         app._aix_tree,
         on_edit_callback=lambda r, ci, ov, nv: _aix_on_tree_edit(app, r, ci, ov, nv),
         editable_cols=set(range(1, 12)),
+        extra_menu_builder=lambda menu, tree, row_id, col_id: _aix_build_row_context_menu(
+            app, menu, tree, row_id, col_id
+        ),
     )
     app._aix_tree._edit_on_preview_cb = lambda row_id: _aix_preview(app, row_id)
     _aix_refresh_usage_label(app)
+
+def _aix_remove_entry(app, row_id: str, delete_files: bool = False):
+    """Remove a single row from the AI Extract results tree.
+
+    delete_files=False -> only removes the row from the results list/tree.
+    delete_files=True  -> also permanently deletes the PDF from both the
+    SCANNED folder (the original) and TEMP API PDFS (the upload copy).
+    Always confirms first via a Yes/No prompt; deletion cannot be undone.
+    """
+    result = app._aix_row_map.get(row_id)
+    if result is None:
+        return
+    fname = result.get("file", "(unknown file)")
+
+    if delete_files:
+        title = "Remove Entry + File"
+        msg = (
+            f"Are you sure you want to remove this from the results AND "
+            f"permanently delete the PDF?\n\n{fname}\n\n"
+            f"This deletes the file from both the SCANNED and TEMP API PDFS "
+            f"folders. This cannot be undone."
+        )
+    else:
+        title = "Remove Entry"
+        msg = (
+            f"Are you sure you want to remove this from the results list?\n\n{fname}\n\n"
+            f"(The PDF file itself will NOT be deleted.)"
+        )
+
+    if not messagebox.askyesno(title, msg):
+        return
+
+    deleted_any = False
+    if delete_files:
+        for key in ("raw_path", "temp_path"):
+            p = result.get(key, "")
+            if p and os.path.exists(p):
+                try:
+                    os.remove(p)
+                    deleted_any = True
+                    _aix_log(app, "SYSTEM", f"Deleted file ({key}): {p}")
+                except Exception as e:
+                    logging.error(f"[AI EXTRACT] failed to delete {p}: {e}", exc_info=True)
+                    messagebox.showerror("Delete Failed", f"Could not delete:\n{p}\n\n{e}")
+
+    try:
+        app._aix_tree.delete(row_id)
+    except Exception:
+        pass
+    app._aix_row_map.pop(row_id, None)
+    if row_id in app._aix_all_rows:
+        app._aix_all_rows.remove(row_id)
+    app._aix_results = [r for r in app._aix_results if r is not result]
+
+    _aix_update_count(app)
+    _aix_log(
+        app, "SYSTEM",
+        f"Removed entry: {fname}" + (" (+ file deleted)" if deleted_any else ""),
+    )
+    app._set_status(
+        f"Removed {fname} from results" + (" and deleted the file(s)." if deleted_any else "."),
+        SUCCESS,
+    )
+
+
+def _aix_build_row_context_menu(app, menu, tree, row_id, col_id):
+    """Adds the 'Remove Entry' / 'Remove Entry + File' options to the AI
+    Extract result tree's right-click menu (via _make_tree_editable's
+    extra_menu_builder hook), on top of the shared Edit/Preview items.
+    """
+    if not row_id or row_id not in app._aix_row_map:
+        return
+    menu.add_separator()
+    menu.add_command(
+        label="🗑 Remove Entry",
+        command=lambda: _aix_remove_entry(app, row_id, delete_files=False),
+    )
+    menu.add_command(
+        label="🗑🗂 Remove Entry + File",
+        command=lambda: _aix_remove_entry(app, row_id, delete_files=True),
+    )
+
 
 # ---------------------------------------------------------------------------
 # PREVIEW
@@ -826,52 +914,110 @@ def _aix_start_process(app, auto=False):
                     was_modified = True
                 else:
                     app._set_status(f"[AI EXTRACT] Preparing {fname} ({idx}/{total})", ACCENT)
+
+                    # --- Enforce OCR.space's 3-page-per-request limit FIRST ---
+                    # This must happen BEFORE size-compression, not after: the
+                    # old order compressed every page of the original (e.g. a
+                    # 6-page PDF) down to fit under the MB limit, then threw
+                    # away everything past page 3 — so quality was crushed
+                    # trying to shrink pages that were about to be discarded
+                    # anyway. Trimming first means the size-compression pass
+                    # below only ever has to fit the <=3 pages that actually
+                    # get uploaded, so much less (often zero) quality loss is
+                    # needed to hit the same MB target. Page trimming here is
+                    # lossless (plain PDF page removal, no rasterization) and
+                    # only ever touches the TEMP API PDFS copy - src_path
+                    # (the original in SCANNED/) is opened read-only.
                     try:
-                        was_modified = _aix_compress_pdf_to_size(src_path, temp_path, target_mb=target_mb)
+                        _sdoc = fitz.open(src_path)
+                        _pcount_before = _sdoc.page_count
+                        _sdoc.close()
+                    except Exception:
+                        _pcount_before = 1
+
+                    trim_source = src_path
+                    _trim_scratch = temp_path + ".trimsrc.tmp"
+                    did_trim = False
+                    if _pcount_before > 3:
+                        app._set_status(
+                            f"[AI EXTRACT] {fname} has {_pcount_before} pages — trimming to first 3 before compressing...",
+                            ACCENT,
+                        )
+                        try:
+                            # Write the trimmed copy to a distinct scratch path
+                            # (not temp_path itself) so the compression step
+                            # right after never has to read and write the same
+                            # file - fitz/shutil same-file saves are unreliable.
+                            _aix_limit_pdf_pages(src_path, _trim_scratch, max_pages=3)
+                            trim_source = _trim_scratch
+                            did_trim = True
+                            _aix_log(
+                                app, "COMPRESS",
+                                f"{fname}: {_pcount_before} pages > OCR.space 3-page limit "
+                                f"-> trimmed to first 3 pages before size-compression "
+                                f"(original in SCANNED untouched)"
+                            )
+                        except Exception as e:
+                            logging.error(f"[AI EXTRACT] page-limit trim failed [{fname}]: {e}", exc_info=True)
+                            trim_source = src_path
+
+                    # Only re-encodes/compresses if trim_source is still over
+                    # target_mb after trimming - _aix_compress_pdf_to_size
+                    # itself checks the size first and just copies through
+                    # untouched (no quality loss at all) when it's already
+                    # under the limit, which is common once trimmed to 3 pages.
+                    did_compress = False
+                    try:
+                        did_compress = _aix_compress_pdf_to_size(trim_source, temp_path, target_mb=target_mb)
                     except Exception as e:
                         logging.error(f"[AI EXTRACT] Prep failed [{fname}]: {e}", exc_info=True)
-                        shutil.copy2(src_path, temp_path)
-                        was_modified = False
+                        shutil.copy2(trim_source, temp_path)
+                        did_compress = False
+                    finally:
+                        if os.path.exists(_trim_scratch):
+                            try:
+                                os.remove(_trim_scratch)
+                            except OSError:
+                                pass
+                    was_modified = did_trim or did_compress
 
                 try:
                     _src_mb = os.path.getsize(src_path) / (1024 * 1024)
                     _tmp_mb = os.path.getsize(temp_path) / (1024 * 1024)
                     if temp_is_fresh:
                         _aix_log(app, "COMPRESS", f"{fname}: reused existing trimmed copy ({_tmp_mb:.2f} MB)")
-                    elif was_modified:
-                        _aix_log(app, "COMPRESS", f"{fname}: {_src_mb:.2f} MB > {target_mb:.2f} MB limit -> compressed to {_tmp_mb:.2f} MB")
+                    elif did_trim and did_compress:
+                        _aix_log(app, "COMPRESS", f"{fname}: {_src_mb:.2f} MB -> {_tmp_mb:.2f} MB (trimmed to 3 pages + compressed, was still over {target_mb:.2f} MB after trim)")
+                    elif did_trim and not did_compress:
+                        _aix_log(app, "COMPRESS", f"{fname}: {_src_mb:.2f} MB -> {_tmp_mb:.2f} MB (trimmed to 3 pages only - already under {target_mb:.2f} MB limit, no re-encode needed)")
+                    elif did_compress:
+                        _aix_log(app, "COMPRESS", f"{fname}: {_src_mb:.2f} MB -> {_tmp_mb:.2f} MB (compressed, no trim needed)")
                     else:
                         _aix_log(app, "COMPRESS", f"{fname}: {_src_mb:.2f} MB <= {target_mb:.2f} MB limit -> sent as-is")
                 except Exception:
                     pass
 
-                # --- Enforce OCR.space's 3-page-per-request limit ---
-                # Safety net: even if Scan & Trim already capped pages, this
-                # step also runs for files that reached here via a fresh
-                # compress (never trimmed) or a stale/reused temp copy, so it
-                # guarantees no upload ever exceeds 3 pages. Only ever
-                # touches the copy in TEMP API PDFS — src_path (the SCANNED/
-                # original) is never opened for writing here.
+                # --- Safety-net re-check ---
+                # Covers a reused/stale temp copy (temp_is_fresh branch) that
+                # might predate this fix and still have >3 pages. In the
+                # normal (fresh) path above this is already satisfied and
+                # will no-op.
                 try:
                     _pdoc = fitz.open(temp_path)
-                    _pcount_before = _pdoc.page_count
+                    _pcount_now = _pdoc.page_count
                     _pdoc.close()
                 except Exception:
-                    _pcount_before = 1
+                    _pcount_now = 1
 
-                if _pcount_before > 3:
-                    app._set_status(
-                        f"[AI EXTRACT] {fname} has {_pcount_before} pages — trimming temp copy to first 3 for OCR...",
-                        ACCENT,
-                    )
+                if _pcount_now > 3:
                     try:
                         trimmed = _aix_limit_pdf_pages(temp_path, temp_path, max_pages=3)
                         if trimmed:
                             was_modified = True
                             _aix_log(
                                 app, "COMPRESS",
-                                f"{fname}: {_pcount_before} pages > OCR.space 3-page limit "
-                                f"-> trimmed TEMP copy to first 3 pages (original in SCANNED untouched)"
+                                f"{fname}: reused/stale temp copy had {_pcount_now} pages "
+                                f"-> trimmed to first 3 (original in SCANNED untouched)"
                             )
                     except Exception as e:
                         logging.error(f"[AI EXTRACT] page-limit trim failed [{fname}]: {e}", exc_info=True)

@@ -1316,51 +1316,111 @@ class OCRWorkerMixin:
                 return f"{dd.zfill(2)}.{mm.zfill(2)}.{yyyy}"
         return ""
 
+    # Words that can legitimately follow a PO number on the same line/label
+    # area - used to stop the extraction window before it slurps a
+    # neighbouring field's digits into the PO number.
+    _PO_WINDOW_STOP = r"\s{2,}|INVOICE|RECEIVING|GRN|\bDATE\b|SUPPLIER|\bTOTAL\b"
+
     def _extract_po_from_receiving_text(self, text: str) -> str:
+        """Find the PO number after a 'PURCHASE ORDER' / 'P.O' label.
+
+        The 'MAM-000' prefix never changes, so instead of trusting whatever
+        OCR handed back for the whole token (which is how a mis-split digit
+        run like 'MAM-0080' used to slip through untouched), we only take the
+        digits found in a small window after the label and rebuild the code
+        with '_reconstruct_po_digits' - forcing the constant prefix and
+        keeping just the last 6 (real, changing) digits.
+        """
         u = text.upper()
-        patterns = [
-            r"PURCHASE\s*ORDER\s*(?:NO\.?|NUMBER|#)?\s*[:\-]?\s*(MAM[-\s]?\d+)",
-            r"\bP\.?\s*O\.?\s*(?:NO\.?|NUMBER|#)?\s*[:\-]?\s*(MAM[-\s]?\d+)",
-            r"PURCHASE\s*ORDER\s*(?:NO\.?|NUMBER|#)?\s*[:\-]?\s*(\d{5,})",
-            r"\bP\.?\s*O\.?\s*(?:NO\.?|NUMBER|#)?\s*[:\-]?\s*(\d{5,})",
+        pats = self.cfg.get("patterns", {})
+        prefix = pats.get("po_prefix", "MAM-")
+
+        label_pats = [
+            r"PURCHASE\s*ORDER\s*(?:NO\.?|NUMBER|#)?\s*[:\-]?\s*",
+            r"\bP\.?\s*O\.?\s*(?:NO\.?|NUMBER|#)?\s*[:\-]?\s*",
         ]
-        for pat in patterns:
-            m = re.search(pat, u, re.IGNORECASE)
-            if m:
-                val = re.sub(r"\s+", "", m.group(1))
-                if re.fullmatch(r"\d{5,}", val):
-                    return f"MAM-{val.zfill(9)}"
-                if val.startswith("MAM"):
-                    return val.replace(" ", "")
-        m = re.search(r"\bMAM-\d+\b", u)
-        if m:
-            return m.group(0)
+        for lp in label_pats:
+            lm = re.search(lp, u, re.IGNORECASE)
+            if not lm:
+                continue
+            window = u[lm.end(): lm.end() + 24]
+            window = re.split(self._PO_WINDOW_STOP, window)[0]
+            # Skip a leading 'MAM'-like token before pulling digits, so an
+            # OCR letter-glitch inside the word itself (rare, but possible)
+            # can't leak a stray digit into the reconstructed number.
+            mam_m = re.match(r"\s*M[A4][AM4]?M?[-\s]*", window)
+            if mam_m:
+                window = window[mam_m.end():]
+            d = self._reconstruct_po_digits(window)
+            if d:
+                return f"{prefix}{d}"
+
+        # Tolerant fallback: no clean 'PURCHASE ORDER' label found (e.g. it
+        # was damaged by a staple hole or OCR dropped it entirely) - look for
+        # 'MAM' anywhere, allowing the usual OCR letter confusions, and
+        # rebuild from whatever digits follow it.
+        for m in re.finditer(r"M[A4]M[-\s]?", u):
+            window = u[m.end(): m.end() + 18]
+            window = re.split(self._PO_WINDOW_STOP, window)[0]
+            d = self._reconstruct_po_digits(window)
+            if d:
+                return f"{prefix}{d}"
+
         return ""
+
+    def _reconstruct_fixed_prefix_number(
+        self, raw: str, total_len: int, variable_len: int, min_variable_digits: int = 2,
+        max_intake_digits: int = 20,
+    ) -> Optional[str]:
+        """Rebuild a code of the form <fixed-zeros><variable digits> that is
+        known to NEVER change its fixed-length leading-zero segment (e.g. the
+        'RC-MAM-0000' / 'MAM-000' prefixes always have that many zeros before
+        the real, changing number starts).
+
+        Because the fixed part is constant by definition, we don't trust OCR
+        to read it correctly at all - we simply force it - and only trust the
+        RIGHTMOST `variable_len` digits actually seen as the real number
+        (rightmost, because a dropped/garbled character is far more likely to
+        happen at the start of a run than mid-number, and because the fixed
+        zeros are also digits that would otherwise get counted). Short
+        captures are zero-padded on the left (safe, since these are
+        zero-padded sequential IDs), long/noisy captures are trimmed to the
+        last `variable_len` digits.
+        """
+        digits = re.sub(r"\D", "", raw or "")
+        if not digits:
+            return None
+        if len(digits) > max_intake_digits:
+            digits = digits[:max_intake_digits]
+
+        if len(digits) >= variable_len:
+            tail = digits[-variable_len:]
+        else:
+            tail = digits
+        if len(tail) < min_variable_digits:
+            return None
+        tail = tail.zfill(variable_len)
+
+        fixed_len = max(0, total_len - variable_len)
+        return ("0" * fixed_len) + tail
 
     def _reconstruct_rcmam_digits(self, raw_digits: str) -> Optional[str]:
         pats = self.cfg.get("patterns", {})
         target_len = int(pats.get("grn_digits", 9))
-        min_len = int(pats.get("grn_min_digits", 4))
-        max_len = int(pats.get("grn_max_digits", 12))
-        # Strip non-digits; also fix common OCR letter->digit confusions
-        digits = re.sub(r"\D", "", raw_digits or "")
+        variable_len = int(pats.get("grn_variable_digits", 5))
+        min_len = int(pats.get("grn_min_digits", 2))
+        return self._reconstruct_fixed_prefix_number(
+            raw_digits, total_len=target_len, variable_len=variable_len, min_variable_digits=min_len,
+        )
 
-        if not digits or len(digits) < min_len:
-            return None
-        # If we have way too many digits (noisy OCR duplicated them), take only
-        # the first max_len to avoid garbage
-        if len(digits) > max_len:
-            digits = digits[:max_len]
-        # If the digit string starts with many leading zeros from OCR noise,
-        # strip excess leading zeros (keep at least one) before padding
-        if len(digits) > target_len and digits.startswith("00"):
-            stripped = digits.lstrip("0")
-            digits = stripped if stripped and len(stripped) >= min_len else digits
-        if len(digits) >= target_len:
-            return digits[:target_len]
-        if digits.startswith("0000") and len(digits) < target_len:
-            return digits.ljust(target_len, "0")
-        return digits.zfill(target_len)
+    def _reconstruct_po_digits(self, raw_digits: str) -> Optional[str]:
+        pats = self.cfg.get("patterns", {})
+        target_len = int(pats.get("po_digits", 9))
+        variable_len = int(pats.get("po_variable_digits", 6))
+        min_len = int(pats.get("po_min_digits", 3))
+        return self._reconstruct_fixed_prefix_number(
+            raw_digits, total_len=target_len, variable_len=variable_len, min_variable_digits=min_len,
+        )
 
     def _extract_grn_candidates_from_receiving_text(self, text: str) -> List[int]:
         nums: List[int] = []
@@ -1597,8 +1657,103 @@ class OCRWorkerMixin:
         }
 
     # ------------- INVOICE EXTRACTION -------------
+    def _extract_invoice_for_supplier(self, raw: str, supplier_hint: str) -> Optional[str]:
+        """Match the invoice number against this supplier's KNOWN historical
+        formats (mined from past GRN dispatch records, config["invoice_formats"]).
+
+        Each format has a strict `regex` (exact literal prefix + flexible
+        digit counts) and a tolerant `shape_regex` (same digit flexibility,
+        but the literal letters are matched by length/class only, so an OCR
+        letter-misread like 'MSI' -> 'MSL' still lines up). On a shape match
+        the value is REBUILT from the format's canonical `template` plus the
+        OCR'd digit groups - i.e. the known prefix is forced, exactly like
+        the user asked for PO/GRN, because a supplier's invoice-series prefix
+        does not change over time either.
+
+        Formats are tried most-common-first. Returns None if this supplier
+        has no config entry or nothing matches, so the caller can fall back
+        to the existing generic extraction untouched.
+        """
+        fmt_entry = self.cfg.get("invoice_formats", {}).get(supplier_hint.upper())
+        if not fmt_entry:
+            return None
+        formats = fmt_entry.get("formats", [])
+        if not formats:
+            return None
+
+        label_ctxs = [
+            r"INVOICE\s*(?:NUMBER|NUM(?:BER)?|NO\.?|#|NR\.?)?\s*[:\-]?\s*",
+            r"(?:INV|BILL)\s*(?:NO\.?|#|NUMBER)?\s*[:\-]?\s*",
+            r"TAX\s*INVOICE\s*(?:NO\.?|#|NUMBER)?\s*[:\-]?\s*",
+            r"CREDIT\s*NOTE\s*(?:NO\.?|#|NUMBER)?\s*[:\-]?\s*",
+        ]
+
+        # Pass 1: strict match (literal prefix intact) near a label - most
+        # reliable, tried across every format before loosening anything.
+        for fmt in formats:
+            pat = fmt.get("regex")
+            if not pat:
+                continue
+            for ctx in label_ctxs:
+                m = re.search(ctx + r"(" + pat + r")", raw)
+                if m:
+                    return _clean_invoice_token(m.group(1)).replace("/", " ").replace("\\", " ").strip()
+
+        # Pass 2: shape match near a label (prefix letters garbled by OCR) -
+        # rebuild from the canonical template + the OCR'd digits. Each digit
+        # run in the format is its own capture group (mining time), so we
+        # read the slot values straight off the match instead of re-scanning
+        # the matched text for digits (which would misfire the moment a
+        # garbled letter looks like a digit, e.g. 'INV' OCR'd as '1NV').
+        for fmt in formats:
+            pat = fmt.get("shape_regex")
+            digit_lengths = fmt.get("digit_lengths", [])
+            if not pat:
+                continue
+            for ctx in label_ctxs:
+                m = re.search(ctx + pat, raw)
+                if m and len(m.groups()) == len(digit_lengths):
+                    v = self._rebuild_invoice_from_template(m.groups(), fmt)
+                    if v:
+                        return v
+
+        # Pass 3: strict match anywhere in the text (no clean label found,
+        # e.g. it was damaged) - still supplier-scoped, so far safer than the
+        # fully generic whole-document fallback.
+        for fmt in formats:
+            pat = fmt.get("regex")
+            if pat:
+                m = re.search(pat, raw)
+                if m:
+                    return _clean_invoice_token(m.group(0)).replace("/", " ").replace("\\", " ").strip()
+
+        return None
+
+    def _rebuild_invoice_from_template(self, digit_groups, fmt: dict) -> str:
+        """Slot the digit groups matched by the format's own capture groups
+        into its canonical template (e.g. 'INV-{0}' + ('0509456',) ->
+        'INV-0509456'), forcing the known-correct literal prefix/separators
+        regardless of what OCR actually rendered them as.
+        """
+        template = fmt.get("template", "")
+        if not digit_groups or any(g is None for g in digit_groups):
+            return ""
+        try:
+            return template.format(*digit_groups)
+        except (IndexError, KeyError):
+            return ""
+
     def _extract_invoice(self, text, supplier_hint=""):
         raw = text.upper()
+
+        # Supplier-specific, data-driven format matching takes priority when
+        # we have a canonical supplier match - it's far less likely to grab
+        # the wrong number, and it can correct a garbled prefix.
+        if supplier_hint:
+            v = self._extract_invoice_for_supplier(raw, supplier_hint)
+            if v:
+                return v
+
         if supplier_hint:
             hint_upper = supplier_hint.upper()
             for key, patterns in SUPPLIER_INVOICE_HINTS.items():
@@ -2881,19 +3036,34 @@ class MaafushivaruHub(tk.Tk, OCRWorkerMixin):
             canvas.yview_scroll(1, "units")
             return "break"
 
-        def _bind_mw(_):
-            canvas.bind_all("<MouseWheel>", _on_mousewheel, add="+")
-            canvas.bind_all("<Button-4>", _on_linux_up, add="+")
-            canvas.bind_all("<Button-5>", _on_linux_down, add="+")
+        # NOTE: mousewheel scrolling is bound while THIS tab is the selected
+        # notebook tab - not on the canvas's own <Enter>/<Leave> like before.
+        # A tab full of nested frames/labels/entries (e.g. Dashboard) means
+        # the mouse is almost always over some CHILD widget, not the bare
+        # canvas background; child widgets are separate windows in Tk, so
+        # moving onto one fires <Leave> on the canvas and silently kills the
+        # global mousewheel binding — scrolling then only works in the thin
+        # strip of canvas actually visible between widgets, which reads as
+        # "unscrollable". Tying the binding to tab selection instead means it
+        # stays active over every widget inside the tab, and gets cleanly
+        # unbound when the user switches to a different tab.
+        def _tab_changed(_ev=None):
+            try:
+                is_active = self.notebook.select() == str(outer)
+            except Exception:
+                is_active = False
+            if is_active:
+                canvas.bind_all("<MouseWheel>", _on_mousewheel, add="+")
+                canvas.bind_all("<Button-4>", _on_linux_up, add="+")
+                canvas.bind_all("<Button-5>", _on_linux_down, add="+")
+            else:
+                canvas.unbind_all("<MouseWheel>")
+                canvas.unbind_all("<Button-4>")
+                canvas.unbind_all("<Button-5>")
 
-        def _unbind_mw(_):
-            canvas.unbind_all("<MouseWheel>")
-            canvas.unbind_all("<Button-4>")
-            canvas.unbind_all("<Button-5>")
-
-        canvas.bind("<Enter>", _bind_mw)
-        canvas.bind("<Leave>", _unbind_mw)
-        # Also bind directly so scrolling works even if bind_all is contested
+        self.notebook.bind("<<NotebookTabChanged>>", _tab_changed, add="+")
+        # Also bind directly on the canvas/inner frame so scrolling works
+        # immediately even before the first tab-changed event fires.
         canvas.bind("<MouseWheel>", _on_mousewheel)
         canvas.bind("<Button-4>", _on_linux_up)
         canvas.bind("<Button-5>", _on_linux_down)
@@ -4470,17 +4640,24 @@ class MaafushivaruHub(tk.Tk, OCRWorkerMixin):
         is assigned to tree._edit_on_preview_cb.
         """
 
-    def _make_tree_editable(self, tree, on_edit_callback=None, editable_cols=None, pre_edit_fn=None):
+    def _make_tree_editable(self, tree, on_edit_callback=None, editable_cols=None, pre_edit_fn=None,
+                             extra_menu_builder=None):
         """
         Make Treeview cells editable by double-clicking or right-clicking.
 
         Column 0 can be used for PDF preview when a preview callback
         is assigned to tree._edit_on_preview_cb.
+
+        extra_menu_builder(menu, tree, row_id, col_id), if given, is called
+        right before the right-click context menu is shown so a caller can
+        append its own items (e.g. "Remove Entry") without affecting every
+        other tree that shares this same editing behaviour.
         """
 
         tree._edit_editable_cols = editable_cols
         tree._edit_on_edit_cb = on_edit_callback
         tree._edit_pre_edit_fn = pre_edit_fn
+        tree._edit_extra_menu_builder = extra_menu_builder
         tree._edit_entry = None
         tree._edit_active_row = None
         tree._edit_active_col = None
@@ -4646,6 +4823,13 @@ class MaafushivaruHub(tk.Tk, OCRWorkerMixin):
                 menu.add_command(label="✏️ Edit", command=lambda: open_editor(row_id, col_id, from_event="right"))
             else:
                 menu.add_command(label="🔒 Read-only", state="disabled")
+
+            extra_builder = getattr(tree, "_edit_extra_menu_builder", None)
+            if callable(extra_builder):
+                try:
+                    extra_builder(menu, tree, row_id, col_id)
+                except Exception:
+                    logging.error("extra context-menu builder failed", exc_info=True)
 
             menu.tk_popup(event.x_root, event.y_root)
 
