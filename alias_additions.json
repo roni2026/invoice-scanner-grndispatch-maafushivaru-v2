@@ -1,0 +1,708 @@
+{
+  "ADK PHARMACEUTICAL SUPPLY": [
+    {
+      "alias": "ADK PHARMACEUTICALS",
+      "matched_via": "fuzzy:0.97"
+    }
+  ],
+  "FRONTIER MARKETS ENTERPRISES PVT LTD": [
+    {
+      "alias": "FRONTIER MARKETS ENTERPRISES",
+      "matched_via": "core-exact"
+    },
+    {
+      "alias": "FRONTANA MARKET INTERPRISE",
+      "matched_via": "fuzzy:0.88"
+    },
+    {
+      "alias": "FRONTIER MARKETS ENTERPRISE PVT LTD",
+      "matched_via": "fuzzy:0.99"
+    },
+    {
+      "alias": "FROTIER MARKET",
+      "matched_via": "fuzzy:0.97"
+    }
+  ],
+  "CHEMLAB PRIVATE LTD": [
+    {
+      "alias": "CHEMLAB PRIVATE",
+      "matched_via": "fuzzy:0.88"
+    }
+  ],
+  "SHENZHEN SANHE E-COMMERCE CO. LTD": [
+    {
+      "alias": "SHENZHEN SANHE E-COMMERCE",
+      "matched_via": "core-exact"
+    },
+    {
+      "alias": "SHENZHEN SANHE E CONNERCE CO.LTD",
+      "matched_via": "fuzzy:0.94"
+    },
+    {
+      "alias": "SHENZHEN SANH E E-COMMERCE CO.LTD",
+      "matched_via": "fuzzy:0.98"
+    }
+  ],
+  "EMPARAL PVT LTD": [
+    {
+      "alias": "EMPARAL PVT",
+      "matched_via": "fuzzy:0.85"
+    },
+    {
+      "alias": "EMPARAL PRIVATE LIMITADE",
+      "matched_via": "core-exact"
+    },
+    {
+      "alias": "EMPARAL PRIVATE LIMITED",
+      "matched_via": "core-exact"
+    },
+    {
+      "alias": "EMAPRAL PVT LTD",
+      "matched_via": "fuzzy:0.97"
+    }
+  ],
+  "SAFCO INTERNATIONAL GEN TRD LLC": [
+    {
+      "alias": "SAFCO INTERNATIONAL GEN TRD",
+      "matched_via": "core-exact"
+    },
+    {
+      "alias": "SAFCO INTERNATIONBAL GEN.TRD.LLC",
+      "matched_via": "fuzzy:0.98"
+    }
+  ],
+  "INTERNATIONAL FOOD SOLUTION PVT LTD": [
+    {
+      "alias": "INTERNATIONAL FOOD SOLUATION",
+      "matched_via": "fuzzy:0.98"
+    },
+    {
+      "alias": "INTERNATIONAL FOOD SOLUTION PVTD LTD",
+      "matched_via": "fuzzy:0.99"
+    },
+    {
+      "alias": "INTERNATIOANAL FOOD SOLUTION PVT LTD",
+      "matched_via": "fuzzy:0.99"
+    },
+    {
+      "alias": "INTERNATIONAL FOOD SOLUTIONS PVT LTD",
+      "matched_via": "core-exact"
+    },
+    {
+      "alias": "INTERNATIONAL FOOD SLUTION PVT LTD",
+      "matched_via": "fuzzy:0.99"
+    },
+    {
+      "alias": "INTERNATIONAL FOOD SOLUYION PVT LTD",
+      "matched_via": "fuzzy:0.97"
+    },
+    {
+      "alias": "INTERNATIONLA FOOD SOLUTION PVT LTD",
+      "matched_via": "fuzzy:0.97"
+    },
+    {
+      "alias": "INTERNATIONAL FOODSO LUTION PVT LTD",
+      "matched_via": "fuzzy:0.97"
+    },
+    {
+      "alias": "INTERNATIONAL FOO D SOLUTION PVT LTD",
+      "matched_via": "fuzzy:0.99"
+    },
+    {
+      "alias": "INT ERNATIONAL FOOD SOLUTION PVT LTD",
+      "matched_via": "fuzzy:0.99"
+    },
+    {
+      "alias": "INT ERNATIONAL FOOD SOLUTION",
+      "matched_via": "fuzzy:0.98"
+    }
+  ],
+  "SUN FRONT LIGHTING": [
+    {
+      "alias": "SUN FRONT LIGHTIN",
+      "matched_via": "fuzzy:0.97"
+    }
+  ],
+  "BESTBUY MALDIVES PVT LTD": [
+    {
+      "alias": "BESTBUY MALDIVES PRIVATE LIMITED",
+      "matched_via": "core-exact"
+    },
+    {
+      "alias": "BESTBUY MALDIVES PRIVATE LIMITADE",
+      "matched_via": "core-exact"
+    },
+    {
+      "alias": "BEST BUY MALDIVES PVT LTD",
+      "matched_via": "core-exact"
+    },
+    {
+      "alias": "BESTBUY MALDIVES PVY LTD",
+      "matched_via": "fuzzy:0.96"
+    },
+    {
+      "alias": "BESTUBY MALDIVES PVT LTD",
+      "matched_via": "fuzzy:0.96"
+    },
+    {
+      "alias": "BSETBUY MALDIVES PVT LTD",
+      "matched_via": "fuzzy:0.96"
+    },
+    {
+      "alias": "BESTBYU MALDIVES PVT LTD",
+      "matched_via": "fuzzy:0.96"
+    }
+  ],
+  "SEALANDS PVT LTD": [
+    {
+      "alias": "SEALANDS PVT",
+      "matched_via": "fuzzy:0.86"
+    },
+    {
+      "alias": "SEA LANDS PVT LTD",
+      "matched_via": "fuzzy:0.97"
+    }
+  ],
+  "EURO MARKETING PVT LTD": [
+    {
+      "alias": "EURO MARKETING PRIVATE LIMITED",
+      "matched_via": "core-exact"
+    },
+    {
+      "alias": "EUROMARKETING PRIVATE LIMITADE",
+      "matched_via": "fuzzy:0.93"
+    },
+    {
+      "alias": "EURO MARKETING PRIVATE LIMITADE",
+      "matched_via": "core-exact"
+    },
+    {
+      "alias": "EURO MARKETNG PVT LTD",
+      "matched_via": "fuzzy:0.98"
+    },
+    {
+      "alias": "EURO MRKETING PVT LTD",
+      "matched_via": "fuzzy:0.98"
+    }
+  ],
+  "ALIA INVESTMENTS": [
+    {
+      "alias": "ALIA INVESTMENTS PVT LTD",
+      "matched_via": "core-exact"
+    },
+    {
+      "alias": "ALIA INVESTMENT PVT LTD",
+      "matched_via": "core-exact"
+    }
+  ],
+  "SAWHNEY FOOD STAFF TRADING CO.": [
+    {
+      "alias": "SAWHNEY FOOD STAFF TRADIGN CO",
+      "matched_via": "fuzzy:0.97"
+    },
+    {
+      "alias": "SAWHNEY FOOD STAFF TRADING CO.(SAFCO0",
+      "matched_via": "fuzzy:0.89"
+    },
+    {
+      "alias": "SAWNEY FOOD STAFF TRADING CO.",
+      "matched_via": "fuzzy:0.98"
+    },
+    {
+      "alias": "SAWHNEY FOODS PVT LTD",
+      "matched_via": "core-exact"
+    }
+  ],
+  "BLUE BIRD COMPANY": [
+    {
+      "alias": "BLUE BIRD COMPANT",
+      "matched_via": "fuzzy:0.94"
+    },
+    {
+      "alias": "BLUE BIRD COMPANY PVT LTD",
+      "matched_via": "core-exact"
+    }
+  ],
+  "ATOLLS PHARMACY": [
+    {
+      "alias": "ATOLL PHARMACY",
+      "matched_via": "fuzzy:0.97"
+    }
+  ],
+  "VILLA HAKATHA PVT LTD": [
+    {
+      "alias": "VILLA HAKHATHA PRIVATE LIMITADE",
+      "matched_via": "fuzzy:0.98"
+    },
+    {
+      "alias": "VILLA HAKTHA  PVT LTD",
+      "matched_via": "fuzzy:0.98"
+    },
+    {
+      "alias": "VILL A HAKATHA PVT LTD",
+      "matched_via": "fuzzy:0.98"
+    },
+    {
+      "alias": "VILL HAKATHA PVT LTD",
+      "matched_via": "fuzzy:0.98"
+    }
+  ],
+  "SONEE HARDWARE": [
+    {
+      "alias": "SONEE HARDWARE PVT LTD",
+      "matched_via": "core-exact"
+    },
+    {
+      "alias": "SONEE HARDWAR E",
+      "matched_via": "fuzzy:0.97"
+    }
+  ],
+  "COSMOPOLITAN": [
+    {
+      "alias": "COSMOPOLITION",
+      "matched_via": "fuzzy:0.92"
+    },
+    {
+      "alias": "COSMOPLIATAN",
+      "matched_via": "fuzzy:0.96"
+    },
+    {
+      "alias": "COSMAPOLITAN",
+      "matched_via": "fuzzy:0.92"
+    },
+    {
+      "alias": "COSMOPOTITAN",
+      "matched_via": "fuzzy:0.92"
+    },
+    {
+      "alias": "COSMOPOLITAN PVT LTD",
+      "matched_via": "core-exact"
+    },
+    {
+      "alias": "COMSOPOLITAN",
+      "matched_via": "fuzzy:0.92"
+    },
+    {
+      "alias": "COSMOOLITAN",
+      "matched_via": "fuzzy:0.96"
+    }
+  ],
+  "FRELLA INTERNATIONAL": [
+    {
+      "alias": "FRELLA INTERNATIONAL PRIVATE LIMITED",
+      "matched_via": "core-exact"
+    }
+  ],
+  "PREMIUM SUPPLIES": [
+    {
+      "alias": "PRIMIUM SUPPLIER",
+      "matched_via": "fuzzy:0.94"
+    }
+  ],
+  "GLOBAL RIWA PVT LTD": [
+    {
+      "alias": "GLOVAL RIWA PVT LTD",
+      "matched_via": "core-exact"
+    },
+    {
+      "alias": "GLOBALRIWA PVT LTD",
+      "matched_via": "fuzzy:0.97"
+    },
+    {
+      "alias": "GLOVAL RIW PVT LTD",
+      "matched_via": "fuzzy:0.92"
+    },
+    {
+      "alias": "GLOABL RIWA PVT LTD",
+      "matched_via": "fuzzy:0.95"
+    },
+    {
+      "alias": "GLOBA L RIWA PVT LTD",
+      "matched_via": "fuzzy:0.97"
+    },
+    {
+      "alias": "GLO BAL RIWA PVT LTD",
+      "matched_via": "fuzzy:0.97"
+    }
+  ],
+  "LYCORN MALDIVES": [
+    {
+      "alias": "LYCRON MALDIVES PVT LTD",
+      "matched_via": "core-exact"
+    }
+  ],
+  "POISE DISTRIBUTORS": [
+    {
+      "alias": "POISE DISTRIBUTORS PVT LTD",
+      "matched_via": "core-exact"
+    }
+  ],
+  "BIZ SOLUTIONS": [
+    {
+      "alias": "BIZ SOLUTIONS PVT LTD",
+      "matched_via": "core-exact"
+    },
+    {
+      "alias": "IBM SOLUTIONS",
+      "matched_via": "fuzzy:0.85"
+    }
+  ],
+  "ALIHAVA CONSTRUCTION & TRADING CO PVT LTD": [
+    {
+      "alias": "ALIHAVA CONSTRUCTION & TRADING CO.",
+      "matched_via": "core-exact"
+    },
+    {
+      "alias": "ALIHAVA CONTRUCTION",
+      "matched_via": "fuzzy:0.97"
+    },
+    {
+      "alias": "ALHAVA CONSTRUCTION & TRADING CO.",
+      "matched_via": "core-exact"
+    }
+  ],
+  "HORIZON FISHERIES": [
+    {
+      "alias": "HORIZON FISHERIES PVT LTD",
+      "matched_via": "core-exact"
+    },
+    {
+      "alias": "HORIZONS FISHERIES",
+      "matched_via": "fuzzy:0.97"
+    }
+  ],
+  "PURE SHORES": [
+    {
+      "alias": "PURE SHOES",
+      "matched_via": "fuzzy:0.95"
+    },
+    {
+      "alias": "PURE SHORES PVT LTD",
+      "matched_via": "core-exact"
+    }
+  ],
+  "VB BROTHERS PVT LTD": [
+    {
+      "alias": "VB BROTHER",
+      "matched_via": "fuzzy:0.95"
+    },
+    {
+      "alias": "VB BROTHER PVT LTD",
+      "matched_via": "fuzzy:0.97"
+    }
+  ],
+  "HYDROGLOBAL PVT LTD": [
+    {
+      "alias": "HYDRO GLOBAL PVT LTD",
+      "matched_via": "core-exact"
+    }
+  ],
+  "SEASPLASH MALDIVES": [
+    {
+      "alias": "SEAPLASH MALDIVES PVT LTD",
+      "matched_via": "core-exact"
+    },
+    {
+      "alias": "SEAS PLASH",
+      "matched_via": "fuzzy:0.95"
+    }
+  ],
+  "PROCURE PLUS": [
+    {
+      "alias": "OFFICE PLUS PVT LTD",
+      "matched_via": "fuzzy:0.82"
+    }
+  ],
+  "JVD TECHNOLOGIES": [
+    {
+      "alias": "JVD TECHNOLOGIES  PTE LTD",
+      "matched_via": "core-exact"
+    }
+  ],
+  "TRADE MALDIVES PVT LTD": [
+    {
+      "alias": "RADIANT HEAT MALDIVES PVT LTD",
+      "matched_via": "fuzzy:0.82"
+    }
+  ],
+  "PERSONAL COMPUTERS": [
+    {
+      "alias": "PERSONAL COMPUTERS USD",
+      "matched_via": "fuzzy:0.90"
+    }
+  ],
+  "ZIP INVESTMENT PVT LTD": [
+    {
+      "alias": "URBAN INVESTMENT PVT LTD",
+      "matched_via": "fuzzy:0.83"
+    },
+    {
+      "alias": "ALIA INVESMENTS PVT LTD",
+      "matched_via": "fuzzy:0.84"
+    },
+    {
+      "alias": "ALIA INVSTMENTS PVT LTD",
+      "matched_via": "fuzzy:0.84"
+    },
+    {
+      "alias": "ALIA IVESTMENT PVT LTD",
+      "matched_via": "fuzzy:0.86"
+    },
+    {
+      "alias": "ALIA INVESMENT PVT LTD",
+      "matched_via": "fuzzy:0.86"
+    }
+  ],
+  "LILY INTERNATIONAL PVT LTD": [
+    {
+      "alias": "LILY INTERNATIUONAL PVT LTD",
+      "matched_via": "fuzzy:0.98"
+    },
+    {
+      "alias": "LILY INTERNATIOANL PVT LTD",
+      "matched_via": "fuzzy:0.96"
+    },
+    {
+      "alias": "LILY INTERNATIONAL PTV LTD",
+      "matched_via": "core-exact"
+    },
+    {
+      "alias": "LILY NTERNATIONAL PVT LTD",
+      "matched_via": "fuzzy:0.98"
+    },
+    {
+      "alias": "LILY INTERNATIONAL PT LTD",
+      "matched_via": "fuzzy:0.98"
+    },
+    {
+      "alias": "LILY INT ERNATIONAL PVT LTD",
+      "matched_via": "fuzzy:0.98"
+    },
+    {
+      "alias": "LILY I NTERNATIONAL PVT LTD",
+      "matched_via": "fuzzy:0.98"
+    },
+    {
+      "alias": "LILY I NTERNATIONAL PTV LTD",
+      "matched_via": "fuzzy:0.94"
+    },
+    {
+      "alias": "LILY IN TERNATIONAL PVT LTD",
+      "matched_via": "fuzzy:0.98"
+    }
+  ],
+  "MAA HARDWARE": [
+    {
+      "alias": "MAA HARDAWRE",
+      "matched_via": "fuzzy:0.92"
+    },
+    {
+      "alias": "MAA HARDWARE PVT LTD",
+      "matched_via": "core-exact"
+    }
+  ],
+  "MMX TRADERS PVT LTD": [
+    {
+      "alias": "MMX TRADERSPVT LTD",
+      "matched_via": "core-exact"
+    },
+    {
+      "alias": "MMX TRARDERS PVT LTD",
+      "matched_via": "fuzzy:0.97"
+    },
+    {
+      "alias": "MMX TRADE RS PVT LTD",
+      "matched_via": "fuzzy:0.97"
+    }
+  ],
+  "F&B EVENING STORE PVT LTD": [
+    {
+      "alias": "F&B EVENING STORY PVT LTD",
+      "matched_via": "fuzzy:0.96"
+    },
+    {
+      "alias": "F & B EVENNING STORE PVT LTD",
+      "matched_via": "fuzzy:0.94"
+    },
+    {
+      "alias": "F&B EVENIN G STORE PVT LTD",
+      "matched_via": "fuzzy:0.98"
+    }
+  ],
+  "DITECH CONSTRUCTION SOLUTIONS": [
+    {
+      "alias": "DITECH CONTRUCTIONS SOLUTIONS",
+      "matched_via": "fuzzy:0.97"
+    },
+    {
+      "alias": "DITECH CONTRACTIONS SOLUTIONS",
+      "matched_via": "fuzzy:0.93"
+    }
+  ],
+  "ILAA MALDIVES PVT LTD": [
+    {
+      "alias": "ILAA MALDIVESS PVT LTD",
+      "matched_via": "fuzzy:0.98"
+    },
+    {
+      "alias": "ILAA AMLDIVES PVT LTD",
+      "matched_via": "fuzzy:0.95"
+    },
+    {
+      "alias": "OISHI MALDIVES PVT LTD",
+      "matched_via": "fuzzy:0.84"
+    }
+  ],
+  "LILY ENTERPRISES PVT LTD": [
+    {
+      "alias": "LILY ENTERPRIESE",
+      "matched_via": "fuzzy:0.97"
+    },
+    {
+      "alias": "LILY ETERPRISES",
+      "matched_via": "fuzzy:0.97"
+    },
+    {
+      "alias": "LILY ETERPRIESE",
+      "matched_via": "fuzzy:0.93"
+    }
+  ],
+  "LOTUS FIHAARA": [
+    {
+      "alias": "LOTUS FIIHAARA",
+      "matched_via": "fuzzy:0.96"
+    },
+    {
+      "alias": "LOTUS FII HAARA",
+      "matched_via": "fuzzy:0.93"
+    }
+  ],
+  "F&B EVENING STORE": [
+    {
+      "alias": "F & B EVENING STORE",
+      "matched_via": "fuzzy:0.97"
+    },
+    {
+      "alias": "F&B EVENINIG STORE",
+      "matched_via": "fuzzy:0.97"
+    }
+  ],
+  "REVOLUTION (HK) IMP & EXP CO. LTD": [
+    {
+      "alias": "REVOLUTION  IMP& EXP CO.LTD",
+      "matched_via": "fuzzy:0.93"
+    }
+  ],
+  "EVO SOLUTIONS": [
+    {
+      "alias": "EVO SOLUTIONS PVT LTD",
+      "matched_via": "core-exact"
+    }
+  ],
+  "SIMDI CONSUMER PRODUCTS": [
+    {
+      "alias": "SIMD CONSUMER PRODUCT",
+      "matched_via": "fuzzy:0.95"
+    }
+  ],
+  "GREEN PATH PVT LTD": [
+    {
+      "alias": "GREENPATH",
+      "matched_via": "fuzzy:0.95"
+    }
+  ],
+  "ADK GENERAL TRADING": [
+    {
+      "alias": "ADK GENERAL TARDING",
+      "matched_via": "fuzzy:0.95"
+    },
+    {
+      "alias": "ADK GENERAL TRADE",
+      "matched_via": "fuzzy:0.90"
+    },
+    {
+      "alias": "ADK GE NERAL TRADING",
+      "matched_via": "fuzzy:0.97"
+    },
+    {
+      "alias": "ADK GENERAL TRADE ING",
+      "matched_via": "fuzzy:0.95"
+    }
+  ],
+  "MARITIME & MERCANTILE INTERNATIONAL MV": [
+    {
+      "alias": "MARITIME & MERCANTILE INTERNATIONAL MV PV",
+      "matched_via": "fuzzy:0.96"
+    },
+    {
+      "alias": "MARITIME & MARCANTILE INTERNATIONAL MV PV",
+      "matched_via": "fuzzy:0.94"
+    },
+    {
+      "alias": "MARITIME & MERCANTILE INERNATIONAL MV PVT",
+      "matched_via": "fuzzy:0.94"
+    },
+    {
+      "alias": "MARITIME & MERCANTITLE INTERNATIONAL",
+      "matched_via": "fuzzy:0.96"
+    },
+    {
+      "alias": "MARITIME & ME RCANTILE INTERNATIONAL MV PV",
+      "matched_via": "fuzzy:0.95"
+    },
+    {
+      "alias": "MARITIME & ME RCANTILE INTERNATIONAL MV",
+      "matched_via": "fuzzy:0.99"
+    }
+  ],
+  "SEAGEAR": [
+    {
+      "alias": "SEAEGEAR",
+      "matched_via": "fuzzy:0.93"
+    },
+    {
+      "alias": "SEAGEAR PVT LTD",
+      "matched_via": "core-exact"
+    }
+  ],
+  "T AND D WATER": [
+    {
+      "alias": "T AND D WATER PVT LTD",
+      "matched_via": "core-exact"
+    }
+  ],
+  "SEAFOOD ENTERPRISES PVT LTD": [
+    {
+      "alias": "SEAFOOD ENTERPRSES",
+      "matched_via": "fuzzy:0.97"
+    },
+    {
+      "alias": "SEAFOOD ETERPRISES",
+      "matched_via": "fuzzy:0.97"
+    }
+  ],
+  "OSMOSIS ASIA": [
+    {
+      "alias": "OSMOSIS ASI A",
+      "matched_via": "fuzzy:0.96"
+    }
+  ],
+  "FOOD SPECIALTY MALDIVES": [
+    {
+      "alias": "FOOD SPECIATLY MALDIVES",
+      "matched_via": "fuzzy:0.96"
+    },
+    {
+      "alias": "FOOD SPECAILTY MALDIVES",
+      "matched_via": "fuzzy:0.96"
+    },
+    {
+      "alias": "FOOD S PECIALTY MALDIVES",
+      "matched_via": "fuzzy:0.98"
+    },
+    {
+      "alias": "FOOD SPECI ALTY MALDIVES",
+      "matched_via": "fuzzy:0.98"
+    }
+  ]
+}

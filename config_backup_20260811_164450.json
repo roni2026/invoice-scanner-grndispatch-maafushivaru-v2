@@ -213,8 +213,13 @@
         ],
         "ALIHAVA CONSTRUCTION & TRADING CO PVT LTD": [
             "ALIHAVA CONSTRUCTION",
-            "ALHAVA CONSTRUCTION & TRADING",
-            "ALIHAVA CONSTRUCTION & TRADING CO"
+            "ALIHAVA CONSTRACTION",
+            "ALHAVA CONSTRUCTION",
+            "ALIHAVE CONDTRUCTION",
+            "ALHAVA CONSTRUCTION & TRADING CO PVT LTD",
+            "ALIHAVA CONSTRUCTION & TRADING CO.",
+            "ALIHAVA CONTRUCTION",
+            "ALHAVA CONSTRUCTION & TRADING CO."
         ],
         "ALIA INVESTMENTS": [
             "ALIA INVESTMENT",
@@ -255,10 +260,6 @@
         "BLENX PVT LTD": [
             "BLENX",
             "BLENX PV"
-        ],
-        "BLUE BIRD COMPANY": [
-            "BLUE BIRD COMPANT",
-            "BLUE BIRD COMPANY PVT LTD"
         ],
         "BROTHERHOOD SHOP": [
             "BROTHERHOOD"
@@ -333,13 +334,10 @@
             "EURO MARKETNG PVT LTD",
             "EURO MRKETING PVT LTD"
         ],
-        "EVO SOLUTIONS": [
-            "EVO SOLUTIONS PVT LTD"
-        ],
-        "F&B EVENING STORE PVT LTD": [
-            "F&B EVENING STORY PVT LTD",
-            "F & B EVENNING STORE PVT LTD",
-            "F&B EVENIN G STORE PVT LTD"
+        "F&B EVENING STORE": [
+            "F&B EVENING",
+            "F& B EVENING STORE",
+            "F&B EVENING STGRE"
         ],
         "FANTASY PVT LTD": [
             "FANTASY",
@@ -454,9 +452,6 @@
             "J.I.M TRADERS PVT LTD",
             "J.I.M TRADERS"
         ],
-        "JVD TECHNOLOGIES": [
-            "JVD TECHNOLOGIES  PTE LTD"
-        ],
         "KAILAAN TRENDS": [
             "KAILAAN TRADERS",
             "KAILLAN TRADERS",
@@ -506,10 +501,6 @@
             "LYCRON",
             "LYCRON MALDIVES PVT LTD"
         ],
-        "MAA HARDWARE": [
-            "MAA HARDAWRE",
-            "MAA HARDWARE PVT LTD"
-        ],
         "MAM PETTY CASH": [
             "MAM PETTY CASH-MVR",
             "MAM-PETTY CASH-MVR",
@@ -547,15 +538,9 @@
         "OMEGA FIBER & CHEMICALS": [
             "OMIGA FIBER A CHEMICALES"
         ],
-        "OSMOSIS ASIA": [
-            "OSMOSIS ASI A"
-        ],
         "PERSONAL COMPUTERS": [
             "PERSONAL COMPUTER",
             "PERSONAL COMPUTERS USD"
-        ],
-        "POISE DISTRIBUTORS": [
-            "POISE DISTRIBUTORS PVT LTD"
         ],
         "PREMIUM SUPPLIES": [
             "PREMIUM SUPPLY",
@@ -568,15 +553,8 @@
             "PROCURE PLUS PVT LTD",
             "OFFICE PLUS PVT LTD"
         ],
-        "PURE SHORES": [
-            "PURE SHOES",
-            "PURE SHORES PVT LTD"
-        ],
         "RESUINSA EXPERIENCES": [
             "RESUINSA EXPERINCES"
-        ],
-        "REVOLUTION (HK) IMP & EXP CO. LTD": [
-            "REVOLUTION  IMP& EXP CO.LTD"
         ],
         "RUMBA": [
             "RUMBAA"
@@ -604,19 +582,11 @@
             "SAWNEY FOOD STAFF TRADING CO.",
             "SAWHNEY FOODS PVT LTD"
         ],
-        "SEAGEAR": [
-            "SEAEGEAR",
-            "SEAGEAR PVT LTD"
-        ],
         "SEAFOOD ENTERPRISES PVT LTD": [
             "SEAFOOD ENTERPRISES",
             "SEAFOOD ENTERPRISE",
             "SEAFOOD ENTERPRSES",
             "SEAFOOD ETERPRISES"
-        ],
-        "SEALANDS PVT LTD": [
-            "SEALANDS PVT",
-            "SEA LANDS PVT LTD"
         ],
         "SEASPLASH MALDIVES": [
             "SEASPLASH",
@@ -645,22 +615,12 @@
         "SIMDI TECH TECHNOLOGY": [
             "SIMDI TECH"
         ],
-        "SONEE HARDWARE": [
-            "SONEE HARDWARE PVT LTD",
-            "SONEE HARDWAR E"
-        ],
         "SOVEREIGN AGENCIES PVT LTD": [
             "SOVEREIGN INTERNATIONAL PTE LTD"
         ],
         "STANDARD & ORIGIN MARKETING": [
             "STANDARD & ORIGIN",
             "STANDARD AND ORIGIN"
-        ],
-        "SUN FRONT LIGHTING": [
-            "SUN FRONT LIGHTIN"
-        ],
-        "T AND D WATER": [
-            "T AND D WATER PVT LTD"
         ],
         "TOTAL BEVERAGES": [
             "TOTAL BEVERAGE",
@@ -699,6 +659,56 @@
             "ALIA INVSTMENTS PVT LTD",
             "ALIA IVESTMENT PVT LTD",
             "ALIA INVESMENT PVT LTD"
+        ],
+        "SUN FRONT LIGHTING": [
+            "SUN FRONT LIGHTIN"
+        ],
+        "SEALANDS PVT LTD": [
+            "SEALANDS PVT",
+            "SEA LANDS PVT LTD"
+        ],
+        "BLUE BIRD COMPANY": [
+            "BLUE BIRD COMPANT",
+            "BLUE BIRD COMPANY PVT LTD"
+        ],
+        "SONEE HARDWARE": [
+            "SONEE HARDWARE PVT LTD",
+            "SONEE HARDWAR E"
+        ],
+        "POISE DISTRIBUTORS": [
+            "POISE DISTRIBUTORS PVT LTD"
+        ],
+        "PURE SHORES": [
+            "PURE SHOES",
+            "PURE SHORES PVT LTD"
+        ],
+        "JVD TECHNOLOGIES": [
+            "JVD TECHNOLOGIES  PTE LTD"
+        ],
+        "MAA HARDWARE": [
+            "MAA HARDAWRE",
+            "MAA HARDWARE PVT LTD"
+        ],
+        "F&B EVENING STORE PVT LTD": [
+            "F&B EVENING STORY PVT LTD",
+            "F & B EVENNING STORE PVT LTD",
+            "F&B EVENIN G STORE PVT LTD"
+        ],
+        "REVOLUTION (HK) IMP & EXP CO. LTD": [
+            "REVOLUTION  IMP& EXP CO.LTD"
+        ],
+        "EVO SOLUTIONS": [
+            "EVO SOLUTIONS PVT LTD"
+        ],
+        "SEAGEAR": [
+            "SEAEGEAR",
+            "SEAGEAR PVT LTD"
+        ],
+        "T AND D WATER": [
+            "T AND D WATER PVT LTD"
+        ],
+        "OSMOSIS ASIA": [
+            "OSMOSIS ASI A"
         ]
     },
     "patterns": {
@@ -739,7 +749,7 @@
         "image_scale_factor": 2,
         "extraction_source": "auto",
         "processed_transfer_path": "C:\\Users\\MAM-STORES\\OneDrive - outrigger.com\\Stores Shared\\STORE\\SCAN STORES\\2026",
-        "grn_next_dispatch_no": 5,
+        "grn_next_dispatch_no": 2,
         "scan_method": "wia",
         "hp_window_title": "HP",
         "hp_button_text": "Scan",
@@ -747,8 +757,7 @@
         "hp_captured_window_title": "",
         "hp_captured_button_text": "",
         "hp_captured_button_class": "",
-        "hp_captured_control_type": "",
-        "auto_fix_supplier_by_invoice_pattern": true
+        "hp_captured_control_type": ""
     },
     "ai_settings": {
         "enabled": false,

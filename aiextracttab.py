@@ -40,6 +40,23 @@ except ImportError:
     OCR_SPACE_AVAILABLE = False
     OCRSpaceExtractor = None
 
+import supplier_learning as sl
+
+
+def _aix_get_ownership_index(app):
+    """Cached supplier<->invoice-pattern ownership index (see
+    supplier_learning.build_ownership_index). Rebuilt only when
+    invoice_formats actually changes, so this stays cheap to call per-PDF."""
+    formats = app.cfg.get("invoice_formats", {})
+    fingerprint = len(formats), sum(len(v.get("formats", [])) for v in formats.values())
+    cached = getattr(app, "_sl_ownership_index", None)
+    cached_fp = getattr(app, "_sl_ownership_fingerprint", None)
+    if cached is None or cached_fp != fingerprint:
+        cached = sl.build_ownership_index(app.cfg)
+        app._sl_ownership_index = cached
+        app._sl_ownership_fingerprint = fingerprint
+    return cached
+
 
 # ---------------------------------------------------------------------------
 # PAGE DETECTION: is this page a Receiving Report?
@@ -1142,6 +1159,30 @@ def _aix_extract_fields_from_text(app, pdf_path: str, text: str) -> Dict:
     totals = rr.get("totals", {"USD": "", "MVR": "", "EUR": "", "GBP": "", "SGD": ""})
 
     invoice = app._extract_invoice(text, supplier_hint=supplier) or ""
+
+    # --- Supplier <-> invoice-pattern cross-match / auto-fix ---
+    # Defaults to ON (no Settings checkbox needed). To disable, set
+    # app.cfg["app_settings"]["auto_fix_supplier_by_invoice_pattern"] = False.
+    autofix_enabled = app.cfg.get("app_settings", {}).get(
+        "auto_fix_supplier_by_invoice_pattern", True
+    )
+    if autofix_enabled and invoice:
+        try:
+            xmatch = sl.cross_match_and_autocorrect(
+                supplier_guess=supplier or None,
+                invoice_no_raw=invoice,
+                cfg=app.cfg,
+                ownership_index=_aix_get_ownership_index(app),
+            )
+            if xmatch["action"] == "supplier_fixed_from_pattern":
+                supplier = xmatch["supplier"]
+                confidence = max(confidence, 90.0)
+                _aix_log(app, "PROCESS", f"[AUTO-FIX] {xmatch['reason']}")
+            elif xmatch["action"] == "invoice_repaired":
+                invoice = xmatch["invoice_no"]
+                _aix_log(app, "PROCESS", f"[AUTO-FIX] {xmatch['reason']}")
+        except Exception as e:
+            logging.error(f"[AI EXTRACT] cross-match auto-fix failed: {e}", exc_info=True)
 
     return {
         "supplier": supplier or "UNKNOWN SUPPLIER",
