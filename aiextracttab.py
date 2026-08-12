@@ -283,6 +283,79 @@ def _aix_compress_pdf_to_size(src_path: str, dest_path: str, target_mb: float = 
 # ---------------------------------------------------------------------------
 # TAB BUILDER
 # ---------------------------------------------------------------------------
+try:
+    from scan_tab import press_hp_scan_button, DEFAULT_HP_WINDOW_TITLE, DEFAULT_HP_BUTTON_TEXT
+    SCAN_BUTTON_AVAILABLE = True
+except ImportError:
+    SCAN_BUTTON_AVAILABLE = False
+    press_hp_scan_button = None
+    DEFAULT_HP_WINDOW_TITLE = "HP"
+    DEFAULT_HP_BUTTON_TEXT = "Scan"
+
+
+def _aix_captured_scan_settings(app):
+    """Mirrors scan_tab.py's own _captured() exactly, reading the SAME
+    config keys the Scan tab's 'Teach…' flow writes -- so whatever button
+    you taught there is what gets replayed here."""
+    s = app.cfg.get("app_settings", {}) if isinstance(app.cfg, dict) else {}
+    backend = s.get("hp_captured_backend", "")
+    if backend not in ("win32", "uia"):
+        return None
+    return {
+        "backend": backend,
+        "window_title": s.get("hp_captured_window_title", ""),
+        "button_text": s.get("hp_captured_button_text", ""),
+        "button_class": s.get("hp_captured_button_class", ""),
+        "control_type": s.get("hp_captured_control_type", ""),
+    }
+
+
+def _aix_do_scan(app):
+    """The AI Extract tab's 'Scan' button: presses the scanner software's
+    Scan button -- using whatever was taught on the Scan tab if available,
+    falling back to an automatic window/button-text search otherwise.
+    Does NOT run OCR/extraction; it only tells the external scanner
+    software to start scanning. The resulting PDF lands in SCANNED as
+    usual, ready for 'Scan & Trim PDFs' / 'Process' below."""
+    if not SCAN_BUTTON_AVAILABLE:
+        messagebox.showerror(
+            "Scan Unavailable",
+            "scan_tab.py could not be imported (pywin32 missing or this "
+            "isn't Windows), so the scanner button can't be pressed from here.",
+        )
+        return
+
+    s = app.cfg.get("app_settings", {}) if isinstance(app.cfg, dict) else {}
+    title_kw = (s.get("hp_window_title") or "").strip() or DEFAULT_HP_WINDOW_TITLE
+    button_kw = (s.get("hp_button_text") or "").strip() or DEFAULT_HP_BUTTON_TEXT
+    captured = _aix_captured_scan_settings(app)
+
+    app._set_status(f"Looking for the scanner software window (\"{title_kw}\")...", ACCENT)
+
+    def worker():
+        try:
+            ok, msg = press_hp_scan_button(title_kw, button_kw, captured=captured)
+        except Exception as e:
+            ok, msg = False, str(e)
+        app.after(0, lambda: _aix_scan_result(app, ok, msg))
+
+    threading.Thread(target=worker, daemon=True).start()
+
+
+def _aix_scan_result(app, ok: bool, msg: str):
+    if ok:
+        app._set_status(f"{msg}  Finish the scan in the scanner window.", SUCCESS)
+        _aix_log(app, "PROCESS", f"[SCAN] {msg}")
+    else:
+        app._set_status("Scanner button could not be pressed automatically.", ERROR)
+        _aix_log(app, "PROCESS", f"[SCAN] FAILED: {msg}")
+        messagebox.showwarning(
+            "Scan button not pressed",
+            f"{msg}\n\nIf this keeps happening, go to the Scan tab and use "
+            f"\"Teach…\" again to re-capture the button.",
+        )
+
+
 def add_ai_extract_tab(app):
     app._aix_results = []
     app._aix_row_map = {}
@@ -308,13 +381,23 @@ def add_ai_extract_tab(app):
     ctrl_bar.pack(fill=tk.X)
     ctrl_bar.pack_propagate(False)
 
+    app._aix_btn_do_scan = ttk.Button(
+        ctrl_bar,
+        text="🖨  Scan",
+        style="Success.TButton",
+        command=lambda: _aix_do_scan(app),
+    )
+    app._aix_btn_do_scan.pack(side=tk.LEFT, padx=(16, 6), pady=8)
+    if not SCAN_BUTTON_AVAILABLE:
+        app._aix_btn_do_scan.state(["disabled"])
+
     app._aix_btn_scan = ttk.Button(
         ctrl_bar,
         text="✂  Scan & Trim PDFs",
         style="Accent.TButton",
         command=lambda: _aix_start_scan_trim(app),
     )
-    app._aix_btn_scan.pack(side=tk.LEFT, padx=(16, 6), pady=8)
+    app._aix_btn_scan.pack(side=tk.LEFT, padx=4, pady=8)
 
     app._aix_btn_process = ttk.Button(
         ctrl_bar,
@@ -449,7 +532,7 @@ def add_ai_extract_tab(app):
     ).pack(side=tk.LEFT, padx=20, pady=(12, 4))
     tk.Label(
         hdr_bar,
-        text="1) Scan & Trim  ->  2) Process (OCR.space API)  ->  3) Send to Tabs  ·  Double-click a cell to edit",
+        text="1) Scan  ->  2) Scan & Trim  ->  3) Process (OCR.space API)  ->  4) Send to Tabs  ·  Double-click a cell to edit",
         bg=PANEL,
         fg=MUTED,
         font=("Segoe UI", 8),
@@ -569,12 +652,24 @@ def _aix_remove_entry(app, row_id: str, delete_files: bool = False):
 
 
 def _aix_build_row_context_menu(app, menu, tree, row_id, col_id):
-    """Adds the 'Remove Entry' / 'Remove Entry + File' options to the AI
-    Extract result tree's right-click menu (via _make_tree_editable's
-    extra_menu_builder hook), on top of the shared Edit/Preview items.
+    """Adds 'Try Again' (re-OCR) plus the 'Remove Entry' / 'Remove Entry +
+    File' options to the AI Extract result tree's right-click menu (via
+    _make_tree_editable's extra_menu_builder hook), on top of the shared
+    Edit/Preview items.
     """
     if not row_id or row_id not in app._aix_row_map:
         return
+    result = app._aix_row_map[row_id]
+    retrying = getattr(app, "_aix_retrying_rows", set())
+
+    menu.add_separator()
+    failed = not result.get("is_valid", False)
+    label = "🔁 Try Again (Re-OCR)" if not failed else "🔁 Try Again — this file failed, re-OCR it"
+    menu.add_command(
+        label=label,
+        command=lambda: _aix_retry_row(app, row_id),
+        state="disabled" if row_id in retrying else "normal",
+    )
     menu.add_separator()
     menu.add_command(
         label="🗑 Remove Entry",
@@ -796,6 +891,152 @@ def _aix_limit_pdf_pages(src_path: str, dest_path: str, max_pages: int = 3) -> b
 # ---------------------------------------------------------------------------
 # STEP 2: PROCESS VIA OCR.SPACE
 # ---------------------------------------------------------------------------
+def _aix_process_single_file(app, extractor, src_path: str, temp_dir: str, target_mb: float, idx: int = 1):
+    """Runs the FULL prep -> trim -> compress -> OCR.space -> field-extraction
+    pipeline for exactly one PDF and returns (result_dict, err_string).
+
+    This is the single source of truth for 'how one PDF gets processed' --
+    both the bulk 'Process' run AND the per-row 'Try Again' retry call this,
+    so a fix/change here never has to be made twice.
+    """
+    fname = os.path.basename(src_path)
+    temp_path = os.path.join(temp_dir, fname)
+
+    temp_is_fresh = (
+        os.path.exists(temp_path)
+        and os.path.getmtime(temp_path) >= os.path.getmtime(src_path)
+    )
+
+    if temp_is_fresh:
+        was_modified = True
+    else:
+        app._set_status(f"[AI EXTRACT] Preparing {fname}", ACCENT)
+        try:
+            _sdoc = fitz.open(src_path)
+            _pcount_before = _sdoc.page_count
+            _sdoc.close()
+        except Exception:
+            _pcount_before = 1
+
+        trim_source = src_path
+        _trim_scratch = temp_path + ".trimsrc.tmp"
+        did_trim = False
+        if _pcount_before > 3:
+            app._set_status(
+                f"[AI EXTRACT] {fname} has {_pcount_before} pages — trimming to first 3 before compressing...",
+                ACCENT,
+            )
+            try:
+                _aix_limit_pdf_pages(src_path, _trim_scratch, max_pages=3)
+                trim_source = _trim_scratch
+                did_trim = True
+                _aix_log(
+                    app, "COMPRESS",
+                    f"{fname}: {_pcount_before} pages > OCR.space 3-page limit "
+                    f"-> trimmed to first 3 pages before size-compression "
+                    f"(original in SCANNED untouched)"
+                )
+            except Exception as e:
+                logging.error(f"[AI EXTRACT] page-limit trim failed [{fname}]: {e}", exc_info=True)
+                trim_source = src_path
+
+        did_compress = False
+        try:
+            did_compress = _aix_compress_pdf_to_size(trim_source, temp_path, target_mb=target_mb)
+        except Exception as e:
+            logging.error(f"[AI EXTRACT] Prep failed [{fname}]: {e}", exc_info=True)
+            shutil.copy2(trim_source, temp_path)
+            did_compress = False
+        finally:
+            if os.path.exists(_trim_scratch):
+                try:
+                    os.remove(_trim_scratch)
+                except OSError:
+                    pass
+        was_modified = did_trim or did_compress
+
+    try:
+        _src_mb = os.path.getsize(src_path) / (1024 * 1024)
+        _tmp_mb = os.path.getsize(temp_path) / (1024 * 1024)
+        if temp_is_fresh:
+            _aix_log(app, "COMPRESS", f"{fname}: reused existing trimmed copy ({_tmp_mb:.2f} MB)")
+        else:
+            _aix_log(app, "COMPRESS", f"{fname}: {_src_mb:.2f} MB -> {_tmp_mb:.2f} MB")
+    except Exception:
+        pass
+
+    try:
+        _pdoc = fitz.open(temp_path)
+        _pcount_now = _pdoc.page_count
+        _pdoc.close()
+    except Exception:
+        _pcount_now = 1
+
+    if _pcount_now > 3:
+        try:
+            trimmed = _aix_limit_pdf_pages(temp_path, temp_path, max_pages=3)
+            if trimmed:
+                was_modified = True
+                _aix_log(
+                    app, "COMPRESS",
+                    f"{fname}: reused/stale temp copy had {_pcount_now} pages "
+                    f"-> trimmed to first 3 (original in SCANNED untouched)"
+                )
+        except Exception as e:
+            logging.error(f"[AI EXTRACT] page-limit trim failed [{fname}]: {e}", exc_info=True)
+
+    try:
+        pdoc = fitz.open(temp_path)
+        n_pages = pdoc.page_count
+        pdoc.close()
+    except Exception:
+        n_pages = 1
+
+    _aix_set_api_status(app, f"Uploading {fname} to OCR.space...", ACCENT)
+    app._set_status(f"[AI EXTRACT] OCR.space {fname}", ACCENT)
+
+    try:
+        text, err = extractor.extract_from_file(temp_path)
+    except Exception as e:
+        text, err = "", str(e)
+
+    _aix_add_usage_pages(app, n_pages)
+
+    if err:
+        _aix_set_api_status(app, f"Error on {fname}: {err}", ERROR)
+    else:
+        _aix_set_api_status(app, f"OK — {fname} ({n_pages} page(s), {len(text or '')} chars)", SUCCESS)
+
+    text = (text or "").upper()
+    fields = _aix_extract_fields_from_text(app, temp_path, text)
+
+    result = {
+        "doc_id": f"{fname}|aix|{idx}",
+        "file": fname,
+        "date": fields["date"],
+        "supplier": fields["supplier"],
+        "po": fields["po"] or "MAM-0000",
+        "invoice": fields["invoice"],
+        "usd": fields["usd"],
+        "mvr": fields["mvr"],
+        "eur": fields["eur"],
+        "gbp": fields["gbp"],
+        "sgd": fields["sgd"],
+        "grn": fields["grn"] or "RC-MAM-0000",
+        "confidence": fields["confidence"],
+        "is_valid": (err == ""),
+        "errors": err,
+        "temp_path": temp_path,
+        "raw_path": src_path,
+        "scan_index": idx,
+        "was_modified": was_modified,
+        "pages_used": n_pages,
+        "raw_ocr_text": text,
+        "parsed_fields": dict(fields),
+    }
+    return result, err
+
+
 def _aix_start_process(app, auto=False):
     """Run OCR.space extraction over every PDF in SCANNED.
 
@@ -918,189 +1159,17 @@ def _aix_start_process(app, auto=False):
 
             for idx, src_path in enumerate(files, 1):
                 fname = os.path.basename(src_path)
-                temp_path = os.path.join(temp, fname)
+                app._set_status(f"[AI EXTRACT] Processing {fname} ({idx}/{total})", ACCENT)
 
-                # --- Prepare the temp copy that will actually be OCR'd ---
-                temp_is_fresh = (
-                    os.path.exists(temp_path)
-                    and os.path.getmtime(temp_path) >= os.path.getmtime(src_path)
-                )
-
-                if temp_is_fresh:
-                    # Reuse it — likely a manual Scan & Trim output, not stale
-                    was_modified = True
-                else:
-                    app._set_status(f"[AI EXTRACT] Preparing {fname} ({idx}/{total})", ACCENT)
-
-                    # --- Enforce OCR.space's 3-page-per-request limit FIRST ---
-                    # This must happen BEFORE size-compression, not after: the
-                    # old order compressed every page of the original (e.g. a
-                    # 6-page PDF) down to fit under the MB limit, then threw
-                    # away everything past page 3 — so quality was crushed
-                    # trying to shrink pages that were about to be discarded
-                    # anyway. Trimming first means the size-compression pass
-                    # below only ever has to fit the <=3 pages that actually
-                    # get uploaded, so much less (often zero) quality loss is
-                    # needed to hit the same MB target. Page trimming here is
-                    # lossless (plain PDF page removal, no rasterization) and
-                    # only ever touches the TEMP API PDFS copy - src_path
-                    # (the original in SCANNED/) is opened read-only.
-                    try:
-                        _sdoc = fitz.open(src_path)
-                        _pcount_before = _sdoc.page_count
-                        _sdoc.close()
-                    except Exception:
-                        _pcount_before = 1
-
-                    trim_source = src_path
-                    _trim_scratch = temp_path + ".trimsrc.tmp"
-                    did_trim = False
-                    if _pcount_before > 3:
-                        app._set_status(
-                            f"[AI EXTRACT] {fname} has {_pcount_before} pages — trimming to first 3 before compressing...",
-                            ACCENT,
-                        )
-                        try:
-                            # Write the trimmed copy to a distinct scratch path
-                            # (not temp_path itself) so the compression step
-                            # right after never has to read and write the same
-                            # file - fitz/shutil same-file saves are unreliable.
-                            _aix_limit_pdf_pages(src_path, _trim_scratch, max_pages=3)
-                            trim_source = _trim_scratch
-                            did_trim = True
-                            _aix_log(
-                                app, "COMPRESS",
-                                f"{fname}: {_pcount_before} pages > OCR.space 3-page limit "
-                                f"-> trimmed to first 3 pages before size-compression "
-                                f"(original in SCANNED untouched)"
-                            )
-                        except Exception as e:
-                            logging.error(f"[AI EXTRACT] page-limit trim failed [{fname}]: {e}", exc_info=True)
-                            trim_source = src_path
-
-                    # Only re-encodes/compresses if trim_source is still over
-                    # target_mb after trimming - _aix_compress_pdf_to_size
-                    # itself checks the size first and just copies through
-                    # untouched (no quality loss at all) when it's already
-                    # under the limit, which is common once trimmed to 3 pages.
-                    did_compress = False
-                    try:
-                        did_compress = _aix_compress_pdf_to_size(trim_source, temp_path, target_mb=target_mb)
-                    except Exception as e:
-                        logging.error(f"[AI EXTRACT] Prep failed [{fname}]: {e}", exc_info=True)
-                        shutil.copy2(trim_source, temp_path)
-                        did_compress = False
-                    finally:
-                        if os.path.exists(_trim_scratch):
-                            try:
-                                os.remove(_trim_scratch)
-                            except OSError:
-                                pass
-                    was_modified = did_trim or did_compress
-
-                try:
-                    _src_mb = os.path.getsize(src_path) / (1024 * 1024)
-                    _tmp_mb = os.path.getsize(temp_path) / (1024 * 1024)
-                    if temp_is_fresh:
-                        _aix_log(app, "COMPRESS", f"{fname}: reused existing trimmed copy ({_tmp_mb:.2f} MB)")
-                    elif did_trim and did_compress:
-                        _aix_log(app, "COMPRESS", f"{fname}: {_src_mb:.2f} MB -> {_tmp_mb:.2f} MB (trimmed to 3 pages + compressed, was still over {target_mb:.2f} MB after trim)")
-                    elif did_trim and not did_compress:
-                        _aix_log(app, "COMPRESS", f"{fname}: {_src_mb:.2f} MB -> {_tmp_mb:.2f} MB (trimmed to 3 pages only - already under {target_mb:.2f} MB limit, no re-encode needed)")
-                    elif did_compress:
-                        _aix_log(app, "COMPRESS", f"{fname}: {_src_mb:.2f} MB -> {_tmp_mb:.2f} MB (compressed, no trim needed)")
-                    else:
-                        _aix_log(app, "COMPRESS", f"{fname}: {_src_mb:.2f} MB <= {target_mb:.2f} MB limit -> sent as-is")
-                except Exception:
-                    pass
-
-                # --- Safety-net re-check ---
-                # Covers a reused/stale temp copy (temp_is_fresh branch) that
-                # might predate this fix and still have >3 pages. In the
-                # normal (fresh) path above this is already satisfied and
-                # will no-op.
-                try:
-                    _pdoc = fitz.open(temp_path)
-                    _pcount_now = _pdoc.page_count
-                    _pdoc.close()
-                except Exception:
-                    _pcount_now = 1
-
-                if _pcount_now > 3:
-                    try:
-                        trimmed = _aix_limit_pdf_pages(temp_path, temp_path, max_pages=3)
-                        if trimmed:
-                            was_modified = True
-                            _aix_log(
-                                app, "COMPRESS",
-                                f"{fname}: reused/stale temp copy had {_pcount_now} pages "
-                                f"-> trimmed to first 3 (original in SCANNED untouched)"
-                            )
-                    except Exception as e:
-                        logging.error(f"[AI EXTRACT] page-limit trim failed [{fname}]: {e}", exc_info=True)
-
-                # --- Count pages for usage/credit tracking ---
-                try:
-                    pdoc = fitz.open(temp_path)
-                    n_pages = pdoc.page_count
-                    pdoc.close()
-                except Exception:
-                    n_pages = 1
-
-                # --- OCR via OCR.space ---
-                _aix_set_api_status(app, f"Uploading {fname} to OCR.space...", ACCENT)
-                app._set_status(f"[AI EXTRACT] OCR.space {fname} ({idx}/{total})", ACCENT)
-
-                try:
-                    text, err = extractor.extract_from_file(temp_path)
-                except Exception as e:
-                    text, err = "", str(e)
-
-                total_pages_used += n_pages
-                _aix_add_usage_pages(app, n_pages)
-
-                if err:
-                    _aix_set_api_status(app, f"Error on {fname}: {err}", ERROR)
-                else:
-                    _aix_set_api_status(
-                        app, f"OK — {fname} ({n_pages} page(s), {len(text or '')} chars)", SUCCESS
-                    )
-
-                text = (text or "").upper()
-                fields = _aix_extract_fields_from_text(app, temp_path, text)
-
-                result = {
-                    "doc_id": f"{fname}|aix|{idx}",
-                    "file": fname,
-                    "date": fields["date"],
-                    "supplier": fields["supplier"],
-                    "po": fields["po"] or "MAM-0000",
-                    "invoice": fields["invoice"],
-                    "usd": fields["usd"],
-                    "mvr": fields["mvr"],
-                    "eur": fields["eur"],
-                    "gbp": fields["gbp"],
-                    "sgd": fields["sgd"],
-                    "grn": fields["grn"] or "RC-MAM-0000",
-                    "confidence": fields["confidence"],
-                    "is_valid": (err == ""),
-                    "errors": err,
-                    "temp_path": temp_path,
-                    "raw_path": src_path,
-                    "scan_index": idx,
-                    "was_modified": was_modified,
-                    "pages_used": n_pages,
-                    # Stashed for the "PDF Log" view (moved to app._aix_pdf_logs
-                    # on the main thread by the queue poller).
-                    "raw_ocr_text": text,
-                    "parsed_fields": dict(fields),
-                }
+                result, err = _aix_process_single_file(app, extractor, src_path, temp, target_mb, idx)
 
                 if err == "":
                     n_ok += 1
                 else:
                     n_fail += 1
                     logging.warning(f"[AI EXTRACT] OCR.space error [{fname}]: {err}")
+
+                total_pages_used += result.get("pages_used", 0)
 
                 _aix_log(app, "PROCESS",
                          f"{fname}: supplier={result['supplier']}, grn={result['grn']}, "
@@ -1395,6 +1464,13 @@ def _aix_send_to_tabs(app, auto=False):
         messagebox.showwarning("AI Extract", "No results to send. Run 'Process' first.")
         return
 
+    if not auto and not messagebox.askyesno(
+        "Send to Tabs",
+        f"Send {len(app._aix_results)} result(s) to OCR Renamer / GRN Dispatch "
+        f"and move their PDFs from SCANNED to PROCESSED?",
+    ):
+        return
+
     scanned = app.dirs.get("scanned", "")
     processed = app.dirs.get("processed", "")
     os.makedirs(processed, exist_ok=True)
@@ -1532,7 +1608,7 @@ def _aix_cleanup_temp(app):
 # ---------------------------------------------------------------------------
 # TREE
 # ---------------------------------------------------------------------------
-def _aix_add_row(app, result: Dict):
+def _aix_row_tag(app, result: Dict) -> str:
     iv = result.get("is_valid", False)
     conf = result.get("confidence", 0.0)
     conf_thr = app.cfg.get("app_settings", {}).get("confidence_warn_threshold", 80)
@@ -1540,15 +1616,35 @@ def _aix_add_row(app, result: Dict):
     was_modified = result.get("was_modified", False)
 
     if not iv:
-        tag = "invalid"
-    elif was_modified:
-        tag = "modified"          # was compressed or pre-trimmed — flagged orange
-    elif sup == "UNKNOWN SUPPLIER" or conf <= 0:
-        tag = "unknown"
-    elif conf < conf_thr:
-        tag = "low_conf"
-    else:
-        tag = "valid"
+        return "invalid"
+    if was_modified:
+        return "modified"          # was compressed or pre-trimmed — flagged orange
+    if sup == "UNKNOWN SUPPLIER" or conf <= 0:
+        return "unknown"
+    if conf < conf_thr:
+        return "low_conf"
+    return "valid"
+
+
+def _aix_row_values(app, result: Dict) -> tuple:
+    return (
+        result.get("file", ""),
+        result.get("date", ""),
+        result.get("supplier", ""),
+        app._conf_display(result.get("confidence", 0.0)),
+        result.get("po", "") or "MAM-0000",
+        result.get("invoice", ""),
+        result.get("usd", ""),
+        result.get("mvr", ""),
+        result.get("eur", ""),
+        result.get("gbp", ""),
+        result.get("sgd", ""),
+        result.get("grn", ""),
+    )
+
+
+def _aix_add_row(app, result: Dict):
+    tag = _aix_row_tag(app, result)
 
     for t, fg in [
         ("valid", SUCCESS),
@@ -1560,27 +1656,158 @@ def _aix_add_row(app, result: Dict):
         app._aix_tree.tag_configure(t, foreground=fg)
 
     row_id = app._aix_tree.insert(
-        "",
-        "end",
-        tags=(tag,),
-        values=(
-            result.get("file", ""),
-            result.get("date", ""),
-            sup,
-            app._conf_display(conf),
-            result.get("po", "") or "MAM-0000",
-            result.get("invoice", ""),
-            result.get("usd", ""),
-            result.get("mvr", ""),
-            result.get("eur", ""),
-            result.get("gbp", ""),
-            result.get("sgd", ""),
-            result.get("grn", ""),
-        ),
+        "", "end", tags=(tag,), values=_aix_row_values(app, result),
     )
     app._aix_row_map[row_id] = result
     app._aix_all_rows.append(row_id)
     _aix_update_count(app)
+
+
+def _aix_update_row(app, row_id: str, result: Dict):
+    """Refreshes an EXISTING row in place (used by Try Again) instead of
+    inserting a new one, and keeps app._aix_results / the PDF-log dict in
+    sync with the new result."""
+    if row_id not in app._aix_tree.get_children():
+        _aix_add_row(app, result)  # row was somehow removed — fall back safely
+        return
+
+    tag = _aix_row_tag(app, result)
+    app._aix_tree.item(row_id, tags=(tag,), values=_aix_row_values(app, result))
+    app._aix_row_map[row_id] = result
+
+    # keep the accumulated results list (used by Export/Send-to-Tabs) in sync
+    old = None
+    for i, r in enumerate(app._aix_results):
+        if r.get("raw_path") == result.get("raw_path") or r.get("file") == result.get("file"):
+            old = i
+            break
+    if old is not None:
+        app._aix_results[old] = result
+    else:
+        app._aix_results.append(result)
+
+    try:
+        if not hasattr(app, "_aix_pdf_logs"):
+            app._aix_pdf_logs = {}
+        app._aix_pdf_logs[result.get("file", "")] = {
+            "raw": result.get("raw_ocr_text", "") or "",
+            "fields": result.get("parsed_fields", {}) or {},
+            "err": result.get("errors", "") or "",
+            "pages": result.get("pages_used", ""),
+        }
+        _aix_refresh_pdf_log_combo(app)
+    except Exception as e:
+        logging.error(f"[AI EXTRACT] pdf-log update failed: {e}", exc_info=True)
+
+
+def _aix_retry_row(app, row_id: str):
+    """Right-click 'Try Again' — re-runs OCR.space + field extraction for
+    just THIS one PDF (reusing the exact same pipeline as a bulk run via
+    _aix_process_single_file) and updates the row in place."""
+    result = app._aix_row_map.get(row_id)
+    if not result:
+        return
+
+    src_path = result.get("raw_path", "")
+    if not src_path or not os.path.exists(src_path):
+        messagebox.showerror(
+            "Try Again",
+            f"Can't find the original file to re-scan:\n{src_path or '(no path recorded)'}",
+        )
+        return
+
+    if not OCR_SPACE_AVAILABLE:
+        messagebox.showerror(
+            "OCR.space Unavailable",
+            "OCRSpaceExtractor could not be imported from ai_supplier_matcher.py.",
+        )
+        return
+
+    retrying = getattr(app, "_aix_retrying_rows", None)
+    if retrying is None:
+        retrying = app._aix_retrying_rows = set()
+    if row_id in retrying:
+        return  # already retrying this row — ignore a second click
+    retrying.add(row_id)
+
+    fname = os.path.basename(src_path)
+    app._aix_tree.item(row_id, tags=("modified",))  # orange = "in progress" while retrying
+    app._set_status(f"[AI EXTRACT] Retrying {fname}...", ACCENT)
+    _aix_log(app, "PROCESS", f"[TRY AGAIN] Re-OCR requested for {fname}")
+
+    if not hasattr(app, "_aix_retry_queue"):
+        app._aix_retry_queue = queue.Queue()
+
+    try:
+        target_mb = float(app.cfg.get("ocr_space", {}).get("max_upload_mb", 1.0))
+    except (TypeError, ValueError):
+        target_mb = 1.0
+    if target_mb <= 0:
+        target_mb = 1.0
+
+    ocr_cfg = dict(app.cfg.get("ocr_space", {}))
+    _engine_label = getattr(app, "_aix_ocr_engine_var", None)
+    if _engine_label is not None:
+        _sel = _engine_label.get()
+        if "Engine 1" in _sel:
+            ocr_cfg["OCREngine"] = 1
+        elif "Engine 3" in _sel:
+            ocr_cfg["OCREngine"] = 3
+        else:
+            ocr_cfg["OCREngine"] = 2
+    extractor = OCRSpaceExtractor(config=ocr_cfg)
+
+    def worker():
+        try:
+            temp = app._aix_temp_folder
+            os.makedirs(temp, exist_ok=True)
+            # Force a fresh OCR pass: drop any stale temp copy so
+            # _aix_process_single_file doesn't think it can reuse it.
+            stale_temp = os.path.join(temp, fname)
+            if os.path.exists(stale_temp):
+                try:
+                    os.remove(stale_temp)
+                except OSError:
+                    pass
+            new_result, err = _aix_process_single_file(
+                app, extractor, src_path, temp, target_mb,
+                idx=result.get("scan_index", 1),
+            )
+            _aix_log(
+                app, "PROCESS",
+                f"[TRY AGAIN] {fname}: supplier={new_result['supplier']}, "
+                f"invoice={new_result['invoice'] or '-'}, "
+                f"conf={new_result['confidence']:.0f}%" +
+                (f", ERROR: {err}" if err else " — OK"),
+            )
+        except Exception as e:
+            logging.error(f"[AI EXTRACT] retry failed [{fname}]: {e}", exc_info=True)
+            new_result = dict(result)
+            new_result["is_valid"] = False
+            new_result["errors"] = str(e)
+        app._aix_retry_queue.put((row_id, new_result))
+
+    threading.Thread(target=worker, daemon=True).start()
+    app.after(150, lambda: _aix_poll_retry_queue(app))
+
+
+def _aix_poll_retry_queue(app):
+    retrying = getattr(app, "_aix_retrying_rows", set())
+    try:
+        while True:
+            row_id, new_result = app._aix_retry_queue.get_nowait()
+            retrying.discard(row_id)
+            _aix_update_row(app, row_id, new_result)
+            fname = new_result.get("file", "")
+            ok = new_result.get("is_valid", False)
+            app._set_status(
+                f"[AI EXTRACT] Retry {'succeeded' if ok else 'still failed'}: {fname}",
+                SUCCESS if ok else WARNING,
+            )
+    except queue.Empty:
+        pass
+    if retrying:
+        app.after(150, lambda: _aix_poll_retry_queue(app))
 
 
 def _aix_update_count(app):
@@ -1617,6 +1844,36 @@ def _aix_on_tree_edit(app, row_id, col_index, old_val, new_val):
     app._aix_tree.item(row_id, values=vals)
 
     result = app._aix_row_map.get(row_id)
+
+    # --- Manual supplier-name correction -> learn from it ---
+    # This is what "if I fix a wrong supplier name, does it learn?" refers
+    # to: double-click the Supplier cell, type the correct name, and this
+    # fires automatically.
+    if col_index == 2 and result and str(old_val).strip().upper() != str(new_val).strip().upper():
+        try:
+            if new_val not in app.cfg.get("suppliers", []):
+                sl.add_supplier(new_val, cfg=app.cfg)
+                _aix_log(app, "PROCESS", f"[LEARN] '{new_val}' wasn't a known supplier yet — added it.")
+            report = sl.learn_from_correction(
+                extracted_text=result.get("raw_ocr_text", ""),
+                wrong_supplier_guess=old_val,
+                correct_supplier=new_val,
+                extracted_invoice_no=result.get("invoice"),
+                cfg=app.cfg,
+            )
+            sl.save_config(app.cfg)
+            bits = []
+            if report.get("alias_added"):
+                bits.append(f"learned alias \"{report['alias_added']}\"")
+            if report.get("format_added"):
+                bits.append(f"learned new invoice pattern {report['format_added']}")
+            if report.get("format_bumped"):
+                bits.append(f"confirmed invoice pattern {report['format_bumped']}")
+            if bits:
+                _aix_log(app, "PROCESS", f"[LEARN] {old_val or '(blank)'} -> {new_val}: " + "; ".join(bits))
+        except Exception as e:
+            logging.error(f"[AI EXTRACT] learn_from_correction failed: {e}", exc_info=True)
+
     if result:
         keys = ["file", "date", "supplier", "_conf", "po", "invoice",
                 "usd", "mvr", "eur", "gbp", "sgd", "grn"]
@@ -1654,6 +1911,14 @@ def _aix_on_tree_edit(app, row_id, col_index, old_val, new_val):
 
 
 def _aix_clear(app):
+    n = len(app._aix_results)
+    if n and not messagebox.askyesno(
+        "Clear Results",
+        f"Clear all {n} result(s) from AI Extract?\n\n"
+        f"This also clears the OCR Renamer and GRN Dispatch tabs and all logs. "
+        f"PDFs already sent to PROCESSED are not affected.",
+    ):
+        return
     app._aix_results = []
     app._aix_row_map.clear()
     app._aix_all_rows.clear()

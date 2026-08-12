@@ -136,6 +136,7 @@ def _build_format_from_sample(invoice_no: str) -> Optional[dict]:
         "shape_regex": shape_regex,
         "count": 1,
         "share": 1.0,
+        "active": True,
     }
 
 
@@ -215,6 +216,8 @@ def learn_from_correction(
         if new_fmt:
             matched = None
             for existing in inv_formats["formats"]:
+                if not existing.get("active", True):
+                    continue  # a deactivated pattern must stay off, even if OCR keeps producing it
                 # same shape if the literal (non-digit) tokens line up
                 if existing.get("template", "").replace("{0}", "").replace("{1}", "") == \
                    new_fmt["template"].replace("{0}", "").replace("{1}", ""):
@@ -288,6 +291,7 @@ def add_supplier(
             "shape_regex": manual_regex,
             "count": 1,
             "share": 1.0,
+            "active": True,
         }
     elif sample_invoice_no:
         fmt = _build_format_from_sample(sample_invoice_no)
@@ -349,13 +353,24 @@ _OCR_CONFUSIONS = {
 
 
 def _literal_key(fmt: dict) -> str:
-    """The part of a format that actually identifies a supplier: the
-    template with the {0}/{1} digit slots stripped out. Empty string means
-    'pure numeric, no distinguishing literal' -> always treated as generic."""
-    template = fmt.get("template", "")
-    literal = _PLACEHOLDER_RE.sub("", template)
-    literal = re.sub(r"[\s\-/.]+", "", literal).upper()
-    return literal
+    """The part of a format that actually identifies a supplier: every
+    letter OUTSIDE any regex/template group, stripped of separators and
+    placeholders. Empty string means 'no distinguishing literal' -> always
+    treated as generic. Works for both auto-derived templates (e.g.
+    'BB-{0}') and hand-typed raw regexes (e.g. 'BB(?:[-/\\s.]{0,2})(\\d{6,8})')
+    -- {0}/{1} placeholders and (...) regex groups are both stripped the
+    same way before the literal letters are pulled out, so a manually
+    typed regex is never mistaken for its own literal prefix+digits."""
+    src = fmt.get("template") or fmt.get("regex") or ""
+    src = _PLACEHOLDER_RE.sub("", src)
+    # iteratively strip parenthesized groups (handles multiple/sequential
+    # groups; regex groups here are never meaningfully nested in our formats)
+    while True:
+        stripped = re.sub(r"\([^()]*\)", "", src)
+        if stripped == src:
+            break
+        src = stripped
+    return re.sub(r"[^A-Za-z]", "", src).upper()
 
 
 def build_ownership_index(cfg: dict) -> dict:
@@ -367,6 +382,8 @@ def build_ownership_index(cfg: dict) -> dict:
 
     for supplier, data in cfg.get("invoice_formats", {}).items():
         for fmt in data.get("formats", []):
+            if not fmt.get("active", True):
+                continue  # deactivated -> never used for identification
             key = _literal_key(fmt)
             if not key:
                 continue  # pure-numeric format, never diagnostic
@@ -442,6 +459,8 @@ def reconstruct_invoice_number(raw_invoice_text: str, supplier: str, cfg: dict):
         return None
 
     for fmt in sorted(formats, key=lambda f: -f.get("share", 0)):
+        if not fmt.get("active", True):
+            continue  # deactivated -> skip when repairing too
         pattern = fmt.get("regex", "")
         if not pattern:
             continue
@@ -522,7 +541,112 @@ def cross_match_and_autocorrect(
 
 
 # --------------------------------------------------------------------------- #
-# 3b. Dashboard: how many PDFs are sitting in the watched folder right now
+# 3c. Settings panel backend: search / add / deactivate / reactivate patterns
+# --------------------------------------------------------------------------- #
+
+def list_invoice_patterns(cfg: dict, search: str = "") -> list[dict]:
+    """Flat, UI-ready list of every invoice pattern across every supplier,
+    for the Settings search box. Each item:
+        {supplier, template, regex, active, count, share, index}
+    `index` is the position within that supplier's formats[] list, needed to
+    address a specific pattern for deactivate/reactivate/edit calls.
+    Matches search against supplier name AND template/regex text.
+    """
+    q = (search or "").strip().upper()
+    out = []
+    for supplier, data in cfg.get("invoice_formats", {}).items():
+        for i, fmt in enumerate(data.get("formats", [])):
+            if q and q not in supplier.upper() and q not in fmt.get("template", "").upper() \
+                    and q not in fmt.get("regex", "").upper():
+                continue
+            out.append({
+                "supplier": supplier,
+                "index": i,
+                "template": fmt.get("template", ""),
+                "regex": fmt.get("regex", ""),
+                "active": fmt.get("active", True),
+                "count": fmt.get("count", 0),
+                "share": fmt.get("share", 0.0),
+            })
+    out.sort(key=lambda r: (r["supplier"], -r["count"]))
+    return out
+
+
+def add_invoice_pattern(
+    supplier: str,
+    sample_invoice_no: Optional[str] = None,
+    manual_regex: Optional[str] = None,
+    cfg: Optional[dict] = None,
+) -> dict:
+    """Add a pattern to an EXISTING supplier from the Settings panel. Exactly
+    one of sample_invoice_no / manual_regex should be given -- manual_regex
+    wins if both are somehow passed."""
+    owns_cfg = cfg is None
+    cfg = cfg or load_config()
+
+    if supplier not in cfg.get("suppliers", []):
+        raise ValueError(f"'{supplier}' is not a known supplier.")
+
+    if manual_regex:
+        try:
+            re.compile(manual_regex)
+        except re.error as e:
+            raise ValueError(f"That regex doesn't compile: {e}")
+        fmt = {
+            "template": manual_regex,
+            "digit_lengths": [],
+            "regex": manual_regex,
+            "shape_regex": manual_regex,
+            "count": 1,
+            "share": 1.0,
+            "active": True,
+        }
+    elif sample_invoice_no:
+        fmt = _build_format_from_sample(sample_invoice_no)
+        if not fmt:
+            raise ValueError("Couldn't derive a pattern from that sample.")
+    else:
+        raise ValueError("Provide either a sample invoice number or a regex.")
+
+    inv_formats = cfg.setdefault("invoice_formats", {}).setdefault(
+        supplier, {"sample_count": 0, "formats": []}
+    )
+    inv_formats["formats"].append(fmt)
+    inv_formats["sample_count"] = inv_formats.get("sample_count", 0) + 1
+    _rebalance_shares(inv_formats)
+
+    if owns_cfg:
+        save_config(cfg)
+    return {"supplier": supplier, "format": fmt}
+
+
+def set_pattern_active(
+    supplier: str,
+    index: int,
+    active: bool,
+    cfg: Optional[dict] = None,
+) -> dict:
+    """Deactivate (active=False) or reactivate (active=True) one pattern by
+    its position in that supplier's formats[] list -- get `index` from
+    list_invoice_patterns(). This NEVER deletes the entry: count/share/history
+    stay intact, the pattern just stops being used for matching/repair while
+    inactive, per your 'deactivate not delete' preference."""
+    owns_cfg = cfg is None
+    cfg = cfg or load_config()
+
+    formats = cfg.get("invoice_formats", {}).get(supplier, {}).get("formats", [])
+    if index < 0 or index >= len(formats):
+        raise ValueError(f"No pattern at index {index} for '{supplier}'.")
+
+    formats[index]["active"] = bool(active)
+
+    if owns_cfg:
+        save_config(cfg)
+    return {"supplier": supplier, "index": index, "active": active, "pattern": formats[index]}
+
+
+# --------------------------------------------------------------------------- #
+# 3d. Dashboard: how many PDFs are sitting in the watched folder right now
 # --------------------------------------------------------------------------- #
 
 def count_pending_pdfs(folder: str) -> int:

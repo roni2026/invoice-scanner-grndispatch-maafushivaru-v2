@@ -20,6 +20,8 @@ from typing import Optional, List, Dict, Tuple
 import tkinter as tk
 from tkinter import ttk, filedialog, messagebox
 
+import supplier_learning as sl
+
 # Optional dependencies — graceful degradation if missing
 try:
     import pytesseract
@@ -3022,52 +3024,52 @@ class MaafushivaruHub(tk.Tk, OCRWorkerMixin):
         canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
         sb.pack(side=tk.RIGHT, fill=tk.Y)
 
-        def _on_mousewheel(ev):
-            # Windows / macOS
-            if getattr(ev, "delta", 0):
-                canvas.yview_scroll(int(-1 * (ev.delta / 120)), "units")
-            return "break"
+        # Tag this tab's canvas so the single global router below can find
+        # it, however deep in the widget tree the mouse cursor actually is.
+        outer._scroll_canvas = canvas
 
-        def _on_linux_up(_ev):
-            canvas.yview_scroll(-1, "units")
-            return "break"
+        # ------------------------------------------------------------------
+        # FIX: scrolling used to be wired up via <<NotebookTabChanged>>,
+        # which never fires for whichever tab is selected by DEFAULT when
+        # the app starts (no tab-change actually happens on first launch).
+        # Since Dashboard is built first and lands as the initially-selected
+        # tab, that meant its content was silently unscrollable — nothing
+        # below the first screenful (System Directories, GRN Dispatch #,
+        # etc.) was reachable — until you clicked away to another tab and
+        # back once. A single app-wide wheel handler that looks up whichever
+        # tab is ACTUALLY selected at scroll time sidesteps the timing issue
+        # entirely and needs to be installed only once, no matter how many
+        # scrollable tabs get built.
+        # ------------------------------------------------------------------
+        if not getattr(self, "_wheel_router_installed", False):
+            self._wheel_router_installed = True
 
-        def _on_linux_down(_ev):
-            canvas.yview_scroll(1, "units")
-            return "break"
+            def _route_wheel(delta_units):
+                try:
+                    sel = self.notebook.nametowidget(self.notebook.select())
+                except Exception:
+                    return
+                target = getattr(sel, "_scroll_canvas", None)
+                if target is not None:
+                    target.yview_scroll(delta_units, "units")
 
-        # NOTE: mousewheel scrolling is bound while THIS tab is the selected
-        # notebook tab - not on the canvas's own <Enter>/<Leave> like before.
-        # A tab full of nested frames/labels/entries (e.g. Dashboard) means
-        # the mouse is almost always over some CHILD widget, not the bare
-        # canvas background; child widgets are separate windows in Tk, so
-        # moving onto one fires <Leave> on the canvas and silently kills the
-        # global mousewheel binding — scrolling then only works in the thin
-        # strip of canvas actually visible between widgets, which reads as
-        # "unscrollable". Tying the binding to tab selection instead means it
-        # stays active over every widget inside the tab, and gets cleanly
-        # unbound when the user switches to a different tab.
-        def _tab_changed(_ev=None):
-            try:
-                is_active = self.notebook.select() == str(outer)
-            except Exception:
-                is_active = False
-            if is_active:
-                canvas.bind_all("<MouseWheel>", _on_mousewheel, add="+")
-                canvas.bind_all("<Button-4>", _on_linux_up, add="+")
-                canvas.bind_all("<Button-5>", _on_linux_down, add="+")
-            else:
-                canvas.unbind_all("<MouseWheel>")
-                canvas.unbind_all("<Button-4>")
-                canvas.unbind_all("<Button-5>")
+            def _on_mousewheel(ev):
+                if getattr(ev, "delta", 0):
+                    _route_wheel(int(-1 * (ev.delta / 120)))
+                return "break"
 
-        self.notebook.bind("<<NotebookTabChanged>>", _tab_changed, add="+")
-        # Also bind directly on the canvas/inner frame so scrolling works
-        # immediately even before the first tab-changed event fires.
-        canvas.bind("<MouseWheel>", _on_mousewheel)
-        canvas.bind("<Button-4>", _on_linux_up)
-        canvas.bind("<Button-5>", _on_linux_down)
-        inner.bind("<MouseWheel>", _on_mousewheel)
+            def _on_linux_up(_ev):
+                _route_wheel(-1)
+                return "break"
+
+            def _on_linux_down(_ev):
+                _route_wheel(1)
+                return "break"
+
+            self.bind_all("<MouseWheel>", _on_mousewheel, add="+")
+            self.bind_all("<Button-4>", _on_linux_up, add="+")
+            self.bind_all("<Button-5>", _on_linux_down, add="+")
+
         return inner
 
     def _section(self, parent, title, subtitle=""):
@@ -4515,6 +4517,83 @@ class MaafushivaruHub(tk.Tk, OCRWorkerMixin):
             sup_ctrl, text="💾  Save", style="Accent.TButton",
             command=self._save_suppliers,
         ).pack(side=tk.RIGHT)
+
+        # ------------------------------------------------------------------
+        # INVOICE PATTERNS (search / add / deactivate — mirrors Suppliers &
+        # Aliases above). A pattern is never hard-deleted here: "Remove"
+        # deactivates it (count/history kept, just stops being matched) so a
+        # faulty regex can always be told apart from one you're testing.
+        # ------------------------------------------------------------------
+        inv_box = self._section(frame, "Invoice Patterns",
+                                 "Search, add, or deactivate the regex pattern each supplier's invoice numbers are matched against")
+        tk.Label(
+            inv_box,
+            text="Deactivating a pattern keeps its match history but stops it being used — use this if a "
+                 "pattern for a supplier starts matching wrong (or another supplier's invoices).",
+            bg=PANEL, fg=MUTED, font=("Segoe UI", 9), wraplength=900,
+        ).pack(anchor="w", padx=20, pady=(0, 6))
+
+        inv_search_bar = tk.Frame(inv_box, bg=PANEL)
+        inv_search_bar.pack(fill=tk.X, padx=20, pady=(0, 6))
+        tk.Label(
+            inv_search_bar, text="Search:", bg=PANEL, fg=MUTED, font=("Segoe UI", 9),
+        ).pack(side=tk.LEFT, padx=(0, 6))
+        self._inv_search_var = tk.StringVar()
+        inv_search_ent = tk.Entry(
+            inv_search_bar,
+            textvariable=self._inv_search_var,
+            bg=PANEL2, fg=TEXT, insertbackground=TEXT,
+            relief="flat", font=("Segoe UI", 10), bd=0,
+            highlightthickness=1, highlightbackground=PANEL3, highlightcolor=ACCENT,
+        )
+        inv_search_ent.pack(side=tk.LEFT, fill=tk.X, expand=True, ipady=5)
+
+        def _clear_inv_search():
+            self._inv_search_var.set("")
+        ttk.Button(inv_search_bar, text="✕", command=_clear_inv_search, width=3).pack(side=tk.LEFT, padx=(6, 0))
+
+        inv_tf = tk.Frame(inv_box, bg=PANEL)
+        inv_tf.pack(fill=tk.BOTH, expand=True, padx=20, pady=(0, 8))
+
+        inv_cols = ("Supplier", "Pattern", "Regex", "Status", "Matches")
+        self._inv_tree = ttk.Treeview(inv_tf, columns=inv_cols, show="headings", height=10)
+        widths = {"Supplier": 220, "Pattern": 160, "Regex": 360, "Status": 80, "Matches": 70}
+        for c in inv_cols:
+            self._inv_tree.heading(c, text=c, anchor="w")
+            self._inv_tree.column(c, width=widths.get(c, 120), anchor="w")
+
+        inv_ys = ttk.Scrollbar(inv_tf, orient="vertical", command=self._inv_tree.yview)
+        self._inv_tree.configure(yscrollcommand=inv_ys.set)
+        self._inv_tree.grid(row=0, column=0, sticky="nsew")
+        inv_ys.grid(row=0, column=1, sticky="ns")
+        inv_tf.rowconfigure(0, weight=1)
+        inv_tf.columnconfigure(0, weight=1)
+        self._bind_tree_mousewheel(self._inv_tree)
+
+        self._inv_tree.tag_configure("active", foreground=SUCCESS)
+        self._inv_tree.tag_configure("inactive", foreground=MUTED)
+
+        self._populate_invoice_pattern_tree()
+
+        def _on_inv_search(*_):
+            q = self._inv_search_var.get().strip().lower()
+            for iid in self._inv_tree.get_children():
+                self._inv_tree.detach(iid)
+            for iid in getattr(self, "_inv_all_rows", []):
+                if not q:
+                    self._inv_tree.reattach(iid, "", "end")
+                else:
+                    v = self._inv_tree.item(iid, "values")
+                    if any(q in str(x).lower() for x in v):
+                        self._inv_tree.reattach(iid, "", "end")
+
+        self._inv_search_var.trace_add("write", _on_inv_search)
+
+        inv_ctrl = tk.Frame(inv_box, bg=PANEL)
+        inv_ctrl.pack(fill=tk.X, padx=20, pady=(0, 20))
+        ttk.Button(inv_ctrl, text="+ Add Pattern", command=self._add_invoice_pattern_dialog).pack(side=tk.LEFT, padx=(0, 8))
+        ttk.Button(inv_ctrl, text="⏻ Toggle Active", command=self._toggle_invoice_pattern_active).pack(side=tk.LEFT, padx=4)
+        ttk.Button(inv_ctrl, text="↻ Refresh", command=self._populate_invoice_pattern_tree).pack(side=tk.LEFT, padx=4)
 
     # ------------------------------------------------------------------
     # ABOUT TAB
@@ -6939,6 +7018,127 @@ class MaafushivaruHub(tk.Tk, OCRWorkerMixin):
         self.cfg["aliases"]   = aliases
         self._save_config()
         messagebox.showinfo("Suppliers Saved", f"Saved {len(suppliers)} supplier(s).")
+
+    # ------------------------------------------------------------------
+    # INVOICE PATTERNS (Settings) — search / add / deactivate
+    # ------------------------------------------------------------------
+    def _populate_invoice_pattern_tree(self):
+        tree = getattr(self, "_inv_tree", None)
+        if tree is None:
+            return
+        for iid in tree.get_children():
+            tree.delete(iid)
+        self._inv_all_rows = []
+        self._inv_row_data = {}  # iid -> {"supplier":..., "index":...}
+
+        for row in sl.list_invoice_patterns(self.cfg):
+            active = row["active"]
+            iid = tree.insert(
+                "", "end",
+                tags=("active" if active else "inactive",),
+                values=(
+                    row["supplier"],
+                    row["template"],
+                    row["regex"],
+                    "Active" if active else "Inactive",
+                    row["count"],
+                ),
+            )
+            self._inv_row_data[iid] = {"supplier": row["supplier"], "index": row["index"]}
+            self._inv_all_rows.append(iid)
+
+    def _add_invoice_pattern_dialog(self):
+        suppliers = sorted(self.cfg.get("suppliers", []))
+        if not suppliers:
+            messagebox.showinfo("Add Invoice Pattern", "Add a supplier first (Suppliers & Aliases above).")
+            return
+
+        win = tk.Toplevel(self)
+        win.title("Add Invoice Pattern")
+        win.geometry("520x320")
+        win.configure(bg=BG)
+        win.transient(self)
+        win.grab_set()
+
+        pad = dict(padx=20, pady=(12, 0))
+
+        tk.Label(win, text="Supplier", bg=BG, fg=MUTED, font=("Segoe UI", 9, "bold")).pack(anchor="w", **pad)
+        sup_var = tk.StringVar(value=suppliers[0])
+        sup_combo = ttk.Combobox(win, textvariable=sup_var, values=suppliers, state="readonly")
+        sup_combo.pack(fill=tk.X, padx=20, pady=(4, 0))
+
+        mode_var = tk.StringVar(value="sample")
+        mode_row = tk.Frame(win, bg=BG)
+        mode_row.pack(anchor="w", padx=20, pady=(14, 0))
+        ttk.Radiobutton(mode_row, text="From a sample invoice number", variable=mode_var, value="sample").pack(anchor="w")
+        ttk.Radiobutton(mode_row, text="From a raw regex (advanced)", variable=mode_var, value="regex").pack(anchor="w")
+
+        tk.Label(win, text="Value", bg=BG, fg=MUTED, font=("Segoe UI", 9, "bold")).pack(anchor="w", **pad)
+        value_var = tk.StringVar()
+        value_ent = tk.Entry(
+            win, textvariable=value_var, bg=PANEL2, fg=TEXT, insertbackground=TEXT,
+            relief="flat", font=("Segoe UI", 10), bd=0,
+            highlightthickness=1, highlightbackground=PANEL3, highlightcolor=ACCENT,
+        )
+        value_ent.pack(fill=tk.X, padx=20, pady=(4, 0), ipady=6)
+
+        hint_var = tk.StringVar(value='e.g.  BB-2026-0451   (or a regex like  BB-(\\d{4,8})  in advanced mode)')
+        tk.Label(win, textvariable=hint_var, bg=BG, fg=MUTED, font=("Segoe UI", 8), wraplength=470, justify="left").pack(
+            anchor="w", padx=20, pady=(4, 0)
+        )
+
+        def _on_mode_change(*_):
+            if mode_var.get() == "sample":
+                hint_var.set('e.g.  BB-2026-0451   (a real invoice number — the pattern is derived from it)')
+            else:
+                hint_var.set('e.g.  BB-(\\d{4,8})   (a Python regex with the invoice number in a capture group)')
+        mode_var.trace_add("write", _on_mode_change)
+
+        btn_row = tk.Frame(win, bg=BG)
+        btn_row.pack(fill=tk.X, padx=20, pady=20, side=tk.BOTTOM)
+
+        def _save():
+            supplier = sup_var.get().strip()
+            value = value_var.get().strip()
+            if not value:
+                messagebox.showwarning("Add Invoice Pattern", "Enter a sample invoice number or a regex.", parent=win)
+                return
+            try:
+                if mode_var.get() == "sample":
+                    sl.add_invoice_pattern(supplier, sample_invoice_no=value, cfg=self.cfg)
+                else:
+                    sl.add_invoice_pattern(supplier, manual_regex=value, cfg=self.cfg)
+            except ValueError as e:
+                messagebox.showerror("Add Invoice Pattern", str(e), parent=win)
+                return
+            self._save_config()
+            self._populate_invoice_pattern_tree()
+            win.destroy()
+            self._set_status(f"Invoice pattern added for {supplier}.", SUCCESS)
+
+        ttk.Button(btn_row, text="Cancel", command=win.destroy).pack(side=tk.RIGHT, padx=(8, 0))
+        ttk.Button(btn_row, text="💾  Save", style="Accent.TButton", command=_save).pack(side=tk.RIGHT)
+
+    def _toggle_invoice_pattern_active(self):
+        selected = self._inv_tree.selection()
+        if not selected:
+            messagebox.showinfo("Toggle Active", "Select one or more pattern rows first.")
+            return
+        changed = 0
+        for row_id in selected:
+            info = self._inv_row_data.get(row_id)
+            if not info:
+                continue
+            current_active = "Active" in self._inv_tree.item(row_id, "values")
+            try:
+                sl.set_pattern_active(info["supplier"], info["index"], not current_active, cfg=self.cfg)
+                changed += 1
+            except ValueError as e:
+                messagebox.showerror("Toggle Active", str(e))
+        if changed:
+            self._save_config()
+            self._populate_invoice_pattern_tree()
+            self._set_status(f"Toggled {changed} invoice pattern(s).", SUCCESS)
 
     # ------------------------------------------------------------------
     # TEST SINGLE PDF DEBUG
