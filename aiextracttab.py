@@ -189,6 +189,9 @@ def _aix_log(app, category: str, message: str):
     if len(store) > _AIX_LOG_MAX:
         del store[: len(store) - _AIX_LOG_MAX]
     try:
+        # _aix_log already stores the timestamp in the UI log entry. The
+        # application file logger also adds its own timestamp, so every action
+        # is traceable chronologically in both places.
         logging.info(f"[AIX:{cat}] {entry['msg'].splitlines()[0]}")
     except Exception:
         pass
@@ -1202,9 +1205,282 @@ def _aix_start_process(app, auto=False):
     threading.Thread(target=worker, daemon=True).start()
     app.after(60, lambda: _aix_poll_queue(app))
 
+def _aix_extract_explicit_supplier(app, text: str) -> str:
+    """Extract the supplier from OCR, including names split across adjacent lines.
+
+    On Birchstreet Receiving Reports the supplier block is ALWAYS printed
+    inside the same band of the page:
+
+        Buyer's Dept.: MAM ACCOUNTING
+        LYCORN MALDIVES PV
+        Supplier:
+        LTD
+        Source document number:
+
+    Rules:
+      * The supplier name lives BETWEEN the "Buyer's Dept." line (above) and
+        the "Source document number:" line (below). Lines outside that band
+        are NEVER treated as supplier text - this is what stops
+        "Buyer's Dept.: MAM ACCOUNTING" from being mixed into the name.
+      * The name may be split across the "Supplier:" label itself
+        ("LYCORN MALDIVES PV" above + "LTD" below -> "LYCORN MALDIVES PVT LTD").
+      * Candidate text is matched against configured suppliers/aliases.
+        If a configured supplier matches, its canonical name is returned;
+        otherwise the raw (cleaned) OCR text is returned.
+      * Currency tokens / report field labels are never returned.
+    """
+    if not text:
+        return ""
+
+    configured = app.cfg.get("suppliers", [])
+    entries = (
+        configured.items()
+        if isinstance(configured, dict)
+        else ((x, []) for x in configured)
+    )
+
+    def norm(v):
+        v = str(v or "").upper()
+        # OCR space-splits legal suffixes: "PV T LTD" -> "PVT LTD" etc.
+        v = re.sub(r"\bP\s*V\s*T\.?\b", "PVT", v)
+        v = re.sub(r"\bL\s*T\s*D\.?\b", "LTD", v)
+        v = re.sub(r"\bL\s*I\s*M\s*I\s*T\s*E\s*D\b", "LIMITED", v)
+        v = re.sub(
+            r"\b(?:PRIVATE\s+LIMITED|PRIVATE\s+LTD|PVT\.?\s*LTD\.?)\b",
+            "PVT LTD",
+            v,
+        )
+        v = re.sub(r"\bLIMITED\b", "LTD", v)
+        v = re.sub(r"[^A-Z0-9]+", " ", v)
+        return re.sub(r"\s+", " ", v).strip()
+
+    def distance(a, b):
+        if abs(len(a) - len(b)) > 3:
+            return 99
+        prev = list(range(len(b) + 1))
+        for i, ca in enumerate(a, 1):
+            cur = [i]
+            for j, cb in enumerate(b, 1):
+                cur.append(
+                    min(
+                        cur[-1] + 1,
+                        prev[j] + 1,
+                        prev[j - 1] + (ca != cb),
+                    )
+                )
+            prev = cur
+        return prev[-1]
+
+    # Currency/amount-only values are not supplier names.
+    currency_only_re = re.compile(
+        r"^\s*[\(\[\{]?\s*(?:USD|MVR|EUR|GBP|SGD|MYR|MRF|RF|"
+        r"US\s*\$|S\s*\$|\$|€|£)\s*[\)\]\}]?\s*$",
+        re.IGNORECASE,
+    )
+
+    # Report-field labels: never absorb these into a supplier candidate,
+    # and never cross them while scanning above/below the Supplier label.
+    stop_re = re.compile(
+        r"^\s*(?:"
+        r"INVOICE|INVO1CE|RECEIVING|RECEIPT|GRN|DATE|PURCHASE\s+ORDER|"
+        r"PO\b|AMOUNT|TOTAL|SUBTOTAL|TAX|FREIGHT|DISCOUNT|"
+        r"SOURCE\s+DOCUMENT|TRACKING\s+NUMBER|TRACKING|"
+        r"BILL\s+OF\s+LADING|DELIVERY\s+NOTE|"
+        r"PRODUCT\s+DISBURSEMENT|PICKED\s+UP\s+BY|"
+        r"STOREROOM|RECEIVING\s+NOTES|DEPARTMENT|LOCATION|"
+        r"SIGNATURE|STATUS|PHONE|DEPT\b|BUYER"
+        r")\b",
+        re.IGNORECASE,
+    )
+
+    # Band limits of the supplier block on the receiving report.
+    buyer_line_re = re.compile(
+        r"BUYER'?S?\s+(?:DEPT|DEPARTMENT)|BUYER'?S?\s+NAME", re.IGNORECASE
+    )
+    region_end_re = re.compile(
+        r"SOURCE\s+DOCUMENT|TRACKING\s+NUMBER|BILL\s+OF\s+LADING|DELIVERY\s+NOTE",
+        re.IGNORECASE,
+    )
+
+    candidates = []
+    for canonical, aliases in entries:
+        values = [canonical]
+        if isinstance(aliases, (list, tuple, set)):
+            values.extend(aliases)
+        elif isinstance(aliases, dict):
+            values.extend(aliases.keys())
+            values.extend(aliases.values())
+        elif aliases:
+            values.append(aliases)
+
+        for value in values:
+            n = norm(value)
+            if n and not currency_only_re.fullmatch(n):
+                candidates.append((n, str(canonical).upper()))
+
+    # Remove duplicate normalized candidates while preserving order.
+    candidates = list(dict.fromkeys(candidates))
+
+    label_re = re.compile(
+        r"^\s*(?:SUPPLIER(?:\s+NAME)?|VENDOR)\s*[:\-]?\s*(.*?)\s*$",
+        re.IGNORECASE,
+    )
+    lines = [x.strip() for x in text.splitlines()]
+    lines = [x for x in lines if x]
+
+    for i, line in enumerate(lines):
+        m = label_re.match(line)
+        if not m:
+            continue
+
+        inline = m.group(1).strip(" :-")
+        inline_is_metadata = bool(currency_only_re.fullmatch(inline))
+
+        # --- Band limits: the supplier name is printed between
+        # "Buyer's Dept.: ..." (above) and "Source document number:" (below).
+        # Lines outside that band are never supplier text.
+        region_top = max(0, i - 3)
+        for j in range(i - 1, max(-1, i - 10), -1):
+            if buyer_line_re.search(lines[j]):
+                region_top = j + 1
+                break
+        region_bottom = min(len(lines), i + 4)
+        for j in range(i + 1, min(len(lines), i + 10)):
+            if region_end_re.search(lines[j]):
+                region_bottom = j
+                break
+
+        # Lines ABOVE the label (within the band, nearest first).
+        before = []
+        for j in range(i - 1, region_top - 1, -1):
+            cand_line = lines[j].strip()
+            if (
+                not cand_line
+                or stop_re.search(cand_line)
+                or region_end_re.search(cand_line)
+            ):
+                break
+            before.insert(0, cand_line)
+
+        # Lines BELOW the label (within the band).
+        after = []
+        for j in range(i + 1, region_bottom):
+            cand_line = lines[j].strip()
+            if (
+                not cand_line
+                or stop_re.search(cand_line)
+                or buyer_line_re.search(cand_line)
+            ):
+                break
+            after.append(cand_line)
+
+        # Build candidate layouts. Handles:
+        #   Supplier: (USD) / PERSONAL COMPUTERS
+        #   PERSONAL / Supplier: (USD) / COMPUTERS
+        #   LYCORN MALDIVES PV / Supplier: / LTD   (split around the label)
+        observed_candidates = []
+
+        if inline and not inline_is_metadata:
+            observed_candidates.append(inline)
+        if before:
+            observed_candidates.extend([
+                " ".join(before),
+                " ".join(before[-2:]),
+            ])
+        if after:
+            observed_candidates.extend([
+                " ".join(after),
+                " ".join(after[:2]),
+                " ".join(after[:3]),
+            ])
+        if before and after:
+            observed_candidates.extend([
+                " ".join(before + after),
+                " ".join(after + before),
+            ])
+        if inline and not inline_is_metadata and after:
+            observed_candidates.extend([
+                " ".join([inline] + after),
+                " ".join(after + [inline]),
+            ])
+        if before and inline and not inline_is_metadata:
+            observed_candidates.append(" ".join(before + [inline]))
+        if before and inline and not inline_is_metadata and after:
+            observed_candidates.extend([
+                " ".join(before + [inline] + after),
+                " ".join(after + [inline] + before),
+            ])
+
+        # Normalize and de-duplicate candidate observations.
+        observed_candidates = [
+            q for q in dict.fromkeys(norm(x) for x in observed_candidates)
+            if q and not currency_only_re.fullmatch(q)
+        ]
+
+        # First prefer exact configured supplier/alias matches.
+        for observed in observed_candidates:
+            for known, canonical in candidates:
+                if observed == known:
+                    return canonical
+
+                # Allow a legal suffix to be present/omitted.
+                suffix_words = {
+                    "PVT LTD", "LTD", "LIMITED",
+                    "PRIVATE LIMITED", "PRIVATE LTD",
+                }
+                if (
+                    observed.startswith(known + " ")
+                    and observed[len(known):].strip() in suffix_words
+                ):
+                    return canonical
+                if (
+                    known.startswith(observed + " ")
+                    and known[len(observed):].strip() in suffix_words
+                ):
+                    return canonical
+
+        # Then allow small OCR corruption, but score the complete observed
+        # supplier fragment rather than a currency token.
+        best = None
+        for observed in observed_candidates:
+            if len(observed) < 5:
+                continue
+            for known, canonical in candidates:
+                if abs(len(observed) - len(known)) <= 3:
+                    dist = distance(observed, known)
+                    if dist <= 3:
+                        score = 100 - (dist * 8) - abs(len(observed) - len(known))
+                        if best is None or score > best[0]:
+                            best = (score, canonical)
+
+        if best:
+            return best[1]
+
+        # No safe configured match: return useful OCR text, but never return
+        # "(USD)" / "USD" / other currency-only metadata, and never let the
+        # "Buyer's Dept." line leak into the raw fallback.
+        fallback_parts = []
+        if inline and not inline_is_metadata:
+            fallback_parts.append(inline)
+        # Raw fallback keeps reading order: name above the label first,
+        # then any fragment below it ("LYCORN MALDIVES PV" + "LTD").
+        fallback_parts.extend(before)
+        fallback_parts.extend(after)
+
+        fallback = norm(" ".join(fallback_parts))
+        if fallback and not currency_only_re.fullmatch(fallback):
+            return fallback
+
+        return ""
+
+    return ""
+
+
 def _aix_extract_fields_from_text(app, pdf_path: str, text: str) -> Dict:
-    supplier = _aix_extract_supplier_raw(app, text)
-    confidence = 100.0 if supplier else 0.0
+    # Explicit Receiving Report supplier is authoritative.
+    explicit_supplier = _aix_extract_explicit_supplier(app, text)
+    supplier = explicit_supplier or _aix_extract_supplier_raw(app, text)
+    confidence = 100.0 if explicit_supplier else (100.0 if supplier else 0.0)
 
     # FAST PATH: OCR.space already returned the text, so parse every field
     # directly from it. The old code called _extract_receiving_report_fields()
@@ -1244,9 +1520,17 @@ def _aix_extract_fields_from_text(app, pdf_path: str, text: str) -> Dict:
                 ownership_index=_aix_get_ownership_index(app),
             )
             if xmatch["action"] == "supplier_fixed_from_pattern":
-                supplier = xmatch["supplier"]
-                confidence = max(confidence, 90.0)
-                _aix_log(app, "PROCESS", f"[AUTO-FIX] {xmatch['reason']}")
+                if explicit_supplier:
+                    _aix_log(
+                        app, "PROCESS",
+                        "[AUTO-FIX BLOCKED] Explicit Receiving Report supplier "
+                        f"'{explicit_supplier}' protected against pattern suggestion "
+                        f"'{xmatch.get('supplier', '')}'."
+                    )
+                else:
+                    supplier = xmatch["supplier"]
+                    confidence = max(confidence, 90.0)
+                    _aix_log(app, "PROCESS", f"[AUTO-FIX] {xmatch['reason']}")
             elif xmatch["action"] == "invoice_repaired":
                 invoice = xmatch["invoice_no"]
                 _aix_log(app, "PROCESS", f"[AUTO-FIX] {xmatch['reason']}")
@@ -1278,13 +1562,26 @@ def _aix_extract_supplier_raw(app, text: str) -> str:
     grab from the other one").
 
     Strategy:
-      1. Try to match a KNOWN config supplier in the WHOLE text, then in each
-         individual page/report block.
-      2. If still nothing, fall back to a simple inline pattern on the whole
-         text and then on each block.
+      1. First use the main Hub OCR-first supplier matcher. It prioritises the
+         explicit supplier/vendor field and tolerates 1-2 OCR character errors.
+      2. If that cannot identify a supplier, use the local page/block fallback
+         below. Invoice-number regex/pattern matching is intentionally excluded.
     """
     if not text:
         return ""
+
+    # PRIMARY SUPPLIER SOURCE: use the OCR text itself and the main Hub's
+    # supplier matcher.  This matcher first inspects an explicit SUPPLIER/VENDOR
+    # field and tolerates small OCR corruption (including 1-2 character errors).
+    # Invoice-number formats are deliberately NOT used here.  They are too common
+    # across suppliers and therefore belong only to the later optional
+    # cross-match fallback in the main processing pipeline.
+    try:
+        matched_supplier, matched_conf = app._match_supplier_with_confidence(text)
+        if matched_supplier and matched_supplier != "UNKNOWN SUPPLIER" and matched_conf >= 87.0:
+            return matched_supplier
+    except Exception as e:
+        logging.debug(f"[AI EXTRACT] primary OCR supplier matcher failed: {e}")
 
     # ------------------------------------------------------------------
     # Build canonical supplier name list from config (no aliases)
@@ -1326,6 +1623,21 @@ def _aix_extract_supplier_raw(app, text: str) -> str:
 
             line_before = lines[idx - 1] if idx > 0 else ""
             line_after  = lines[idx + 1] if idx + 1 < len(lines) else ""
+
+            # Never let neighbouring report-field lines (Buyer's Dept.,
+            # Source document number, PO, dates, etc.) bleed into the name.
+            _not_supplier_re = re.compile(
+                r"BUYER'?S?\s+(?:DEPT|DEPARTMENT)|BUYER'?S?\s+NAME|"
+                r"SOURCE\s+DOCUMENT|TRACKING|BILL\s+OF\s+LADING|"
+                r"DELIVERY\s+NOTE|PURCHASE\s+ORDER|\bPO\b|INVOICE|"
+                r"GRN|\bDATE\b|AMOUNT|TOTAL|STOREROOM|DEPARTMENT|"
+                r"LOCATION|SIGNATURE|PHONE|STATUS",
+                re.IGNORECASE,
+            )
+            if line_before and _not_supplier_re.search(line_before):
+                line_before = ""
+            if line_after and _not_supplier_re.search(line_after):
+                line_after = ""
 
             m_inline = re.search(
                 r"\b(?:SUPPLIER(?:\s+NAME)?|VENDOR)\s*[:\-]\s*(.+)",
@@ -1410,7 +1722,7 @@ def _aix_extract_supplier_raw(app, text: str) -> str:
 
     # --- Single Receiving Record: match on the whole text. ---
     if len(blocks) <= 1:
-        return _match_known(text) or _inline_fallback(text) or ""
+        return _match_known(text) or ""
 
     # --- Multiple Receiving Records in ONE pdf ---
     # Every GRN document starts with "RECEIVING RECORD". A pdf can hold several,
@@ -1420,7 +1732,7 @@ def _aix_extract_supplier_raw(app, text: str) -> str:
     # so we can safely borrow the name from the readable record.
     per = []  # (supplier, invoice) per record block, in document order
     for b in blocks:
-        sup = _match_known(b) or _inline_fallback(b)
+        sup = _match_known(b) or ""
         try:
             inv = (app._extract_invoice(b) or "").strip().upper()
         except Exception:

@@ -1,0 +1,1473 @@
+2026-09-13 12:04:44 [INFO] Application started.
+2026-09-13 12:04:46 [INFO] Auto-ingest (api) watching: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED
+2026-09-13 12:04:46 [INFO] [WATCHER] Started watching C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED in api mode
+2026-09-13 12:04:58 [INFO] [WATCHER] New PDF detected: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED\Scan_0003.pdf
+2026-09-13 12:04:58 [INFO] [WATCHER] New PDF detected: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED\Scan_0002.pdf
+2026-09-13 12:04:58 [INFO] [WATCHER] New PDF detected: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED\Scan_0001.pdf
+2026-09-13 12:04:58 [INFO] [AUTO-INGEST API] Detected: Scan_0003.pdf (1.48 MB) — extracting...
+2026-09-13 12:04:58 [INFO] [AUTO-INGEST API] Detected: Scan_0002.pdf (2.54 MB) — extracting...
+2026-09-13 12:04:58 [INFO] [AUTO-INGEST API] Detected: Scan_0001.pdf (2.41 MB) — extracting...
+2026-09-13 12:04:58 [INFO] [AIX:SYSTEM] Auto-ingest (API) triggered by folder watcher.
+2026-09-13 12:04:58 [INFO] [AIX:PROCESS] Run started (auto): 3 file(s), compress threshold 1.00 MB.
+2026-09-13 12:04:58 [INFO] [AIX:API] Preparing files...
+2026-09-13 12:04:58 [INFO] [AI EXTRACT] Processing Scan_0003.pdf (1/3)
+2026-09-13 12:04:58 [INFO] [AIX:COMPRESS] Scan_0003.pdf: reused existing trimmed copy (0.46 MB)
+2026-09-13 12:05:05 [INFO] [AIX:API] OK — Scan_0003.pdf (3 page(s), 3479 chars)
+2026-09-13 12:05:05 [INFO] [AIX:PROCESS] Scan_0003.pdf: supplier=HMHI COMPANY, grn=RC-MAM-000020831, po=MAM-000020967, invoice=11092, conf=100%
+2026-09-13 12:05:05 [INFO] [AI EXTRACT] Processing Scan_0002.pdf (2/3)
+2026-09-13 12:05:05 [INFO] [AIX:COMPRESS] Scan_0002.pdf: reused existing trimmed copy (0.69 MB)
+2026-09-13 12:05:16 [INFO] [AIX:API] OK — Scan_0002.pdf (3 page(s), 3825 chars)
+2026-09-13 12:05:17 [INFO] [AIX:PROCESS] Scan_0002.pdf: supplier=FRONTIER MARKETS ENTERPRISES PVT LTD, grn=RC-MAM-000020853, po=MAM-000021122, invoice=25520, conf=100%
+2026-09-13 12:05:17 [INFO] [AI EXTRACT] Processing Scan_0001.pdf (3/3)
+2026-09-13 12:05:17 [INFO] [AIX:COMPRESS] Scan_0001.pdf: reused existing trimmed copy (0.64 MB)
+2026-09-13 12:05:24 [INFO] [AIX:API] OK — Scan_0001.pdf (3 page(s), 3360 chars)
+2026-09-13 12:05:26 [INFO] [AIX:PROCESS] Scan_0001.pdf: supplier=FRONTIER MARKETS ENTERPRISES PVT LTD, grn=RC-MAM-000020854, po=MAM-000021142, invoice=25521, conf=100%
+2026-09-13 12:05:26 [INFO] [AIX:API] Done — 3 ok, 0 error(s), 9 page(s) used this run.
+2026-09-13 12:05:26 [INFO] [AIX:PROCESS] Run complete - 3 ok, 0 error(s), 9 page(s) used.
+2026-09-13 12:11:44 [INFO] Auto-ingest stopped.
+2026-09-13 12:11:44 [INFO] Application shutdown complete.
+2026-09-13 12:12:17 [INFO] Application started.
+2026-09-13 12:12:18 [INFO] Auto-ingest (api) watching: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED
+2026-09-13 12:12:18 [INFO] [WATCHER] Started watching C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED in api mode
+2026-09-13 12:12:29 [INFO] [WATCHER] New PDF detected: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED\Scan_0002.pdf
+2026-09-13 12:12:29 [INFO] [WATCHER] New PDF detected: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED\Scan_0003.pdf
+2026-09-13 12:12:29 [INFO] [WATCHER] New PDF detected: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED\Scan_0001.pdf
+2026-09-13 12:12:29 [INFO] [AUTO-INGEST API] Detected: Scan_0002.pdf (2.54 MB) — extracting...
+2026-09-13 12:12:29 [INFO] [AUTO-INGEST API] Detected: Scan_0003.pdf (1.48 MB) — extracting...
+2026-09-13 12:12:29 [INFO] [AUTO-INGEST API] Detected: Scan_0001.pdf (2.41 MB) — extracting...
+2026-09-13 12:12:29 [INFO] [AIX:SYSTEM] Auto-ingest (API) triggered by folder watcher.
+2026-09-13 12:12:29 [INFO] [AIX:PROCESS] Run started (auto): 3 file(s), compress threshold 1.00 MB.
+2026-09-13 12:12:29 [INFO] [AIX:API] Preparing files...
+2026-09-13 12:12:29 [INFO] [AI EXTRACT] Processing Scan_0003.pdf (1/3)
+2026-09-13 12:12:29 [INFO] [AIX:COMPRESS] Scan_0003.pdf: reused existing trimmed copy (0.46 MB)
+2026-09-13 12:12:35 [INFO] [AIX:API] OK — Scan_0003.pdf (3 page(s), 3479 chars)
+2026-09-13 12:12:35 [INFO] [AIX:PROCESS] Scan_0003.pdf: supplier=MARINE EQUIPMENTS, grn=RC-MAM-000020831, po=MAM-000020967, invoice=11092, conf=100%
+2026-09-13 12:12:35 [INFO] [AI EXTRACT] Processing Scan_0002.pdf (2/3)
+2026-09-13 12:12:35 [INFO] [AIX:COMPRESS] Scan_0002.pdf: reused existing trimmed copy (0.69 MB)
+2026-09-13 12:12:43 [INFO] [AIX:API] OK — Scan_0002.pdf (3 page(s), 3825 chars)
+2026-09-13 12:12:44 [INFO] [AIX:PROCESS] Scan_0002.pdf: supplier=ENTERPRISES PVT LTD, grn=RC-MAM-000020853, po=MAM-000021122, invoice=25520, conf=100%
+2026-09-13 12:12:44 [INFO] [AI EXTRACT] Processing Scan_0001.pdf (3/3)
+2026-09-13 12:12:44 [INFO] [AIX:COMPRESS] Scan_0001.pdf: reused existing trimmed copy (0.64 MB)
+2026-09-13 12:12:51 [INFO] [AIX:API] OK — Scan_0001.pdf (3 page(s), 3360 chars)
+2026-09-13 12:12:51 [INFO] [AIX:PROCESS] Scan_0001.pdf: supplier=ENTERPRISES PVT LTD, grn=RC-MAM-000020854, po=MAM-000021142, invoice=25521, conf=100%
+2026-09-13 12:12:51 [INFO] [AIX:API] Done — 3 ok, 0 error(s), 9 page(s) used this run.
+2026-09-13 12:12:51 [INFO] [AIX:PROCESS] Run complete - 3 ok, 0 error(s), 9 page(s) used.
+2026-09-13 12:17:01 [INFO] Auto-ingest stopped.
+2026-09-13 12:17:01 [INFO] Application shutdown complete.
+2026-09-13 12:17:15 [INFO] Application started.
+2026-09-13 12:17:16 [INFO] Auto-ingest (api) watching: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED
+2026-09-13 12:17:16 [INFO] [WATCHER] Started watching C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED in api mode
+2026-09-13 12:17:29 [INFO] [WATCHER] New PDF detected: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED\Scan_0002.pdf
+2026-09-13 12:17:29 [INFO] [WATCHER] New PDF detected: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED\Scan_0003.pdf
+2026-09-13 12:17:29 [INFO] [WATCHER] New PDF detected: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED\Scan_0001.pdf
+2026-09-13 12:17:30 [INFO] [AUTO-INGEST API] Detected: Scan_0002.pdf (2.54 MB) — extracting...
+2026-09-13 12:17:30 [INFO] [AUTO-INGEST API] Detected: Scan_0003.pdf (1.48 MB) — extracting...
+2026-09-13 12:17:30 [INFO] [AUTO-INGEST API] Detected: Scan_0001.pdf (2.41 MB) — extracting...
+2026-09-13 12:17:30 [INFO] [AIX:SYSTEM] Auto-ingest (API) triggered by folder watcher.
+2026-09-13 12:17:30 [INFO] [AIX:PROCESS] Run started (auto): 3 file(s), compress threshold 1.00 MB.
+2026-09-13 12:17:30 [INFO] [AIX:API] Preparing files...
+2026-09-13 12:17:30 [INFO] [AI EXTRACT] Processing Scan_0003.pdf (1/3)
+2026-09-13 12:17:30 [INFO] [AIX:COMPRESS] Scan_0003.pdf: reused existing trimmed copy (0.46 MB)
+2026-09-13 12:17:38 [INFO] [AIX:API] OK — Scan_0003.pdf (3 page(s), 3479 chars)
+2026-09-13 12:17:38 [INFO] [AIX:PROCESS] Scan_0003.pdf: supplier=MARINE EQUIPMENTS, grn=RC-MAM-000020831, po=MAM-000020967, invoice=11092, conf=100%
+2026-09-13 12:17:38 [INFO] [AI EXTRACT] Processing Scan_0002.pdf (2/3)
+2026-09-13 12:17:38 [INFO] [AIX:COMPRESS] Scan_0002.pdf: reused existing trimmed copy (0.69 MB)
+2026-09-13 12:17:45 [INFO] [AIX:API] OK — Scan_0002.pdf (3 page(s), 3825 chars)
+2026-09-13 12:17:45 [INFO] [AIX:PROCESS] Scan_0002.pdf: supplier=FRONTIER MARKETS ENTERPRISES PVT LTD, grn=RC-MAM-000020853, po=MAM-000021122, invoice=25520, conf=100%
+2026-09-13 12:17:45 [INFO] [AI EXTRACT] Processing Scan_0001.pdf (3/3)
+2026-09-13 12:17:45 [INFO] [AIX:COMPRESS] Scan_0001.pdf: reused existing trimmed copy (0.64 MB)
+2026-09-13 12:17:52 [INFO] [AIX:API] OK — Scan_0001.pdf (3 page(s), 3360 chars)
+2026-09-13 12:17:52 [INFO] [AIX:PROCESS] Scan_0001.pdf: supplier=FRONTIER MARKETS ENTERPRISES PVT LTD, grn=RC-MAM-000020854, po=MAM-000021142, invoice=25521, conf=100%
+2026-09-13 12:17:52 [INFO] [AIX:API] Done — 3 ok, 0 error(s), 9 page(s) used this run.
+2026-09-13 12:17:52 [INFO] [AIX:PROCESS] Run complete - 3 ok, 0 error(s), 9 page(s) used.
+2026-09-13 12:18:59 [INFO] [WATCHER] New PDF detected: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED\Scan_0004.pdf
+2026-09-13 12:19:00 [INFO] [AUTO-INGEST API] Detected: Scan_0004.pdf (2.02 MB) — extracting...
+2026-09-13 12:19:01 [INFO] [AIX:SYSTEM] Auto-ingest (API) triggered by folder watcher.
+2026-09-13 12:19:01 [INFO] [AIX:PROCESS] Run started (auto): 1 file(s), compress threshold 1.00 MB.
+2026-09-13 12:19:01 [INFO] [AIX:API] Preparing files...
+2026-09-13 12:19:01 [INFO] [AI EXTRACT] Processing Scan_0004.pdf (1/1)
+2026-09-13 12:19:01 [INFO] [AI EXTRACT] Preparing Scan_0004.pdf
+2026-09-13 12:19:01 [INFO] [AIX:COMPRESS] Scan_0004.pdf: 2.02 MB -> 0.63 MB
+2026-09-13 12:19:09 [INFO] [AIX:API] OK — Scan_0004.pdf (3 page(s), 3897 chars)
+2026-09-13 12:19:09 [INFO] [AIX:PROCESS] Scan_0004.pdf: supplier=M GLASS ALU, grn=RC-MAM-000020865, po=MAM-000021072, invoice=121004185, conf=100%
+2026-09-13 12:19:09 [INFO] [AIX:API] Done — 1 ok, 0 error(s), 3 page(s) used this run.
+2026-09-13 12:19:09 [INFO] [AIX:PROCESS] Run complete - 1 ok, 0 error(s), 3 page(s) used.
+2026-09-13 12:19:24 [INFO] [AIX:PROCESS] [LEARN] 'M GLASS & ALU' wasn't a known supplier yet — added it.
+2026-09-13 12:19:24 [INFO] [AIX:PROCESS] [LEARN] M GLASS ALU -> M GLASS & ALU: learned alias "M GLASS ALU"; learned new invoice pattern {0}
+2026-09-13 12:19:24 [INFO] AI Extract cell updated.
+2026-09-13 12:19:59 [INFO] [WATCHER] New PDF detected: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED\Scan_0005.pdf
+2026-09-13 12:19:59 [INFO] [AUTO-INGEST API] Detected: Scan_0005.pdf (1.84 MB) — extracting...
+2026-09-13 12:19:59 [INFO] [AIX:SYSTEM] Auto-ingest (API) triggered by folder watcher.
+2026-09-13 12:19:59 [INFO] [AIX:PROCESS] Run started (auto): 1 file(s), compress threshold 1.00 MB.
+2026-09-13 12:19:59 [INFO] [AIX:API] Preparing files...
+2026-09-13 12:19:59 [INFO] [AI EXTRACT] Processing Scan_0005.pdf (1/1)
+2026-09-13 12:19:59 [INFO] [AI EXTRACT] Preparing Scan_0005.pdf
+2026-09-13 12:19:59 [INFO] [AIX:COMPRESS] Scan_0005.pdf: 1.84 MB -> 0.55 MB
+2026-09-13 12:20:07 [INFO] [AIX:API] OK — Scan_0005.pdf (3 page(s), 3278 chars)
+2026-09-13 12:20:07 [INFO] [AIX:PROCESS] Scan_0005.pdf: supplier=PRINTLAB, grn=RC-MAM-000020874, po=MAM-000021162, invoice=2673, conf=100%
+2026-09-13 12:20:07 [INFO] [AIX:API] Done — 1 ok, 0 error(s), 3 page(s) used this run.
+2026-09-13 12:20:07 [INFO] [AIX:PROCESS] Run complete - 1 ok, 0 error(s), 3 page(s) used.
+2026-09-13 12:20:39 [INFO] AI Extract cell updated.
+2026-09-13 12:25:23 [INFO] Auto-ingest stopped.
+2026-09-13 12:25:23 [INFO] Application shutdown complete.
+2026-09-13 12:25:36 [INFO] Application started.
+2026-09-13 12:25:38 [INFO] Auto-ingest (api) watching: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED
+2026-09-13 12:25:38 [INFO] [WATCHER] Started watching C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED in api mode
+2026-09-13 12:25:51 [INFO] [WATCHER] New PDF detected: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED\Scan_0004.pdf
+2026-09-13 12:25:51 [INFO] [WATCHER] New PDF detected: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED\Scan_0003.pdf
+2026-09-13 12:25:51 [INFO] [WATCHER] New PDF detected: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED\Scan_0005.pdf
+2026-09-13 12:25:51 [INFO] [WATCHER] New PDF detected: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED\Scan_0001.pdf
+2026-09-13 12:25:51 [INFO] [WATCHER] New PDF detected: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED\Scan_0002.pdf
+2026-09-13 12:25:52 [INFO] [AUTO-INGEST API] Detected: Scan_0004.pdf (2.02 MB) — extracting...
+2026-09-13 12:25:52 [INFO] [AUTO-INGEST API] Detected: Scan_0003.pdf (1.48 MB) — extracting...
+2026-09-13 12:25:52 [INFO] [AUTO-INGEST API] Detected: Scan_0005.pdf (1.84 MB) — extracting...
+2026-09-13 12:25:52 [INFO] [AUTO-INGEST API] Detected: Scan_0001.pdf (2.41 MB) — extracting...
+2026-09-13 12:25:52 [INFO] [AUTO-INGEST API] Detected: Scan_0002.pdf (2.54 MB) — extracting...
+2026-09-13 12:25:52 [INFO] [AIX:SYSTEM] Auto-ingest (API) triggered by folder watcher.
+2026-09-13 12:25:52 [INFO] [AIX:PROCESS] Run started (auto): 5 file(s), compress threshold 1.00 MB.
+2026-09-13 12:25:52 [INFO] [AIX:API] Preparing files...
+2026-09-13 12:25:52 [INFO] [AI EXTRACT] Processing Scan_0005.pdf (1/5)
+2026-09-13 12:25:52 [INFO] [AIX:COMPRESS] Scan_0005.pdf: reused existing trimmed copy (0.55 MB)
+2026-09-13 12:25:58 [INFO] [AIX:API] OK — Scan_0005.pdf (3 page(s), 3278 chars)
+2026-09-13 12:25:58 [INFO] [AIX:PROCESS] Scan_0005.pdf: supplier=PRINTLAB, grn=RC-MAM-000020874, po=MAM-000021162, invoice=2673, conf=100%
+2026-09-13 12:25:58 [INFO] [AI EXTRACT] Processing Scan_0004.pdf (2/5)
+2026-09-13 12:25:58 [INFO] [AIX:COMPRESS] Scan_0004.pdf: reused existing trimmed copy (0.63 MB)
+2026-09-13 12:26:05 [INFO] [AIX:API] OK — Scan_0004.pdf (3 page(s), 3897 chars)
+2026-09-13 12:26:05 [INFO] [AIX:PROCESS] Scan_0004.pdf: supplier=M GLASS & ALU, grn=RC-MAM-000020865, po=MAM-000021072, invoice=121004185, conf=100%
+2026-09-13 12:26:05 [INFO] [AI EXTRACT] Processing Scan_0003.pdf (3/5)
+2026-09-13 12:26:05 [INFO] [AIX:COMPRESS] Scan_0003.pdf: reused existing trimmed copy (0.46 MB)
+2026-09-13 12:26:11 [INFO] [AIX:API] OK — Scan_0003.pdf (3 page(s), 3479 chars)
+2026-09-13 12:26:11 [INFO] [AIX:PROCESS] Scan_0003.pdf: supplier=MARINE EQUIPMENTS, grn=RC-MAM-000020831, po=MAM-000020967, invoice=11092, conf=100%
+2026-09-13 12:26:11 [INFO] [AI EXTRACT] Processing Scan_0002.pdf (4/5)
+2026-09-13 12:26:11 [INFO] [AIX:COMPRESS] Scan_0002.pdf: reused existing trimmed copy (0.69 MB)
+2026-09-13 12:26:12 [INFO] AI Extract cell updated.
+2026-09-13 12:26:19 [INFO] [AIX:API] OK — Scan_0002.pdf (3 page(s), 3825 chars)
+2026-09-13 12:26:19 [INFO] [AIX:PROCESS] Scan_0002.pdf: supplier=FRONTIER MARKETS ENTERPRISES PVT LTD, grn=RC-MAM-000020853, po=MAM-000021122, invoice=25520, conf=100%
+2026-09-13 12:26:19 [INFO] [AI EXTRACT] Processing Scan_0001.pdf (5/5)
+2026-09-13 12:26:19 [INFO] [AIX:COMPRESS] Scan_0001.pdf: reused existing trimmed copy (0.64 MB)
+2026-09-13 12:26:25 [INFO] [AIX:API] OK — Scan_0001.pdf (3 page(s), 3360 chars)
+2026-09-13 12:26:25 [INFO] [AIX:PROCESS] Scan_0001.pdf: supplier=FRONTIER MARKETS ENTERPRISES PVT LTD, grn=RC-MAM-000020854, po=MAM-000021142, invoice=25521, conf=100%
+2026-09-13 12:26:25 [INFO] [AIX:API] Done — 5 ok, 0 error(s), 15 page(s) used this run.
+2026-09-13 12:26:25 [INFO] [AIX:PROCESS] Run complete - 5 ok, 0 error(s), 15 page(s) used.
+2026-09-13 14:19:49 [INFO] [WATCHER] New PDF detected: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED\Scan_0006.pdf
+2026-09-13 14:19:50 [INFO] [AUTO-INGEST API] Detected: Scan_0006.pdf (2.50 MB) — extracting...
+2026-09-13 14:19:50 [INFO] [AIX:SYSTEM] Auto-ingest (API) triggered by folder watcher.
+2026-09-13 14:19:50 [INFO] [AIX:PROCESS] Run started (auto): 1 file(s), compress threshold 1.00 MB.
+2026-09-13 14:19:50 [INFO] [AIX:API] Preparing files...
+2026-09-13 14:19:50 [INFO] [AI EXTRACT] Processing Scan_0006.pdf (1/1)
+2026-09-13 14:19:50 [INFO] [AI EXTRACT] Preparing Scan_0006.pdf
+2026-09-13 14:19:51 [INFO] [AIX:COMPRESS] Scan_0006.pdf: 2.50 MB -> 0.76 MB
+2026-09-13 14:19:58 [INFO] [AIX:API] OK — Scan_0006.pdf (3 page(s), 3433 chars)
+2026-09-13 14:19:58 [INFO] [AIX:PROCESS] Scan_0006.pdf: supplier=FEATHER INVESTMENT, grn=RC-MAM-000020875, po=MAM-000021164, invoice=2053, conf=100%
+2026-09-13 14:19:58 [INFO] [AIX:API] Done — 1 ok, 0 error(s), 3 page(s) used this run.
+2026-09-13 14:19:58 [INFO] [AIX:PROCESS] Run complete - 1 ok, 0 error(s), 3 page(s) used.
+2026-09-13 14:20:51 [INFO] [WATCHER] New PDF detected: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED\Scan_0007.pdf
+2026-09-13 14:20:52 [INFO] [AUTO-INGEST API] Detected: Scan_0007.pdf (1.74 MB) — extracting...
+2026-09-13 14:20:52 [INFO] [AIX:SYSTEM] Auto-ingest (API) triggered by folder watcher.
+2026-09-13 14:20:52 [INFO] [AIX:PROCESS] Run started (auto): 1 file(s), compress threshold 1.00 MB.
+2026-09-13 14:20:52 [INFO] [AIX:API] Preparing files...
+2026-09-13 14:20:52 [INFO] [AI EXTRACT] Processing Scan_0007.pdf (1/1)
+2026-09-13 14:20:52 [INFO] [AI EXTRACT] Preparing Scan_0007.pdf
+2026-09-13 14:20:52 [INFO] [AIX:COMPRESS] Scan_0007.pdf: 1.74 MB -> 0.55 MB
+2026-09-13 14:20:58 [INFO] [AIX:API] OK — Scan_0007.pdf (3 page(s), 3664 chars)
+2026-09-13 14:20:58 [INFO] [AIX:PROCESS] Scan_0007.pdf: supplier=A&G ENERGY SOLUTIONS, grn=RC-MAM-000020822, po=MAM-000021108, invoice=6138, conf=100%
+2026-09-13 14:20:58 [INFO] [AIX:API] Done — 1 ok, 0 error(s), 3 page(s) used this run.
+2026-09-13 14:20:58 [INFO] [AIX:PROCESS] Run complete - 1 ok, 0 error(s), 3 page(s) used.
+2026-09-13 14:21:41 [INFO] [WATCHER] New PDF detected: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED\Scan_0008.pdf
+2026-09-13 14:21:41 [INFO] [AUTO-INGEST API] Detected: Scan_0008.pdf (1.35 MB) — extracting...
+2026-09-13 14:21:42 [INFO] [AIX:SYSTEM] Auto-ingest (API) triggered by folder watcher.
+2026-09-13 14:21:42 [INFO] [AIX:PROCESS] Run started (auto): 1 file(s), compress threshold 1.00 MB.
+2026-09-13 14:21:42 [INFO] [AIX:API] Preparing files...
+2026-09-13 14:21:42 [INFO] [AI EXTRACT] Processing Scan_0008.pdf (1/1)
+2026-09-13 14:21:42 [INFO] [AI EXTRACT] Preparing Scan_0008.pdf
+2026-09-13 14:21:42 [INFO] [AIX:COMPRESS] Scan_0008.pdf: 1.35 MB -> 0.47 MB
+2026-09-13 14:21:48 [INFO] [AIX:API] OK — Scan_0008.pdf (2 page(s), 4135 chars)
+2026-09-13 14:21:48 [INFO] [AIX:PROCESS] Scan_0008.pdf: supplier=USD, grn=RC-MAM-000020821, po=MAM-000021104, invoice=17581, conf=100%
+2026-09-13 14:21:48 [INFO] [AIX:API] Done — 1 ok, 0 error(s), 2 page(s) used this run.
+2026-09-13 14:21:48 [INFO] [AIX:PROCESS] Run complete - 1 ok, 0 error(s), 2 page(s) used.
+2026-09-13 14:36:47 [INFO] AI Extract cell updated.
+2026-09-13 14:37:00 [INFO] [AIX:PROCESS] [LEARN] 'PERSONAL COMPUTERS USD' wasn't a known supplier yet — added it.
+2026-09-13 14:37:00 [INFO] [AIX:PROCESS] [LEARN] USD -> PERSONAL COMPUTERS USD: learned alias "USD"; learned new invoice pattern {0}
+2026-09-13 14:37:00 [INFO] AI Extract cell updated.
+2026-09-13 14:37:44 [INFO] [WATCHER] New PDF detected: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED\Scan_0009.pdf
+2026-09-13 14:37:44 [INFO] [AUTO-INGEST API] Detected: Scan_0009.pdf (2.18 MB) — extracting...
+2026-09-13 14:37:45 [INFO] [AIX:SYSTEM] Auto-ingest (API) triggered by folder watcher.
+2026-09-13 14:37:45 [INFO] [AIX:PROCESS] Run started (auto): 1 file(s), compress threshold 1.00 MB.
+2026-09-13 14:37:45 [INFO] [AIX:API] Preparing files...
+2026-09-13 14:37:45 [INFO] [AI EXTRACT] Processing Scan_0009.pdf (1/1)
+2026-09-13 14:37:45 [INFO] [AI EXTRACT] Preparing Scan_0009.pdf
+2026-09-13 14:37:45 [INFO] [AIX:COMPRESS] Scan_0009.pdf: 2.18 MB -> 0.73 MB
+2026-09-13 14:37:53 [INFO] [AIX:API] OK — Scan_0009.pdf (3 page(s), 5156 chars)
+2026-09-13 14:37:53 [INFO] [AIX:PROCESS] Scan_0009.pdf: supplier=EURO MARKETING, grn=RC-MAM-000020820, po=MAM-000021143, invoice=100199206, conf=100%
+2026-09-13 14:37:53 [INFO] [AIX:API] Done — 1 ok, 0 error(s), 3 page(s) used this run.
+2026-09-13 14:37:53 [INFO] [AIX:PROCESS] Run complete - 1 ok, 0 error(s), 3 page(s) used.
+2026-09-13 14:38:37 [INFO] [WATCHER] New PDF detected: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED\Scan_0010.pdf
+2026-09-13 14:38:37 [INFO] [AUTO-INGEST API] Detected: Scan_0010.pdf (1.44 MB) — extracting...
+2026-09-13 14:38:37 [INFO] [AIX:SYSTEM] Auto-ingest (API) triggered by folder watcher.
+2026-09-13 14:38:37 [INFO] [AIX:PROCESS] Run started (auto): 1 file(s), compress threshold 1.00 MB.
+2026-09-13 14:38:37 [INFO] [AIX:API] Preparing files...
+2026-09-13 14:38:37 [INFO] [AI EXTRACT] Processing Scan_0010.pdf (1/1)
+2026-09-13 14:38:37 [INFO] [AI EXTRACT] Preparing Scan_0010.pdf
+2026-09-13 14:38:37 [INFO] [AIX:COMPRESS] Scan_0010.pdf: 1.44 MB -> 0.48 MB
+2026-09-13 14:38:43 [INFO] [AIX:API] OK — Scan_0010.pdf (2 page(s), 4095 chars)
+2026-09-13 14:38:43 [INFO] [AIX:PROCESS] Scan_0010.pdf: supplier=BESTBUY MALDIVES PVT LTD, grn=RC-MAM-000020819, po=MAM-000021137, invoice=1249870, conf=100%
+2026-09-13 14:38:43 [INFO] [AIX:API] Done — 1 ok, 0 error(s), 2 page(s) used this run.
+2026-09-13 14:38:43 [INFO] [AIX:PROCESS] Run complete - 1 ok, 0 error(s), 2 page(s) used.
+2026-09-13 14:39:26 [INFO] [WATCHER] New PDF detected: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED\Scan_0011.pdf
+2026-09-13 14:39:27 [INFO] [AUTO-INGEST API] Detected: Scan_0011.pdf (1.18 MB) — extracting...
+2026-09-13 14:39:27 [INFO] [AIX:SYSTEM] Auto-ingest (API) triggered by folder watcher.
+2026-09-13 14:39:27 [INFO] [AIX:PROCESS] Run started (auto): 1 file(s), compress threshold 1.00 MB.
+2026-09-13 14:39:27 [INFO] [AIX:API] Preparing files...
+2026-09-13 14:39:27 [INFO] [AI EXTRACT] Processing Scan_0011.pdf (1/1)
+2026-09-13 14:39:27 [INFO] [AI EXTRACT] Preparing Scan_0011.pdf
+2026-09-13 14:39:27 [INFO] [AIX:COMPRESS] Scan_0011.pdf: 1.18 MB -> 0.39 MB
+2026-09-13 14:39:32 [INFO] [AIX:API] OK — Scan_0011.pdf (2 page(s), 2772 chars)
+2026-09-13 14:39:32 [INFO] [AIX:PROCESS] Scan_0011.pdf: supplier=PVT LTD, grn=RC-MAM-000020818, po=MAM-000021140, invoice=2326 26, conf=100%
+2026-09-13 14:39:32 [INFO] [AIX:API] Done — 1 ok, 0 error(s), 2 page(s) used this run.
+2026-09-13 14:39:32 [INFO] [AIX:PROCESS] Run complete - 1 ok, 0 error(s), 2 page(s) used.
+2026-09-13 14:40:06 [INFO] [AIX:PROCESS] [LEARN] PVT LTD -> LILY ENTERPRISES PVT LTD: learned alias "PVT LTD"; confirmed invoice pattern {0}
+2026-09-13 14:40:06 [INFO] AI Extract cell updated.
+2026-09-13 14:40:56 [INFO] [WATCHER] New PDF detected: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED\Scan_0012.pdf
+2026-09-13 14:40:56 [INFO] [AUTO-INGEST API] Detected: Scan_0012.pdf (2.14 MB) — extracting...
+2026-09-13 14:40:56 [INFO] [AIX:SYSTEM] Auto-ingest (API) triggered by folder watcher.
+2026-09-13 14:40:56 [INFO] [AIX:PROCESS] Run started (auto): 1 file(s), compress threshold 1.00 MB.
+2026-09-13 14:40:56 [INFO] [AIX:API] Preparing files...
+2026-09-13 14:40:56 [INFO] [AI EXTRACT] Processing Scan_0012.pdf (1/1)
+2026-09-13 14:40:56 [INFO] [AI EXTRACT] Preparing Scan_0012.pdf
+2026-09-13 14:40:56 [INFO] [AI EXTRACT] Scan_0012.pdf has 4 pages — trimming to first 3 before compressing...
+2026-09-13 14:40:56 [INFO] [AIX:COMPRESS] Scan_0012.pdf: 2.14 MB -> 0.52 MB
+2026-09-13 14:41:02 [INFO] [AIX:API] OK — Scan_0012.pdf (3 page(s), 3296 chars)
+2026-09-13 14:41:02 [INFO] [AIX:PROCESS] Scan_0012.pdf: supplier=PVT LTD, grn=RC-MAM-000020817, po=MAM-000021141, invoice=26 04201, conf=100%
+2026-09-13 14:41:02 [INFO] [AIX:API] Done — 1 ok, 0 error(s), 3 page(s) used this run.
+2026-09-13 14:41:02 [INFO] [AIX:PROCESS] Run complete - 1 ok, 0 error(s), 3 page(s) used.
+2026-09-13 14:41:19 [INFO] [AIX:PROCESS] [LEARN] 'BARQUE INVESTMENT PVT LTD' wasn't a known supplier yet — added it.
+2026-09-13 14:41:19 [INFO] [AIX:PROCESS] [LEARN] PVT LTD -> BARQUE INVESTMENT PVT LTD: learned alias "PVT LTD"; learned new invoice pattern {0}{1}
+2026-09-13 14:41:19 [INFO] AI Extract cell updated.
+2026-09-13 14:45:42 [INFO] [WATCHER] New PDF detected: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED\Scan_0013.pdf
+2026-09-13 14:45:43 [INFO] [AUTO-INGEST API] Detected: Scan_0013.pdf (4.12 MB) — extracting...
+2026-09-13 14:45:43 [INFO] [AIX:SYSTEM] Auto-ingest (API) triggered by folder watcher.
+2026-09-13 14:45:43 [INFO] [AIX:PROCESS] Run started (auto): 1 file(s), compress threshold 1.00 MB.
+2026-09-13 14:45:43 [INFO] [AIX:API] Preparing files...
+2026-09-13 14:45:43 [INFO] [AI EXTRACT] Processing Scan_0013.pdf (1/1)
+2026-09-13 14:45:43 [INFO] [AI EXTRACT] Preparing Scan_0013.pdf
+2026-09-13 14:45:43 [INFO] [AI EXTRACT] Scan_0013.pdf has 4 pages — trimming to first 3 before compressing...
+2026-09-13 14:45:44 [INFO] [AIX:COMPRESS] Scan_0013.pdf: 4.12 MB -> 0.67 MB
+2026-09-13 14:45:52 [INFO] [AIX:API] OK — Scan_0013.pdf (3 page(s), 11287 chars)
+2026-09-13 14:45:52 [INFO] [AIX:PROCESS] Scan_0013.pdf: supplier=LOTUS FIHAARA, grn=RC-MAM-000020816, po=MAM-000021117, invoice=1094208, conf=100%
+2026-09-13 14:45:52 [INFO] [AIX:API] Done — 1 ok, 0 error(s), 3 page(s) used this run.
+2026-09-13 14:45:53 [INFO] [AIX:PROCESS] Run complete - 1 ok, 0 error(s), 3 page(s) used.
+2026-09-13 14:46:11 [INFO] AI Extract cell updated.
+2026-09-13 14:47:10 [INFO] [WATCHER] New PDF detected: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED\Scan_0014.pdf
+2026-09-13 14:47:11 [INFO] [AUTO-INGEST API] Detected: Scan_0014.pdf (1.99 MB) — extracting...
+2026-09-13 14:47:11 [INFO] [AIX:SYSTEM] Auto-ingest (API) triggered by folder watcher.
+2026-09-13 14:47:11 [INFO] [AIX:PROCESS] Run started (auto): 1 file(s), compress threshold 1.00 MB.
+2026-09-13 14:47:11 [INFO] [AIX:API] Preparing files...
+2026-09-13 14:47:11 [INFO] [AI EXTRACT] Processing Scan_0014.pdf (1/1)
+2026-09-13 14:47:11 [INFO] [AI EXTRACT] Preparing Scan_0014.pdf
+2026-09-13 14:47:11 [INFO] [AIX:COMPRESS] Scan_0014.pdf: 1.99 MB -> 0.65 MB
+2026-09-13 14:47:21 [INFO] [AIX:API] OK — Scan_0014.pdf (3 page(s), 4447 chars)
+2026-09-13 14:47:21 [INFO] [AIX:PROCESS] Scan_0014.pdf: supplier=LOLLO WHOLESALE, grn=RC-MAM-000020815, po=MAM-000021120, invoice=17198, conf=100%
+2026-09-13 14:47:21 [INFO] [AIX:API] Done — 1 ok, 0 error(s), 3 page(s) used this run.
+2026-09-13 14:47:21 [INFO] [AIX:PROCESS] Run complete - 1 ok, 0 error(s), 3 page(s) used.
+2026-09-13 15:31:11 [INFO] [WATCHER] New PDF detected: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED\Scan_0015.pdf
+2026-09-13 15:31:11 [INFO] [AUTO-INGEST API] Detected: Scan_0015.pdf (2.09 MB) — extracting...
+2026-09-13 15:31:12 [INFO] [AIX:SYSTEM] Auto-ingest (API) triggered by folder watcher.
+2026-09-13 15:31:12 [INFO] [AIX:PROCESS] Run started (auto): 1 file(s), compress threshold 1.00 MB.
+2026-09-13 15:31:12 [INFO] [AIX:API] Preparing files...
+2026-09-13 15:31:12 [INFO] [AI EXTRACT] Processing Scan_0015.pdf (1/1)
+2026-09-13 15:31:12 [INFO] [AI EXTRACT] Preparing Scan_0015.pdf
+2026-09-13 15:31:12 [INFO] [AI EXTRACT] Scan_0015.pdf has 5 pages — trimming to first 3 before compressing...
+2026-09-13 15:31:12 [INFO] [AIX:COMPRESS] Scan_0015.pdf: 2.09 MB -> 0.45 MB
+2026-09-13 15:31:20 [INFO] [AIX:API] OK — Scan_0015.pdf (3 page(s), 3566 chars)
+2026-09-13 15:31:20 [INFO] [AIX:PROCESS] Scan_0015.pdf: supplier=MIYAMI TRADERS, grn=RC-MAM-000020804, po=MAM-000021115, invoice=420773, conf=100%
+2026-09-13 15:31:20 [INFO] [AIX:API] Done — 1 ok, 0 error(s), 3 page(s) used this run.
+2026-09-13 15:31:20 [INFO] [AIX:PROCESS] Run complete - 1 ok, 0 error(s), 3 page(s) used.
+2026-09-13 15:32:03 [INFO] [WATCHER] New PDF detected: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED\Scan_0016.pdf
+2026-09-13 15:32:04 [INFO] [AUTO-INGEST API] Detected: Scan_0016.pdf (1.08 MB) — extracting...
+2026-09-13 15:32:04 [INFO] [AIX:SYSTEM] Auto-ingest (API) triggered by folder watcher.
+2026-09-13 15:32:04 [INFO] [AIX:PROCESS] Run started (auto): 1 file(s), compress threshold 1.00 MB.
+2026-09-13 15:32:04 [INFO] [AIX:API] Preparing files...
+2026-09-13 15:32:04 [INFO] [AI EXTRACT] Processing Scan_0016.pdf (1/1)
+2026-09-13 15:32:04 [INFO] [AI EXTRACT] Preparing Scan_0016.pdf
+2026-09-13 15:32:04 [INFO] [AIX:COMPRESS] Scan_0016.pdf: 1.08 MB -> 0.38 MB
+2026-09-13 15:32:09 [INFO] [AIX:API] OK — Scan_0016.pdf (2 page(s), 3334 chars)
+2026-09-13 15:32:09 [INFO] [AIX:PROCESS] Scan_0016.pdf: supplier=VB BROTHERS PVT LTD, grn=RC-MAM-000020805, po=MAM-000021127, invoice=23273, conf=100%
+2026-09-13 15:32:09 [INFO] [AIX:API] Done — 1 ok, 0 error(s), 2 page(s) used this run.
+2026-09-13 15:32:09 [INFO] [AIX:PROCESS] Run complete - 1 ok, 0 error(s), 2 page(s) used.
+2026-09-13 15:33:38 [INFO] [WATCHER] New PDF detected: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED\Scan_0017.pdf
+2026-09-13 15:33:39 [INFO] [AUTO-INGEST API] Detected: Scan_0017.pdf (1.12 MB) — extracting...
+2026-09-13 15:33:39 [INFO] [AIX:SYSTEM] Auto-ingest (API) triggered by folder watcher.
+2026-09-13 15:33:39 [INFO] [AIX:PROCESS] Run started (auto): 1 file(s), compress threshold 1.00 MB.
+2026-09-13 15:33:39 [INFO] [AIX:API] Preparing files...
+2026-09-13 15:33:39 [INFO] [AI EXTRACT] Processing Scan_0017.pdf (1/1)
+2026-09-13 15:33:39 [INFO] [AI EXTRACT] Preparing Scan_0017.pdf
+2026-09-13 15:33:39 [INFO] [AIX:COMPRESS] Scan_0017.pdf: 1.12 MB -> 0.38 MB
+2026-09-13 15:33:45 [INFO] [AIX:API] OK — Scan_0017.pdf (2 page(s), 2782 chars)
+2026-09-13 15:33:45 [INFO] [AIX:PROCESS] Scan_0017.pdf: supplier=KAILAAN TRENDS, grn=RC-MAM-000020806, po=MAM-000021123, invoice=01685, conf=100%
+2026-09-13 15:33:45 [INFO] [AIX:API] Done — 1 ok, 0 error(s), 2 page(s) used this run.
+2026-09-13 15:33:45 [INFO] [AIX:PROCESS] Run complete - 1 ok, 0 error(s), 2 page(s) used.
+2026-09-13 15:41:12 [INFO] [WATCHER] New PDF detected: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED\Scan_0018.pdf
+2026-09-13 15:41:13 [INFO] [AUTO-INGEST API] Detected: Scan_0018.pdf (1.39 MB) — extracting...
+2026-09-13 15:41:14 [INFO] [AIX:SYSTEM] Auto-ingest (API) triggered by folder watcher.
+2026-09-13 15:41:14 [INFO] [AIX:PROCESS] Run started (auto): 1 file(s), compress threshold 1.00 MB.
+2026-09-13 15:41:14 [INFO] [AIX:API] Preparing files...
+2026-09-13 15:41:14 [INFO] [AI EXTRACT] Processing Scan_0018.pdf (1/1)
+2026-09-13 15:41:14 [INFO] [AI EXTRACT] Preparing Scan_0018.pdf
+2026-09-13 15:41:14 [INFO] [AIX:COMPRESS] Scan_0018.pdf: 1.39 MB -> 0.44 MB
+2026-09-13 15:41:19 [INFO] [AIX:API] OK — Scan_0018.pdf (2 page(s), 3242 chars)
+2026-09-13 15:41:19 [INFO] [AIX:PROCESS] Scan_0018.pdf: supplier=BIZ SOLUTIONS PVT I, grn=RC-MAM-000020807, po=MAM-000021118, invoice=2026 348, conf=100%
+2026-09-13 15:41:19 [INFO] [AIX:API] Done — 1 ok, 0 error(s), 2 page(s) used this run.
+2026-09-13 15:41:19 [INFO] [AIX:PROCESS] Run complete - 1 ok, 0 error(s), 2 page(s) used.
+2026-09-13 15:41:33 [INFO] [AIX:PROCESS] [LEARN] 'BIZ SOLUTIONS PVT LTD' wasn't a known supplier yet — added it.
+2026-09-13 15:41:33 [INFO] [AIX:PROCESS] [LEARN] BIZ SOLUTIONS PVT I -> BIZ SOLUTIONS PVT LTD: learned alias "BIZ SOLUTIONS PVT I"; learned new invoice pattern {0}{1}
+2026-09-13 15:41:33 [INFO] AI Extract cell updated.
+2026-09-13 15:42:14 [INFO] [WATCHER] New PDF detected: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED\Scan_0019.pdf
+2026-09-13 15:42:14 [INFO] [AUTO-INGEST API] Detected: Scan_0019.pdf (2.94 MB) — extracting...
+2026-09-13 15:42:14 [INFO] [AIX:SYSTEM] Auto-ingest (API) triggered by folder watcher.
+2026-09-13 15:42:14 [INFO] [AIX:PROCESS] Run started (auto): 1 file(s), compress threshold 1.00 MB.
+2026-09-13 15:42:14 [INFO] [AIX:API] Preparing files...
+2026-09-13 15:42:14 [INFO] [AI EXTRACT] Processing Scan_0019.pdf (1/1)
+2026-09-13 15:42:14 [INFO] [AI EXTRACT] Preparing Scan_0019.pdf
+2026-09-13 15:42:14 [INFO] [AIX:COMPRESS] Scan_0019.pdf: 2.94 MB -> 0.53 MB
+2026-09-13 15:42:24 [INFO] [AIX:API] OK — Scan_0019.pdf (3 page(s), 8703 chars)
+2026-09-13 15:42:24 [INFO] [AIX:PROCESS] Scan_0019.pdf: supplier=EURO MARKETING PVT LTD, grn=RC-MAM-000020808, po=MAM-000021113, invoice=100199198, conf=100%
+2026-09-13 15:42:24 [INFO] [AIX:API] Done — 1 ok, 0 error(s), 3 page(s) used this run.
+2026-09-13 15:42:24 [INFO] [AIX:PROCESS] Run complete - 1 ok, 0 error(s), 3 page(s) used.
+2026-09-13 15:43:14 [INFO] [WATCHER] New PDF detected: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED\Scan_0020.pdf
+2026-09-13 15:43:15 [INFO] [AUTO-INGEST API] Detected: Scan_0020.pdf (1.86 MB) — extracting...
+2026-09-13 15:43:16 [INFO] [AIX:SYSTEM] Auto-ingest (API) triggered by folder watcher.
+2026-09-13 15:43:16 [INFO] [AIX:PROCESS] Run started (auto): 1 file(s), compress threshold 1.00 MB.
+2026-09-13 15:43:16 [INFO] [AIX:API] Preparing files...
+2026-09-13 15:43:16 [INFO] [AI EXTRACT] Processing Scan_0020.pdf (1/1)
+2026-09-13 15:43:16 [INFO] [AI EXTRACT] Preparing Scan_0020.pdf
+2026-09-13 15:43:16 [INFO] [AIX:COMPRESS] Scan_0020.pdf: 1.86 MB -> 0.61 MB
+2026-09-13 15:43:22 [INFO] [AIX:API] OK — Scan_0020.pdf (3 page(s), 4120 chars)
+2026-09-13 15:43:22 [INFO] [AIX:PROCESS] Scan_0020.pdf: supplier=PREMIUM SUPPLIES, grn=RC-MAM-000020809, po=MAM-000021129, invoice=5584, conf=100%
+2026-09-13 15:43:22 [INFO] [AIX:API] Done — 1 ok, 0 error(s), 3 page(s) used this run.
+2026-09-13 15:43:22 [INFO] [AIX:PROCESS] Run complete - 1 ok, 0 error(s), 3 page(s) used.
+2026-09-13 15:44:01 [INFO] [WATCHER] New PDF detected: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED\Scan_0021.pdf
+2026-09-13 15:44:02 [INFO] [AUTO-INGEST API] Detected: Scan_0021.pdf (1.36 MB) — extracting...
+2026-09-13 15:44:02 [INFO] [AIX:SYSTEM] Auto-ingest (API) triggered by folder watcher.
+2026-09-13 15:44:02 [INFO] [AIX:PROCESS] Run started (auto): 1 file(s), compress threshold 1.00 MB.
+2026-09-13 15:44:02 [INFO] [AIX:API] Preparing files...
+2026-09-13 15:44:02 [INFO] [AI EXTRACT] Processing Scan_0021.pdf (1/1)
+2026-09-13 15:44:02 [INFO] [AI EXTRACT] Preparing Scan_0021.pdf
+2026-09-13 15:44:02 [INFO] [AIX:COMPRESS] Scan_0021.pdf: 1.36 MB -> 0.45 MB
+2026-09-13 15:44:08 [INFO] [AIX:API] OK — Scan_0021.pdf (2 page(s), 3251 chars)
+2026-09-13 15:44:08 [INFO] [AIX:PROCESS] Scan_0021.pdf: supplier=PVT LTD, grn=RC-MAM-000020810, po=MAM-000021119, invoice=2325 26, conf=100%
+2026-09-13 15:44:08 [INFO] [AIX:API] Done — 1 ok, 0 error(s), 2 page(s) used this run.
+2026-09-13 15:44:08 [INFO] [AIX:PROCESS] Run complete - 1 ok, 0 error(s), 2 page(s) used.
+2026-09-13 15:44:17 [INFO] [AIX:PROCESS] [LEARN] PVT LTD -> LILY ENTERPRISES PVT LTD: confirmed invoice pattern {0}
+2026-09-13 15:44:17 [INFO] AI Extract cell updated.
+2026-09-13 15:44:58 [INFO] [WATCHER] New PDF detected: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED\Scan_0022.pdf
+2026-09-13 15:44:59 [INFO] [AUTO-INGEST API] Detected: Scan_0022.pdf (2.25 MB) — extracting...
+2026-09-13 15:44:59 [INFO] [AIX:SYSTEM] Auto-ingest (API) triggered by folder watcher.
+2026-09-13 15:44:59 [INFO] [AIX:PROCESS] Run started (auto): 1 file(s), compress threshold 1.00 MB.
+2026-09-13 15:44:59 [INFO] [AIX:API] Preparing files...
+2026-09-13 15:44:59 [INFO] [AI EXTRACT] Processing Scan_0022.pdf (1/1)
+2026-09-13 15:44:59 [INFO] [AI EXTRACT] Preparing Scan_0022.pdf
+2026-09-13 15:45:00 [INFO] [AIX:COMPRESS] Scan_0022.pdf: 2.25 MB -> 0.79 MB
+2026-09-13 15:45:09 [INFO] [AIX:API] OK — Scan_0022.pdf (3 page(s), 6061 chars)
+2026-09-13 15:45:09 [INFO] [AIX:PROCESS] Scan_0022.pdf: supplier=ALIHAVA CONSTRUCTION & TRADING CO PVT LTD, grn=RC-MAM-000020811, po=MAM-000021116, invoice=26 720, conf=100%
+2026-09-13 15:45:09 [INFO] [AIX:API] Done — 1 ok, 0 error(s), 3 page(s) used this run.
+2026-09-13 15:45:09 [INFO] [AIX:PROCESS] Run complete - 1 ok, 0 error(s), 3 page(s) used.
+2026-09-13 15:45:45 [INFO] [WATCHER] New PDF detected: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED\Scan_0023.pdf
+2026-09-13 15:45:46 [INFO] [AUTO-INGEST API] Detected: Scan_0023.pdf (1.32 MB) — extracting...
+2026-09-13 15:45:46 [INFO] [AIX:SYSTEM] Auto-ingest (API) triggered by folder watcher.
+2026-09-13 15:45:46 [INFO] [AIX:PROCESS] Run started (auto): 1 file(s), compress threshold 1.00 MB.
+2026-09-13 15:45:46 [INFO] [AIX:API] Preparing files...
+2026-09-13 15:45:46 [INFO] [AI EXTRACT] Processing Scan_0023.pdf (1/1)
+2026-09-13 15:45:46 [INFO] [AI EXTRACT] Preparing Scan_0023.pdf
+2026-09-13 15:45:46 [INFO] [AIX:COMPRESS] Scan_0023.pdf: 1.32 MB -> 0.45 MB
+2026-09-13 15:45:54 [INFO] [AIX:API] OK — Scan_0023.pdf (2 page(s), 3251 chars)
+2026-09-13 15:45:54 [INFO] [AIX:PROCESS] Scan_0023.pdf: supplier=ARAABY PVT LTD, grn=RC-MAM-000020812, po=MAM-000021112, invoice=40771, conf=100%
+2026-09-13 15:45:54 [INFO] [AIX:API] Done — 1 ok, 0 error(s), 2 page(s) used this run.
+2026-09-13 15:45:54 [INFO] [AIX:PROCESS] Run complete - 1 ok, 0 error(s), 2 page(s) used.
+2026-09-13 15:46:40 [INFO] [WATCHER] New PDF detected: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED\Scan_0024.pdf
+2026-09-13 15:46:40 [INFO] [AUTO-INGEST API] Detected: Scan_0024.pdf (2.67 MB) — extracting...
+2026-09-13 15:46:40 [INFO] [AIX:SYSTEM] Auto-ingest (API) triggered by folder watcher.
+2026-09-13 15:46:40 [INFO] [AIX:PROCESS] Run started (auto): 1 file(s), compress threshold 1.00 MB.
+2026-09-13 15:46:40 [INFO] [AIX:API] Preparing files...
+2026-09-13 15:46:40 [INFO] [AI EXTRACT] Processing Scan_0024.pdf (1/1)
+2026-09-13 15:46:40 [INFO] [AI EXTRACT] Preparing Scan_0024.pdf
+2026-09-13 15:46:40 [INFO] [AI EXTRACT] Scan_0024.pdf has 5 pages — trimming to first 3 before compressing...
+2026-09-13 15:46:41 [INFO] [AIX:COMPRESS] Scan_0024.pdf: 2.67 MB -> 0.59 MB
+2026-09-13 15:46:48 [INFO] [AIX:API] OK — Scan_0024.pdf (3 page(s), 4553 chars)
+2026-09-13 15:46:48 [INFO] [AIX:PROCESS] Scan_0024.pdf: supplier=COUNTLINE, grn=RC-MAM-000020813, po=MAM-000021128, invoice=97167, conf=100%
+2026-09-13 15:46:48 [INFO] [AIX:API] Done — 1 ok, 0 error(s), 3 page(s) used this run.
+2026-09-13 15:46:48 [INFO] [AIX:PROCESS] Run complete - 1 ok, 0 error(s), 3 page(s) used.
+2026-09-13 15:47:40 [INFO] [WATCHER] New PDF detected: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED\Scan_0025.pdf
+2026-09-13 15:47:40 [INFO] [AUTO-INGEST API] Detected: Scan_0025.pdf (1.50 MB) — extracting...
+2026-09-13 15:47:41 [INFO] [AIX:SYSTEM] Auto-ingest (API) triggered by folder watcher.
+2026-09-13 15:47:41 [INFO] [AIX:PROCESS] Run started (auto): 1 file(s), compress threshold 1.00 MB.
+2026-09-13 15:47:41 [INFO] [AIX:API] Preparing files...
+2026-09-13 15:47:41 [INFO] [AI EXTRACT] Processing Scan_0025.pdf (1/1)
+2026-09-13 15:47:41 [INFO] [AI EXTRACT] Preparing Scan_0025.pdf
+2026-09-13 15:47:41 [INFO] [AIX:COMPRESS] Scan_0025.pdf: 1.50 MB -> 0.49 MB
+2026-09-13 15:47:47 [INFO] [AIX:API] OK — Scan_0025.pdf (3 page(s), 3445 chars)
+2026-09-13 15:47:47 [INFO] [AIX:PROCESS] Scan_0025.pdf: supplier=MU STORE, grn=RC-MAM-000020814, po=MAM-000021131, invoice=100033, conf=100%
+2026-09-13 15:47:47 [INFO] [AIX:API] Done — 1 ok, 0 error(s), 3 page(s) used this run.
+2026-09-13 15:47:47 [INFO] [AIX:PROCESS] Run complete - 1 ok, 0 error(s), 3 page(s) used.
+2026-09-13 15:48:22 [INFO] [WATCHER] New PDF detected: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED\Scan_0026.pdf
+2026-09-13 15:48:22 [INFO] [AUTO-INGEST API] Detected: Scan_0026.pdf (1.13 MB) — extracting...
+2026-09-13 15:48:23 [INFO] [AIX:SYSTEM] Auto-ingest (API) triggered by folder watcher.
+2026-09-13 15:48:23 [INFO] [AIX:PROCESS] Run started (auto): 1 file(s), compress threshold 1.00 MB.
+2026-09-13 15:48:23 [INFO] [AIX:API] Preparing files...
+2026-09-13 15:48:23 [INFO] [AI EXTRACT] Processing Scan_0026.pdf (1/1)
+2026-09-13 15:48:23 [INFO] [AI EXTRACT] Preparing Scan_0026.pdf
+2026-09-13 15:48:23 [INFO] [AIX:COMPRESS] Scan_0026.pdf: 1.13 MB -> 0.39 MB
+2026-09-13 15:48:29 [INFO] [AIX:API] OK — Scan_0026.pdf (2 page(s), 3488 chars)
+2026-09-13 15:48:29 [INFO] [AIX:PROCESS] Scan_0026.pdf: supplier=SIMDI CONSUMER PRODUCTS, grn=RC-MAM-000020823, po=MAM-000021134, invoice=13522, conf=100%
+2026-09-13 15:48:29 [INFO] [AIX:API] Done — 1 ok, 0 error(s), 2 page(s) used this run.
+2026-09-13 15:48:29 [INFO] [AIX:PROCESS] Run complete - 1 ok, 0 error(s), 2 page(s) used.
+2026-09-13 15:48:39 [INFO] AI Extract cell updated.
+2026-09-13 15:49:22 [INFO] [WATCHER] New PDF detected: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED\Scan_0027.pdf
+2026-09-13 15:49:23 [INFO] [AUTO-INGEST API] Detected: Scan_0027.pdf (1.16 MB) — extracting...
+2026-09-13 15:49:23 [INFO] [AIX:SYSTEM] Auto-ingest (API) triggered by folder watcher.
+2026-09-13 15:49:23 [INFO] [AIX:PROCESS] Run started (auto): 1 file(s), compress threshold 1.00 MB.
+2026-09-13 15:49:23 [INFO] [AIX:API] Preparing files...
+2026-09-13 15:49:23 [INFO] [AI EXTRACT] Processing Scan_0027.pdf (1/1)
+2026-09-13 15:49:23 [INFO] [AI EXTRACT] Preparing Scan_0027.pdf
+2026-09-13 15:49:23 [INFO] [AIX:COMPRESS] Scan_0027.pdf: 1.16 MB -> 0.40 MB
+2026-09-13 15:49:30 [INFO] [AIX:API] OK — Scan_0027.pdf (2 page(s), 3548 chars)
+2026-09-13 15:49:30 [INFO] [AIX:PROCESS] Scan_0027.pdf: supplier=SIMDI CONSUMER PRODUCTS, grn=RC-MAM-000020824, po=MAM-000021145, invoice=13526, conf=100%
+2026-09-13 15:49:30 [INFO] [AIX:API] Done — 1 ok, 0 error(s), 2 page(s) used this run.
+2026-09-13 15:49:30 [INFO] [AIX:PROCESS] Run complete - 1 ok, 0 error(s), 2 page(s) used.
+2026-09-13 15:50:07 [INFO] [WATCHER] New PDF detected: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED\Scan_0028.pdf
+2026-09-13 15:50:08 [INFO] [AUTO-INGEST API] Detected: Scan_0028.pdf (0.95 MB) — extracting...
+2026-09-13 15:50:08 [INFO] [AIX:SYSTEM] Auto-ingest (API) triggered by folder watcher.
+2026-09-13 15:50:08 [INFO] [AIX:PROCESS] Run started (auto): 1 file(s), compress threshold 1.00 MB.
+2026-09-13 15:50:08 [INFO] [AIX:API] Preparing files...
+2026-09-13 15:50:08 [INFO] [AI EXTRACT] Processing Scan_0028.pdf (1/1)
+2026-09-13 15:50:08 [INFO] [AI EXTRACT] Preparing Scan_0028.pdf
+2026-09-13 15:50:08 [INFO] [AIX:COMPRESS] Scan_0028.pdf: 0.95 MB -> 0.95 MB
+2026-09-13 15:50:16 [INFO] [AIX:API] OK — Scan_0028.pdf (2 page(s), 2659 chars)
+2026-09-13 15:50:16 [INFO] [AIX:PROCESS] Scan_0028.pdf: supplier=VB BROTHERS PVT LTD, grn=RC-MAM-000020830, po=MAM-000021153, invoice=23272, conf=100%
+2026-09-13 15:50:16 [INFO] [AIX:API] Done — 1 ok, 0 error(s), 2 page(s) used this run.
+2026-09-13 15:50:16 [INFO] [AIX:PROCESS] Run complete - 1 ok, 0 error(s), 2 page(s) used.
+2026-09-13 15:51:07 [INFO] [WATCHER] New PDF detected: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED\Scan_0029.pdf
+2026-09-13 15:51:08 [INFO] [AUTO-INGEST API] Detected: Scan_0029.pdf (3.13 MB) — extracting...
+2026-09-13 15:51:08 [INFO] [AIX:SYSTEM] Auto-ingest (API) triggered by folder watcher.
+2026-09-13 15:51:08 [INFO] [AIX:PROCESS] Run started (auto): 1 file(s), compress threshold 1.00 MB.
+2026-09-13 15:51:08 [INFO] [AIX:API] Preparing files...
+2026-09-13 15:51:08 [INFO] [AI EXTRACT] Processing Scan_0029.pdf (1/1)
+2026-09-13 15:51:08 [INFO] [AI EXTRACT] Preparing Scan_0029.pdf
+2026-09-13 15:51:08 [INFO] [AI EXTRACT] Scan_0029.pdf has 5 pages — trimming to first 3 before compressing...
+2026-09-13 15:51:09 [INFO] [AIX:COMPRESS] Scan_0029.pdf: 3.13 MB -> 0.56 MB
+2026-09-13 15:51:19 [INFO] [AIX:API] OK — Scan_0029.pdf (3 page(s), 3577 chars)
+2026-09-13 15:51:19 [INFO] [AIX:PROCESS] Scan_0029.pdf: supplier=PREMIUM SUPPLIES, grn=RC-MAM-000020826, po=MAM-000021149, invoice=5585, conf=100%
+2026-09-13 15:51:19 [INFO] [AIX:API] Done — 1 ok, 0 error(s), 3 page(s) used this run.
+2026-09-13 15:51:19 [INFO] [AIX:PROCESS] Run complete - 1 ok, 0 error(s), 3 page(s) used.
+2026-09-13 15:52:03 [INFO] [WATCHER] New PDF detected: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED\Scan_0030.pdf
+2026-09-13 15:52:04 [INFO] [AUTO-INGEST API] Detected: Scan_0030.pdf (1.27 MB) — extracting...
+2026-09-13 15:52:04 [INFO] [AIX:SYSTEM] Auto-ingest (API) triggered by folder watcher.
+2026-09-13 15:52:04 [INFO] [AIX:PROCESS] Run started (auto): 1 file(s), compress threshold 1.00 MB.
+2026-09-13 15:52:04 [INFO] [AIX:API] Preparing files...
+2026-09-13 15:52:04 [INFO] [AI EXTRACT] Processing Scan_0030.pdf (1/1)
+2026-09-13 15:52:04 [INFO] [AI EXTRACT] Preparing Scan_0030.pdf
+2026-09-13 15:52:04 [INFO] [AIX:COMPRESS] Scan_0030.pdf: 1.27 MB -> 0.44 MB
+2026-09-13 15:52:10 [INFO] [AIX:API] OK — Scan_0030.pdf (2 page(s), 3525 chars)
+2026-09-13 15:52:10 [INFO] [AIX:PROCESS] Scan_0030.pdf: supplier=BESTBUY MALDIVES PVT LTD, grn=RC-MAM-000020825, po=MAM-000021100, invoice=1249780, conf=100%
+2026-09-13 15:52:10 [INFO] [AIX:API] Done — 1 ok, 0 error(s), 2 page(s) used this run.
+2026-09-13 15:52:10 [INFO] [AIX:PROCESS] Run complete - 1 ok, 0 error(s), 2 page(s) used.
+2026-09-13 15:52:25 [INFO] [AIX:SEND] Scan_0005.pdf -> PRINTLAB GRN RC-MAM-000020874 IN 7673.pdf
+2026-09-13 15:52:25 [INFO] [AIX:SEND] Scan_0004.pdf -> M GLASS & ALU GRN RC-MAM-000020865 IN 121004185.pdf
+2026-09-13 15:52:25 [INFO] [AIX:SEND] Scan_0003.pdf -> MARINE EQUIPMENTS GRN RC-MAM-000020831 IN 11092.pdf
+2026-09-13 15:52:25 [INFO] [AIX:SEND] Scan_0002.pdf -> FRONTIER MARKETS ENTERPRISES PVT LTD GRN RC-MAM-000020853 IN 25520.pdf
+2026-09-13 15:52:25 [INFO] [AIX:SEND] Scan_0001.pdf -> FRONTIER MARKETS ENTERPRISES PVT LTD GRN RC-MAM-000020854 IN 25521.pdf
+2026-09-13 15:52:25 [INFO] [AIX:SEND] Scan_0006.pdf -> FEATHER INVESTMENT GRN RC-MAM-000020875 IN 2053.pdf
+2026-09-13 15:52:25 [INFO] [AIX:SEND] Scan_0007.pdf -> A&G ENERGY SOLUTIONS GRN RC-MAM-000020822 IN 6138.pdf
+2026-09-13 15:52:25 [INFO] [AIX:SEND] Scan_0008.pdf -> PERSONAL COMPUTERS USD GRN RC-MAM-000020821 IN 17581.pdf
+2026-09-13 15:52:25 [INFO] [AIX:SEND] Scan_0009.pdf -> EURO MARKETING GRN RC-MAM-000020820 IN 100199206.pdf
+2026-09-13 15:52:25 [INFO] [AIX:SEND] Scan_0010.pdf -> BESTBUY MALDIVES PVT LTD GRN RC-MAM-000020819 IN 1249870.pdf
+2026-09-13 15:52:25 [INFO] [AIX:SEND] Scan_0011.pdf -> LILY ENTERPRISES PVT LTD GRN RC-MAM-000020818 IN 2326 26.pdf
+2026-09-13 15:52:25 [INFO] [AIX:SEND] Scan_0012.pdf -> BARQUE INVESTMENT PVT LTD GRN RC-MAM-000020817 IN 26 04201.pdf
+2026-09-13 15:52:25 [INFO] [AIX:SEND] Scan_0013.pdf -> LOTUS FIHAARA GRN RC-MAM-000020816 IN 1094298.pdf
+2026-09-13 15:52:25 [INFO] [AIX:SEND] Scan_0014.pdf -> LOLLO WHOLESALE GRN RC-MAM-000020815 IN 17198.pdf
+2026-09-13 15:52:25 [INFO] [AIX:SEND] Scan_0015.pdf -> MIYAMI TRADERS GRN RC-MAM-000020804 IN 420773.pdf
+2026-09-13 15:52:25 [INFO] [AIX:SEND] Scan_0016.pdf -> VB BROTHERS PVT LTD GRN RC-MAM-000020805 IN 23273.pdf
+2026-09-13 15:52:25 [INFO] [AIX:SEND] Scan_0017.pdf -> KAILAAN TRENDS GRN RC-MAM-000020806 IN 01685.pdf
+2026-09-13 15:52:25 [INFO] [AIX:SEND] Scan_0018.pdf -> BIZ SOLUTIONS PVT LTD GRN RC-MAM-000020807 IN 2026 348.pdf
+2026-09-13 15:52:25 [INFO] [AIX:SEND] Scan_0019.pdf -> EURO MARKETING PVT LTD GRN RC-MAM-000020808 IN 100199198.pdf
+2026-09-13 15:52:25 [INFO] [AIX:SEND] Scan_0020.pdf -> PREMIUM SUPPLIES GRN RC-MAM-000020809 IN 5584.pdf
+2026-09-13 15:52:25 [INFO] [AIX:SEND] Scan_0021.pdf -> LILY ENTERPRISES PVT LTD GRN RC-MAM-000020810 IN 2325 26.pdf
+2026-09-13 15:52:25 [INFO] [AIX:SEND] Scan_0022.pdf -> ALIHAVA CONSTRUCTION & TRADING CO PVT LTD GRN RC-MAM-000020811 IN 26 720.pdf
+2026-09-13 15:52:25 [INFO] [AIX:SEND] Scan_0023.pdf -> ARAABY PVT LTD GRN RC-MAM-000020812 IN 40771.pdf
+2026-09-13 15:52:25 [INFO] [AIX:SEND] Scan_0024.pdf -> COUNTLINE GRN RC-MAM-000020813 IN 97167.pdf
+2026-09-13 15:52:25 [INFO] [AIX:SEND] Scan_0025.pdf -> MU STORE GRN RC-MAM-000020814 IN 100033.pdf
+2026-09-13 15:52:25 [INFO] [AIX:SEND] Scan_0026.pdf -> SIMDI CONSUMER PRODUCTS GRN RC-MAM-000020823 IN 13527.pdf
+2026-09-13 15:52:25 [INFO] [AIX:SEND] Scan_0027.pdf -> SIMDI CONSUMER PRODUCTS GRN RC-MAM-000020824 IN 13526.pdf
+2026-09-13 15:52:25 [INFO] [AIX:SEND] Scan_0028.pdf -> VB BROTHERS PVT LTD GRN RC-MAM-000020830 IN 23272.pdf
+2026-09-13 15:52:25 [INFO] [AIX:SEND] Scan_0029.pdf -> PREMIUM SUPPLIES GRN RC-MAM-000020826 IN 5585.pdf
+2026-09-13 15:52:25 [INFO] [AIX:SEND] Scan_0030.pdf -> BESTBUY MALDIVES PVT LTD GRN RC-MAM-000020825 IN 1249780.pdf
+2026-09-13 15:52:25 [INFO] [AIX:SEND] Sent to tabs - 30 renamed, 0 missing.
+2026-09-13 15:52:25 [INFO] Sent to tabs - 30 renamed, 0 missing.
+2026-09-13 15:52:25 [INFO] [AIX:SYSTEM] TEMP API PDFS cleaned - deleted 30 temp PDF(s) after send.
+2026-09-13 15:52:25 [INFO] TEMP API PDFS cleaned (30 file(s) removed).
+2026-09-13 15:52:28 [INFO] Settings saved.
+2026-09-13 15:52:28 [INFO] [AIX:SYSTEM] Excel exported (30 rows) -> GRN_OUTPUT_20260913_155228.xlsx
+2026-09-13 15:52:28 [INFO] Excel exported: C:\Users\MAM-STORES\Downloads\grn\backup latest\GRN_OUTPUT_20260913_155228.xlsx
+2026-09-13 15:58:33 [INFO] Transferring 30 PDF(s)…
+2026-09-13 15:58:33 [INFO] Transferred 30 PDF(s) to C:\Users\MAM-STORES\OneDrive - outrigger.com\Stores Shared\STORE\SCAN STORES\2026 (0 failed).
+2026-09-14 17:13:54 [INFO] Auto-ingest stopped.
+2026-09-14 17:13:54 [INFO] Application shutdown complete.
+2026-09-14 17:14:02 [INFO] Application started.
+2026-09-14 17:14:04 [INFO] Auto-ingest (api) watching: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED
+2026-09-14 17:14:04 [INFO] [WATCHER] Started watching C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED in api mode
+2026-09-14 18:00:45 [INFO] [WATCHER] New PDF detected: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED\Scan_0001.pdf
+2026-09-14 18:00:45 [INFO] [AUTO-INGEST API] Detected: Scan_0001.pdf (2.03 MB) — extracting...
+2026-09-14 18:00:45 [INFO] [AIX:SYSTEM] Auto-ingest (API) triggered by folder watcher.
+2026-09-14 18:00:45 [INFO] [AIX:PROCESS] Run started (auto): 1 file(s), compress threshold 1.00 MB.
+2026-09-14 18:00:45 [INFO] [AIX:API] Preparing files...
+2026-09-14 18:00:45 [INFO] [AI EXTRACT] Processing Scan_0001.pdf (1/1)
+2026-09-14 18:00:45 [INFO] [AI EXTRACT] Preparing Scan_0001.pdf
+2026-09-14 18:00:46 [INFO] [AIX:COMPRESS] Scan_0001.pdf: 2.03 MB -> 0.62 MB
+2026-09-14 18:00:57 [INFO] [AIX:API] OK — Scan_0001.pdf (3 page(s), 3922 chars)
+2026-09-14 18:00:57 [INFO] [AIX:PROCESS] Scan_0001.pdf: supplier=EMPARAL PVT LTD, grn=RC-MAM-000020845, po=MAM-000021177, invoice=5338, conf=100%
+2026-09-14 18:00:57 [INFO] [AIX:API] Done — 1 ok, 0 error(s), 3 page(s) used this run.
+2026-09-14 18:00:57 [INFO] [AIX:PROCESS] Run complete - 1 ok, 0 error(s), 3 page(s) used.
+2026-09-14 18:01:21 [INFO] Looking for the scanner software window ("Maafushivaru - Document Processing Hub")...
+2026-09-14 18:01:24 [INFO] Scanner button could not be pressed automatically.
+2026-09-14 18:01:24 [INFO] [AIX:PROCESS] [SCAN] FAILED: The window "Maafushivaru - Document Processing Hub" was found, but it contains no button with "Scan" in its label.
+2026-09-14 18:01:38 [INFO] [WATCHER] New PDF detected: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED\Scan_0002.pdf
+2026-09-14 18:01:40 [INFO] [AUTO-INGEST API] Detected: Scan_0002.pdf (1.80 MB) — extracting...
+2026-09-14 18:01:40 [INFO] [AIX:SYSTEM] Auto-ingest (API) triggered by folder watcher.
+2026-09-14 18:01:40 [INFO] [AIX:PROCESS] Run started (auto): 1 file(s), compress threshold 1.00 MB.
+2026-09-14 18:01:40 [INFO] [AIX:API] Preparing files...
+2026-09-14 18:01:40 [INFO] [AI EXTRACT] Processing Scan_0002.pdf (1/1)
+2026-09-14 18:01:40 [INFO] [AI EXTRACT] Preparing Scan_0002.pdf
+2026-09-14 18:01:40 [INFO] [AIX:COMPRESS] Scan_0002.pdf: 1.80 MB -> 0.54 MB
+2026-09-14 18:01:56 [INFO] [AIX:API] OK — Scan_0002.pdf (3 page(s), 3545 chars)
+2026-09-14 18:01:56 [INFO] [AIX:PROCESS] Scan_0002.pdf: supplier=EMPARAL PVT LTD, grn=RC-MAM-000020844, po=MAM-000021124, invoice=5330, conf=100%
+2026-09-14 18:01:56 [INFO] [AIX:API] Done — 1 ok, 0 error(s), 3 page(s) used this run.
+2026-09-14 18:01:56 [INFO] [AIX:PROCESS] Run complete - 1 ok, 0 error(s), 3 page(s) used.
+2026-09-14 18:02:42 [INFO] Listening… click the HP software's Scan button (60s, Esc cancels)
+2026-09-14 18:02:42 [INFO] Settings saved.
+2026-09-14 18:02:42 [INFO] Remembered the Scan button: "?" in "Maafushivaru - Document Processing Hub".
+2026-09-14 18:02:47 [INFO] [WATCHER] New PDF detected: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED\Scan_0003.pdf
+2026-09-14 18:02:47 [INFO] [AUTO-INGEST API] Detected: Scan_0003.pdf (2.04 MB) — extracting...
+2026-09-14 18:02:48 [INFO] [AIX:SYSTEM] Auto-ingest (API) triggered by folder watcher.
+2026-09-14 18:02:48 [INFO] [AIX:PROCESS] Run started (auto): 1 file(s), compress threshold 1.00 MB.
+2026-09-14 18:02:48 [INFO] [AIX:API] Preparing files...
+2026-09-14 18:02:48 [INFO] [AI EXTRACT] Processing Scan_0003.pdf (1/1)
+2026-09-14 18:02:48 [INFO] [AI EXTRACT] Preparing Scan_0003.pdf
+2026-09-14 18:02:48 [INFO] [AIX:COMPRESS] Scan_0003.pdf: 2.04 MB -> 0.70 MB
+2026-09-14 18:02:56 [INFO] [AIX:API] OK — Scan_0003.pdf (3 page(s), 4533 chars)
+2026-09-14 18:02:56 [INFO] [AIX:PROCESS] Scan_0003.pdf: supplier=ZEGA MALDIVES, grn=RC-MAM-000020843, po=MAM-000021103, invoice=1108 2026, conf=100%
+2026-09-14 18:02:56 [INFO] [AIX:API] Done — 1 ok, 0 error(s), 3 page(s) used this run.
+2026-09-14 18:02:56 [INFO] [AIX:PROCESS] Run complete - 1 ok, 0 error(s), 3 page(s) used.
+2026-09-14 18:03:25 [INFO] Listening… click the HP software's Scan button (60s, Esc cancels)
+2026-09-14 18:03:26 [INFO] Listening… click the HP software's Scan button (59s, Esc cancels)
+2026-09-14 18:03:27 [INFO] Listening… click the HP software's Scan button (58s, Esc cancels)
+2026-09-14 18:03:28 [INFO] Settings saved.
+2026-09-14 18:03:28 [INFO] Remembered the Scan button: "Scan" in "HP Scan - HP ScanJet Pro 3000 s3 (USB)".
+2026-09-14 18:03:41 [INFO] [WATCHER] New PDF detected: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED\Scan_0004.pdf
+2026-09-14 18:03:42 [INFO] [AUTO-INGEST API] Detected: Scan_0004.pdf (1.77 MB) — extracting...
+2026-09-14 18:03:42 [INFO] [AIX:SYSTEM] Auto-ingest (API) triggered by folder watcher.
+2026-09-14 18:03:42 [INFO] [AIX:PROCESS] Run started (auto): 1 file(s), compress threshold 1.00 MB.
+2026-09-14 18:03:42 [INFO] [AIX:API] Preparing files...
+2026-09-14 18:03:42 [INFO] [AI EXTRACT] Processing Scan_0004.pdf (1/1)
+2026-09-14 18:03:42 [INFO] [AI EXTRACT] Preparing Scan_0004.pdf
+2026-09-14 18:03:42 [INFO] [AIX:COMPRESS] Scan_0004.pdf: 1.77 MB -> 0.59 MB
+2026-09-14 18:03:55 [INFO] [AIX:API] OK — Scan_0004.pdf (3 page(s), 4478 chars)
+2026-09-14 18:03:55 [INFO] [AIX:PROCESS] Scan_0004.pdf: supplier=COSMOPOLITAN, grn=RC-MAM-000020842, po=MAM-000021151, invoice=0187610, conf=100%
+2026-09-14 18:03:55 [INFO] [AIX:API] Done — 1 ok, 0 error(s), 3 page(s) used this run.
+2026-09-14 18:03:55 [INFO] [AIX:PROCESS] Run complete - 1 ok, 0 error(s), 3 page(s) used.
+2026-09-14 18:04:18 [INFO] Looking for the scanner software window ("HP Scan - HP ScanJet Pro 3000 s3 (USB)")...
+2026-09-14 18:04:18 [INFO] Pressed remembered button "Scan" in "HP Scan - HP ScanJet Pro 3000 s3 (USB)" (UI Automation).  Finish the scan in the scanner window.
+2026-09-14 18:04:18 [INFO] [AIX:PROCESS] [SCAN] Pressed remembered button "Scan" in "HP Scan - HP ScanJet Pro 3000 s3 (USB)" (UI Automation).
+2026-09-14 18:04:32 [INFO] [WATCHER] New PDF detected: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED\Scan_0005.pdf
+2026-09-14 18:04:32 [INFO] [AUTO-INGEST API] Detected: Scan_0005.pdf (2.27 MB) — extracting...
+2026-09-14 18:04:32 [INFO] [AIX:SYSTEM] Auto-ingest (API) triggered by folder watcher.
+2026-09-14 18:04:32 [INFO] [AIX:PROCESS] Run started (auto): 1 file(s), compress threshold 1.00 MB.
+2026-09-14 18:04:32 [INFO] [AIX:API] Preparing files...
+2026-09-14 18:04:32 [INFO] [AI EXTRACT] Processing Scan_0005.pdf (1/1)
+2026-09-14 18:04:32 [INFO] [AI EXTRACT] Preparing Scan_0005.pdf
+2026-09-14 18:04:32 [INFO] [AIX:COMPRESS] Scan_0005.pdf: 2.27 MB -> 0.73 MB
+2026-09-14 18:05:07 [WARNING] [AI EXTRACT] OCR.space error [Scan_0005.pdf]: HTTP 503: {"error":"E571: Free OCR API overloaded currently, so your free ocr api key is throttled. PRO OCR API keys are not affected by this. Get your own PRO ocr api key at https://ocr.space/ocrapi to avoid this.","details":"Temporary condition. Please retry in a few minutes - or get/use an OCR.Space PRO OCR API key, they are never throttled. Endpoint performance dashboard: https://status.ocr.space/"}
+2026-09-14 18:05:07 [INFO] [AIX:API] Done — 0 ok, 1 error(s), 3 page(s) used this run.
+2026-09-14 18:05:07 [INFO] [AIX:PROCESS] Run complete - 0 ok, 1 error(s), 3 page(s) used.
+2026-09-14 18:05:30 [INFO] [AI EXTRACT] Retrying Scan_0005.pdf...
+2026-09-14 18:05:30 [INFO] [AI EXTRACT] Preparing Scan_0005.pdf
+2026-09-14 18:05:31 [INFO] [AIX:COMPRESS] Scan_0005.pdf: 2.27 MB -> 0.73 MB
+2026-09-14 18:05:39 [INFO] [AIX:API] OK — Scan_0005.pdf (3 page(s), 4626 chars)
+2026-09-14 18:05:39 [INFO] [AIX:PROCESS] [TRY AGAIN] Scan_0005.pdf: supplier=HAPPY MARKET, invoice=21174, conf=100% — OK
+2026-09-14 18:05:39 [INFO] [AI EXTRACT] Retry succeeded: Scan_0005.pdf
+2026-09-14 18:06:02 [INFO] Looking for the scanner software window ("HP Scan - HP ScanJet Pro 3000 s3 (USB)")...
+2026-09-14 18:06:02 [INFO] Pressed remembered button "Scan" in "HP Scan - HP ScanJet Pro 3000 s3 (USB)" (UI Automation).  Finish the scan in the scanner window.
+2026-09-14 18:06:02 [INFO] [AIX:PROCESS] [SCAN] Pressed remembered button "Scan" in "HP Scan - HP ScanJet Pro 3000 s3 (USB)" (UI Automation).
+2026-09-14 18:06:15 [INFO] [WATCHER] New PDF detected: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED\Scan_0006.pdf
+2026-09-14 18:06:17 [INFO] [AUTO-INGEST API] Detected: Scan_0006.pdf (1.91 MB) — extracting...
+2026-09-14 18:06:17 [INFO] [AIX:SYSTEM] Auto-ingest (API) triggered by folder watcher.
+2026-09-14 18:06:17 [INFO] [AIX:PROCESS] Run started (auto): 1 file(s), compress threshold 1.00 MB.
+2026-09-14 18:06:17 [INFO] [AIX:API] Preparing files...
+2026-09-14 18:06:17 [INFO] [AI EXTRACT] Processing Scan_0006.pdf (1/1)
+2026-09-14 18:06:17 [INFO] [AI EXTRACT] Preparing Scan_0006.pdf
+2026-09-14 18:06:17 [INFO] [AIX:COMPRESS] Scan_0006.pdf: 1.91 MB -> 0.64 MB
+2026-09-14 18:06:26 [INFO] [AIX:API] OK — Scan_0006.pdf (3 page(s), 4544 chars)
+2026-09-14 18:06:26 [INFO] [AIX:PROCESS] Scan_0006.pdf: supplier=MARKETING BUYER S DEPT MAM STAFF KITCHEN STANDARD ORIGIN, grn=RC-MAM-000020840, po=MAM-000021181, invoice=9888, conf=100%
+2026-09-14 18:06:27 [INFO] [AIX:API] Done — 1 ok, 0 error(s), 3 page(s) used this run.
+2026-09-14 18:06:27 [INFO] [AIX:PROCESS] Run complete - 1 ok, 0 error(s), 3 page(s) used.
+2026-09-14 18:06:58 [INFO] [AIX:PROCESS] [LEARN] 'STANDARD & ORIGIN' wasn't a known supplier yet — added it.
+2026-09-14 18:06:58 [INFO] [AIX:PROCESS] [LEARN] MARKETING BUYER S DEPT MAM STAFF KITCHEN STANDARD ORIGIN -> STANDARD & ORIGIN: learned alias "MARKETING BUYER S DEPT MAM STAFF KITCHEN STANDARD ORIGIN"; learned new invoice pattern {0}
+2026-09-14 18:06:58 [INFO] AI Extract cell updated.
+2026-09-14 18:07:25 [INFO] Looking for the scanner software window ("HP Scan - HP ScanJet Pro 3000 s3 (USB)")...
+2026-09-14 18:07:25 [INFO] Pressed remembered button "Scan" in "HP Scan - HP ScanJet Pro 3000 s3 (USB)" (UI Automation).  Finish the scan in the scanner window.
+2026-09-14 18:07:25 [INFO] [AIX:PROCESS] [SCAN] Pressed remembered button "Scan" in "HP Scan - HP ScanJet Pro 3000 s3 (USB)" (UI Automation).
+2026-09-14 18:07:40 [INFO] [WATCHER] New PDF detected: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED\Scan_0007.pdf
+2026-09-14 18:07:41 [INFO] [AUTO-INGEST API] Detected: Scan_0007.pdf (2.27 MB) — extracting...
+2026-09-14 18:07:41 [INFO] [AIX:SYSTEM] Auto-ingest (API) triggered by folder watcher.
+2026-09-14 18:07:41 [INFO] [AIX:PROCESS] Run started (auto): 1 file(s), compress threshold 1.00 MB.
+2026-09-14 18:07:41 [INFO] [AIX:API] Preparing files...
+2026-09-14 18:07:41 [INFO] [AI EXTRACT] Processing Scan_0007.pdf (1/1)
+2026-09-14 18:07:41 [INFO] [AI EXTRACT] Preparing Scan_0007.pdf
+2026-09-14 18:07:41 [INFO] [AI EXTRACT] Scan_0007.pdf has 4 pages — trimming to first 3 before compressing...
+2026-09-14 18:07:42 [INFO] [AIX:COMPRESS] Scan_0007.pdf: 2.27 MB -> 0.62 MB
+2026-09-14 18:08:53 [WARNING] [AI EXTRACT] OCR.space error [Scan_0007.pdf]: HTTP 503: {"error":"E571: Free OCR API overloaded currently, so your free ocr api key is throttled. PRO OCR API keys are not affected by this. Get your own PRO ocr api key at https://ocr.space/ocrapi to avoid this.","details":"Temporary condition. Please retry in a few minutes - or get/use an OCR.Space PRO OCR API key, they are never throttled. Endpoint performance dashboard: https://status.ocr.space/"}
+2026-09-14 18:08:53 [INFO] [AIX:API] Done — 0 ok, 1 error(s), 3 page(s) used this run.
+2026-09-14 18:08:53 [INFO] [AIX:PROCESS] Run complete - 0 ok, 1 error(s), 3 page(s) used.
+2026-09-14 18:08:57 [INFO] [AI EXTRACT] Retrying Scan_0007.pdf...
+2026-09-14 18:08:57 [INFO] [AI EXTRACT] Preparing Scan_0007.pdf
+2026-09-14 18:08:57 [INFO] [AI EXTRACT] Scan_0007.pdf has 4 pages — trimming to first 3 before compressing...
+2026-09-14 18:08:57 [INFO] [AIX:COMPRESS] Scan_0007.pdf: 2.27 MB -> 0.62 MB
+2026-09-14 18:09:00 [INFO] [AI EXTRACT] Retry still failed: Scan_0007.pdf
+2026-09-14 18:09:09 [INFO] [AI EXTRACT] Retrying Scan_0007.pdf...
+2026-09-14 18:09:09 [INFO] [AI EXTRACT] Preparing Scan_0007.pdf
+2026-09-14 18:09:09 [INFO] [AI EXTRACT] Scan_0007.pdf has 4 pages — trimming to first 3 before compressing...
+2026-09-14 18:09:09 [INFO] [AIX:COMPRESS] Scan_0007.pdf: 2.27 MB -> 0.62 MB
+2026-09-14 18:09:12 [INFO] [AI EXTRACT] Retry still failed: Scan_0007.pdf
+2026-09-14 18:10:00 [INFO] [AI EXTRACT] Retrying Scan_0007.pdf...
+2026-09-14 18:10:00 [INFO] [AI EXTRACT] Preparing Scan_0007.pdf
+2026-09-14 18:10:00 [INFO] [AI EXTRACT] Scan_0007.pdf has 4 pages — trimming to first 3 before compressing...
+2026-09-14 18:10:00 [INFO] [AIX:COMPRESS] Scan_0007.pdf: 2.27 MB -> 0.62 MB
+2026-09-14 18:10:07 [INFO] [AIX:API] OK — Scan_0007.pdf (3 page(s), 4416 chars)
+2026-09-14 18:10:07 [INFO] [AIX:PROCESS] [TRY AGAIN] Scan_0007.pdf: supplier=MARKETING BUYER S DEPT MAM ACCOUNTING STANDARD ORI, invoice=2835, conf=100% — OK
+2026-09-14 18:10:07 [INFO] [AI EXTRACT] Retry succeeded: Scan_0007.pdf
+2026-09-14 18:11:00 [INFO] [AIX:PROCESS] [LEARN] MARKETING BUYER S DEPT MAM ACCOUNTING STANDARD ORI -> STANDARD & ORIGIN: learned alias "MARKETING BUYER S DEPT MAM ACCOUNTING STANDARD ORI"; confirmed invoice pattern {0}
+2026-09-14 18:11:00 [INFO] AI Extract cell updated.
+2026-09-14 18:11:08 [INFO] AI Extract cell updated.
+2026-09-14 18:11:35 [INFO] Looking for the scanner software window ("HP Scan - HP ScanJet Pro 3000 s3 (USB)")...
+2026-09-14 18:11:36 [INFO] Pressed remembered button "Scan" in "HP Scan - HP ScanJet Pro 3000 s3 (USB)" (UI Automation).  Finish the scan in the scanner window.
+2026-09-14 18:11:36 [INFO] [AIX:PROCESS] [SCAN] Pressed remembered button "Scan" in "HP Scan - HP ScanJet Pro 3000 s3 (USB)" (UI Automation).
+2026-09-14 18:11:50 [INFO] [WATCHER] New PDF detected: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED\Scan_0008.pdf
+2026-09-14 18:11:51 [INFO] [AUTO-INGEST API] Detected: Scan_0008.pdf (2.11 MB) — extracting...
+2026-09-14 18:11:51 [INFO] [AIX:SYSTEM] Auto-ingest (API) triggered by folder watcher.
+2026-09-14 18:11:51 [INFO] [AIX:PROCESS] Run started (auto): 1 file(s), compress threshold 1.00 MB.
+2026-09-14 18:11:51 [INFO] [AIX:API] Preparing files...
+2026-09-14 18:11:51 [INFO] [AI EXTRACT] Processing Scan_0008.pdf (1/1)
+2026-09-14 18:11:52 [INFO] [AI EXTRACT] Preparing Scan_0008.pdf
+2026-09-14 18:11:52 [INFO] [AIX:COMPRESS] Scan_0008.pdf: 2.11 MB -> 0.72 MB
+2026-09-14 18:13:30 [INFO] [AIX:API] OK — Scan_0008.pdf (3 page(s), 5532 chars)
+2026-09-14 18:13:30 [INFO] [AIX:PROCESS] Scan_0008.pdf: supplier=LTD BUYER S DEPT MAM ACCOUNTING LILY INTERNATION, grn=RC-MAM-000020838, po=MAM-000021146, invoice=-, conf=100%
+2026-09-14 18:13:30 [INFO] [AIX:API] Done — 1 ok, 0 error(s), 3 page(s) used this run.
+2026-09-14 18:13:30 [INFO] [AIX:PROCESS] Run complete - 1 ok, 0 error(s), 3 page(s) used.
+2026-09-14 18:14:52 [INFO] [AIX:PROCESS] [LEARN] 'LILY INTERNATIONAL LTD' wasn't a known supplier yet — added it.
+2026-09-14 18:14:52 [INFO] [AIX:PROCESS] [LEARN] LTD BUYER S DEPT MAM ACCOUNTING LILY INTERNATION -> LILY INTERNATIONAL LTD: learned alias "LTD BUYER S DEPT MAM ACCOUNTING LILY INTERNATION"
+2026-09-14 18:14:52 [INFO] AI Extract cell updated.
+2026-09-14 18:15:12 [INFO] Looking for the scanner software window ("HP Scan - HP ScanJet Pro 3000 s3 (USB)")...
+2026-09-14 18:15:12 [INFO] Pressed remembered button "Scan" in "HP Scan - HP ScanJet Pro 3000 s3 (USB)" (UI Automation).  Finish the scan in the scanner window.
+2026-09-14 18:15:12 [INFO] [AIX:PROCESS] [SCAN] Pressed remembered button "Scan" in "HP Scan - HP ScanJet Pro 3000 s3 (USB)" (UI Automation).
+2026-09-14 18:15:24 [INFO] [WATCHER] New PDF detected: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED\Scan_0009.pdf
+2026-09-14 18:15:24 [INFO] [AUTO-INGEST API] Detected: Scan_0009.pdf (1.30 MB) — extracting...
+2026-09-14 18:15:24 [INFO] [AIX:SYSTEM] Auto-ingest (API) triggered by folder watcher.
+2026-09-14 18:15:24 [INFO] [AIX:PROCESS] Run started (auto): 1 file(s), compress threshold 1.00 MB.
+2026-09-14 18:15:24 [INFO] [AIX:API] Preparing files...
+2026-09-14 18:15:24 [INFO] [AI EXTRACT] Processing Scan_0009.pdf (1/1)
+2026-09-14 18:15:24 [INFO] [AI EXTRACT] Preparing Scan_0009.pdf
+2026-09-14 18:15:24 [INFO] [AIX:COMPRESS] Scan_0009.pdf: 1.30 MB -> 0.38 MB
+2026-09-14 18:15:29 [INFO] [AIX:API] OK — Scan_0009.pdf (2 page(s), 2025 chars)
+2026-09-14 18:15:29 [INFO] [AIX:PROCESS] Scan_0009.pdf: supplier=MAM PETTY CASH MVI, grn=RC-MAM-000020837, po=MAM-000021180, invoice=030926, conf=100%
+2026-09-14 18:15:29 [INFO] [AIX:API] Done — 1 ok, 0 error(s), 2 page(s) used this run.
+2026-09-14 18:15:29 [INFO] [AIX:PROCESS] Run complete - 1 ok, 0 error(s), 2 page(s) used.
+2026-09-14 18:15:35 [INFO] [AIX:PROCESS] [LEARN] 'MAM PETTY CASH MVR' wasn't a known supplier yet — added it.
+2026-09-14 18:15:35 [INFO] [AIX:PROCESS] [LEARN] MAM PETTY CASH MVI -> MAM PETTY CASH MVR: learned alias "MAM PETTY CASH MVI"; learned new invoice pattern {0}
+2026-09-14 18:15:35 [INFO] AI Extract cell updated.
+2026-09-14 18:15:51 [INFO] AI Extract cell updated.
+2026-09-14 18:16:25 [INFO] Looking for the scanner software window ("HP Scan - HP ScanJet Pro 3000 s3 (USB)")...
+2026-09-14 18:16:25 [INFO] Pressed remembered button "Scan" in "HP Scan - HP ScanJet Pro 3000 s3 (USB)" (UI Automation).  Finish the scan in the scanner window.
+2026-09-14 18:16:25 [INFO] [AIX:PROCESS] [SCAN] Pressed remembered button "Scan" in "HP Scan - HP ScanJet Pro 3000 s3 (USB)" (UI Automation).
+2026-09-14 18:16:39 [INFO] [WATCHER] New PDF detected: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED\Scan_0010.pdf
+2026-09-14 18:16:39 [INFO] [AUTO-INGEST API] Detected: Scan_0010.pdf (2.55 MB) — extracting...
+2026-09-14 18:16:39 [INFO] [AIX:SYSTEM] Auto-ingest (API) triggered by folder watcher.
+2026-09-14 18:16:39 [INFO] [AIX:PROCESS] Run started (auto): 1 file(s), compress threshold 1.00 MB.
+2026-09-14 18:16:39 [INFO] [AIX:API] Preparing files...
+2026-09-14 18:16:39 [INFO] [AI EXTRACT] Processing Scan_0010.pdf (1/1)
+2026-09-14 18:16:39 [INFO] [AI EXTRACT] Preparing Scan_0010.pdf
+2026-09-14 18:16:39 [INFO] [AIX:COMPRESS] Scan_0010.pdf: 2.55 MB -> 0.82 MB
+2026-09-14 18:16:49 [INFO] [AIX:API] OK — Scan_0010.pdf (3 page(s), 4097 chars)
+2026-09-14 18:16:49 [INFO] [AIX:PROCESS] Scan_0010.pdf: supplier=FOOD SPECIALTY MALDIVES, grn=RC-MAM-000020836, po=MAM-000021183, invoice=103898, conf=100%
+2026-09-14 18:16:49 [INFO] [AIX:API] Done — 1 ok, 0 error(s), 3 page(s) used this run.
+2026-09-14 18:16:49 [INFO] [AIX:PROCESS] Run complete - 1 ok, 0 error(s), 3 page(s) used.
+2026-09-14 18:17:33 [INFO] Looking for the scanner software window ("HP Scan - HP ScanJet Pro 3000 s3 (USB)")...
+2026-09-14 18:17:33 [INFO] Pressed remembered button "Scan" in "HP Scan - HP ScanJet Pro 3000 s3 (USB)" (UI Automation).  Finish the scan in the scanner window.
+2026-09-14 18:17:33 [INFO] [AIX:PROCESS] [SCAN] Pressed remembered button "Scan" in "HP Scan - HP ScanJet Pro 3000 s3 (USB)" (UI Automation).
+2026-09-14 18:17:46 [INFO] [WATCHER] New PDF detected: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED\Scan_0011.pdf
+2026-09-14 18:17:47 [INFO] [AUTO-INGEST API] Detected: Scan_0011.pdf (2.62 MB) — extracting...
+2026-09-14 18:17:47 [INFO] [AIX:SYSTEM] Auto-ingest (API) triggered by folder watcher.
+2026-09-14 18:17:47 [INFO] [AIX:PROCESS] Run started (auto): 1 file(s), compress threshold 1.00 MB.
+2026-09-14 18:17:47 [INFO] [AIX:API] Preparing files...
+2026-09-14 18:17:47 [INFO] [AI EXTRACT] Processing Scan_0011.pdf (1/1)
+2026-09-14 18:17:47 [INFO] [AI EXTRACT] Preparing Scan_0011.pdf
+2026-09-14 18:17:47 [INFO] [AIX:COMPRESS] Scan_0011.pdf: 2.62 MB -> 0.83 MB
+2026-09-14 18:18:03 [INFO] [AIX:API] OK — Scan_0011.pdf (3 page(s), 4187 chars)
+2026-09-14 18:18:03 [INFO] [AIX:PROCESS] Scan_0011.pdf: supplier=MALDIVES FOOD SPECIALTY, grn=RC-MAM-000020835, po=MAM-000021165, invoice=103890, conf=100%
+2026-09-14 18:18:03 [INFO] [AIX:API] Done — 1 ok, 0 error(s), 3 page(s) used this run.
+2026-09-14 18:18:03 [INFO] [AIX:PROCESS] Run complete - 1 ok, 0 error(s), 3 page(s) used.
+2026-09-14 18:18:17 [INFO] [AIX:PROCESS] [LEARN] MALDIVES FOOD SPECIALTY -> FOOD SPECIALTY MALDIVES: learned alias "MALDIVES FOOD SPECIALTY"; confirmed invoice pattern {0}
+2026-09-14 18:18:17 [INFO] AI Extract cell updated.
+2026-09-14 18:19:49 [INFO] Looking for the scanner software window ("HP Scan - HP ScanJet Pro 3000 s3 (USB)")...
+2026-09-14 18:19:49 [INFO] Pressed remembered button "Scan" in "HP Scan - HP ScanJet Pro 3000 s3 (USB)" (UI Automation).  Finish the scan in the scanner window.
+2026-09-14 18:19:49 [INFO] [AIX:PROCESS] [SCAN] Pressed remembered button "Scan" in "HP Scan - HP ScanJet Pro 3000 s3 (USB)" (UI Automation).
+2026-09-14 18:20:03 [INFO] [WATCHER] New PDF detected: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED\Scan_0012.pdf
+2026-09-14 18:20:04 [INFO] [AUTO-INGEST API] Detected: Scan_0012.pdf (2.65 MB) — extracting...
+2026-09-14 18:20:04 [INFO] [AIX:SYSTEM] Auto-ingest (API) triggered by folder watcher.
+2026-09-14 18:20:04 [INFO] [AIX:PROCESS] Run started (auto): 1 file(s), compress threshold 1.00 MB.
+2026-09-14 18:20:04 [INFO] [AIX:API] Preparing files...
+2026-09-14 18:20:04 [INFO] [AI EXTRACT] Processing Scan_0012.pdf (1/1)
+2026-09-14 18:20:04 [INFO] [AI EXTRACT] Preparing Scan_0012.pdf
+2026-09-14 18:20:04 [INFO] [AIX:COMPRESS] Scan_0012.pdf: 2.65 MB -> 0.87 MB
+2026-09-14 18:20:40 [WARNING] [AI EXTRACT] OCR.space error [Scan_0012.pdf]: HTTP 503: {"error":"E571: Free OCR API overloaded currently, so your free ocr api key is throttled. PRO OCR API keys are not affected by this. Get your own PRO ocr api key at https://ocr.space/ocrapi to avoid this.","details":"Temporary condition. Please retry in a few minutes - or get/use an OCR.Space PRO OCR API key, they are never throttled. Endpoint performance dashboard: https://status.ocr.space/"}
+2026-09-14 18:20:40 [INFO] [AIX:API] Done — 0 ok, 1 error(s), 3 page(s) used this run.
+2026-09-14 18:20:40 [INFO] [AIX:PROCESS] Run complete - 0 ok, 1 error(s), 3 page(s) used.
+2026-09-14 18:20:45 [INFO] [AI EXTRACT] Retrying Scan_0012.pdf...
+2026-09-14 18:20:45 [INFO] [AI EXTRACT] Preparing Scan_0012.pdf
+2026-09-14 18:20:45 [INFO] [AIX:COMPRESS] Scan_0012.pdf: 2.65 MB -> 0.87 MB
+2026-09-14 18:20:48 [INFO] [AI EXTRACT] Retry still failed: Scan_0012.pdf
+2026-09-14 18:20:53 [INFO] [AI EXTRACT] Retrying Scan_0012.pdf...
+2026-09-14 18:20:53 [INFO] [AI EXTRACT] Preparing Scan_0012.pdf
+2026-09-14 18:20:53 [INFO] [AIX:COMPRESS] Scan_0012.pdf: 2.65 MB -> 0.87 MB
+2026-09-14 18:20:56 [INFO] [AI EXTRACT] Retry still failed: Scan_0012.pdf
+2026-09-14 18:21:28 [INFO] [AI EXTRACT] Retrying Scan_0012.pdf...
+2026-09-14 18:21:28 [INFO] [AI EXTRACT] Preparing Scan_0012.pdf
+2026-09-14 18:21:28 [INFO] [AIX:COMPRESS] Scan_0012.pdf: 2.65 MB -> 0.87 MB
+2026-09-14 18:21:31 [INFO] [AI EXTRACT] Retry still failed: Scan_0012.pdf
+2026-09-14 18:21:38 [INFO] [AI EXTRACT] Retrying Scan_0012.pdf...
+2026-09-14 18:21:38 [INFO] [AI EXTRACT] Preparing Scan_0012.pdf
+2026-09-14 18:21:38 [INFO] [AIX:COMPRESS] Scan_0012.pdf: 2.65 MB -> 0.87 MB
+2026-09-14 18:21:41 [INFO] [AI EXTRACT] Retry still failed: Scan_0012.pdf
+2026-09-14 18:22:16 [INFO] [AI EXTRACT] Retrying Scan_0012.pdf...
+2026-09-14 18:22:16 [INFO] [AI EXTRACT] Preparing Scan_0012.pdf
+2026-09-14 18:22:17 [INFO] [AIX:COMPRESS] Scan_0012.pdf: 2.65 MB -> 0.87 MB
+2026-09-14 18:22:25 [INFO] [AIX:API] OK — Scan_0012.pdf (3 page(s), 4813 chars)
+2026-09-14 18:22:25 [INFO] [AIX:PROCESS] [TRY AGAIN] Scan_0012.pdf: supplier=MALDIVES FOOD SPECIALTY, invoice=103883, conf=100% — OK
+2026-09-14 18:22:25 [INFO] [AI EXTRACT] Retry succeeded: Scan_0012.pdf
+2026-09-14 18:22:44 [INFO] [AIX:PROCESS] [LEARN] MALDIVES FOOD SPECIALTY -> FOOD SPECIALTY MALDIVES: confirmed invoice pattern {0}
+2026-09-14 18:22:44 [INFO] AI Extract cell updated.
+2026-09-14 18:24:05 [INFO] Looking for the scanner software window ("HP Scan - HP ScanJet Pro 3000 s3 (USB)")...
+2026-09-14 18:24:05 [INFO] Pressed remembered button "Scan" in "HP Scan - HP ScanJet Pro 3000 s3 (USB)" (UI Automation).  Finish the scan in the scanner window.
+2026-09-14 18:24:05 [INFO] [AIX:PROCESS] [SCAN] Pressed remembered button "Scan" in "HP Scan - HP ScanJet Pro 3000 s3 (USB)" (UI Automation).
+2026-09-14 18:24:19 [INFO] [WATCHER] New PDF detected: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED\Scan_0013.pdf
+2026-09-14 18:24:20 [INFO] [AUTO-INGEST API] Detected: Scan_0013.pdf (1.83 MB) — extracting...
+2026-09-14 18:24:20 [INFO] [AIX:SYSTEM] Auto-ingest (API) triggered by folder watcher.
+2026-09-14 18:24:20 [INFO] [AIX:PROCESS] Run started (auto): 1 file(s), compress threshold 1.00 MB.
+2026-09-14 18:24:20 [INFO] [AIX:API] Preparing files...
+2026-09-14 18:24:20 [INFO] [AI EXTRACT] Processing Scan_0013.pdf (1/1)
+2026-09-14 18:24:20 [INFO] [AI EXTRACT] Preparing Scan_0013.pdf
+2026-09-14 18:24:20 [INFO] [AIX:COMPRESS] Scan_0013.pdf: 1.83 MB -> 0.55 MB
+2026-09-14 18:25:29 [WARNING] [AI EXTRACT] OCR.space error [Scan_0013.pdf]: HTTP 503: {"error":"E571: Free OCR API overloaded currently, so your free ocr api key is throttled. PRO OCR API keys are not affected by this. Get your own PRO ocr api key at https://ocr.space/ocrapi to avoid this.","details":"Temporary condition. Please retry in a few minutes - or get/use an OCR.Space PRO OCR API key, they are never throttled. Endpoint performance dashboard: https://status.ocr.space/"}
+2026-09-14 18:25:29 [INFO] [AIX:API] Done — 0 ok, 1 error(s), 3 page(s) used this run.
+2026-09-14 18:25:29 [INFO] [AIX:PROCESS] Run complete - 0 ok, 1 error(s), 3 page(s) used.
+2026-09-14 18:25:54 [INFO] [AI EXTRACT] Retrying Scan_0013.pdf...
+2026-09-14 18:25:54 [INFO] [AI EXTRACT] Preparing Scan_0013.pdf
+2026-09-14 18:25:54 [INFO] [AIX:COMPRESS] Scan_0013.pdf: 1.83 MB -> 0.55 MB
+2026-09-14 18:25:57 [INFO] [AI EXTRACT] Retry still failed: Scan_0013.pdf
+2026-09-14 18:27:13 [INFO] [AI EXTRACT] Retrying Scan_0013.pdf...
+2026-09-14 18:27:13 [INFO] [AI EXTRACT] Preparing Scan_0013.pdf
+2026-09-14 18:27:13 [INFO] [AIX:COMPRESS] Scan_0013.pdf: 1.83 MB -> 0.55 MB
+2026-09-14 18:27:19 [INFO] [AIX:API] OK — Scan_0013.pdf (3 page(s), 2659 chars)
+2026-09-14 18:27:19 [INFO] [AIX:PROCESS] [TRY AGAIN] Scan_0013.pdf: supplier=LTD BUYER S DEPT MAM ACCOUNTING LYCORN MALDIVES PV, invoice=21154, conf=100% — OK
+2026-09-14 18:27:19 [INFO] [AI EXTRACT] Retry succeeded: Scan_0013.pdf
+2026-09-14 18:31:33 [INFO] [AIX:PROCESS] [LEARN] LTD BUYER S DEPT MAM ACCOUNTING LYCORN MALDIVES PV -> LYCORN MALDIVES: learned alias "LTD BUYER S DEPT MAM ACCOUNTING LYCORN MALDIVES PV"; confirmed invoice pattern {0}
+2026-09-14 18:31:33 [INFO] AI Extract cell updated.
+2026-09-15 08:40:40 [INFO] [WATCHER] New PDF detected: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED\Scan_0014.pdf
+2026-09-15 08:40:40 [INFO] [AUTO-INGEST API] Detected: Scan_0014.pdf (1.94 MB) — extracting...
+2026-09-15 08:40:40 [INFO] [AIX:SYSTEM] Auto-ingest (API) triggered by folder watcher.
+2026-09-15 08:40:40 [INFO] [AIX:PROCESS] Run started (auto): 1 file(s), compress threshold 1.00 MB.
+2026-09-15 08:40:40 [INFO] [AIX:API] Preparing files...
+2026-09-15 08:40:40 [INFO] [AI EXTRACT] Processing Scan_0014.pdf (1/1)
+2026-09-15 08:40:40 [INFO] [AI EXTRACT] Preparing Scan_0014.pdf
+2026-09-15 08:40:41 [INFO] [AIX:COMPRESS] Scan_0014.pdf: 1.94 MB -> 0.57 MB
+2026-09-15 08:40:48 [INFO] [AIX:API] OK — Scan_0014.pdf (3 page(s), 2672 chars)
+2026-09-15 08:40:48 [INFO] [AIX:PROCESS] Scan_0014.pdf: supplier=LYCORN MALDIVES, grn=RC-MAM-000020832, po=MAM-000021106, invoice=LCM 26 3503, conf=100%
+2026-09-15 08:40:48 [INFO] [AIX:API] Done — 1 ok, 0 error(s), 3 page(s) used this run.
+2026-09-15 08:40:48 [INFO] [AIX:PROCESS] Run complete - 1 ok, 0 error(s), 3 page(s) used.
+2026-09-15 08:41:00 [INFO] AI Extract cell updated.
+2026-09-15 08:41:34 [INFO] [WATCHER] New PDF detected: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED\Scan_0015.pdf
+2026-09-15 08:41:34 [INFO] [AUTO-INGEST API] Detected: Scan_0015.pdf (1.95 MB) — extracting...
+2026-09-15 08:41:35 [INFO] [AIX:SYSTEM] Auto-ingest (API) triggered by folder watcher.
+2026-09-15 08:41:35 [INFO] [AIX:PROCESS] Run started (auto): 1 file(s), compress threshold 1.00 MB.
+2026-09-15 08:41:35 [INFO] [AIX:API] Preparing files...
+2026-09-15 08:41:35 [INFO] [AI EXTRACT] Processing Scan_0015.pdf (1/1)
+2026-09-15 08:41:35 [INFO] [AI EXTRACT] Preparing Scan_0015.pdf
+2026-09-15 08:41:35 [INFO] [AIX:COMPRESS] Scan_0015.pdf: 1.95 MB -> 0.63 MB
+2026-09-15 08:41:45 [INFO] [AIX:API] OK — Scan_0015.pdf (3 page(s), 3453 chars)
+2026-09-15 08:41:45 [INFO] [AIX:PROCESS] Scan_0015.pdf: supplier=GLOBAL RIWA PVT LTD, grn=RC-MAM-000020846, po=MAM-000021083, invoice=26 1866, conf=100%
+2026-09-15 08:41:45 [INFO] [AIX:API] Done — 1 ok, 0 error(s), 3 page(s) used this run.
+2026-09-15 08:41:45 [INFO] [AIX:PROCESS] Run complete - 1 ok, 0 error(s), 3 page(s) used.
+2026-09-15 08:42:38 [INFO] [WATCHER] New PDF detected: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED\Scan_0016.pdf
+2026-09-15 08:42:39 [INFO] [AUTO-INGEST API] Detected: Scan_0016.pdf (1.70 MB) — extracting...
+2026-09-15 08:42:39 [INFO] [AIX:SYSTEM] Auto-ingest (API) triggered by folder watcher.
+2026-09-15 08:42:39 [INFO] [AIX:PROCESS] Run started (auto): 1 file(s), compress threshold 1.00 MB.
+2026-09-15 08:42:39 [INFO] [AIX:API] Preparing files...
+2026-09-15 08:42:39 [INFO] [AI EXTRACT] Processing Scan_0016.pdf (1/1)
+2026-09-15 08:42:39 [INFO] [AI EXTRACT] Preparing Scan_0016.pdf
+2026-09-15 08:42:40 [INFO] [AIX:COMPRESS] Scan_0016.pdf: 1.70 MB -> 0.52 MB
+2026-09-15 08:42:46 [INFO] [AIX:API] OK — Scan_0016.pdf (3 page(s), 2661 chars)
+2026-09-15 08:42:46 [INFO] [AIX:PROCESS] Scan_0016.pdf: supplier=BIGWIG, grn=RC-MAM-000020847, po=MAM-000021084, invoice=2026-071, conf=100%
+2026-09-15 08:42:46 [INFO] [AIX:API] Done — 1 ok, 0 error(s), 3 page(s) used this run.
+2026-09-15 08:42:46 [INFO] [AIX:PROCESS] Run complete - 1 ok, 0 error(s), 3 page(s) used.
+2026-09-15 08:42:59 [INFO] AI Extract cell updated.
+2026-09-15 08:44:02 [INFO] [WATCHER] New PDF detected: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED\Scan_0017.pdf
+2026-09-15 08:44:04 [INFO] [AUTO-INGEST API] Detected: Scan_0017.pdf (2.21 MB) — extracting...
+2026-09-15 08:44:04 [INFO] [AIX:SYSTEM] Auto-ingest (API) triggered by folder watcher.
+2026-09-15 08:44:04 [INFO] [AIX:PROCESS] Run started (auto): 1 file(s), compress threshold 1.00 MB.
+2026-09-15 08:44:04 [INFO] [AIX:API] Preparing files...
+2026-09-15 08:44:04 [INFO] [AI EXTRACT] Processing Scan_0017.pdf (1/1)
+2026-09-15 08:44:04 [INFO] [AI EXTRACT] Preparing Scan_0017.pdf
+2026-09-15 08:44:04 [INFO] [AIX:COMPRESS] Scan_0017.pdf: 2.21 MB -> 0.70 MB
+2026-09-15 08:44:12 [INFO] [AIX:API] OK — Scan_0017.pdf (3 page(s), 4389 chars)
+2026-09-15 08:44:12 [INFO] [AIX:PROCESS] Scan_0017.pdf: supplier=PVT LTD BUYER S DEPT MAM STAFF KITCHEN F B EVENING STORE, grn=RC-MAM-000000002, po=MAM-000021173, invoice=15699, conf=100%
+2026-09-15 08:44:12 [INFO] [AIX:API] Done — 1 ok, 0 error(s), 3 page(s) used this run.
+2026-09-15 08:44:12 [INFO] [AIX:PROCESS] Run complete - 1 ok, 0 error(s), 3 page(s) used.
+2026-09-15 08:45:10 [INFO] [AIX:PROCESS] [LEARN] PVT LTD BUYER S DEPT MAM STAFF KITCHEN F B EVENING STORE -> F&B EVENING STORE PVT LTD: learned alias "PVT LTD BUYER S DEPT MAM STAFF KITCHEN F B EVENING STORE"; confirmed invoice pattern {0}{1}
+2026-09-15 08:45:10 [INFO] AI Extract cell updated.
+2026-09-15 08:46:00 [INFO] AI Extract cell updated.
+2026-09-15 08:47:41 [INFO] [WATCHER] New PDF detected: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED\Scan_0018.pdf
+2026-09-15 08:47:42 [INFO] [AUTO-INGEST API] Detected: Scan_0018.pdf (1.84 MB) — extracting...
+2026-09-15 08:47:42 [INFO] [AIX:SYSTEM] Auto-ingest (API) triggered by folder watcher.
+2026-09-15 08:47:42 [INFO] [AIX:PROCESS] Run started (auto): 1 file(s), compress threshold 1.00 MB.
+2026-09-15 08:47:42 [INFO] [AIX:API] Preparing files...
+2026-09-15 08:47:42 [INFO] [AI EXTRACT] Processing Scan_0018.pdf (1/1)
+2026-09-15 08:47:42 [INFO] [AI EXTRACT] Preparing Scan_0018.pdf
+2026-09-15 08:47:42 [INFO] [AIX:COMPRESS] Scan_0018.pdf: 1.84 MB -> 0.58 MB
+2026-09-15 08:47:48 [INFO] [AIX:API] OK — Scan_0018.pdf (3 page(s), 3223 chars)
+2026-09-15 08:47:48 [INFO] [AIX:PROCESS] Scan_0018.pdf: supplier=INNOVO MALDIVES, grn=RC-MAM-000020851, po=MAM-000021121, invoice=6283, conf=100%
+2026-09-15 08:47:48 [INFO] [AIX:API] Done — 1 ok, 0 error(s), 3 page(s) used this run.
+2026-09-15 08:47:48 [INFO] [AIX:PROCESS] Run complete - 1 ok, 0 error(s), 3 page(s) used.
+2026-09-15 08:48:32 [INFO] [WATCHER] New PDF detected: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED\Scan_0019.pdf
+2026-09-15 08:48:33 [INFO] [AUTO-INGEST API] Detected: Scan_0019.pdf (1.83 MB) — extracting...
+2026-09-15 08:48:33 [INFO] [AIX:SYSTEM] Auto-ingest (API) triggered by folder watcher.
+2026-09-15 08:48:33 [INFO] [AIX:PROCESS] Run started (auto): 1 file(s), compress threshold 1.00 MB.
+2026-09-15 08:48:33 [INFO] [AIX:API] Preparing files...
+2026-09-15 08:48:33 [INFO] [AI EXTRACT] Processing Scan_0019.pdf (1/1)
+2026-09-15 08:48:33 [INFO] [AI EXTRACT] Preparing Scan_0019.pdf
+2026-09-15 08:48:34 [INFO] [AIX:COMPRESS] Scan_0019.pdf: 1.83 MB -> 0.58 MB
+2026-09-15 08:48:39 [INFO] [AIX:API] OK — Scan_0019.pdf (3 page(s), 2955 chars)
+2026-09-15 08:48:39 [INFO] [AIX:PROCESS] Scan_0019.pdf: supplier=MAA HARDWARE, grn=RC-MAM-000020852, po=MAM-000021105, invoice=008, conf=100%
+2026-09-15 08:48:39 [INFO] [AIX:API] Done — 1 ok, 0 error(s), 3 page(s) used this run.
+2026-09-15 08:48:39 [INFO] [AIX:PROCESS] Run complete - 1 ok, 0 error(s), 3 page(s) used.
+2026-09-15 08:51:01 [INFO] [WATCHER] New PDF detected: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED\Scan_0020.pdf
+2026-09-15 08:51:02 [INFO] [AUTO-INGEST API] Detected: Scan_0020.pdf (2.00 MB) — extracting...
+2026-09-15 08:51:02 [INFO] [AIX:SYSTEM] Auto-ingest (API) triggered by folder watcher.
+2026-09-15 08:51:02 [INFO] [AIX:PROCESS] Run started (auto): 1 file(s), compress threshold 1.00 MB.
+2026-09-15 08:51:02 [INFO] [AIX:API] Preparing files...
+2026-09-15 08:51:02 [INFO] [AI EXTRACT] Processing Scan_0020.pdf (1/1)
+2026-09-15 08:51:02 [INFO] [AI EXTRACT] Preparing Scan_0020.pdf
+2026-09-15 08:51:03 [INFO] [AIX:COMPRESS] Scan_0020.pdf: 2.00 MB -> 0.66 MB
+2026-09-15 08:51:09 [INFO] [AIX:API] OK — Scan_0020.pdf (3 page(s), 3580 chars)
+2026-09-15 08:51:09 [INFO] [AIX:PROCESS] Scan_0020.pdf: supplier=HORIZON FISHERIES, grn=RC-MAM-000020855, po=MAM-000021155, invoice=2227, conf=100%
+2026-09-15 08:51:09 [INFO] [AIX:API] Done — 1 ok, 0 error(s), 3 page(s) used this run.
+2026-09-15 08:51:09 [INFO] [AIX:PROCESS] Run complete - 1 ok, 0 error(s), 3 page(s) used.
+2026-09-15 08:52:08 [INFO] AI Extract cell updated.
+2026-09-15 08:52:59 [INFO] [WATCHER] New PDF detected: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED\Scan_0021.pdf
+2026-09-15 08:53:00 [INFO] [AUTO-INGEST API] Detected: Scan_0021.pdf (2.82 MB) — extracting...
+2026-09-15 08:53:00 [INFO] [AIX:SYSTEM] Auto-ingest (API) triggered by folder watcher.
+2026-09-15 08:53:00 [INFO] [AIX:PROCESS] Run started (auto): 1 file(s), compress threshold 1.00 MB.
+2026-09-15 08:53:00 [INFO] [AIX:API] Preparing files...
+2026-09-15 08:53:00 [INFO] [AI EXTRACT] Processing Scan_0021.pdf (1/1)
+2026-09-15 08:53:00 [INFO] [AI EXTRACT] Preparing Scan_0021.pdf
+2026-09-15 08:53:00 [INFO] [AIX:COMPRESS] Scan_0021.pdf: 2.82 MB -> 0.89 MB
+2026-09-15 08:53:08 [INFO] [AIX:API] OK — Scan_0021.pdf (3 page(s), 3546 chars)
+2026-09-15 08:53:08 [INFO] [AIX:PROCESS] Scan_0021.pdf: supplier=ENTERPRISES PVT LTD SEAFOOD, grn=RC-MAM-000020856, po=MAM-000021150, invoice=7136, conf=100%
+2026-09-15 08:53:08 [INFO] [AIX:API] Done — 1 ok, 0 error(s), 3 page(s) used this run.
+2026-09-15 08:53:08 [INFO] [AIX:PROCESS] Run complete - 1 ok, 0 error(s), 3 page(s) used.
+2026-09-15 08:53:28 [INFO] [AIX:PROCESS] [LEARN] ENTERPRISES PVT LTD SEAFOOD -> SEAFOOD ENTERPRISES: learned alias "ENTERPRISES PVT LTD SEAFOOD"; confirmed invoice pattern {0}
+2026-09-15 08:53:28 [INFO] AI Extract cell updated.
+2026-09-15 08:54:08 [INFO] [WATCHER] New PDF detected: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED\Scan_0022.pdf
+2026-09-15 08:54:09 [INFO] [AUTO-INGEST API] Detected: Scan_0022.pdf (1.81 MB) — extracting...
+2026-09-15 08:54:09 [INFO] [AIX:SYSTEM] Auto-ingest (API) triggered by folder watcher.
+2026-09-15 08:54:09 [INFO] [AIX:PROCESS] Run started (auto): 1 file(s), compress threshold 1.00 MB.
+2026-09-15 08:54:09 [INFO] [AIX:API] Preparing files...
+2026-09-15 08:54:09 [INFO] [AI EXTRACT] Processing Scan_0022.pdf (1/1)
+2026-09-15 08:54:09 [INFO] [AI EXTRACT] Preparing Scan_0022.pdf
+2026-09-15 08:54:09 [INFO] [AIX:COMPRESS] Scan_0022.pdf: 1.81 MB -> 0.58 MB
+2026-09-15 08:54:16 [INFO] [AIX:API] OK — Scan_0022.pdf (3 page(s), 3738 chars)
+2026-09-15 08:54:16 [INFO] [AIX:PROCESS] [AUTO-FIX BLOCKED] Explicit Receiving Report supplier 'SOLUTION PVT LTD INTERNATIONAL FOOD' protected against pattern suggestion 'INTERNATIONAL FOOD SOLUTION PVT LTD'.
+2026-09-15 08:54:16 [INFO] [AIX:PROCESS] Scan_0022.pdf: supplier=SOLUTION PVT LTD INTERNATIONAL FOOD, grn=RC-MAM-000020857, po=MAM-000021182, invoice=MSI-294031, conf=100%
+2026-09-15 08:54:16 [INFO] [AIX:API] Done — 1 ok, 0 error(s), 3 page(s) used this run.
+2026-09-15 08:54:16 [INFO] [AIX:PROCESS] Run complete - 1 ok, 0 error(s), 3 page(s) used.
+2026-09-15 08:54:31 [INFO] [AIX:PROCESS] [LEARN] SOLUTION PVT LTD INTERNATIONAL FOOD -> INTERNATIONAL FOOD SOLUTION PVT LTD: learned alias "SOLUTION PVT LTD INTERNATIONAL FOOD"; confirmed invoice pattern MSI{0}
+2026-09-15 08:54:31 [INFO] AI Extract cell updated.
+2026-09-15 08:54:38 [INFO] AI Extract cell updated.
+2026-09-15 08:55:20 [INFO] [WATCHER] New PDF detected: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED\Scan_0023.pdf
+2026-09-15 08:55:21 [INFO] [AUTO-INGEST API] Detected: Scan_0023.pdf (2.17 MB) — extracting...
+2026-09-15 08:55:21 [INFO] [AIX:SYSTEM] Auto-ingest (API) triggered by folder watcher.
+2026-09-15 08:55:21 [INFO] [AIX:PROCESS] Run started (auto): 1 file(s), compress threshold 1.00 MB.
+2026-09-15 08:55:21 [INFO] [AIX:API] Preparing files...
+2026-09-15 08:55:21 [INFO] [AI EXTRACT] Processing Scan_0023.pdf (1/1)
+2026-09-15 08:55:21 [INFO] [AI EXTRACT] Preparing Scan_0023.pdf
+2026-09-15 08:55:21 [INFO] [AI EXTRACT] Scan_0023.pdf has 4 pages — trimming to first 3 before compressing...
+2026-09-15 08:55:22 [INFO] [AIX:COMPRESS] Scan_0023.pdf: 2.17 MB -> 0.60 MB
+2026-09-15 08:55:28 [INFO] [AIX:API] OK — Scan_0023.pdf (3 page(s), 4090 chars)
+2026-09-15 08:55:28 [INFO] [AIX:PROCESS] Scan_0023.pdf: supplier=SOLUTION PVT LTD BUYER S DEPT MAM ACCOUNTING INTERNATIONAL FOC, grn=RC-MAM-000020858, po=MAM-000021139, invoice=293762, conf=100%
+2026-09-15 08:55:28 [INFO] [AIX:API] Done — 1 ok, 0 error(s), 3 page(s) used this run.
+2026-09-15 08:55:28 [INFO] [AIX:PROCESS] Run complete - 1 ok, 0 error(s), 3 page(s) used.
+2026-09-15 08:55:45 [INFO] [AIX:PROCESS] [LEARN] SOLUTION PVT LTD BUYER S DEPT MAM ACCOUNTING INTERNATIONAL FOC -> INTERNATIONAL FOOD SOLUTION PVT LTD: learned alias "SOLUTION PVT LTD BUYER S DEPT MAM ACCOUNTING INTERNATIONAL FOC"; confirmed invoice pattern {0}
+2026-09-15 08:55:45 [INFO] AI Extract cell updated.
+2026-09-15 08:56:27 [INFO] [WATCHER] New PDF detected: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED\Scan_0024.pdf
+2026-09-15 08:56:28 [INFO] [AUTO-INGEST API] Detected: Scan_0024.pdf (1.84 MB) — extracting...
+2026-09-15 08:56:28 [INFO] [AIX:SYSTEM] Auto-ingest (API) triggered by folder watcher.
+2026-09-15 08:56:28 [INFO] [AIX:PROCESS] Run started (auto): 1 file(s), compress threshold 1.00 MB.
+2026-09-15 08:56:28 [INFO] [AIX:API] Preparing files...
+2026-09-15 08:56:28 [INFO] [AI EXTRACT] Processing Scan_0024.pdf (1/1)
+2026-09-15 08:56:28 [INFO] [AI EXTRACT] Preparing Scan_0024.pdf
+2026-09-15 08:56:28 [INFO] [AIX:COMPRESS] Scan_0024.pdf: 1.84 MB -> 0.62 MB
+2026-09-15 08:56:35 [INFO] [AIX:API] OK — Scan_0024.pdf (3 page(s), 4173 chars)
+2026-09-15 08:56:35 [INFO] [AIX:PROCESS] Scan_0024.pdf: supplier=PVT LTD BUYER S DEPT MAM ACCOUNTING LILY INTERNATIONAL, grn=RC-MAM-000020859, po=MAM-000021101, invoice=0556931, conf=100%
+2026-09-15 08:56:35 [INFO] [AIX:API] Done — 1 ok, 0 error(s), 3 page(s) used this run.
+2026-09-15 08:56:35 [INFO] [AIX:PROCESS] Run complete - 1 ok, 0 error(s), 3 page(s) used.
+2026-09-15 08:56:48 [INFO] [AIX:PROCESS] [LEARN] PVT LTD BUYER S DEPT MAM ACCOUNTING LILY INTERNATIONAL -> LILY INTERNATIONAL PVT LTD: learned alias "PVT LTD BUYER S DEPT MAM ACCOUNTING LILY INTERNATIONAL"; confirmed invoice pattern {0}
+2026-09-15 08:56:48 [INFO] AI Extract cell updated.
+2026-09-15 08:57:42 [INFO] [WATCHER] New PDF detected: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED\Scan_0025.pdf
+2026-09-15 08:57:43 [INFO] [AUTO-INGEST API] Detected: Scan_0025.pdf (1.91 MB) — extracting...
+2026-09-15 08:57:43 [INFO] [AIX:SYSTEM] Auto-ingest (API) triggered by folder watcher.
+2026-09-15 08:57:43 [INFO] [AIX:PROCESS] Run started (auto): 1 file(s), compress threshold 1.00 MB.
+2026-09-15 08:57:43 [INFO] [AIX:API] Preparing files...
+2026-09-15 08:57:43 [INFO] [AI EXTRACT] Processing Scan_0025.pdf (1/1)
+2026-09-15 08:57:43 [INFO] [AI EXTRACT] Preparing Scan_0025.pdf
+2026-09-15 08:57:43 [INFO] [AIX:COMPRESS] Scan_0025.pdf: 1.91 MB -> 0.67 MB
+2026-09-15 08:57:50 [INFO] [AIX:API] OK — Scan_0025.pdf (3 page(s), 4437 chars)
+2026-09-15 08:57:50 [INFO] [AIX:PROCESS] Scan_0025.pdf: supplier=PVT LTD BUYER S DEPT MAM ACCOUNTING GRAPE EXPECTATIONS, grn=RC-MAM-000020860, po=MAM-000021102, invoice=0070812, conf=100%
+2026-09-15 08:57:50 [INFO] [AIX:API] Done — 1 ok, 0 error(s), 3 page(s) used this run.
+2026-09-15 08:57:50 [INFO] [AIX:PROCESS] Run complete - 1 ok, 0 error(s), 3 page(s) used.
+2026-09-15 08:58:00 [INFO] [AIX:PROCESS] [LEARN] PVT LTD BUYER S DEPT MAM ACCOUNTING GRAPE EXPECTATIONS -> GRAPE EXPECTATIONS PVT LTD: learned alias "PVT LTD BUYER S DEPT MAM ACCOUNTING GRAPE EXPECTATIONS"; confirmed invoice pattern {0}
+2026-09-15 08:58:00 [INFO] AI Extract cell updated.
+2026-09-15 08:58:43 [INFO] [WATCHER] New PDF detected: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED\Scan_0026.pdf
+2026-09-15 08:58:45 [INFO] [AUTO-INGEST API] Detected: Scan_0026.pdf (1.94 MB) — extracting...
+2026-09-15 08:58:45 [INFO] [AIX:SYSTEM] Auto-ingest (API) triggered by folder watcher.
+2026-09-15 08:58:45 [INFO] [AIX:PROCESS] Run started (auto): 1 file(s), compress threshold 1.00 MB.
+2026-09-15 08:58:45 [INFO] [AIX:API] Preparing files...
+2026-09-15 08:58:45 [INFO] [AI EXTRACT] Processing Scan_0026.pdf (1/1)
+2026-09-15 08:58:45 [INFO] [AI EXTRACT] Preparing Scan_0026.pdf
+2026-09-15 08:58:45 [INFO] [AIX:COMPRESS] Scan_0026.pdf: 1.94 MB -> 0.60 MB
+2026-09-15 08:58:52 [INFO] [AIX:API] OK — Scan_0026.pdf (3 page(s), 3540 chars)
+2026-09-15 08:58:52 [INFO] [AIX:PROCESS] Scan_0026.pdf: supplier=MIAAF PVT LTD, grn=RC-MAM-000020861, po=MAM-000021147, invoice=6544, conf=100%
+2026-09-15 08:58:52 [INFO] [AIX:API] Done — 1 ok, 0 error(s), 3 page(s) used this run.
+2026-09-15 08:58:52 [INFO] [AIX:PROCESS] Run complete - 1 ok, 0 error(s), 3 page(s) used.
+2026-09-15 08:59:20 [INFO] [WATCHER] New PDF detected: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED\Scan_0027.pdf
+2026-09-15 08:59:21 [INFO] [AUTO-INGEST API] Detected: Scan_0027.pdf (1.97 MB) — extracting...
+2026-09-15 08:59:21 [INFO] [AIX:SYSTEM] Auto-ingest (API) triggered by folder watcher.
+2026-09-15 08:59:21 [INFO] [AIX:PROCESS] Run started (auto): 1 file(s), compress threshold 1.00 MB.
+2026-09-15 08:59:21 [INFO] [AIX:API] Preparing files...
+2026-09-15 08:59:21 [INFO] [AI EXTRACT] Processing Scan_0027.pdf (1/1)
+2026-09-15 08:59:21 [INFO] [AI EXTRACT] Preparing Scan_0027.pdf
+2026-09-15 08:59:21 [INFO] [AIX:COMPRESS] Scan_0027.pdf: 1.97 MB -> 0.62 MB
+2026-09-15 08:59:29 [INFO] [AIX:API] OK — Scan_0027.pdf (3 page(s), 3541 chars)
+2026-09-15 08:59:29 [INFO] [AIX:PROCESS] Scan_0027.pdf: supplier=F&B EVENING STORE PVT LTD, grn=RC-MAM-000020862, po=MAM-000021126, invoice=15611, conf=100%
+2026-09-15 08:59:29 [INFO] [AIX:API] Done — 1 ok, 0 error(s), 3 page(s) used this run.
+2026-09-15 08:59:29 [INFO] [AIX:PROCESS] Run complete - 1 ok, 0 error(s), 3 page(s) used.
+2026-09-15 08:59:59 [INFO] [WATCHER] New PDF detected: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED\Scan_0028.pdf
+2026-09-15 09:00:00 [INFO] [AUTO-INGEST API] Detected: Scan_0028.pdf (2.02 MB) — extracting...
+2026-09-15 09:00:00 [INFO] [AIX:SYSTEM] Auto-ingest (API) triggered by folder watcher.
+2026-09-15 09:00:00 [INFO] [AIX:PROCESS] Run started (auto): 1 file(s), compress threshold 1.00 MB.
+2026-09-15 09:00:00 [INFO] [AIX:API] Preparing files...
+2026-09-15 09:00:00 [INFO] [AI EXTRACT] Processing Scan_0028.pdf (1/1)
+2026-09-15 09:00:00 [INFO] [AI EXTRACT] Preparing Scan_0028.pdf
+2026-09-15 09:00:00 [INFO] [AIX:COMPRESS] Scan_0028.pdf: 2.02 MB -> 0.66 MB
+2026-09-15 09:00:08 [INFO] [AIX:API] OK — Scan_0028.pdf (3 page(s), 4099 chars)
+2026-09-15 09:00:08 [INFO] [AIX:PROCESS] Scan_0028.pdf: supplier=F&B EVENING STORE PVT LTD, grn=RC-MAM-000020863, po=MAM-000021159, invoice=15609, conf=100%
+2026-09-15 09:00:08 [INFO] [AIX:API] Done — 1 ok, 0 error(s), 3 page(s) used this run.
+2026-09-15 09:00:08 [INFO] [AIX:PROCESS] Run complete - 1 ok, 0 error(s), 3 page(s) used.
+2026-09-15 09:00:40 [INFO] [WATCHER] New PDF detected: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED\Scan_0029.pdf
+2026-09-15 09:00:41 [INFO] [AUTO-INGEST API] Detected: Scan_0029.pdf (3.41 MB) — extracting...
+2026-09-15 09:00:41 [INFO] [AIX:SYSTEM] Auto-ingest (API) triggered by folder watcher.
+2026-09-15 09:00:41 [INFO] [AIX:PROCESS] Run started (auto): 1 file(s), compress threshold 1.00 MB.
+2026-09-15 09:00:41 [INFO] [AIX:API] Preparing files...
+2026-09-15 09:00:41 [INFO] [AI EXTRACT] Processing Scan_0029.pdf (1/1)
+2026-09-15 09:00:41 [INFO] [AI EXTRACT] Preparing Scan_0029.pdf
+2026-09-15 09:00:41 [INFO] [AI EXTRACT] Scan_0029.pdf has 4 pages — trimming to first 3 before compressing...
+2026-09-15 09:00:41 [INFO] [AIX:COMPRESS] Scan_0029.pdf: 3.41 MB -> 0.98 MB
+2026-09-15 09:00:51 [INFO] [AIX:API] OK — Scan_0029.pdf (3 page(s), 8753 chars)
+2026-09-15 09:00:51 [INFO] [AIX:PROCESS] Scan_0029.pdf: supplier=LTD F B EVENING STOR, grn=RC-MAM-000020864, po=MAM-000021136, invoice=15610, conf=100%
+2026-09-15 09:00:51 [INFO] [AIX:API] Done — 1 ok, 0 error(s), 3 page(s) used this run.
+2026-09-15 09:00:51 [INFO] [AIX:PROCESS] Run complete - 1 ok, 0 error(s), 3 page(s) used.
+2026-09-15 09:00:59 [INFO] [AIX:PROCESS] [LEARN] LTD F B EVENING STOR -> F&B EVENING STORE PVT LTD: learned alias "LTD F B EVENING STOR"; confirmed invoice pattern {0}{1}
+2026-09-15 09:00:59 [INFO] AI Extract cell updated.
+2026-09-15 09:01:25 [INFO] [WATCHER] New PDF detected: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED\Scan_0030.pdf
+2026-09-15 09:01:26 [INFO] [AUTO-INGEST API] Detected: Scan_0030.pdf (1.30 MB) — extracting...
+2026-09-15 09:01:26 [INFO] [AIX:SYSTEM] Auto-ingest (API) triggered by folder watcher.
+2026-09-15 09:01:26 [INFO] [AIX:PROCESS] Run started (auto): 1 file(s), compress threshold 1.00 MB.
+2026-09-15 09:01:26 [INFO] [AIX:API] Preparing files...
+2026-09-15 09:01:26 [INFO] [AI EXTRACT] Processing Scan_0030.pdf (1/1)
+2026-09-15 09:01:26 [INFO] [AI EXTRACT] Preparing Scan_0030.pdf
+2026-09-15 09:01:26 [INFO] [AIX:COMPRESS] Scan_0030.pdf: 1.30 MB -> 0.40 MB
+2026-09-15 09:01:32 [INFO] [AIX:API] OK — Scan_0030.pdf (2 page(s), 2526 chars)
+2026-09-15 09:01:32 [INFO] [AIX:PROCESS] Scan_0030.pdf: supplier=FEATHER INVESTMENT, grn=RC-MAM-000020799, po=MAM-000021099, invoice=2075, conf=100%
+2026-09-15 09:01:32 [INFO] [AIX:API] Done — 1 ok, 0 error(s), 2 page(s) used this run.
+2026-09-15 09:01:32 [INFO] [AIX:PROCESS] Run complete - 1 ok, 0 error(s), 2 page(s) used.
+2026-09-15 09:01:52 [INFO] Settings saved.
+2026-09-15 09:01:52 [INFO] [AIX:SYSTEM] Excel exported (30 rows) -> GRN_OUTPUT_20260915_090151.xlsx
+2026-09-15 09:01:52 [INFO] Excel exported: C:\Users\MAM-STORES\Downloads\grn\backup latest\GRN_OUTPUT_20260915_090151.xlsx
+2026-09-15 09:03:09 [INFO] AI Extract cell updated.
+2026-09-15 09:03:16 [INFO] [AIX:SEND] Scan_0001.pdf -> EMPARAL PVT LTD GRN RC-MAM-000020845 IN 5338.pdf
+2026-09-15 09:03:16 [INFO] [AIX:SEND] Scan_0002.pdf -> EMPARAL PVT LTD GRN RC-MAM-000020844 IN 5330.pdf
+2026-09-15 09:03:16 [INFO] [AIX:SEND] Scan_0003.pdf -> ZEGA MALDIVES GRN RC-MAM-000020843 IN 1108 2026.pdf
+2026-09-15 09:03:16 [INFO] [AIX:SEND] Scan_0004.pdf -> COSMOPOLITAN GRN RC-MAM-000020842 IN 0187610.pdf
+2026-09-15 09:03:16 [INFO] [AIX:SEND] Scan_0005.pdf -> HAPPY MARKET GRN RC-MAM-000020841 IN 21174.pdf
+2026-09-15 09:03:16 [INFO] [AIX:SEND] Scan_0006.pdf -> STANDARD & ORIGIN GRN RC-MAM-000020840 IN 9888.pdf
+2026-09-15 09:03:16 [INFO] [AIX:SEND] Scan_0007.pdf -> STANDARD & ORIGIN GRN RC-MAM-000020839 IN 9835.pdf
+2026-09-15 09:03:16 [INFO] [AIX:SEND] Scan_0008.pdf -> LILY INTERNATIONAL LTD GRN RC-MAM-000020838 IN 0556524.pdf
+2026-09-15 09:03:16 [INFO] [AIX:SEND] Scan_0009.pdf -> MAM PETTY CASH MVR GRN RC-MAM-000020837 IN 030926.pdf
+2026-09-15 09:03:16 [INFO] [AIX:SEND] Scan_0010.pdf -> FOOD SPECIALTY MALDIVES GRN RC-MAM-000020836 IN 103898.pdf
+2026-09-15 09:03:16 [INFO] [AIX:SEND] Scan_0011.pdf -> FOOD SPECIALTY MALDIVES GRN RC-MAM-000020835 IN 103890.pdf
+2026-09-15 09:03:16 [INFO] [AIX:SEND] Scan_0012.pdf -> FOOD SPECIALTY MALDIVES GRN RC-MAM-000020834 IN 103883.pdf
+2026-09-15 09:03:16 [INFO] [AIX:SEND] Scan_0013.pdf -> LYCORN MALDIVES GRN RC-MAM-000020833 IN 21154.pdf
+2026-09-15 09:03:16 [INFO] [AIX:SEND] Scan_0014.pdf -> LYCORN MALDIVES GRN RC-MAM-000020832 IN 3503.pdf
+2026-09-15 09:03:16 [INFO] [AIX:SEND] Scan_0015.pdf -> GLOBAL RIWA PVT LTD GRN RC-MAM-000020846 IN 26 1866.pdf
+2026-09-15 09:03:16 [INFO] [AIX:SEND] Scan_0016.pdf -> BIGWIG GRN RC-MAM-000020847 IN 2026-071.pdf
+2026-09-15 09:03:16 [INFO] [AIX:SEND] Scan_0017.pdf -> F&B EVENING STORE PVT LTD GRN RC-MAM-000020850 IN 15699.pdf
+2026-09-15 09:03:16 [INFO] [AIX:SEND] Scan_0018.pdf -> INNOVO MALDIVES GRN RC-MAM-000020851 IN 6283.pdf
+2026-09-15 09:03:16 [INFO] [AIX:SEND] Scan_0019.pdf -> MAA HARDWARE GRN RC-MAM-000020852 IN 008.pdf
+2026-09-15 09:03:16 [INFO] [AIX:SEND] Scan_0020.pdf -> HORIZON FISHERIES GRN RC-MAM-000020855 IN 7227.pdf
+2026-09-15 09:03:16 [INFO] [AIX:SEND] Scan_0021.pdf -> SEAFOOD ENTERPRISES GRN RC-MAM-000020856 IN 7136.pdf
+2026-09-15 09:03:16 [INFO] [AIX:SEND] Scan_0022.pdf -> INTERNATIONAL FOOD SOLUTION PVT LTD GRN RC-MAM-000020857 IN 294031.pdf
+2026-09-15 09:03:16 [INFO] [AIX:SEND] Scan_0023.pdf -> INTERNATIONAL FOOD SOLUTION PVT LTD GRN RC-MAM-000020858 IN 293762.pdf
+2026-09-15 09:03:16 [INFO] [AIX:SEND] Scan_0024.pdf -> LILY INTERNATIONAL PVT LTD GRN RC-MAM-000020859 IN 0556931.pdf
+2026-09-15 09:03:16 [INFO] [AIX:SEND] Scan_0025.pdf -> GRAPE EXPECTATIONS PVT LTD GRN RC-MAM-000020860 IN 0070812.pdf
+2026-09-15 09:03:16 [INFO] [AIX:SEND] Scan_0026.pdf -> MIAAF PVT LTD GRN RC-MAM-000020861 IN 6544.pdf
+2026-09-15 09:03:16 [INFO] [AIX:SEND] Scan_0027.pdf -> F&B EVENING STORE PVT LTD GRN RC-MAM-000020862 IN 15611.pdf
+2026-09-15 09:03:16 [INFO] [AIX:SEND] Scan_0028.pdf -> F&B EVENING STORE PVT LTD GRN RC-MAM-000020863 IN 15609.pdf
+2026-09-15 09:03:16 [INFO] [AIX:SEND] Scan_0029.pdf -> F&B EVENING STORE PVT LTD GRN RC-MAM-000020864 IN 15610.pdf
+2026-09-15 09:03:16 [INFO] [AIX:SEND] Scan_0030.pdf -> FEATHER INVESTMENT GRN RC-MAM-000020799 IN 2075.pdf
+2026-09-15 09:03:16 [INFO] [AIX:SEND] Sent to tabs - 30 renamed, 0 missing.
+2026-09-15 09:03:16 [INFO] Sent to tabs - 30 renamed, 0 missing.
+2026-09-15 09:03:16 [INFO] [AIX:SYSTEM] TEMP API PDFS cleaned - deleted 30 temp PDF(s) after send.
+2026-09-15 09:03:16 [INFO] TEMP API PDFS cleaned (30 file(s) removed).
+2026-09-15 09:03:24 [INFO] Transferring 30 PDF(s)…
+2026-09-15 09:03:24 [INFO] Transferred 30 PDF(s) to C:\Users\MAM-STORES\OneDrive - outrigger.com\Stores Shared\STORE\SCAN STORES\2026 (0 failed).
+2026-09-15 10:31:52 [INFO] Auto-ingest stopped.
+2026-09-15 10:31:52 [INFO] Application shutdown complete.
+2026-09-16 11:09:36 [INFO] Application started.
+2026-09-16 11:09:38 [INFO] Auto-ingest (api) watching: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED
+2026-09-16 11:09:38 [INFO] [WATCHER] Started watching C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED in api mode
+2026-09-16 11:10:52 [INFO] Settings saved.
+2026-09-16 11:10:58 [INFO] Settings saved.
+2026-09-16 11:11:02 [INFO] Listening… click the HP software's Scan button (60s, Esc cancels)
+2026-09-16 11:11:03 [INFO] Listening… click the HP software's Scan button (59s, Esc cancels)
+2026-09-16 11:11:04 [INFO] Settings saved.
+2026-09-16 11:11:04 [INFO] Remembered the Scan button: "?" in "Maafushivaru - Document Processing Hub".
+2026-09-16 11:11:58 [INFO] [WATCHER] New PDF detected: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED\Scan_0001.pdf
+2026-09-16 11:12:00 [INFO] [AUTO-INGEST API] Detected: Scan_0001.pdf (1.46 MB) — extracting...
+2026-09-16 11:12:00 [INFO] [AIX:SYSTEM] Auto-ingest (API) triggered by folder watcher.
+2026-09-16 11:12:00 [INFO] [AIX:PROCESS] Run started (auto): 1 file(s), compress threshold 1.00 MB.
+2026-09-16 11:12:00 [INFO] [AIX:API] Preparing files...
+2026-09-16 11:12:00 [INFO] [AI EXTRACT] Processing Scan_0001.pdf (1/1)
+2026-09-16 11:12:00 [INFO] [AI EXTRACT] Preparing Scan_0001.pdf
+2026-09-16 11:12:01 [INFO] [AIX:COMPRESS] Scan_0001.pdf: 1.46 MB -> 0.43 MB
+2026-09-16 11:12:10 [INFO] [AIX:API] OK — Scan_0001.pdf (2 page(s), 2197 chars)
+2026-09-16 11:12:10 [INFO] [AIX:PROCESS] Scan_0001.pdf: supplier=FEATHER INVESTMENT, grn=RC-MAM-000020798, po=MAM-000021040, invoice=2023, conf=100%
+2026-09-16 11:12:10 [INFO] [AIX:API] Done — 1 ok, 0 error(s), 2 page(s) used this run.
+2026-09-16 11:12:10 [INFO] [AIX:PROCESS] Run complete - 1 ok, 0 error(s), 2 page(s) used.
+2026-09-16 11:13:21 [INFO] [WATCHER] New PDF detected: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED\Scan_0002.pdf
+2026-09-16 11:13:21 [INFO] [AUTO-INGEST API] Detected: Scan_0002.pdf (2.17 MB) — extracting...
+2026-09-16 11:13:21 [INFO] [AIX:SYSTEM] Auto-ingest (API) triggered by folder watcher.
+2026-09-16 11:13:21 [INFO] [AIX:PROCESS] Run started (auto): 1 file(s), compress threshold 1.00 MB.
+2026-09-16 11:13:21 [INFO] [AIX:API] Preparing files...
+2026-09-16 11:13:21 [INFO] [AI EXTRACT] Processing Scan_0002.pdf (1/1)
+2026-09-16 11:13:22 [INFO] [AI EXTRACT] Preparing Scan_0002.pdf
+2026-09-16 11:13:22 [INFO] [AIX:COMPRESS] Scan_0002.pdf: 2.17 MB -> 0.71 MB
+2026-09-16 11:13:32 [INFO] [AIX:API] OK — Scan_0002.pdf (3 page(s), 4539 chars)
+2026-09-16 11:13:32 [INFO] [AIX:PROCESS] Scan_0002.pdf: supplier=F&B EVENING STORE PVT LTD, grn=RC-MAM-000020800, po=MAM-000021092, invoice=15396, conf=100%
+2026-09-16 11:13:32 [INFO] [AIX:API] Done — 1 ok, 0 error(s), 3 page(s) used this run.
+2026-09-16 11:13:32 [INFO] [AIX:PROCESS] Run complete - 1 ok, 0 error(s), 3 page(s) used.
+2026-09-16 11:14:35 [INFO] [WATCHER] New PDF detected: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED\Scan_0003.pdf
+2026-09-16 11:14:35 [INFO] [AUTO-INGEST API] Detected: Scan_0003.pdf (4.01 MB) — extracting...
+2026-09-16 11:14:35 [INFO] [AIX:SYSTEM] Auto-ingest (API) triggered by folder watcher.
+2026-09-16 11:14:35 [INFO] [AIX:PROCESS] Run started (auto): 1 file(s), compress threshold 1.00 MB.
+2026-09-16 11:14:35 [INFO] [AIX:API] Preparing files...
+2026-09-16 11:14:35 [INFO] [AI EXTRACT] Processing Scan_0003.pdf (1/1)
+2026-09-16 11:14:35 [INFO] [AI EXTRACT] Preparing Scan_0003.pdf
+2026-09-16 11:14:35 [INFO] [AI EXTRACT] Scan_0003.pdf has 4 pages — trimming to first 3 before compressing...
+2026-09-16 11:14:36 [INFO] [AIX:COMPRESS] Scan_0003.pdf: 4.01 MB -> 0.58 MB
+2026-09-16 11:14:45 [INFO] [AIX:API] OK — Scan_0003.pdf (3 page(s), 7750 chars)
+2026-09-16 11:14:45 [INFO] [AIX:PROCESS] Scan_0003.pdf: supplier=HOSPITALITY LTD, grn=RC-MAM-000020866, po=MAM-000021166, invoice=26 00986, conf=100%
+2026-09-16 11:14:45 [INFO] [AIX:API] Done — 1 ok, 0 error(s), 3 page(s) used this run.
+2026-09-16 11:14:45 [INFO] [AIX:PROCESS] Run complete - 1 ok, 0 error(s), 3 page(s) used.
+2026-09-16 11:15:05 [INFO] [WATCHER] New PDF detected: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED\Scan_0004.pdf
+2026-09-16 11:15:05 [INFO] [AUTO-INGEST API] Detected: Scan_0004.pdf (2.95 MB) — extracting...
+2026-09-16 11:15:05 [INFO] [AIX:SYSTEM] Auto-ingest (API) triggered by folder watcher.
+2026-09-16 11:15:05 [INFO] [AIX:PROCESS] Run started (auto): 1 file(s), compress threshold 1.00 MB.
+2026-09-16 11:15:05 [INFO] [AIX:API] Preparing files...
+2026-09-16 11:15:05 [INFO] [AI EXTRACT] Processing Scan_0004.pdf (1/1)
+2026-09-16 11:15:05 [INFO] [AI EXTRACT] Preparing Scan_0004.pdf
+2026-09-16 11:15:06 [INFO] [AIX:COMPRESS] Scan_0004.pdf: 2.95 MB -> 0.99 MB
+2026-09-16 11:15:15 [INFO] [AIX:API] OK — Scan_0004.pdf (3 page(s), 7819 chars)
+2026-09-16 11:15:15 [INFO] [AIX:PROCESS] Scan_0004.pdf: supplier=LTD SEAPLASH M, grn=RC-MAM-000020867, po=MAM-000021081, invoice=103298, conf=100%
+2026-09-16 11:15:15 [INFO] [AIX:API] Done — 1 ok, 0 error(s), 3 page(s) used this run.
+2026-09-16 11:15:15 [INFO] [AIX:PROCESS] Run complete - 1 ok, 0 error(s), 3 page(s) used.
+2026-09-16 11:16:06 [INFO] [WATCHER] New PDF detected: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED\Scan_0005.pdf
+2026-09-16 11:16:07 [INFO] [AUTO-INGEST API] Detected: Scan_0005.pdf (2.00 MB) — extracting...
+2026-09-16 11:16:07 [INFO] [AIX:SYSTEM] Auto-ingest (API) triggered by folder watcher.
+2026-09-16 11:16:07 [INFO] [AIX:PROCESS] Run started (auto): 1 file(s), compress threshold 1.00 MB.
+2026-09-16 11:16:07 [INFO] [AIX:API] Preparing files...
+2026-09-16 11:16:07 [INFO] [AI EXTRACT] Processing Scan_0005.pdf (1/1)
+2026-09-16 11:16:07 [INFO] [AI EXTRACT] Preparing Scan_0005.pdf
+2026-09-16 11:16:08 [INFO] [AIX:COMPRESS] Scan_0005.pdf: 2.00 MB -> 0.63 MB
+2026-09-16 11:16:14 [INFO] [AIX:API] OK — Scan_0005.pdf (3 page(s), 3484 chars)
+2026-09-16 11:16:14 [INFO] [AIX:PROCESS] Scan_0005.pdf: supplier=AMAGI EXPORTS, grn=RC-MAM-000020868, po=MAM-000021144, invoice=91089, conf=100%
+2026-09-16 11:16:14 [INFO] [AIX:API] Done — 1 ok, 0 error(s), 3 page(s) used this run.
+2026-09-16 11:16:14 [INFO] [AIX:PROCESS] Run complete - 1 ok, 0 error(s), 3 page(s) used.
+2026-09-16 11:16:20 [INFO] [AIX:PROCESS] [LEARN] 'SEAPLASH M LTD' wasn't a known supplier yet — added it.
+2026-09-16 11:16:20 [INFO] [AIX:PROCESS] [LEARN] LTD SEAPLASH M -> SEAPLASH M LTD: learned alias "LTD SEAPLASH M"; learned new invoice pattern {0}
+2026-09-16 11:16:20 [INFO] AI Extract cell updated.
+2026-09-16 11:17:27 [INFO] [WATCHER] New PDF detected: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED\Scan_0006.pdf
+2026-09-16 11:17:27 [INFO] [AUTO-INGEST API] Detected: Scan_0006.pdf (3.25 MB) — extracting...
+2026-09-16 11:17:27 [INFO] [AIX:SYSTEM] Auto-ingest (API) triggered by folder watcher.
+2026-09-16 11:17:27 [INFO] [AIX:PROCESS] Run started (auto): 1 file(s), compress threshold 1.00 MB.
+2026-09-16 11:17:27 [INFO] [AIX:API] Preparing files...
+2026-09-16 11:17:27 [INFO] [AI EXTRACT] Processing Scan_0006.pdf (1/1)
+2026-09-16 11:17:27 [INFO] [AI EXTRACT] Preparing Scan_0006.pdf
+2026-09-16 11:17:27 [INFO] [AIX:COMPRESS] Scan_0006.pdf: 3.25 MB -> 0.94 MB
+2026-09-16 11:17:37 [INFO] [AIX:API] OK — Scan_0006.pdf (3 page(s), 3988 chars)
+2026-09-16 11:17:37 [INFO] [AIX:PROCESS] Scan_0006.pdf: supplier=FANTASY PVT LTD, grn=RC-MAM-000020869, po=MAM-000021171, invoice=14099-2026, conf=100%
+2026-09-16 11:17:37 [INFO] [AIX:API] Done — 1 ok, 0 error(s), 3 page(s) used this run.
+2026-09-16 11:17:37 [INFO] [AIX:PROCESS] Run complete - 1 ok, 0 error(s), 3 page(s) used.
+2026-09-16 11:18:39 [INFO] [WATCHER] New PDF detected: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED\Scan_0007.pdf
+2026-09-16 11:18:41 [INFO] [AUTO-INGEST API] Detected: Scan_0007.pdf (3.77 MB) — extracting...
+2026-09-16 11:18:41 [INFO] [AIX:SYSTEM] Auto-ingest (API) triggered by folder watcher.
+2026-09-16 11:18:41 [INFO] [AIX:PROCESS] Run started (auto): 1 file(s), compress threshold 1.00 MB.
+2026-09-16 11:18:41 [INFO] [AIX:API] Preparing files...
+2026-09-16 11:18:41 [INFO] [AI EXTRACT] Processing Scan_0007.pdf (1/1)
+2026-09-16 11:18:41 [INFO] [AI EXTRACT] Preparing Scan_0007.pdf
+2026-09-16 11:18:41 [INFO] [AIX:COMPRESS] Scan_0007.pdf: 3.77 MB -> 0.98 MB
+2026-09-16 11:18:50 [INFO] [AIX:API] OK — Scan_0007.pdf (3 page(s), 4299 chars)
+2026-09-16 11:18:50 [INFO] [AIX:PROCESS] Scan_0007.pdf: supplier=FANTASY PVT LTD, grn=RC-MAM-000020870, po=MAM-000021125, invoice=14015-2026, conf=100%
+2026-09-16 11:18:50 [INFO] [AIX:API] Done — 1 ok, 0 error(s), 3 page(s) used this run.
+2026-09-16 11:18:50 [INFO] [AIX:PROCESS] Run complete - 1 ok, 0 error(s), 3 page(s) used.
+2026-09-16 11:19:28 [INFO] [WATCHER] New PDF detected: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED\Scan_0008.pdf
+2026-09-16 11:19:29 [INFO] [AUTO-INGEST API] Detected: Scan_0008.pdf (3.19 MB) — extracting...
+2026-09-16 11:19:29 [INFO] [AIX:SYSTEM] Auto-ingest (API) triggered by folder watcher.
+2026-09-16 11:19:29 [INFO] [AIX:PROCESS] Run started (auto): 1 file(s), compress threshold 1.00 MB.
+2026-09-16 11:19:29 [INFO] [AIX:API] Preparing files...
+2026-09-16 11:19:29 [INFO] [AI EXTRACT] Processing Scan_0008.pdf (1/1)
+2026-09-16 11:19:29 [INFO] [AI EXTRACT] Preparing Scan_0008.pdf
+2026-09-16 11:19:29 [INFO] [AIX:COMPRESS] Scan_0008.pdf: 3.19 MB -> 0.90 MB
+2026-09-16 11:19:37 [INFO] [AIX:API] OK — Scan_0008.pdf (3 page(s), 4103 chars)
+2026-09-16 11:19:37 [INFO] [AIX:PROCESS] Scan_0008.pdf: supplier=FANTASY PVT LTD, grn=RC-MAM-000020871, po=MAM-000021152, invoice=14038-2026, conf=100%
+2026-09-16 11:19:37 [INFO] [AIX:API] Done — 1 ok, 0 error(s), 3 page(s) used this run.
+2026-09-16 11:19:37 [INFO] [AIX:PROCESS] Run complete - 1 ok, 0 error(s), 3 page(s) used.
+2026-09-16 11:20:36 [INFO] [WATCHER] New PDF detected: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED\Scan_0009.pdf
+2026-09-16 11:20:37 [INFO] [AUTO-INGEST API] Detected: Scan_0009.pdf (1.80 MB) — extracting...
+2026-09-16 11:20:37 [INFO] [AIX:SYSTEM] Auto-ingest (API) triggered by folder watcher.
+2026-09-16 11:20:37 [INFO] [AIX:PROCESS] Run started (auto): 1 file(s), compress threshold 1.00 MB.
+2026-09-16 11:20:37 [INFO] [AIX:API] Preparing files...
+2026-09-16 11:20:37 [INFO] [AI EXTRACT] Processing Scan_0009.pdf (1/1)
+2026-09-16 11:20:37 [INFO] [AI EXTRACT] Preparing Scan_0009.pdf
+2026-09-16 11:20:37 [INFO] [AIX:COMPRESS] Scan_0009.pdf: 1.80 MB -> 0.57 MB
+2026-09-16 11:20:43 [INFO] [AIX:API] OK — Scan_0009.pdf (3 page(s), 3247 chars)
+2026-09-16 11:20:43 [INFO] [AIX:PROCESS] Scan_0009.pdf: supplier=INNOVO MALDIVES, grn=RC-MAM-000020872, po=MAM-000021178, invoice=IS 6284, conf=100%
+2026-09-16 11:20:43 [INFO] [AIX:API] Done — 1 ok, 0 error(s), 3 page(s) used this run.
+2026-09-16 11:20:43 [INFO] [AIX:PROCESS] Run complete - 1 ok, 0 error(s), 3 page(s) used.
+2026-09-16 11:21:20 [INFO] AI Extract cell updated.
+2026-09-16 11:21:42 [INFO] [WATCHER] New PDF detected: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED\Scan_0010.pdf
+2026-09-16 11:21:43 [INFO] [AUTO-INGEST API] Detected: Scan_0010.pdf (1.85 MB) — extracting...
+2026-09-16 11:21:43 [INFO] [AIX:SYSTEM] Auto-ingest (API) triggered by folder watcher.
+2026-09-16 11:21:43 [INFO] [AIX:PROCESS] Run started (auto): 1 file(s), compress threshold 1.00 MB.
+2026-09-16 11:21:43 [INFO] [AIX:API] Preparing files...
+2026-09-16 11:21:43 [INFO] [AI EXTRACT] Processing Scan_0010.pdf (1/1)
+2026-09-16 11:21:43 [INFO] [AI EXTRACT] Preparing Scan_0010.pdf
+2026-09-16 11:21:43 [INFO] [AIX:COMPRESS] Scan_0010.pdf: 1.85 MB -> 0.63 MB
+2026-09-16 11:21:50 [INFO] [AIX:API] OK — Scan_0010.pdf (2 page(s), 4900 chars)
+2026-09-16 11:21:50 [INFO] [AIX:PROCESS] Scan_0010.pdf: supplier=MISRAAB, grn=RC-MAM-000020873, po=MAM-000021069, invoice=3004091, conf=100%
+2026-09-16 11:21:50 [INFO] [AIX:API] Done — 1 ok, 0 error(s), 2 page(s) used this run.
+2026-09-16 11:21:50 [INFO] [AIX:PROCESS] Run complete - 1 ok, 0 error(s), 2 page(s) used.
+2026-09-16 11:22:31 [INFO] [WATCHER] New PDF detected: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED\Scan_0011.pdf
+2026-09-16 11:22:33 [INFO] [AUTO-INGEST API] Detected: Scan_0011.pdf (2.29 MB) — extracting...
+2026-09-16 11:22:33 [INFO] [AIX:SYSTEM] Auto-ingest (API) triggered by folder watcher.
+2026-09-16 11:22:33 [INFO] [AIX:PROCESS] Run started (auto): 1 file(s), compress threshold 1.00 MB.
+2026-09-16 11:22:33 [INFO] [AIX:API] Preparing files...
+2026-09-16 11:22:33 [INFO] [AI EXTRACT] Processing Scan_0011.pdf (1/1)
+2026-09-16 11:22:33 [INFO] [AI EXTRACT] Preparing Scan_0011.pdf
+2026-09-16 11:22:33 [INFO] [AIX:COMPRESS] Scan_0011.pdf: 2.29 MB -> 0.69 MB
+2026-09-16 11:22:40 [INFO] [AIX:API] OK — Scan_0011.pdf (3 page(s), 4030 chars)
+2026-09-16 11:22:40 [INFO] [AIX:PROCESS] Scan_0011.pdf: supplier=NASREENA ABDULLA (FISH SUPPLIER), grn=RC-MAM-000020876-20877, po=MAM-000021187, invoice=2026-0071 •, conf=100%
+2026-09-16 11:22:40 [INFO] [AIX:API] Done — 1 ok, 0 error(s), 3 page(s) used this run.
+2026-09-16 11:22:40 [INFO] [AIX:PROCESS] Run complete - 1 ok, 0 error(s), 3 page(s) used.
+2026-09-16 11:23:10 [INFO] [WATCHER] New PDF detected: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED\Scan_0012.pdf
+2026-09-16 11:23:10 [INFO] [AUTO-INGEST API] Detected: Scan_0012.pdf (1.91 MB) — extracting...
+2026-09-16 11:23:10 [INFO] [AIX:SYSTEM] Auto-ingest (API) triggered by folder watcher.
+2026-09-16 11:23:10 [INFO] [AIX:PROCESS] Run started (auto): 1 file(s), compress threshold 1.00 MB.
+2026-09-16 11:23:10 [INFO] [AIX:API] Preparing files...
+2026-09-16 11:23:10 [INFO] [AI EXTRACT] Processing Scan_0012.pdf (1/1)
+2026-09-16 11:23:10 [INFO] [AI EXTRACT] Preparing Scan_0012.pdf
+2026-09-16 11:23:11 [INFO] [AIX:COMPRESS] Scan_0012.pdf: 1.91 MB -> 0.61 MB
+2026-09-16 11:23:18 [INFO] [AIX:API] OK — Scan_0012.pdf (3 page(s), 3573 chars)
+2026-09-16 11:23:19 [INFO] [AIX:PROCESS] Scan_0012.pdf: supplier=MIAAF PVT LTD, grn=RC-MAM-000020789, po=MAM-000021093, invoice=6501, conf=100%
+2026-09-16 11:23:19 [INFO] [AIX:API] Done — 1 ok, 0 error(s), 3 page(s) used this run.
+2026-09-16 11:23:19 [INFO] [AIX:PROCESS] Run complete - 1 ok, 0 error(s), 3 page(s) used.
+2026-09-16 11:23:31 [INFO] AI Extract cell updated.
+2026-09-16 11:23:45 [INFO] AI Extract cell updated.
+2026-09-16 11:25:07 [INFO] [WATCHER] New PDF detected: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED\Scan_0013.pdf
+2026-09-16 11:25:08 [INFO] [AUTO-INGEST API] Detected: Scan_0013.pdf (1.34 MB) — extracting...
+2026-09-16 11:25:08 [INFO] [AIX:SYSTEM] Auto-ingest (API) triggered by folder watcher.
+2026-09-16 11:25:08 [INFO] [AIX:PROCESS] Run started (auto): 1 file(s), compress threshold 1.00 MB.
+2026-09-16 11:25:08 [INFO] [AIX:API] Preparing files...
+2026-09-16 11:25:08 [INFO] [AI EXTRACT] Processing Scan_0013.pdf (1/1)
+2026-09-16 11:25:08 [INFO] [AI EXTRACT] Preparing Scan_0013.pdf
+2026-09-16 11:25:08 [INFO] [AIX:COMPRESS] Scan_0013.pdf: 1.34 MB -> 0.46 MB
+2026-09-16 11:25:14 [INFO] [AIX:API] OK — Scan_0013.pdf (2 page(s), 3341 chars)
+2026-09-16 11:25:14 [INFO] [AIX:PROCESS] Scan_0013.pdf: supplier=HYDROGLOBAL PVT LTD, grn=RC-MAM-000020787, po=MAM-000021086, invoice=1652, conf=100%
+2026-09-16 11:25:14 [INFO] [AIX:API] Done — 1 ok, 0 error(s), 2 page(s) used this run.
+2026-09-16 11:25:14 [INFO] [AIX:PROCESS] Run complete - 1 ok, 0 error(s), 2 page(s) used.
+2026-09-16 11:25:47 [INFO] AI Extract cell updated.
+2026-09-16 11:26:12 [INFO] [WATCHER] New PDF detected: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED\Scan_0014.pdf
+2026-09-16 11:26:12 [INFO] [AUTO-INGEST API] Detected: Scan_0014.pdf (2.36 MB) — extracting...
+2026-09-16 11:26:13 [INFO] [AIX:SYSTEM] Auto-ingest (API) triggered by folder watcher.
+2026-09-16 11:26:13 [INFO] [AIX:PROCESS] Run started (auto): 1 file(s), compress threshold 1.00 MB.
+2026-09-16 11:26:13 [INFO] [AIX:API] Preparing files...
+2026-09-16 11:26:13 [INFO] [AI EXTRACT] Processing Scan_0014.pdf (1/1)
+2026-09-16 11:26:13 [INFO] [AI EXTRACT] Preparing Scan_0014.pdf
+2026-09-16 11:26:13 [INFO] [AIX:COMPRESS] Scan_0014.pdf: 2.36 MB -> 0.81 MB
+2026-09-16 11:26:23 [INFO] [AIX:API] OK — Scan_0014.pdf (3 page(s), 6186 chars)
+2026-09-16 11:26:23 [INFO] [AIX:PROCESS] Scan_0014.pdf: supplier=FEATHER INVESTMENT, grn=RC-MAM-000020780, po=MAM-000021082, invoice=2022, conf=100%
+2026-09-16 11:26:23 [INFO] [AIX:API] Done — 1 ok, 0 error(s), 3 page(s) used this run.
+2026-09-16 11:26:23 [INFO] [AIX:PROCESS] Run complete - 1 ok, 0 error(s), 3 page(s) used.
+2026-09-16 11:27:05 [INFO] [WATCHER] New PDF detected: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED\Scan_0015.pdf
+2026-09-16 11:27:07 [INFO] [AUTO-INGEST API] Detected: Scan_0015.pdf (2.36 MB) — extracting...
+2026-09-16 11:27:07 [INFO] [AIX:SYSTEM] Auto-ingest (API) triggered by folder watcher.
+2026-09-16 11:27:07 [INFO] [AIX:PROCESS] Run started (auto): 1 file(s), compress threshold 1.00 MB.
+2026-09-16 11:27:07 [INFO] [AIX:API] Preparing files...
+2026-09-16 11:27:07 [INFO] [AI EXTRACT] Processing Scan_0015.pdf (1/1)
+2026-09-16 11:27:07 [INFO] [AI EXTRACT] Preparing Scan_0015.pdf
+2026-09-16 11:27:07 [INFO] [AIX:COMPRESS] Scan_0015.pdf: 2.36 MB -> 0.70 MB
+2026-09-16 11:27:14 [INFO] [AIX:API] OK — Scan_0015.pdf (3 page(s), 3345 chars)
+2026-09-16 11:27:14 [INFO] [AIX:PROCESS] Scan_0015.pdf: supplier=COLOR BANK, grn=RC-MAM-000020764, po=MAM-000021035, invoice=274159, conf=100%
+2026-09-16 11:27:14 [INFO] [AIX:API] Done — 1 ok, 0 error(s), 3 page(s) used this run.
+2026-09-16 11:27:14 [INFO] [AIX:PROCESS] Run complete - 1 ok, 0 error(s), 3 page(s) used.
+2026-09-16 11:27:49 [INFO] [WATCHER] New PDF detected: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED\Scan_0016.pdf
+2026-09-16 11:27:49 [INFO] [AUTO-INGEST API] Detected: Scan_0016.pdf (1.56 MB) — extracting...
+2026-09-16 11:27:49 [INFO] [AIX:SYSTEM] Auto-ingest (API) triggered by folder watcher.
+2026-09-16 11:27:49 [INFO] [AIX:PROCESS] Run started (auto): 1 file(s), compress threshold 1.00 MB.
+2026-09-16 11:27:49 [INFO] [AIX:API] Preparing files...
+2026-09-16 11:27:49 [INFO] [AI EXTRACT] Processing Scan_0016.pdf (1/1)
+2026-09-16 11:27:49 [INFO] [AI EXTRACT] Preparing Scan_0016.pdf
+2026-09-16 11:27:49 [INFO] [AIX:COMPRESS] Scan_0016.pdf: 1.56 MB -> 0.46 MB
+2026-09-16 11:27:55 [INFO] [AIX:API] OK — Scan_0016.pdf (2 page(s), 2610 chars)
+2026-09-16 11:27:55 [INFO] [AIX:PROCESS] Scan_0016.pdf: supplier=FEATHER INVESTMENT, grn=RC-MAM-000020760, po=MAM-000021074, invoice=2025, conf=100%
+2026-09-16 11:27:55 [INFO] [AIX:API] Done — 1 ok, 0 error(s), 2 page(s) used this run.
+2026-09-16 11:27:55 [INFO] [AIX:PROCESS] Run complete - 1 ok, 0 error(s), 2 page(s) used.
+2026-09-16 11:28:30 [INFO] [WATCHER] New PDF detected: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED\Scan_0017.pdf
+2026-09-16 11:28:31 [INFO] [AUTO-INGEST API] Detected: Scan_0017.pdf (1.40 MB) — extracting...
+2026-09-16 11:28:31 [INFO] [AIX:SYSTEM] Auto-ingest (API) triggered by folder watcher.
+2026-09-16 11:28:31 [INFO] [AIX:PROCESS] Run started (auto): 1 file(s), compress threshold 1.00 MB.
+2026-09-16 11:28:31 [INFO] [AIX:API] Preparing files...
+2026-09-16 11:28:31 [INFO] [AI EXTRACT] Processing Scan_0017.pdf (1/1)
+2026-09-16 11:28:31 [INFO] [AI EXTRACT] Preparing Scan_0017.pdf
+2026-09-16 11:28:31 [INFO] [AIX:COMPRESS] Scan_0017.pdf: 1.40 MB -> 0.43 MB
+2026-09-16 11:28:37 [INFO] [AIX:API] OK — Scan_0017.pdf (2 page(s), 2597 chars)
+2026-09-16 11:28:37 [INFO] [AIX:PROCESS] Scan_0017.pdf: supplier=FEATHER INVESTMENT, grn=RC-MAM-000020759, po=MAM-000021087, invoice=2024, conf=100%
+2026-09-16 11:28:37 [INFO] [AIX:API] Done — 1 ok, 0 error(s), 2 page(s) used this run.
+2026-09-16 11:28:37 [INFO] [AIX:PROCESS] Run complete - 1 ok, 0 error(s), 2 page(s) used.
+2026-09-16 11:29:41 [INFO] [WATCHER] New PDF detected: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED\Scan_0018.pdf
+2026-09-16 11:29:42 [INFO] [AUTO-INGEST API] Detected: Scan_0018.pdf (1.95 MB) — extracting...
+2026-09-16 11:29:42 [INFO] [AIX:SYSTEM] Auto-ingest (API) triggered by folder watcher.
+2026-09-16 11:29:42 [INFO] [AIX:PROCESS] Run started (auto): 1 file(s), compress threshold 1.00 MB.
+2026-09-16 11:29:42 [INFO] [AIX:API] Preparing files...
+2026-09-16 11:29:42 [INFO] [AI EXTRACT] Processing Scan_0018.pdf (1/1)
+2026-09-16 11:29:42 [INFO] [AI EXTRACT] Preparing Scan_0018.pdf
+2026-09-16 11:29:42 [INFO] [AIX:COMPRESS] Scan_0018.pdf: 1.95 MB -> 0.60 MB
+2026-09-16 11:29:49 [INFO] [AIX:API] OK — Scan_0018.pdf (3 page(s), 3957 chars)
+2026-09-16 11:29:49 [INFO] [AIX:PROCESS] Scan_0018.pdf: supplier=EMPARAL PVT LTD, grn=RC-MAM-000020781, po=MAM-000021027, invoice=5189, conf=100%
+2026-09-16 11:29:49 [INFO] [AIX:API] Done — 1 ok, 0 error(s), 3 page(s) used this run.
+2026-09-16 11:29:49 [INFO] [AIX:PROCESS] Run complete - 1 ok, 0 error(s), 3 page(s) used.
+2026-09-16 11:30:29 [INFO] [WATCHER] New PDF detected: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED\Scan_0019.pdf
+2026-09-16 11:30:30 [INFO] [AUTO-INGEST API] Detected: Scan_0019.pdf (2.67 MB) — extracting...
+2026-09-16 11:30:30 [INFO] [AIX:SYSTEM] Auto-ingest (API) triggered by folder watcher.
+2026-09-16 11:30:30 [INFO] [AIX:PROCESS] Run started (auto): 1 file(s), compress threshold 1.00 MB.
+2026-09-16 11:30:30 [INFO] [AIX:API] Preparing files...
+2026-09-16 11:30:30 [INFO] [AI EXTRACT] Processing Scan_0019.pdf (1/1)
+2026-09-16 11:30:30 [INFO] [AI EXTRACT] Preparing Scan_0019.pdf
+2026-09-16 11:30:30 [INFO] [AIX:COMPRESS] Scan_0019.pdf: 2.67 MB -> 0.88 MB
+2026-09-16 11:30:41 [INFO] [AIX:API] OK — Scan_0019.pdf (3 page(s), 6802 chars)
+2026-09-16 11:30:41 [INFO] [AIX:PROCESS] Scan_0019.pdf: supplier=F&B EVENING STORE PVT LTD, grn=RC-MAM-000020782, po=MAM-000021006, invoice=15092, conf=100%
+2026-09-16 11:30:41 [INFO] [AIX:API] Done — 1 ok, 0 error(s), 3 page(s) used this run.
+2026-09-16 11:30:41 [INFO] [AIX:PROCESS] Run complete - 1 ok, 0 error(s), 3 page(s) used.
+2026-09-16 11:33:19 [INFO] [WATCHER] New PDF detected: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED\Scan_0020.pdf
+2026-09-16 11:33:20 [INFO] [AUTO-INGEST API] Detected: Scan_0020.pdf (2.44 MB) — extracting...
+2026-09-16 11:33:20 [INFO] [AIX:SYSTEM] Auto-ingest (API) triggered by folder watcher.
+2026-09-16 11:33:20 [INFO] [AIX:PROCESS] Run started (auto): 1 file(s), compress threshold 1.00 MB.
+2026-09-16 11:33:20 [INFO] [AIX:API] Preparing files...
+2026-09-16 11:33:20 [INFO] [AI EXTRACT] Processing Scan_0020.pdf (1/1)
+2026-09-16 11:33:20 [INFO] [AI EXTRACT] Preparing Scan_0020.pdf
+2026-09-16 11:33:21 [INFO] [AIX:COMPRESS] Scan_0020.pdf: 2.44 MB -> 0.77 MB
+2026-09-16 11:33:30 [INFO] [AIX:API] OK — Scan_0020.pdf (3 page(s), 4064 chars)
+2026-09-16 11:33:30 [INFO] [AIX:PROCESS] Scan_0020.pdf: supplier=FEATHER INVESTMENT, grn=RC-MAM-000020783, po=MAM-000021040, invoice=1913, conf=100%
+2026-09-16 11:33:30 [INFO] [AIX:API] Done — 1 ok, 0 error(s), 3 page(s) used this run.
+2026-09-16 11:33:30 [INFO] [AIX:PROCESS] Run complete - 1 ok, 0 error(s), 3 page(s) used.
+2026-09-16 11:34:17 [INFO] [WATCHER] New PDF detected: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED\Scan_0021.pdf
+2026-09-16 11:34:17 [INFO] [AUTO-INGEST API] Detected: Scan_0021.pdf (2.05 MB) — extracting...
+2026-09-16 11:34:18 [INFO] [AIX:SYSTEM] Auto-ingest (API) triggered by folder watcher.
+2026-09-16 11:34:18 [INFO] [AIX:PROCESS] Run started (auto): 1 file(s), compress threshold 1.00 MB.
+2026-09-16 11:34:18 [INFO] [AIX:API] Preparing files...
+2026-09-16 11:34:18 [INFO] [AI EXTRACT] Processing Scan_0021.pdf (1/1)
+2026-09-16 11:34:18 [INFO] [AI EXTRACT] Preparing Scan_0021.pdf
+2026-09-16 11:34:18 [INFO] [AIX:COMPRESS] Scan_0021.pdf: 2.05 MB -> 0.66 MB
+2026-09-16 11:34:26 [INFO] [AIX:API] OK — Scan_0021.pdf (3 page(s), 3968 chars)
+2026-09-16 11:34:26 [INFO] [AIX:PROCESS] Scan_0021.pdf: supplier=HAPPY MARKET, grn=RC-MAM-000020784, po=MAM-000021026, invoice=311131, conf=100%
+2026-09-16 11:34:26 [INFO] [AIX:API] Done — 1 ok, 0 error(s), 3 page(s) used this run.
+2026-09-16 11:34:26 [INFO] [AIX:PROCESS] Run complete - 1 ok, 0 error(s), 3 page(s) used.
+2026-09-16 11:35:07 [INFO] [WATCHER] New PDF detected: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED\Scan_0022.pdf
+2026-09-16 11:35:09 [INFO] [AUTO-INGEST API] Detected: Scan_0022.pdf (1.92 MB) — extracting...
+2026-09-16 11:35:09 [INFO] [AIX:SYSTEM] Auto-ingest (API) triggered by folder watcher.
+2026-09-16 11:35:09 [INFO] [AIX:PROCESS] Run started (auto): 1 file(s), compress threshold 1.00 MB.
+2026-09-16 11:35:09 [INFO] [AIX:API] Preparing files...
+2026-09-16 11:35:09 [INFO] [AI EXTRACT] Processing Scan_0022.pdf (1/1)
+2026-09-16 11:35:09 [INFO] [AI EXTRACT] Preparing Scan_0022.pdf
+2026-09-16 11:35:09 [INFO] [AIX:COMPRESS] Scan_0022.pdf: 1.92 MB -> 0.60 MB
+2026-09-16 11:35:16 [INFO] [AIX:API] OK — Scan_0022.pdf (3 page(s), 3682 chars)
+2026-09-16 11:35:16 [INFO] [AIX:PROCESS] Scan_0022.pdf: supplier=INNOVO MALDIVES, grn=RC-MAM-000020785, po=MAM-000021025, invoice=6263, conf=100%
+2026-09-16 11:35:16 [INFO] [AIX:API] Done — 1 ok, 0 error(s), 3 page(s) used this run.
+2026-09-16 11:35:16 [INFO] [AIX:PROCESS] Run complete - 1 ok, 0 error(s), 3 page(s) used.
+2026-09-16 11:35:42 [INFO] AI Extract cell updated.
+2026-09-16 11:36:14 [INFO] [WATCHER] New PDF detected: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED\Scan_0023.pdf
+2026-09-16 11:36:15 [INFO] [AUTO-INGEST API] Detected: Scan_0023.pdf (1.98 MB) — extracting...
+2026-09-16 11:36:15 [INFO] [AIX:SYSTEM] Auto-ingest (API) triggered by folder watcher.
+2026-09-16 11:36:15 [INFO] [AIX:PROCESS] Run started (auto): 1 file(s), compress threshold 1.00 MB.
+2026-09-16 11:36:15 [INFO] [AIX:API] Preparing files...
+2026-09-16 11:36:15 [INFO] [AI EXTRACT] Processing Scan_0023.pdf (1/1)
+2026-09-16 11:36:15 [INFO] [AI EXTRACT] Preparing Scan_0023.pdf
+2026-09-16 11:36:15 [INFO] [AIX:COMPRESS] Scan_0023.pdf: 1.98 MB -> 0.61 MB
+2026-09-16 11:36:22 [INFO] [AIX:API] OK — Scan_0023.pdf (3 page(s), 3631 chars)
+2026-09-16 11:36:22 [INFO] [AIX:PROCESS] Scan_0023.pdf: supplier=INNOVO MALDIVES, grn=RC-MAM-000020786, po=MAM-000020982, invoice=6264, conf=100%
+2026-09-16 11:36:22 [INFO] [AIX:API] Done — 1 ok, 0 error(s), 3 page(s) used this run.
+2026-09-16 11:36:22 [INFO] [AIX:PROCESS] Run complete - 1 ok, 0 error(s), 3 page(s) used.
+2026-09-16 11:37:01 [INFO] AI Extract cell updated.
+2026-09-16 11:37:27 [INFO] [WATCHER] New PDF detected: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED\Scan_0024.pdf
+2026-09-16 11:37:29 [INFO] [AUTO-INGEST API] Detected: Scan_0024.pdf (2.47 MB) — extracting...
+2026-09-16 11:37:29 [INFO] [AIX:SYSTEM] Auto-ingest (API) triggered by folder watcher.
+2026-09-16 11:37:29 [INFO] [AIX:PROCESS] Run started (auto): 1 file(s), compress threshold 1.00 MB.
+2026-09-16 11:37:29 [INFO] [AIX:API] Preparing files...
+2026-09-16 11:37:29 [INFO] [AI EXTRACT] Processing Scan_0024.pdf (1/1)
+2026-09-16 11:37:29 [INFO] [AI EXTRACT] Preparing Scan_0024.pdf
+2026-09-16 11:37:29 [INFO] [AIX:COMPRESS] Scan_0024.pdf: 2.47 MB -> 0.71 MB
+2026-09-16 11:37:37 [INFO] [AIX:API] OK — Scan_0024.pdf (3 page(s), 3547 chars)
+2026-09-16 11:37:37 [INFO] [AIX:PROCESS] Scan_0024.pdf: supplier=SALESCO PVT LTD, grn=RC-MAM-000020768, po=MAM-000021041, invoice=26163, conf=100%
+2026-09-16 11:37:37 [INFO] [AIX:API] Done — 1 ok, 0 error(s), 3 page(s) used this run.
+2026-09-16 11:37:37 [INFO] [AIX:PROCESS] Run complete - 1 ok, 0 error(s), 3 page(s) used.
+2026-09-16 11:37:41 [INFO] [WATCHER] New PDF detected: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED\Scan_0025.pdf
+2026-09-16 11:37:42 [INFO] [AUTO-INGEST API] Detected: Scan_0025.pdf (1.33 MB) — extracting...
+2026-09-16 11:37:42 [INFO] [AIX:SYSTEM] Auto-ingest (API) triggered by folder watcher.
+2026-09-16 11:37:42 [INFO] [AIX:PROCESS] Run started (auto): 1 file(s), compress threshold 1.00 MB.
+2026-09-16 11:37:42 [INFO] [AIX:API] Preparing files...
+2026-09-16 11:37:42 [INFO] [AI EXTRACT] Processing Scan_0025.pdf (1/1)
+2026-09-16 11:37:42 [INFO] [AI EXTRACT] Preparing Scan_0025.pdf
+2026-09-16 11:37:43 [INFO] [AIX:COMPRESS] Scan_0025.pdf: 1.33 MB -> 0.44 MB
+2026-09-16 11:37:48 [INFO] [AIX:API] OK — Scan_0025.pdf (2 page(s), 4001 chars)
+2026-09-16 11:37:49 [INFO] [AIX:PROCESS] Scan_0025.pdf: supplier=SIMDI CONSUMER PRODUCTS, grn=RC-MAM-000020769, po=MAM-000020995, invoice=12904, conf=100%
+2026-09-16 11:37:49 [INFO] [AIX:API] Done — 1 ok, 0 error(s), 2 page(s) used this run.
+2026-09-16 11:37:49 [INFO] [AIX:PROCESS] Run complete - 1 ok, 0 error(s), 2 page(s) used.
+2026-09-16 11:40:22 [INFO] [WATCHER] New PDF detected: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED\Scan_0026.pdf
+2026-09-16 11:40:23 [INFO] [AUTO-INGEST API] Detected: Scan_0026.pdf (1.21 MB) — extracting...
+2026-09-16 11:40:24 [INFO] [AIX:SYSTEM] Auto-ingest (API) triggered by folder watcher.
+2026-09-16 11:40:24 [INFO] [AIX:PROCESS] Run started (auto): 1 file(s), compress threshold 1.00 MB.
+2026-09-16 11:40:24 [INFO] [AIX:API] Preparing files...
+2026-09-16 11:40:24 [INFO] [AI EXTRACT] Processing Scan_0026.pdf (1/1)
+2026-09-16 11:40:24 [INFO] [AI EXTRACT] Preparing Scan_0026.pdf
+2026-09-16 11:40:24 [INFO] [AIX:COMPRESS] Scan_0026.pdf: 1.21 MB -> 0.42 MB
+2026-09-16 11:40:31 [INFO] [AIX:API] OK — Scan_0026.pdf (2 page(s), 3200 chars)
+2026-09-16 11:40:31 [INFO] [AIX:PROCESS] Scan_0026.pdf: supplier=LILY ENTERPRISES PVT LTD, grn=RC-MAM-000020770, po=MAM-000020997, invoice=2259 26, conf=100%
+2026-09-16 11:40:31 [INFO] [AIX:API] Done — 1 ok, 0 error(s), 2 page(s) used this run.
+2026-09-16 11:40:31 [INFO] [AIX:PROCESS] Run complete - 1 ok, 0 error(s), 2 page(s) used.
+2026-09-16 11:41:25 [INFO] [WATCHER] New PDF detected: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED\Scan_0027.pdf
+2026-09-16 11:41:25 [INFO] [AUTO-INGEST API] Detected: Scan_0027.pdf (1.13 MB) — extracting...
+2026-09-16 11:41:25 [INFO] [AIX:SYSTEM] Auto-ingest (API) triggered by folder watcher.
+2026-09-16 11:41:25 [INFO] [AIX:PROCESS] Run started (auto): 1 file(s), compress threshold 1.00 MB.
+2026-09-16 11:41:25 [INFO] [AIX:API] Preparing files...
+2026-09-16 11:41:25 [INFO] [AI EXTRACT] Processing Scan_0027.pdf (1/1)
+2026-09-16 11:41:25 [INFO] [AI EXTRACT] Preparing Scan_0027.pdf
+2026-09-16 11:41:26 [INFO] [AIX:COMPRESS] Scan_0027.pdf: 1.13 MB -> 0.38 MB
+2026-09-16 11:41:30 [INFO] [AIX:API] OK — Scan_0027.pdf (2 page(s), 3454 chars)
+2026-09-16 11:41:30 [INFO] [AIX:PROCESS] Scan_0027.pdf: supplier=SIMDI CONSUMER PRODUCTS, grn=RC-MAM-000020771, po=MAM-000021012, invoice=12903, conf=100%
+2026-09-16 11:41:30 [INFO] [AIX:API] Done — 1 ok, 0 error(s), 2 page(s) used this run.
+2026-09-16 11:41:30 [INFO] [AIX:PROCESS] Run complete - 1 ok, 0 error(s), 2 page(s) used.
+2026-09-16 11:42:26 [INFO] [WATCHER] New PDF detected: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED\Scan_0028.pdf
+2026-09-16 11:42:27 [INFO] [AUTO-INGEST API] Detected: Scan_0028.pdf (3.32 MB) — extracting...
+2026-09-16 11:42:27 [INFO] [AIX:SYSTEM] Auto-ingest (API) triggered by folder watcher.
+2026-09-16 11:42:27 [INFO] [AIX:PROCESS] Run started (auto): 1 file(s), compress threshold 1.00 MB.
+2026-09-16 11:42:27 [INFO] [AIX:API] Preparing files...
+2026-09-16 11:42:27 [INFO] [AI EXTRACT] Processing Scan_0028.pdf (1/1)
+2026-09-16 11:42:27 [INFO] [AI EXTRACT] Preparing Scan_0028.pdf
+2026-09-16 11:42:27 [INFO] [AI EXTRACT] Scan_0028.pdf has 5 pages — trimming to first 3 before compressing...
+2026-09-16 11:42:27 [INFO] [AIX:COMPRESS] Scan_0028.pdf: 3.32 MB -> 0.60 MB
+2026-09-16 11:42:35 [INFO] [AIX:API] OK — Scan_0028.pdf (3 page(s), 3974 chars)
+2026-09-16 11:42:35 [INFO] [AIX:PROCESS] Scan_0028.pdf: supplier=PREMIUM SUPPLIES, grn=RC-MAM-000020772, po=MAM-000021010, invoice=PS-5400, conf=100%
+2026-09-16 11:42:35 [INFO] [AIX:API] Done — 1 ok, 0 error(s), 3 page(s) used this run.
+2026-09-16 11:42:35 [INFO] [AIX:PROCESS] Run complete - 1 ok, 0 error(s), 3 page(s) used.
+2026-09-16 11:44:22 [INFO] AI Extract cell updated.
+2026-09-16 11:44:47 [INFO] [WATCHER] New PDF detected: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED\Scan_0029.pdf
+2026-09-16 11:44:49 [INFO] [AUTO-INGEST API] Detected: Scan_0029.pdf (1.05 MB) — extracting...
+2026-09-16 11:44:49 [INFO] [AIX:SYSTEM] Auto-ingest (API) triggered by folder watcher.
+2026-09-16 11:44:49 [INFO] [AIX:PROCESS] Run started (auto): 1 file(s), compress threshold 1.00 MB.
+2026-09-16 11:44:49 [INFO] [AIX:API] Preparing files...
+2026-09-16 11:44:49 [INFO] [AI EXTRACT] Processing Scan_0029.pdf (1/1)
+2026-09-16 11:44:49 [INFO] [AI EXTRACT] Preparing Scan_0029.pdf
+2026-09-16 11:44:49 [INFO] [AIX:COMPRESS] Scan_0029.pdf: 1.05 MB -> 0.37 MB
+2026-09-16 11:44:54 [INFO] [AIX:API] OK — Scan_0029.pdf (2 page(s), 2698 chars)
+2026-09-16 11:44:54 [INFO] [AIX:PROCESS] Scan_0029.pdf: supplier=LILY ENTERPRISES PVT LTD, grn=RC-MAM-000020773, po=MAM-000021016, invoice=2260 26, conf=100%
+2026-09-16 11:44:54 [INFO] [AIX:API] Done — 1 ok, 0 error(s), 2 page(s) used this run.
+2026-09-16 11:44:54 [INFO] [AIX:PROCESS] Run complete - 1 ok, 0 error(s), 2 page(s) used.
+2026-09-16 11:45:34 [INFO] [WATCHER] New PDF detected: C:\Users\MAM-STORES\Downloads\grn\backup latest\SCANNED\Scan_0030.pdf
+2026-09-16 11:45:34 [INFO] [AUTO-INGEST API] Detected: Scan_0030.pdf (2.06 MB) — extracting...
+2026-09-16 11:45:34 [INFO] [AIX:SYSTEM] Auto-ingest (API) triggered by folder watcher.
+2026-09-16 11:45:34 [INFO] [AIX:PROCESS] Run started (auto): 1 file(s), compress threshold 1.00 MB.
+2026-09-16 11:45:34 [INFO] [AIX:API] Preparing files...
+2026-09-16 11:45:34 [INFO] [AI EXTRACT] Processing Scan_0030.pdf (1/1)
+2026-09-16 11:45:34 [INFO] [AI EXTRACT] Preparing Scan_0030.pdf
+2026-09-16 11:45:34 [INFO] [AIX:COMPRESS] Scan_0030.pdf: 2.06 MB -> 0.66 MB
+2026-09-16 11:45:42 [INFO] [AIX:API] OK — Scan_0030.pdf (3 page(s), 4073 chars)
+2026-09-16 11:45:42 [INFO] [AIX:PROCESS] Scan_0030.pdf: supplier=MAA HARDWARE, grn=RC-MAM-000020774, po=MAM-000021044, invoice=078, conf=100%
+2026-09-16 11:45:42 [INFO] [AIX:API] Done — 1 ok, 0 error(s), 3 page(s) used this run.
+2026-09-16 11:45:42 [INFO] [AIX:PROCESS] Run complete - 1 ok, 0 error(s), 3 page(s) used.
+2026-09-16 11:47:27 [INFO] [AIX:SEND] Scan_0001.pdf -> FEATHER INVESTMENT GRN RC-MAM-000020798 IN 2023.pdf
+2026-09-16 11:47:27 [INFO] [AIX:SEND] Scan_0002.pdf -> F&B EVENING STORE PVT LTD GRN RC-MAM-000020800 IN 15396.pdf
+2026-09-16 11:47:27 [INFO] [AIX:SEND] Scan_0003.pdf -> HOSPITALITY LTD GRN RC-MAM-000020866 IN 26 00986.pdf
+2026-09-16 11:47:27 [INFO] [AIX:SEND] Scan_0004.pdf -> SEAPLASH M LTD GRN RC-MAM-000020867 IN 103298.pdf
+2026-09-16 11:47:27 [INFO] [AIX:SEND] Scan_0005.pdf -> AMAGI EXPORTS GRN RC-MAM-000020868 IN 91089.pdf
+2026-09-16 11:47:27 [INFO] [AIX:SEND] Scan_0006.pdf -> FANTASY PVT LTD GRN RC-MAM-000020869 IN 14099-2026.pdf
+2026-09-16 11:47:27 [INFO] [AIX:SEND] Scan_0007.pdf -> FANTASY PVT LTD GRN RC-MAM-000020870 IN 14015-2026.pdf
+2026-09-16 11:47:27 [INFO] [AIX:SEND] Scan_0008.pdf -> FANTASY PVT LTD GRN RC-MAM-000020871 IN 14038-2026.pdf
+2026-09-16 11:47:27 [INFO] [AIX:SEND] Scan_0009.pdf -> INNOVO MALDIVES GRN RC-MAM-000020872 IN 18 6284.pdf
+2026-09-16 11:47:27 [INFO] [AIX:SEND] Scan_0010.pdf -> MISRAAB GRN RC-MAM-000020873 IN 3004091.pdf
+2026-09-16 11:47:27 [INFO] [AIX:SEND] Scan_0011.pdf -> NASREENA ABDULLA (FISH SUPPLIER) GRN RC-MAM-000020876 IN 2026-0071 •.pdf
+2026-09-16 11:47:27 [INFO] [AIX:SEND] Scan_0012.pdf -> MIAAF PVT LTD GRN RC-MAM-000020789 IN 6501.pdf
+2026-09-16 11:47:27 [INFO] [AIX:SEND] Scan_0013.pdf -> HYDROGLOBAL PVT LTD GRN RC-MAM-000020787 IN 1659.pdf
+2026-09-16 11:47:27 [INFO] [AIX:SEND] Scan_0014.pdf -> FEATHER INVESTMENT GRN RC-MAM-000020780 IN 2022.pdf
+2026-09-16 11:47:27 [INFO] [AIX:SEND] Scan_0015.pdf -> COLOR BANK GRN RC-MAM-000020764 IN 274159.pdf
+2026-09-16 11:47:27 [INFO] [AIX:SEND] Scan_0016.pdf -> FEATHER INVESTMENT GRN RC-MAM-000020760 IN 2025.pdf
+2026-09-16 11:47:27 [INFO] [AIX:SEND] Scan_0017.pdf -> FEATHER INVESTMENT GRN RC-MAM-000020759 IN 2024.pdf
+2026-09-16 11:47:27 [INFO] [AIX:SEND] Scan_0018.pdf -> EMPARAL PVT LTD GRN RC-MAM-000020781 IN 5189.pdf
+2026-09-16 11:47:27 [INFO] [AIX:SEND] Scan_0019.pdf -> F&B EVENING STORE PVT LTD GRN RC-MAM-000020782 IN 15092.pdf
+2026-09-16 11:47:27 [INFO] [AIX:SEND] Scan_0020.pdf -> FEATHER INVESTMENT GRN RC-MAM-000020783 IN 1913.pdf
+2026-09-16 11:47:27 [INFO] [AIX:SEND] Scan_0021.pdf -> HAPPY MARKET GRN RC-MAM-000020784 IN 311131.pdf
+2026-09-16 11:47:27 [INFO] [AIX:SEND] Scan_0022.pdf -> INNOVO MALDIVES GRN RC-MAM-000020785 IN 6263.pdf
+2026-09-16 11:47:27 [INFO] [AIX:SEND] Scan_0023.pdf -> INNOVO MALDIVES GRN RC-MAM-000020786 IN 6264.pdf
+2026-09-16 11:47:27 [INFO] [AIX:SEND] Scan_0024.pdf -> SALESCO PVT LTD GRN RC-MAM-000020768 IN 26163.pdf
+2026-09-16 11:47:27 [INFO] [AIX:SEND] Scan_0025.pdf -> SIMDI CONSUMER PRODUCTS GRN RC-MAM-000020769 IN 12904.pdf
+2026-09-16 11:47:27 [INFO] [AIX:SEND] Scan_0026.pdf -> LILY ENTERPRISES PVT LTD GRN RC-MAM-000020770 IN 2259 26.pdf
+2026-09-16 11:47:27 [INFO] [AIX:SEND] Scan_0027.pdf -> SIMDI CONSUMER PRODUCTS GRN RC-MAM-000020771 IN 12903.pdf
+2026-09-16 11:47:27 [INFO] [AIX:SEND] Scan_0028.pdf -> PREMIUM SUPPLIES GRN RC-MAM-000020772 IN 26-5400.pdf
+2026-09-16 11:47:27 [INFO] [AIX:SEND] Scan_0029.pdf -> LILY ENTERPRISES PVT LTD GRN RC-MAM-000020773 IN 2260 26.pdf
+2026-09-16 11:47:27 [INFO] [AIX:SEND] Scan_0030.pdf -> MAA HARDWARE GRN RC-MAM-000020774 IN 078.pdf
+2026-09-16 11:47:27 [INFO] [AIX:SEND] Sent to tabs - 30 renamed, 0 missing.
+2026-09-16 11:47:27 [INFO] Sent to tabs - 30 renamed, 0 missing.
+2026-09-16 11:47:27 [INFO] [AIX:SYSTEM] TEMP API PDFS cleaned - deleted 30 temp PDF(s) after send.
+2026-09-16 11:47:27 [INFO] TEMP API PDFS cleaned (30 file(s) removed).
+2026-09-16 11:47:31 [INFO] [AIX:SEND] Sent to tabs - 0 renamed, 0 missing.
+2026-09-16 11:47:31 [INFO] Sent to tabs - 0 renamed, 0 missing.
+2026-09-16 11:47:33 [INFO] Settings saved.
+2026-09-16 11:47:33 [INFO] [AIX:SYSTEM] Excel exported (30 rows) -> GRN_OUTPUT_20260916_114733.xlsx
+2026-09-16 11:47:33 [INFO] Excel exported: C:\Users\MAM-STORES\Downloads\grn\backup latest\GRN_OUTPUT_20260916_114733.xlsx
+2026-09-16 11:48:15 [INFO] Transferring 30 PDF(s)…
+2026-09-16 11:48:15 [INFO] Transferred 30 PDF(s) to C:\Users\MAM-STORES\OneDrive - outrigger.com\Stores Shared\STORE\SCAN STORES\2026 (0 failed).
+2026-09-16 12:18:54 [INFO] Auto-ingest stopped.
+2026-09-16 12:18:54 [INFO] Application shutdown complete.

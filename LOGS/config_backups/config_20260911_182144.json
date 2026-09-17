@@ -15,11 +15,14 @@
         "ALAAN COMPANY PVT LTD",
         "ALBA INTERNATIONAL",
         "ALIA INVESTMENTS",
+        "ALIHAVA CONSTRUCTION & TRADING CO",
         "ALIHAVA CONSTRUCTION & TRADING CO PVT LTD",
+        "ALLA INVEST",
         "AMAGI EXPORTS",
         "AMINATH SINAZ",
         "ANAKEE",
         "ARAABY PVT LTD",
+        "ARSEAFOODS GMBH",
         "ASTERS",
         "ASTRABON",
         "ATOLL MARKET",
@@ -32,6 +35,7 @@
         "BIGWIG",
         "BIZ SOLUTIONS",
         "BLENX PVT LTD",
+        "BLUE BIRD COMPANT",
         "BLUE BIRD COMPANY",
         "BROTHERHOOD SHOP",
         "CAMBRO NILKAMAL",
@@ -54,6 +58,7 @@
         "ECOPURE WATERS INTERNATIONAL LTD",
         "EGO TIMBER",
         "EMPARAL PVT LTD",
+        "EURO MARKETING",
         "EURO MARKETING PVT LTD",
         "EVO SOLUTIONS",
         "F&B EVENING STORE PVT LTD",
@@ -78,10 +83,14 @@
         "HEALTH AND GLOW PVT LTD",
         "HENMAN TRADING",
         "HMHI COMPANY",
+        "HMHI COMPANY LIMITADE",
+        "HMHI COMPANY LIMITED",
+        "HMHI COMPANY PRIVATE LTD",
         "HONEY VIEW HARDWARE",
         "HORIZON FISHERIES",
         "HOSPITALITY LTD",
         "HUIZHOU ALPHA SAUNA & SWIMMING POOL EQUIPMENT CO.LTD",
+        "HYDRO GLOBAL PVT LTD",
         "HYDROGLOBAL PVT LTD",
         "IFS GLOBAL PVT LTD",
         "IKEBANA",
@@ -99,6 +108,7 @@
         "KOOLTEMP MALDIVES",
         "L&R TRADING",
         "LEO STORES PVT LTD",
+        "LILY ENTERPRISE PVT LTD",
         "LILY ENTERPRISES PVT LTD",
         "LILY INTERNATIONAL PVT LTD",
         "LINK SERVE",
@@ -107,12 +117,12 @@
         "LOST SOUVENIRS",
         "LOTUS FIHAARA",
         "LYCORN MALDIVES",
-        "M GLASS & ALU",
+        "LYCORN MALDIVES PVT LTD",
+        "M-GLASS & ALUMINIUM",
         "M7 PRINT",
         "MAA HARDWARE",
         "MACHINERY PART",
         "MAM PETTY CASH",
-        "MAM PETTY CASH MVR",
         "MARITIME & MERCANTILE INTERNATIONAL MV",
         "MAZIYA TRADERS",
         "MIAAF PVT LTD",
@@ -130,9 +140,11 @@
         "OSMOSIS ASIA",
         "OSTRAVA PRIVATE LTD",
         "PACIFIC TECHNOLOGIES",
+        "PACIFIC TECHNOLOGIES PVT LTD",
         "PALM TREE MARINE",
         "PERSONAL COMPUTERS",
         "POISE DISTRIBUTORS",
+        "POISE DISTRIBUTORS PVT LTD",
         "POLL TABLE",
         "PONY SPA",
         "PREMIUM SUPPLIES",
@@ -160,10 +172,10 @@
         "SAMAN TRADING",
         "SAWHNEY FOOD STAFF TRADING CO.",
         "SEA & SAND TRADING PVT LTD",
+        "SEAFOOD ENTERPRISES",
         "SEAFOOD ENTERPRISES PVT LTD",
         "SEAGEAR",
         "SEALANDS PVT LTD",
-        "SEAPLASH M LTD",
         "SEASPLASH MALDIVES",
         "SERANDIB PVT LTD",
         "SHENZHEN SANHE E-COMMERCE CO. LTD",
@@ -171,6 +183,7 @@
         "SIMDI CONSUMER PRODUCTS",
         "SIMDI TECH TECHNOLOGY",
         "SONEE HARDWARE",
+        "SONEE HARDWARE PVT LTD",
         "SOVEREIGN AGENCIES PVT LTD",
         "STANDARD & ORIGIN MARKETING",
         "STEEL HARDWARE",
@@ -194,7 +207,6 @@
         "WUHAN ZHAIKE NETWORK",
         "XTAN GAVIN ELECTRONIC",
         "YONKA PARIS",
-        "ZEGA MALDIVES",
         "ZIP INVESTMENT PVT LTD"
     ],
     "aliases": {
@@ -251,7 +263,8 @@
             "BESTBUY MALDIVES PVY LTD",
             "BESTUBY MALDIVES PVT LTD",
             "BSETBUY MALDIVES PVT LTD",
-            "BESTBYU MALDIVES PVT LTD"
+            "BESTBYU MALDIVES PVT LTD",
+            "UNKNOWN SUPPLIER"
         ],
         "BIGWIG": [
             "BIGIWG",
@@ -261,8 +274,7 @@
             "BIZ SOLUTIION LTD",
             "BIZ SOLUTION",
             "BIZ SOLUTIONS PVT LTD",
-            "IBM SOLUTIONS",
-            "BIZ SOLUTIONS PVT I"
+            "IBM SOLUTIONS"
         ],
         "BLENX PVT LTD": [
             "BLENX",
@@ -285,7 +297,9 @@
             "CHEMLAB PRIVATE LIMITADE",
             "CHEMLAB PRIVATE"
         ],
-        "COLORLAND": [],
+        "COLORLAND": [
+            "COLOR BANK"
+        ],
         "COSMOPOLITAN": [
             "COSMOPLLITA",
             "COSMOPLITAN",
@@ -298,7 +312,8 @@
             "COSMOPOTITAN",
             "COSMOPOLITAN PVT LTD",
             "COMSOPOLITAN",
-            "COSMOOLITAN"
+            "COSMOOLITAN",
+            "UNKNOWN SUPPLIER"
         ],
         "COSMERC MALDIVES": [
             "COSMERC"
@@ -349,7 +364,9 @@
         "F&B EVENING STORE PVT LTD": [
             "F&B EVENING STORY PVT LTD",
             "F & B EVENNING STORE PVT LTD",
-            "F&B EVENIN G STORE PVT LTD"
+            "F&B EVENIN G STORE PVT LTD",
+            "ALIHAVA CONSTRUCTION & TRADING CO PVT LTD",
+            "ALAAN COMPANY PVT LTD"
         ],
         "FANTASY PVT LTD": [
             "FANTASY",
@@ -369,7 +386,7 @@
             "FOOD SPECAILTY MALDIVES",
             "FOOD S PECIALTY MALDIVES",
             "FOOD SPECI ALTY MALDIVES",
-            "MALDIVES FOOD SPECIALTY"
+            "UNKNOWN SUPPLIER"
         ],
         "FRELLA INTERNATIONAL": [
             "FRELLA INTERNATIONAL PVT LTD",
@@ -401,7 +418,8 @@
         ],
         "GRAPE EXPECTATIONS PVT LTD": [
             "GRAPE EXPECTATIONS",
-            "GRAPE EXPECTATION"
+            "GRAPE EXPECTATION",
+            "ALAAN COMPANY PVT LTD"
         ],
         "GREEN PATH PVT LTD": [
             "GREEN PATH",
@@ -415,10 +433,7 @@
             "HAPPY MARKETS"
         ],
         "HMHI COMPANY": [
-            "HMHI COM LIMITED",
-            "HMHI COMPANY LIMITADE",
-            "HMHI COMPANY LIMITED",
-            "HMHI COMPANY PRIVATE LTD"
+            "HMHI COM LIMITED"
         ],
         "HORIZON FISHERIES": [
             "HORIZON FISHIRES",
@@ -486,8 +501,7 @@
             "LILY INTERPRISE",
             "LILY ENTERPRIESE",
             "LILY ETERPRISES",
-            "LILY ETERPRIESE",
-            "LILY ENTERPRISE PVT LTD"
+            "LILY ETERPRIESE"
         ],
         "LILY INTERNATIONAL PVT LTD": [
             "LILY INTERNATIONAL",
@@ -499,8 +513,7 @@
             "LILY INT ERNATIONAL PVT LTD",
             "LILY I NTERNATIONAL PVT LTD",
             "LILY I NTERNATIONAL PTV LTD",
-            "LILY IN TERNATIONAL PVT LTD",
-            "LILY INTERNATIONAL LTD"
+            "LILY IN TERNATIONAL PVT LTD"
         ],
         "LOLLO WHOLESALE": [
             "LOLLO WHOLE SALE",
@@ -520,8 +533,7 @@
             "LYCRON MALDIVES",
             "LYCRON MALDEVES",
             "LYCRON",
-            "LYCRON MALDIVES PVT LTD",
-            "LYCORN MALDIVES PVT LTD"
+            "LYCRON MALDIVES PVT LTD"
         ],
         "MAA HARDWARE": [
             "MAA HARDAWRE",
@@ -550,7 +562,8 @@
             "MMX TRADERS",
             "MMX TRADERSPVT LTD",
             "MMX TRARDERS PVT LTD",
-            "MMX TRADE RS PVT LTD"
+            "MMX TRADE RS PVT LTD",
+            "UNKNOWN SUPPLIER"
         ],
         "NASREENA ABDULLA (FISH SUPPLIER)": [
             "NASREENA ABDULLA",
@@ -582,7 +595,8 @@
             "PRIMIUM SUPPLIER"
         ],
         "PROCURE PLUS": [
-            "PROCURE PLUS PVT LTD"
+            "PROCURE PLUS PVT LTD",
+            "OFFICE PLUS PVT LTD"
         ],
         "PURE SHORES": [
             "PURE SHOES",
@@ -628,7 +642,8 @@
             "SEAFOOD ENTERPRISES",
             "SEAFOOD ENTERPRISE",
             "SEAFOOD ENTERPRSES",
-            "SEAFOOD ETERPRISES"
+            "SEAFOOD ETERPRISES",
+            "FRONTIER MARKETS ENTERPRISES PVT LTD"
         ],
         "SEALANDS PVT LTD": [
             "SEALANDS PVT",
@@ -670,7 +685,8 @@
         ],
         "STANDARD & ORIGIN MARKETING": [
             "STANDARD & ORIGIN",
-            "STANDARD AND ORIGIN"
+            "STANDARD AND ORIGIN",
+            "EURO MARKETING PVT LTD"
         ],
         "SUN FRONT LIGHTING": [
             "SUN FRONT LIGHTIN"
@@ -689,7 +705,8 @@
         "VB BROTHERS PVT LTD": [
             "VB BROTHERS",
             "VB BROTHER",
-            "VB BROTHER PVT LTD"
+            "VB BROTHER PVT LTD",
+            "UNKNOWN SUPPLIER"
         ],
         "VILLA HAKATHA PVT LTD": [
             "VILLA HAKATHA",
@@ -716,36 +733,75 @@
             "ALIA IVESTMENT PVT LTD",
             "ALIA INVESMENT PVT LTD"
         ],
+        "BLUE BIRD COMPANT": [
+            "BLUE BIRD COMPANY"
+        ],
+        "SEAFOOD ENTERPRISES": [
+            "FRONTIER MARKETS ENTERPRISES PVT LTD"
+        ],
+        "HMHI COMPANY PRIVATE LTD": [
+            "UNKNOWN SUPPLIER"
+        ],
         "OFFICE PLUS PVT LTD": [
             "OFFICE PLUS PVT LT"
         ],
-        "HUIZHOU ALPHA SAUNA & SWIMMING POOL EQUIPMENT CO.LTD": [],
-        "REGIUM FOOD EXPORTD LLP": [],
-        "ECOPURE WATERS INTERNATIONAL LTD": [],
-        "RATERIA FABRICS": [],
-        "HEALTH AND GLOW PVT LTD": [],
+        "HYDRO GLOBAL PVT LTD": [
+            "ALIHAVA CONSTRUCTION & TRADING CO PVT LTD"
+        ],
+        "POISE DISTRIBUTORS PVT LTD": [
+            "ALIHAVA CONSTRUCTION & TRADING CO PVT LTD"
+        ],
+        "HUIZHOU ALPHA SAUNA & SWIMMING POOL EQUIPMENT CO.LTD": [
+            "GUANGZHOU HENGYANG LIGHTING EQUIPMENT CO., LTD"
+        ],
+        "REGIUM FOOD EXPORTD LLP": [
+            "EX"
+        ],
+        "ECOPURE WATERS INTERNATIONAL LTD": [
+            "LILY INTERNATIONAL PVT LTD"
+        ],
+        "RATERIA FABRICS": [
+            "ALIHAVA CONSTRUCTION & TRADING CO PVT LTD"
+        ],
+        "HEALTH AND GLOW PVT LTD": [
+            "ALIHAVA CONSTRUCTION & TRADING CO PVT LTD"
+        ],
+        "LYCORN MALDIVES PVT LTD": [
+            "ALIHAVA CONSTRUCTION & TRADING CO PVT LTD",
+            "ALAAN COMPANY PVT LTD"
+        ],
+        "SONEE HARDWARE PVT LTD": [
+            "ALIHAVA CONSTRUCTION & TRADING CO PVT LTD"
+        ],
+        "PACIFIC TECHNOLOGIES PVT LTD": [
+            "PACIFIC TECHNOLOGIES"
+        ],
+        "HMHI COMPANY LIMITADE": [
+            "UNKNOWN SUPPLIER"
+        ],
         "ALAAN COMPANY PVT LTD": [
             "HMHI COMPANY PRIVATE LTD"
         ],
-        "SEA & SAND TRADING PVT LTD": [],
-        "HONEY VIEW HARDWARE": [],
-        "SIMDI BONDED WAREHOUSE": [],
-        "ZEGA MALDIVES": [],
-        "M GLASS & ALU": [
-            "M GLASS ALU",
-            "M-GLASS & ALUMINIUM"
+        "HMHI COMPANY LIMITED": [
+            "HMHI COMPANY LIMITADE"
         ],
-        "MAM PETTY CASH MVR": [
-            "MAM PETTY CASH MVI"
+        "SEA & SAND TRADING PVT LTD": [
+            "ALAAN COMPANY PVT LTD"
         ],
-        "BARQUE INVESTMENT": [
-            "BARQUE INVESTMENT PVT LTD"
+        "HONEY VIEW HARDWARE": [
+            "HARDWARE LAB"
         ],
-        "PACIFIC TECHNOLOGIES": [
-            "PACIFIC TECHNOLOGIES PVT LTD"
+        "SIMDI BONDED WAREHOUSE": [
+            "WAREHOUSE"
         ],
-        "SEAPLASH M LTD": [
-            "LTD SEAPLASH M"
+        "ALIHAVA CONSTRUCTION & TRADING CO": [
+            "UNKNOWN SUPPLIER"
+        ],
+        "LILY ENTERPRISE PVT LTD": [
+            "ALAAN COMPANY PVT LTD"
+        ],
+        "EURO MARKETING": [
+            "UNKNOWN SUPPLIER"
         ]
     },
     "patterns": {
@@ -786,7 +842,7 @@
         "image_scale_factor": 2,
         "extraction_source": "auto",
         "processed_transfer_path": "C:\\Users\\MAM-STORES\\OneDrive - outrigger.com\\Stores Shared\\STORE\\SCAN STORES\\2026",
-        "grn_next_dispatch_no": 22,
+        "grn_next_dispatch_no": 19,
         "scan_method": "hp",
         "hp_window_title": "Maafushivaru - Document Processing Hub",
         "hp_button_text": "Scan",
@@ -882,7 +938,7 @@
             ]
         },
         "FOOD SPECIALTY MALDIVES": {
-            "sample_count": 95,
+            "sample_count": 93,
             "formats": [
                 {
                     "template": "{0}",
@@ -891,8 +947,8 @@
                     ],
                     "regex": "(\\d{4,6})",
                     "shape_regex": "(\\d{4,6})",
-                    "count": 84,
-                    "share": 0.884
+                    "count": 82,
+                    "share": 0.882
                 },
                 {
                     "template": "{0}",
@@ -902,7 +958,7 @@
                     "regex": "(\\d{5,7})",
                     "shape_regex": "(\\d{5,7})",
                     "count": 9,
-                    "share": 0.095
+                    "share": 0.097
                 },
                 {
                     "template": "INV :{0}",
@@ -1176,7 +1232,7 @@
             ]
         },
         "LYCORN MALDIVES": {
-            "sample_count": 35,
+            "sample_count": 34,
             "formats": [
                 {
                     "template": "LCM/{0}/{1}",
@@ -1187,7 +1243,7 @@
                     "regex": "LCM(?:[-/\\s.]{0,2})(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{3,5})",
                     "shape_regex": "(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{3,5})",
                     "count": 16,
-                    "share": 0.457
+                    "share": 0.5
                 },
                 {
                     "template": "{0}",
@@ -1196,8 +1252,8 @@
                     ],
                     "regex": "(\\d{3,5})",
                     "shape_regex": "(\\d{3,5})",
-                    "count": 14,
-                    "share": 0.4
+                    "count": 13,
+                    "share": 0.406
                 },
                 {
                     "template": "{0}-{1}",
@@ -1208,7 +1264,7 @@
                     "regex": "(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{3,5})",
                     "shape_regex": "(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{3,5})",
                     "count": 3,
-                    "share": 0.086
+                    "share": 0.094
                 },
                 {
                     "template": "LCM-26{0}",
@@ -1218,7 +1274,7 @@
                     "regex": "LCM(?:[-/\\s.]{0,2})26(?:[-/\\s.]{0,2})(\\d{3,9})",
                     "shape_regex": "LCM(?:[-/\\s.]{0,2})26(?:[-/\\s.]{0,2})(\\d{3,9})",
                     "count": 1,
-                    "share": 0.029,
+                    "share": 1.0,
                     "source": "derived_from_INVOICEREGEX.txt"
                 },
                 {
@@ -1229,7 +1285,7 @@
                     "regex": "LCM/25(?:[-/\\s.]{0,2})(\\d{3,9})",
                     "shape_regex": "LCM/25(?:[-/\\s.]{0,2})(\\d{3,9})",
                     "count": 1,
-                    "share": 0.029,
+                    "share": 1.0,
                     "source": "derived_from_INVOICEREGEX.txt"
                 }
             ]
@@ -4803,7 +4859,7 @@
             ]
         },
         "LILY ENTERPRISES PVT LTD": {
-            "sample_count": 22,
+            "sample_count": 19,
             "formats": [
                 {
                     "template": "LLS/{0}/{1}",
@@ -4814,17 +4870,7 @@
                     "regex": "LLS(?:[-/\\s.]{0,2})(\\d{3,5})(?:[-/\\s.]{0,2})(\\d{1,3})",
                     "shape_regex": "(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(\\d{3,5})(?:[-/\\s.]{0,2})(\\d{1,3})",
                     "count": 6,
-                    "share": 0.286
-                },
-                {
-                    "template": "{0}",
-                    "digit_lengths": [
-                        6
-                    ],
-                    "regex": "(\\d{5,7})",
-                    "shape_regex": "(\\d{5,7})",
-                    "count": 5,
-                    "share": 0.238
+                    "share": 0.429
                 },
                 {
                     "template": "{0}-{1}",
@@ -4835,7 +4881,17 @@
                     "regex": "(\\d{3,5})(?:[-/\\s.]{0,2})(\\d{1,3})",
                     "shape_regex": "(\\d{3,5})(?:[-/\\s.]{0,2})(\\d{1,3})",
                     "count": 4,
-                    "share": 0.19
+                    "share": 0.286
+                },
+                {
+                    "template": "{0}",
+                    "digit_lengths": [
+                        6
+                    ],
+                    "regex": "(\\d{5,7})",
+                    "shape_regex": "(\\d{5,7})",
+                    "count": 2,
+                    "share": 0.143
                 },
                 {
                     "template": "INV-{0}",
@@ -4845,7 +4901,7 @@
                     "regex": "INV(?:[-/\\s.]{0,2})(\\d{6,8})",
                     "shape_regex": "(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(\\d{6,8})",
                     "count": 1,
-                    "share": 0.048
+                    "share": 0.071
                 },
                 {
                     "template": "0551{0}",
@@ -4855,7 +4911,7 @@
                     "regex": "0551(?:[-/\\s.]{0,2})(\\d{3,9})",
                     "shape_regex": "0551(?:[-/\\s.]{0,2})(\\d{3,9})",
                     "count": 1,
-                    "share": 0.048,
+                    "share": 1.0,
                     "source": "derived_from_INVOICEREGEX.txt"
                 },
                 {
@@ -4866,7 +4922,7 @@
                     "regex": "LLS(?:[-/\\s.]{0,2})1473(?:[-/\\s.]{0,2})(\\d{3,9})",
                     "shape_regex": "LLS(?:[-/\\s.]{0,2})1473(?:[-/\\s.]{0,2})(\\d{3,9})",
                     "count": 1,
-                    "share": 0.048,
+                    "share": 1.0,
                     "source": "derived_from_INVOICEREGEX.txt"
                 },
                 {
@@ -4877,7 +4933,7 @@
                     "regex": "LLS(?:[-/\\s.]{0,2})1525(?:[-/\\s.]{0,2})(\\d{3,9})",
                     "shape_regex": "LLS(?:[-/\\s.]{0,2})1525(?:[-/\\s.]{0,2})(\\d{3,9})",
                     "count": 1,
-                    "share": 0.048,
+                    "share": 1.0,
                     "source": "derived_from_INVOICEREGEX.txt"
                 },
                 {
@@ -4888,7 +4944,7 @@
                     "regex": "LLS/0370(?:[-/\\s.]{0,2})(\\d{3,9})",
                     "shape_regex": "LLS/0370(?:[-/\\s.]{0,2})(\\d{3,9})",
                     "count": 1,
-                    "share": 0.048,
+                    "share": 1.0,
                     "source": "derived_from_INVOICEREGEX.txt"
                 },
                 {
@@ -4899,7 +4955,7 @@
                     "regex": "LLS/0586(?:[-/\\s.]{0,2})(\\d{3,9})",
                     "shape_regex": "LLS/0586(?:[-/\\s.]{0,2})(\\d{3,9})",
                     "count": 1,
-                    "share": 0.048,
+                    "share": 1.0,
                     "source": "derived_from_INVOICEREGEX.txt"
                 }
             ]
@@ -6748,136 +6804,6 @@
                     ],
                     "regex": "(\\d{7,10})",
                     "shape_regex": "(\\d{7,10})",
-                    "count": 1,
-                    "share": 1.0,
-                    "active": true
-                }
-            ]
-        },
-        "ZEGA MALDIVES": {
-            "sample_count": 1,
-            "formats": [
-                {
-                    "template": "{0}",
-                    "digit_lengths": [
-                        4
-                    ],
-                    "regex": "(\\d{3,6})",
-                    "shape_regex": "(\\d{3,6})",
-                    "count": 1,
-                    "share": 1.0,
-                    "active": true
-                }
-            ]
-        },
-        "M GLASS & ALU": {
-            "sample_count": 1,
-            "formats": [
-                {
-                    "template": "{0}",
-                    "digit_lengths": [
-                        9
-                    ],
-                    "regex": "(\\d{8,11})",
-                    "shape_regex": "(\\d{8,11})",
-                    "count": 1,
-                    "share": 1.0,
-                    "active": true
-                }
-            ]
-        },
-        "PERSONAL COMPUTERS USD": {
-            "sample_count": 1,
-            "formats": [
-                {
-                    "template": "{0}",
-                    "digit_lengths": [
-                        5
-                    ],
-                    "regex": "(\\d{4,7})",
-                    "shape_regex": "(\\d{4,7})",
-                    "count": 1,
-                    "share": 1.0,
-                    "active": true
-                }
-            ]
-        },
-        "BARQUE INVESTMENT PVT LTD": {
-            "sample_count": 1,
-            "formats": [
-                {
-                    "template": "{0}{1}",
-                    "digit_lengths": [
-                        2,
-                        5
-                    ],
-                    "regex": "(\\d{2,4})(?:[-/\\s.]{0,2})(\\d{4,7})",
-                    "shape_regex": "(\\d{2,4})(?:[-/\\s.]{0,2})(\\d{4,7})",
-                    "count": 1,
-                    "share": 1.0,
-                    "active": true
-                }
-            ]
-        },
-        "BIZ SOLUTIONS PVT LTD": {
-            "sample_count": 1,
-            "formats": [
-                {
-                    "template": "{0}{1}",
-                    "digit_lengths": [
-                        4,
-                        3
-                    ],
-                    "regex": "(\\d{3,6})(?:[-/\\s.]{0,2})(\\d{2,5})",
-                    "shape_regex": "(\\d{3,6})(?:[-/\\s.]{0,2})(\\d{2,5})",
-                    "count": 1,
-                    "share": 1.0,
-                    "active": true
-                }
-            ]
-        },
-        "STANDARD & ORIGIN": {
-            "sample_count": 2,
-            "formats": [
-                {
-                    "template": "{0}",
-                    "digit_lengths": [
-                        4
-                    ],
-                    "regex": "(\\d{3,6})",
-                    "shape_regex": "(\\d{3,6})",
-                    "count": 2,
-                    "share": 1.0,
-                    "active": true
-                }
-            ]
-        },
-        "MAM PETTY CASH MVR": {
-            "sample_count": 1,
-            "formats": [
-                {
-                    "template": "{0}",
-                    "digit_lengths": [
-                        6
-                    ],
-                    "regex": "(\\d{5,8})",
-                    "shape_regex": "(\\d{5,8})",
-                    "count": 1,
-                    "share": 1.0,
-                    "active": true
-                }
-            ]
-        },
-        "SEAPLASH M LTD": {
-            "sample_count": 1,
-            "formats": [
-                {
-                    "template": "{0}",
-                    "digit_lengths": [
-                        6
-                    ],
-                    "regex": "(\\d{5,8})",
-                    "shape_regex": "(\\d{5,8})",
                     "count": 1,
                     "share": 1.0,
                     "active": true

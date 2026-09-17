@@ -1,6 +1,6 @@
 # maafushivaru_hub.py
 # Maafushivaru - Document Processing Hub
-# v5.0 - Watchdog auto-ingest, desktop notifications, confidence scoring,
+# v5.2 - Watchdog auto-ingest, desktop notifications, confidence scoring,
 #         supplier learning, scroll fix, live status bar, professional UI
 
 import os
@@ -139,7 +139,7 @@ except ImportError:
 # CONSTANTS / COLORS
 # ---------------------------------------------------------------------------
 APP_TITLE   = "Maafushivaru - Document Processing Hub"
-APP_VERSION = "v5.1"
+APP_VERSION = "v5.2"
 
 # Color palette — professional dark theme
 BG       = "#0A0F1E"          # deepest background
@@ -213,51 +213,207 @@ _INVOICE_CURRENCY_TOKENS = {
     "US$", "S$", "$", "€", "£"
 }
 
-_REPORT_INVOICE_TOTAL_PAT = re.compile(
-    r"\bI?NVOICE\s*TOTAL\s*[:\-]?\s*"
-    r"(?:(USD|MVR|MYR|RF|MRF|EUR|GBP|SGD|US\$|S\$|\$|€|£)\s*)?"
-    r"(\d{1,3}(?:,\d{3})*(?:\.\d{1,2})?|\d+(?:\.\d{1,2})?)"
-    r"(?:\s*(USD|MVR|MYR|RF|MRF|EUR|GBP|SGD|US\$|S\$|\$|€|£))?",
-    re.IGNORECASE,
+# Invoice-total OCR parser.  OCR engines frequently damage currency symbols and
+# thousands separators, so invoice totals are deliberately parsed in two stages:
+# 1) find the complete "Invoice Total" line;
+# 2) independently repair/parse the currency and numeric value.
+#
+# Examples intentionally supported:
+#   Invoice Total: S1,296.00      -> USD 1296.00   ($ misread as S)
+#   Invoice Total: S1,194.48      -> USD 1194.48
+#   Invoice Total: MVR1.720.00    -> MVR 1720.00   (OCR used . for ,)
+#   Invoice Total: MVR8.444.00    -> MVR 8444.00
+#   Invoice Total: $ 1,296.00     -> USD 1296.00
+#   Invoice Total: MVR 8,444.00   -> MVR 8444.00
+# OCR-tolerant invoice-total label matcher.
+# Handles common OCR variants such as "Involce Total" / "Invo1ce Total".
+_REPORT_INVOICE_TOTAL_LINE_PAT = re.compile(
+    r"(?im)^\s*(?:"
+    r"I?NVOICE|INVO1CE|1NVOICE|INVOLCE|INVOlCE"
+    r")\s*"
+    r"(?:TOTAL|T0TAL|T0TAI|T0TA)\s*[:\-]?\s*(.*?)\s*$"
 )
+
+# Currency spellings that OCR commonly produces.  A lone S immediately before
+# an invoice-total amount is treated as the dollar sign -> USD.  SGD must still
+# be written as SGD/S$ so we do not confuse it with USD.
+_OCR_CURRENCY_PAT = re.compile(
+    r"(?i)^(?P<cur>US\s*\$|S\s*\$|USD|MVR|MYR|MRF|RF|SGD|EUR|GBP|\$|€|£|S)\s*"
+)
+_OCR_CURRENCY_AFTER_PAT = re.compile(
+    r"(?i)\s*(?P<cur>USD|MVR|MYR|MRF|RF|SGD|EUR|GBP|S\s*\$|US\s*\$|\$|€|£)\s*$"
+)
+
+# Amount characters most often confused by OCR.  These replacements are made
+# ONLY inside the numeric token, never in the surrounding invoice text.
+_OCR_AMOUNT_DIGIT_FIX = str.maketrans({
+    "O": "0", "Q": "0", "D": "0",
+    "I": "1", "L": "1", "|": "1", "!": "1",
+    "Z": "2", "E": "3", "A": "4", "S": "5", "G": "6",
+    "T": "7", "J": "7", "B": "8",
+})
+
+
+def _normalize_ocr_currency_token(cur: str) -> str:
+    """Return our canonical currency code from an OCR currency token."""
+    if not cur:
+        return ""
+    c = re.sub(r"\s+", "", cur.upper())
+    if c in ("$", "US$", "USD", "S"):
+        return "USD"
+    if c in ("MVR", "MYR", "MRF", "RF"):
+        return "MVR"
+    if c in ("EUR", "€"):
+        return "EUR"
+    if c in ("GBP", "£"):
+        return "GBP"
+    if c in ("SGD", "S$"):
+        return "SGD"
+    return _CURRENCY_MAP.get(c, "")
+
+
+def _parse_ocr_invoice_amount(raw_amount: str) -> Optional[float]:
+    """Parse an OCR-damaged money amount without trusting its separators.
+
+    OCR can turn a thousands comma into a dot, e.g. 8,444.00 -> 8.444.00.
+    It can also produce repeated separators or spaces.  The final separator is
+    considered the decimal separator when it has 1-2 trailing digits; all
+    earlier separators are thousands separators.  A single separator followed
+    by exactly three digits is treated as a thousands separator.
+    """
+    if not raw_amount:
+        return None
+
+    s = raw_amount.upper().strip()
+    # Remove currency-like residue that may have remained attached to the amount.
+    s = re.sub(r"[^0-9A-Z.,\s]", "", s)
+    s = s.translate(_OCR_AMOUNT_DIGIT_FIX)
+    s = re.sub(r"\s+", "", s)
+    if not s:
+        return None
+
+    # Keep only numeric/separator material after OCR character repair.
+    s = re.sub(r"[^0-9.,]", "", s)
+    if not re.search(r"\d", s):
+        return None
+
+    # If there are multiple separators, the last one is the decimal separator
+    # when it has one or two digits after it.  Everything before it is grouping.
+    dot_positions = [m.start() for m in re.finditer(r"\.", s)]
+    comma_positions = [m.start() for m in re.finditer(r",", s)]
+    all_positions = sorted(dot_positions + comma_positions)
+
+    if not all_positions:
+        try:
+            return float(s)
+        except ValueError:
+            return None
+
+    last_pos = all_positions[-1]
+    trailing = s[last_pos + 1:]
+    last_sep = s[last_pos]
+
+    if len(trailing) in (1, 2) and trailing.isdigit():
+        # Last separator is decimal.  Earlier separators are thousands.
+        whole = re.sub(r"[.,]", "", s[:last_pos]) or "0"
+        decimal = trailing
+        normalized = whole + "." + decimal
+    elif len(trailing) == 3 and len(all_positions) == 1:
+        # Classic 1,296 / 1.296 thousands grouping.
+        normalized = re.sub(r"[.,]", "", s)
+    else:
+        # No convincing decimal part: treat every separator as grouping.
+        normalized = re.sub(r"[.,]", "", s)
+
+    try:
+        return float(normalized)
+    except ValueError:
+        return None
+
+
+def _extract_ocr_invoice_totals(raw: str) -> List[Tuple[str, float, str]]:
+    """Extract invoice totals with aggressive, context-limited OCR repair.
+
+    Returns (currency, numeric_value, repaired_line).  Parsing is restricted to
+    lines labelled Invoice Total so ordinary item numbers elsewhere in the OCR
+    text cannot accidentally become totals.
+    """
+    results = []
+    if not raw:
+        return results
+
+    for match in _REPORT_INVOICE_TOTAL_LINE_PAT.finditer(raw):
+        payload = (match.group(1) or "").strip()
+        if not payload:
+            continue
+
+        currency = ""
+        amount_part = payload
+
+        # Currency before amount: handles $, S, MVR, MYR, RF, etc., with or
+        # without a space between currency and amount.
+        cm = _OCR_CURRENCY_PAT.match(amount_part)
+        if cm:
+            currency = _normalize_ocr_currency_token(cm.group("cur"))
+            amount_part = amount_part[cm.end():].strip()
+
+        # Currency after amount is also accepted.
+        if not currency:
+            cm_after = _OCR_CURRENCY_AFTER_PAT.search(amount_part)
+            if cm_after:
+                currency = _normalize_ocr_currency_token(cm_after.group("cur"))
+                amount_part = amount_part[:cm_after.start()].strip()
+
+        # OCR sometimes inserts junk between the currency and the number.  Do
+        # not let arbitrary letters become part of the amount; locate the first
+        # plausible numeric run and trim the rest to that run.
+        if not re.search(r"\d", amount_part):
+            continue
+        nm = re.search(r"[0-9OQDI L|!ZEA SGBTJ,\.]+", amount_part, re.IGNORECASE)
+        if not nm:
+            continue
+        numeric_raw = re.sub(r"\s+", "", nm.group(0))
+        value = _parse_ocr_invoice_amount(numeric_raw)
+        if value is None:
+            continue
+
+        # If OCR dropped the currency entirely, do not guess: the caller can
+        # continue safely without inventing a currency.
+        if not currency:
+            continue
+
+        repaired = f"{currency}{value:.2f}"
+        results.append((currency, value, repaired))
+
+    return results
 
 
 def _fix_ocr_currency_amount(raw: str) -> str:
-    """
-    Fix OCR errors in currency+amount strings.
+    """Repair common OCR currency/amount errors before legacy matching.
 
-    Handles cases like:
-      - MVRI,380.14   -> MVR1,380.14
-      - MYR1,380.14   -> MVR1,380.14
-      - MYRI,380.14   -> MVR1,380.14
-      - MVR I,380.14  -> MVR 1,380.14
-      - USD I23.50    -> USD123.50
-      - EUR l,250.00  -> EUR1,250.00
-
-    Returns the corrected string.
+    This function remains for compatibility with the rest of the application,
+    while the invoice-total parser above performs the stronger amount parsing.
     """
     if not raw:
         return raw
 
     fixed = raw
-
-    # Normalize MYR -> MVR when it appears as OCR currency for Maldivian invoices
     fixed = re.sub(r"\bMYR\b", "MVR", fixed, flags=re.IGNORECASE)
 
-    # Cases like MVRI,380.14 or MYRI,380.14 -> MVR1,380.14
+    # MVR I,380.14 / USD l23.50 -> MVR 1,380.14 / USD 123.50
     fixed = re.sub(
-        r"\b(MVR|MYR|USD|EUR|GBP|SGD|RF|MRF)([Il])(?=[\d,])",
+        r"\b(MVR|MYR|USD|EUR|GBP|SGD|RF|MRF)\s*([Il|!])(?=[\d,\.])",
         lambda m: ("MVR" if m.group(1).upper() == "MYR" else m.group(1).upper()) + "1",
         fixed,
         flags=re.IGNORECASE,
     )
 
-    # Cases like MVR I,380.14 -> MVR 1,380.14
+    # A lone OCR 'S' directly before a money amount is commonly a damaged '$'.
+    # Restrict this to Invoice Total lines so ordinary text is never changed.
     fixed = re.sub(
-        r"\b(MVR|MYR|USD|EUR|GBP|SGD|RF|MRF)\s+([Il])\s*(?=[\d,])",
-        lambda m: ("MVR" if m.group(1).upper() == "MYR" else m.group(1).upper()) + " 1",
+        r"(?im)(^\s*(?:I?NVOICE|INVO1CE|1NVOICE)\s*TOTAL\s*[:\-]?\s*)S(?=\s*\d)",
+        r"\1$",
         fixed,
-        flags=re.IGNORECASE,
     )
 
     return fixed
@@ -982,163 +1138,272 @@ class OCRWorkerMixin:
 
     # ------------- SUPPLIER MATCHING WITH CONFIDENCE -------------
     def _match_supplier_with_confidence(self, text, filename="") -> Tuple[str, float]:
-        """Returns (supplier_name, confidence_0_to_100)."""
+        """Identify the supplier from OCR text, prioritising the OCR's supplier field.
+
+        IMPORTANT DESIGN RULE:
+        Supplier identity is established from the text that OCR actually extracted.
+        Invoice-number regexes / invoice-series patterns are NOT used here.  They are
+        only a later fallback when the supplier genuinely cannot be identified.
+
+        OCR commonly changes 1-2 characters in company names, removes punctuation,
+        joins words, or splits one word into two.  This matcher therefore combines:
+          * exact/normalised matches
+          * token overlap
+          * character similarity / edit distance
+          * best-line matching
+          * aliases
+
+        The score is deliberately conservative when two suppliers are similarly named.
+        """
         suppliers = self.cfg.get("suppliers", [])
         aliases = self.cfg.get("aliases", {})
-        cands = suppliers + [a for sub in aliases.values() for a in sub]
-        thr = self.cfg["app_settings"].get("fuzzy_match_threshold", 95)
-
+        cands = list(dict.fromkeys(suppliers + [a for sub in aliases.values() for a in sub]))
         if not cands:
             return "UNKNOWN SUPPLIER", 0.0
 
-        upper = text.upper()
+        raw = text or ""
+        upper = raw.upper()
         unique_index = _build_unique_word_index(suppliers, aliases)
 
+        # 1) FIRST PRIORITY: explicit OCR supplier/vendor field.
+        field_match, field_conf = self._match_supplier_field_confidence(raw, cands, aliases)
+        if field_match:
+            return field_match, field_conf
+
+        # 2) Strong exact/unique-word evidence anywhere in OCR text.
         best_unique_name = None
         best_unique_score = 0.0
-
         for c in cands:
             unique_words = unique_index.get(c, set())
             if not unique_words:
                 continue
-            hits = sum(
-                1 for w in unique_words
-                if re.search(r"\b" + re.escape(w) + r"\b", upper)
-            )
-            if hits > 0:
-                score = hits / len(unique_words)
+            hits = sum(1 for w in unique_words if re.search(r"\b" + re.escape(w) + r"\b", upper))
+            if hits:
+                score = hits / max(len(unique_words), 1)
                 if score > best_unique_score:
                     best_unique_score = score
                     best_unique_name = c
 
-        if best_unique_name and best_unique_score >= 0.5:
-            conf = min(100.0, best_unique_score * 100.0)
+        if best_unique_name and best_unique_score >= 0.50:
+            conf = min(99.0, 70.0 + best_unique_score * 29.0)
             return self._resolve_alias(best_unique_name, aliases), conf
 
+        # 3) Search individual OCR lines. This is deliberately text-first and does
+        # not inspect invoice formats. Compare the useful first ~8 words of each line.
+        best = None
+        best_score = 0.0
+        best_margin = 0.0
+        for line in upper.splitlines():
+            line = re.sub(r"\s+", " ", line).strip()
+            if len(line) < 3:
+                continue
+            # Ignore obvious non-company lines.
+            if re.fullmatch(r"[\d\s.,:/#\-]+", line):
+                continue
+            probe = re.sub(r"[^A-Z0-9& ]", " ", line)
+            probe = re.sub(r"\s+", " ", probe).strip()
+            if not probe:
+                continue
+            words = probe.split()
+            probe = " ".join(words[:8])
+
+            ranked = []
+            for c in cands:
+                score = self._supplier_candidate_score(probe, c)
+                ranked.append((score, c))
+            ranked.sort(reverse=True, key=lambda x: x[0])
+            if ranked:
+                score, cand = ranked[0]
+                second = ranked[1][0] if len(ranked) > 1 else 0.0
+                # Require a meaningful score and a margin when the top two are close.
+                if score > best_score and score >= 82.0:
+                    best = cand
+                    best_score = score
+                    best_margin = score - second
+
+        if best:
+            # High score + reasonable margin = reliable OCR correction.
+            if best_score >= 94.0 or (best_score >= 88.0 and best_margin >= 4.0):
+                conf = min(97.0, best_score)
+                return self._resolve_alias(best, aliases), conf
+
+        # 4) Filename is only a late fallback, never the primary supplier source.
         if filename:
             hint = re.sub(r"[_\-]", " ", re.split(r"GRN|RC-MAM", filename.upper())[0]).strip()
-            m = process.extractOne(hint, cands, scorer=fuzz.token_sort_ratio)
-            if m and m[1] >= thr:
-                return self._resolve_alias(m[0], aliases), float(m[1])
-
-        for c in cands:
-            cn = self._normalize_text(c)
-            if cn and cn in upper:
-                return self._resolve_alias(c, aliases), 95.0
-
-        word_freq_global = {}
-        for c in cands:
-            for w in re.sub(r"[^A-Z0-9 ]", " ", c.upper()).split():
-                if len(w) >= 3:
-                    word_freq_global[w] = word_freq_global.get(w, 0) + 1
-
-        best_line_score = 0.0
-        best_line_name = None
-        for line in upper.splitlines():
-            line = line.strip()
-            if len(line) < 4:
-                continue
-            m = process.extractOne(line, cands, scorer=fuzz.partial_ratio)
-            if m and m[1] >= 88:
-                candidate = m[0]
-                c_words = set(re.sub(r"[^A-Z0-9 ]", " ", candidate.upper()).split())
-                uncommon_hits = sum(
-                    1 for w in c_words
-                    if len(w) >= 3 and word_freq_global.get(w, 0) == 1 and w in upper
+            if hint:
+                ranked = sorted(
+                    ((self._supplier_candidate_score(hint, c), c) for c in cands),
+                    reverse=True,
+                    key=lambda x: x[0],
                 )
-                if uncommon_hits > 0 or len(c_words) <= 2:
-                    if m[1] > best_line_score:
-                        best_line_score = m[1]
-                        best_line_name = candidate
-
-        if best_line_name:
-            return self._resolve_alias(best_line_name, aliases), float(best_line_score)
+                if ranked and ranked[0][0] >= 94.0:
+                    return self._resolve_alias(ranked[0][1], aliases), ranked[0][0]
 
         return "UNKNOWN SUPPLIER", 0.0
+
+    @staticmethod
+    def _supplier_normalize_for_match(value: str) -> str:
+        """Normalise company text without destroying useful character information."""
+        s = (value or "").upper()
+        s = s.replace("&", " AND ")
+        # Common OCR punctuation/spacing noise.
+        s = re.sub(r"[^A-Z0-9 ]", " ", s)
+        s = re.sub(r"\s+", " ", s).strip()
+        return s
+
+    def _supplier_candidate_score(self, extracted: str, candidate: str) -> float:
+        """Score an OCR company-name fragment against one configured supplier.
+
+        A 1-2 character OCR error is intentionally cheap, while unrelated company
+        names with only one common word do not receive a high score.
+        """
+        a = self._supplier_normalize_for_match(extracted)
+        b = self._supplier_normalize_for_match(candidate)
+        if not a or not b:
+            return 0.0
+        if a == b:
+            return 100.0
+
+        # Direct substring is strong when OCR has added a prefix/suffix.
+        if b in a or a in b:
+            ratio = fuzz.ratio(a, b) if RAPIDFUZZ_AVAILABLE else 0.0
+            return max(96.0, ratio)
+
+        if not RAPIDFUZZ_AVAILABLE:
+            # Fallback when rapidfuzz is unavailable.
+            return SequenceMatcher(None, a, b).ratio() * 100.0 if SequenceMatcher else 0.0
+
+        ratio = fuzz.ratio(a, b)
+        wratio = fuzz.WRatio(a, b)
+        token_set = fuzz.token_set_ratio(a, b)
+        token_sort = fuzz.token_sort_ratio(a, b)
+
+        # Character-level similarity is the most important signal for 1-2 OCR typos.
+        score = max(ratio, 0.65 * wratio + 0.35 * token_sort)
+
+        # Explicit edit-distance bonus for short OCR corruption.
+        if len(a) >= 5 and len(b) >= 5:
+            dist = _levenshtein(a.replace(" ", ""), b.replace(" ", ""))
+            if dist <= 2 and abs(len(a.replace(" ", "")) - len(b.replace(" ", ""))) <= 2:
+                score = max(score, 97.0 - dist * 2.0)
+
+        # Token overlap helps with names such as "ABC TRADING COMPANY LTD" while
+        # still requiring character similarity on the company-defining words.
+        aw = a.split()
+        bw = b.split()
+        if aw and bw:
+            common = 0
+            for x in aw:
+                if any(fuzz.ratio(x, y) >= 88 for y in bw):
+                    common += 1
+            overlap = common / max(len(bw), 1)
+            if overlap >= 0.75:
+                score = max(score, min(98.0, 82.0 + overlap * 16.0))
+
+        return min(100.0, score)
+
+    def _match_supplier_field_confidence(self, text, cands, aliases):
+        """Match ONLY against configured suppliers/aliases using OCR around a supplier label.
+
+        OCR layout is not trusted: a long supplier may be split before/after the label,
+        or the fragments may be reversed. Unknown text is NEVER returned as a supplier.
+        """
+        if not text or not cands:
+            return None, 0.0
+        lines = [re.sub(r"\s+", " ", x).strip() for x in text.upper().splitlines()]
+        lines = [x for x in lines if x]
+        label_patterns = [r"SUPPLIE(?:R)?\s*(?:NAME)?", r"VENDOR\s*(?:NAME)?", r"BILL\s*(?:FROM|TO)", r"SOLD\s+BY"]
+        stop_re = re.compile(r"^(?:SOURCE\s+DOCUMENT|TRACKING|BILL\s+OF\s+LADING|DELIVERY\s+NOTE|INVOICE|INVO1CE|DATE|PURCHASE\s+ORDER|PO\b|GRN\b|RC[- ]?MAM|AMOUNT|TOTAL|SUBTOTAL|TAX|FREIGHT|DISCOUNT|DEPARTMENT|LOCATION|SIGNATURE|BUYER'?S?|DEPT\b|PHONE|STOREROOM)\b", re.I)
+        probes=[]
+        for i,line in enumerate(lines):
+            m=None
+            for pat in label_patterns:
+                m=re.search(pat,line,re.I)
+                if m: break
+            if not m:
+                continue
+            inline=line[m.end():].lstrip(' :#-–—\t')
+            before=[lines[j] for j in range(max(0,i-2),i) if not stop_re.search(lines[j])]
+            after=[]
+            for j in range(i+1,min(len(lines),i+3)):
+                if stop_re.search(lines[j]): break
+                after.append(lines[j])
+            parts=[]
+            # Try normal, reversed and surrounding layouts.
+            if inline: parts.append(inline)
+            if before: parts.append(' '.join(before))
+            if after: parts.append(' '.join(after))
+            if before and inline: parts.append(' '.join(before+[inline]))
+            if inline and after: parts.append(' '.join([inline]+after))
+            if before and inline and after:
+                parts += [' '.join(before+[inline]+after), ' '.join(after+[inline]+before), ' '.join(before+after+[inline])]
+            elif before and after:
+                parts += [' '.join(before+after), ' '.join(after+before)]
+            for part in parts:
+                q=self._clean_supplier_probe(part)
+                if q and len(q)>=2: probes.append(q)
+        # damaged SUPPLIER/VENDOR labels
+        for i,line in enumerate(lines):
+            words=re.findall(r"[A-Z0-9]+",line)
+            if not words: continue
+            first=words[0]
+            if not any(_levenshtein(first,t)<=2 for t in ('SUPPLIER','VENDOR')): continue
+            if re.search(r"(?:INVOICE|TOTAL|AMOUNT|PURCHASE|RECEIVING)",line): continue
+            rem=re.sub(r"^[A-Z0-9]+\s*[:#-]?\s*",'',line,count=1)
+            near=[]
+            for j in range(max(0,i-1),min(len(lines),i+2)):
+                if j!=i and stop_re.search(lines[j]): continue
+                near.append(rem if j==i else lines[j])
+            q=self._clean_supplier_probe(' '.join(near))
+            if q: probes.append(q)
+        best=(0.0,None,0.0)
+        for probe in dict.fromkeys(probes):
+            words=probe.split()
+            variants=[probe]
+            for n in range(min(10,len(words)),1,-1): variants.append(' '.join(words[:n]))
+            for pr in variants:
+                scores=[(self._supplier_candidate_score(pr,c),c) for c in cands]
+                scores.sort(reverse=True,key=lambda x:x[0])
+                if not scores: continue
+                score,cand=scores[0]; second=scores[1][0] if len(scores)>1 else 0.0
+                if score>best[0]: best=(score,cand,second)
+        score,cand,second=best
+        if not cand: return None,0.0
+        margin=score-second
+        if score>=96 and margin>=1: return self._resolve_alias(cand,aliases),min(99.5,score)
+        if score>=91 and margin>=3: return self._resolve_alias(cand,aliases),min(98.0,score)
+        if score>=87 and margin>=6: return self._resolve_alias(cand,aliases),min(95.0,score)
+        return None,0.0
+
+    @staticmethod
+    def _clean_supplier_probe(value: str) -> str:
+        """Remove obvious neighbouring field labels from an OCR supplier probe."""
+        s = re.sub(r"\s+", " ", value or "").strip(" :#-–—")
+        if not s:
+            return ""
+        # Stop at the next obvious report field.
+        stop = re.search(
+            r"\b(?:INVOICE|INVO1CE|GRN|RECEIVING|RECEIPT|DATE|PURCHASE\s+ORDER|P\.O\.|PO|"
+            r"SUBTOTAL|TOTAL|AMOUNT|QTY|QUANTITY|DESCRIPTION|TAX|CURRENCY|"
+            r"BUYER'?S?\s+DEPT|BUYER)\b",
+            s,
+            re.IGNORECASE,
+        )
+        if stop and stop.start() > 0:
+            s = s[:stop.start()].strip(" :#-–—")
+        # Remove leading boilerplate such as "NAME" if OCR kept it after the label.
+        s = re.sub(r"^(?:NAME|NO|NUMBER)\s*[:#-]?\s*", "", s, flags=re.IGNORECASE)
+        return re.sub(r"\s+", " ", s).strip()
 
     def _match_supplier(self, text, filename="") -> str:
         name, _ = self._match_supplier_with_confidence(text, filename)
         return name
 
     def _extract_supplier_from_field(self, text):
-        suppliers = self.cfg.get("suppliers", [])
-        aliases = self.cfg.get("aliases", {})
-        cands = suppliers + [a for sub in aliases.values() for a in sub]
-        thr = self.cfg["app_settings"].get("fuzzy_match_threshold", 85)
-
-        if not cands:
-            return None
-
-        upper = text.upper()
-
-        patterns = [
-            r"SUPPLIE(?:R)?\s*(?:NAME)?\s*[:\-]?",
-            r"VENDOR\s*(?:NAME)?\s*[:\-]?",
-            r"BILL\s*(?:TO|FROM)\s*[:\-]?",
-            r"SOLD\s*(?:BY|TO)\s*[:\-]?",
-        ]
-        stop_words = [
-            "INVOICE", "RECEIVING", "RECEIPT", "GRN", "DATE", "BILL",
-            "AMOUNT", "SOURCE DOCUMENT", "SOURCE", "DIRCET", "DIRECT",
-            "NO NOTES", "NOTES", "PURCHASE ORDER", "PURCHASE", "PO",
-        ]
-
-        raw_extracted_name = None
-
-        for pat in patterns:
-            m = re.search(pat, upper)
-            if not m:
-                continue
-
-            chunk = upper[m.end(): m.end() + 800]
-
-            for s in stop_words:
-                pos = chunk.find(s)
-                if 0 < pos < len(chunk):
-                    chunk = chunk[:pos]
-
-            chunk = re.sub(r"[^A-Z0-9\s]", " ", chunk)
-            chunk = re.sub(r"\s+", " ", chunk).strip()
-
-            if len(chunk) < 2:
-                continue
-
-            raw_extracted_name = chunk.strip()
-            extracted_words = [w for w in chunk.split() if len(w) >= 2]
-            if not extracted_words:
-                continue
-
-            first_extracted_word = extracted_words[0]
-            if first_extracted_word.isdigit():
-                for w in extracted_words[1:]:
-                    if not w.isdigit():
-                        first_extracted_word = w
-                        break
-
-            for c in cands:
-                c_words = [w for w in re.sub(r"[^A-Z0-9 ]", " ", c.upper()).split() if len(w) >= 2]
-                if not c_words:
-                    continue
-                first_cand_word = c_words[0]
-                if first_extracted_word == first_cand_word:
-                    return self._resolve_alias(c, aliases)
-                if fuzz.ratio(first_extracted_word, first_cand_word) >= 88:
-                    return self._resolve_alias(c, aliases)
-
-            for c in cands:
-                cn = self._normalize_text(c)
-                if cn and cn in chunk:
-                    return self._resolve_alias(c, aliases)
-
-            mt = process.extractOne(chunk[:240], cands, scorer=fuzz.token_set_ratio)
-            if mt and mt[1] >= thr:
-                return self._resolve_alias(mt[0], aliases)
-
-        if raw_extracted_name:
-            cleaned = re.sub(r"\s+", " ", raw_extracted_name).strip()
-            words = cleaned.split()[:6]
-            return " ".join(words) if words else None
-
+        """Compatibility wrapper. Never return an unconfigured/raw OCR supplier."""
+        name, confidence = self._match_supplier_with_confidence(text or "")
+        if name and name != "UNKNOWN SUPPLIER" and confidence > 0:
+            return name
         return None
 
     def _extract_company_from_invoice_pages(self, pdf_path):
@@ -1622,29 +1887,15 @@ class OCRWorkerMixin:
             if not best_po:
                 best_po = self._extract_po_from_receiving_text(txt)
 
-            # Apply OCR currency correction before pattern matching
-            txt_fixed = _fix_ocr_currency_amount(txt)
-
-            for m in _REPORT_INVOICE_TOTAL_PAT.finditer(txt_fixed):
-                cur_pre = m.group(1)
-                amount_str = m.group(2)
-                cur_post = m.group(3)
-                cur = (cur_pre or cur_post or "").upper().strip()
-                # Normalize MYR → MVR
-                if cur == "MYR":
-                    cur = "MVR"
-                currency = _CURRENCY_MAP.get(cur)
-                if not currency:
-                    continue
-                dedup_key = (page_index, currency, amount_str.replace(",", ""))
+            # Strong OCR-aware invoice-total extraction.  This handles
+            # currency-symbol confusion ($ -> S), missing spaces, and broken
+            # thousands separators such as MVR8.444.00.
+            for currency, val, repaired in _extract_ocr_invoice_totals(txt):
+                dedup_key = (page_index, currency, f"{val:.2f}")
                 if dedup_key in seen_totals:
                     continue
                 seen_totals.add(dedup_key)
-                try:
-                    val = float(amount_str.replace(",", ""))
-                    sums[currency] += val
-                except ValueError:
-                    pass
+                sums[currency] += val
 
         formatted_totals = {}
         for k, v in sums.items():
@@ -1731,6 +1982,61 @@ class OCRWorkerMixin:
 
         return None
 
+    def _repair_invoice_fixed_part(self, invoice_value: str, supplier_hint: str) -> str:
+        """Repair only 1-2 OCR errors in a configured invoice format's fixed part.
+
+        Critical rule: this function NEVER adds a configured prefix/year/etc.
+        If the OCR value is just ``6541`` and the configured template is
+        ``INV-2026-{0}``, ``6541`` remains ``6541``.
+
+        When the OCR value already contains a fixed part, that fixed part can be
+        corrected when it is within two edits of a configured fixed prefix. The
+        variable digit portion is preserved exactly from OCR.
+        """
+        value = (invoice_value or "").strip()
+        if not value or not supplier_hint:
+            return value
+
+        fmt_entry = self.cfg.get("invoice_formats", {}).get(supplier_hint.upper())
+        if not fmt_entry:
+            return value
+
+        formats = fmt_entry.get("formats", [])
+        if not formats:
+            return value
+
+        # Prefer the configured template prefix.  Only the literal text before
+        # the first variable slot is considered; nothing is inserted when that
+        # prefix is absent from the OCR value.
+        for fmt in formats:
+            template = str(fmt.get("template") or "")
+            if not template or "{" not in template:
+                continue
+            fixed_prefix = template.split("{", 1)[0]
+            if not fixed_prefix:
+                continue
+
+            # Normalize only for comparison; preserve the OCR value's original
+            # separators when there is no repair to make.
+            prefix_len = len(fixed_prefix)
+            if len(value) < prefix_len:
+                continue
+
+            observed_prefix = value[:prefix_len]
+            if _levenshtein(observed_prefix.upper(), fixed_prefix.upper()) > 2:
+                continue
+
+            # Do not turn a numeric-only OCR result into the configured format.
+            # Also require at least one alphabetic/symbolic fixed character to
+            # have actually been present in the OCR value.
+            if not re.search(r"[A-Z/\\_-]", observed_prefix.upper()):
+                continue
+
+            repaired = fixed_prefix + value[prefix_len:]
+            return repaired
+
+        return value
+
     def _rebuild_invoice_from_template(self, digit_groups, fmt: dict) -> str:
         """Slot the digit groups matched by the format's own capture groups
         into its canonical template (e.g. 'INV-{0}' + ('0509456',) ->
@@ -1748,9 +2054,39 @@ class OCRWorkerMixin:
     def _extract_invoice(self, text, supplier_hint=""):
         raw = text.upper()
 
-        # Supplier-specific, data-driven format matching takes priority when
-        # we have a canonical supplier match - it's far less likely to grab
-        # the wrong number, and it can correct a garbled prefix.
+        # IMPORTANT: if OCR already extracted an invoice value from an explicit
+        # invoice-number label, that value is authoritative.  Do NOT rebuild it
+        # from a learned regex/template.  For example, if the document says
+        # "Invoice No: 6541", the result must stay exactly "6541" -- never
+        # become "INV-2026-6541" merely because a historical invoice pattern
+        # contains that prefix/year.
+        #
+        # Supplier-specific patterns remain a FALLBACK for cases where the raw
+        # labelled value could not be extracted (or the label itself is damaged).
+        raw_labeled = _find_invoice_value(raw)
+        if raw_labeled:
+            raw_labeled = _clean_invoice_token(raw_labeled)
+            if raw_labeled:
+                # RAW OCR is authoritative for the variable invoice number.
+                # A configured format may ONLY repair a small OCR error in its
+                # fixed/literal portion.  It must NEVER manufacture a prefix,
+                # year, separator, or other characters that were not present in
+                # the OCR value.  Example:
+                #   OCR:    6541
+                #   format: INV-2026-{0}
+                #   result: 6541  (NOT INV-2026-6541)
+                #
+                # If OCR actually contains the fixed portion but has 1-2 bad
+                # characters, e.g. INV-202S-6541, the fixed portion may be
+                # corrected to INV-2026 while preserving the OCR invoice digits.
+                raw_labeled = self._repair_invoice_fixed_part(
+                    raw_labeled, supplier_hint
+                )
+                return raw_labeled.replace("/", " ").replace("\\", " ").strip()
+
+        # Supplier-specific, data-driven format matching is only a fallback.
+        # It may repair/reconstruct an invoice when the raw labelled extraction
+        # is unavailable, but it must never override a clean raw invoice value.
         if supplier_hint:
             v = self._extract_invoice_for_supplier(raw, supplier_hint)
             if v:
@@ -2530,12 +2866,62 @@ class MaafushivaruHub(tk.Tk, OCRWorkerMixin):
             )
 
     def _setup_logging(self):
+        """Configure persistent timestamped logs.
+
+        Policy:
+        - Every application/action log is written with an exact timestamp.
+        - Routine successful OCR engine chatter is NOT written at INFO level.
+        - OCR failures/warnings/errors ARE retained so failed documents can be
+          diagnosed.
+        - The normal application log remains the single chronological history.
+        """
         os.makedirs(self.dirs["logs"], exist_ok=True)
-        logging.basicConfig(
-            filename=os.path.join(self.dirs["logs"], "maafushivaru_hub.log"),
-            level=logging.INFO,
-            format="%(asctime)s [%(levelname)s] %(message)s",
-        )
+
+        class _HubLogFilter(logging.Filter):
+            _OCR_INFO_MARKERS = (
+                "OCR FAILED", "OCR error", "OCR.space error",
+                "OCRSpace error", "OCR fallback failed", "OCR extraction failed",
+            )
+
+            def filter(self, record):
+                # Never hide warnings/errors: failed OCR must remain visible.
+                if record.levelno >= logging.WARNING:
+                    return True
+                msg = record.getMessage()
+                upper = msg.upper()
+                # Suppress verbose successful/local OCR engine chatter only.
+                # Higher-level PROCESS/ACTION messages are kept separately by
+                # the normal logging calls and AI Extract action log.
+                if "OCR" in upper:
+                    return any(marker.upper() in upper for marker in self._OCR_INFO_MARKERS)
+                return True
+
+        log_path = os.path.join(self.dirs["logs"], "maafushivaru_hub.log")
+        root = logging.getLogger()
+        root.setLevel(logging.INFO)
+
+        # Avoid duplicate handlers if the application is reloaded in-process.
+        target = os.path.abspath(log_path)
+        for h in list(root.handlers):
+            if isinstance(h, logging.FileHandler) and os.path.abspath(getattr(h, "baseFilename", "")) == target:
+                h.setLevel(logging.INFO)
+                h.setFormatter(logging.Formatter(
+                    "%(asctime)s [%(levelname)s] %(message)s",
+                    datefmt="%Y-%m-%d %H:%M:%S",
+                ))
+                h.addFilter(_HubLogFilter())
+                logging.info("Application started.")
+                return
+
+        handler = logging.FileHandler(log_path, encoding="utf-8")
+        handler.setLevel(logging.INFO)
+        handler.setFormatter(logging.Formatter(
+            "%(asctime)s [%(levelname)s] %(message)s",
+            datefmt="%Y-%m-%d %H:%M:%S",
+        ))
+        handler.addFilter(_HubLogFilter())
+        root.addHandler(handler)
+
         logging.info("Application started.")
 
     # ------------------------------------------------------------------

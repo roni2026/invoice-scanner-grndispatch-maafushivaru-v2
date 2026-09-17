@@ -1,0 +1,6964 @@
+{
+  "folders": {
+    "base": ".",
+    "scanned": "SCANNED",
+    "processed": "PROCESSED",
+    "archive": "ARCHIVE",
+    "failed": "FAILED",
+    "logs": "LOGS"
+  },
+  "suppliers": [
+    "A&G ENERGY SOLUTIONS",
+    "ADK GENERAL TRADING",
+    "ADK PHARMACEUTICAL SUPPLY",
+    "AIRSEAFOODS GMBH",
+    "ALAAN COMPANY PVT LTD",
+    "ALBA INTERNATIONAL",
+    "ALIA INVESTMENTS",
+    "ALIHAVA CONSTRUCTION & TRADING CO",
+    "ALIHAVA CONSTRUCTION & TRADING CO PVT LTD",
+    "ALLA INVEST",
+    "AMAGI EXPORTS",
+    "AMINATH SINAZ",
+    "ANAKEE",
+    "ARAABY PVT LTD",
+    "ARSEAFOODS GMBH",
+    "ASTERS",
+    "ASTRABON",
+    "ATOLL MARKET",
+    "ATOLLS PHARMACY",
+    "AYAAN EXPORT",
+    "BAAN THAKRAI",
+    "BARQUE INVESTMENT",
+    "BARQUE INVESTMENT PVT LTD",
+    "BAZAAR TRADING",
+    "BESTBUY MALDIVES PVT LTD",
+    "BIGWIG",
+    "BIZ SOLUTIONS",
+    "BIZ SOLUTIONS PVT LTD",
+    "BLENX PVT LTD",
+    "BLUE BIRD COMPANT",
+    "BLUE BIRD COMPANY",
+    "BROTHERHOOD SHOP",
+    "CAMBRO NILKAMAL",
+    "CGT PVT LTD",
+    "CHEF 2 CHEF LLC",
+    "CHEMCITY MALDIVES",
+    "CHEMLAB PRIVATE LTD",
+    "COLOR BANK",
+    "COLORLAND",
+    "COSMERC MALDIVES",
+    "COSMOPOLITAN",
+    "COUNTLINE",
+    "CSC ENGINEERING",
+    "D BLUE PRIVATE LTD",
+    "DIANA TRADING",
+    "DITECH CONSTRUCTION SOLUTIONS",
+    "DONAD INVESTMENT",
+    "EASTERN AND ALLIED SRI LANKA",
+    "ECOCOAST",
+    "ECOPURE WATERS INTERNATIONAL LTD",
+    "EGO TIMBER",
+    "EMPARAL PVT LTD",
+    "EURO MARKETING",
+    "EURO MARKETING PVT LTD",
+    "EVO SOLUTIONS",
+    "F&B EVENING STORE PVT LTD",
+    "FAITH PHARMACY",
+    "FANTASY PVT LTD",
+    "FEATHER INVESTMENT",
+    "FEEF SIDE CO.",
+    "FOOD SPECIALTY MALDIVES",
+    "FRELLA INTERNATIONAL",
+    "FRONTIER MARKETS ENTERPRISES PVT LTD",
+    "GGT",
+    "GLOBAL RIWA PVT LTD",
+    "GLOSSY HOME",
+    "GRAPE EXPECTATIONS PVT LTD",
+    "GREEN PATH PVT LTD",
+    "GUANGZHOU HENGYANG LIGHTING EQUIPMENT CO., LTD",
+    "H2O MALDIVES",
+    "HAMILTON INTERNATIONAL",
+    "HAPPY MARKET",
+    "HARDWARE LAB",
+    "HASSAN MARINE EQUIPMENT SHOP",
+    "HEALTH AND GLOW PVT LTD",
+    "HENMAN TRADING",
+    "HMHI COMPANY",
+    "HMHI COMPANY LIMITADE",
+    "HMHI COMPANY LIMITED",
+    "HMHI COMPANY PRIVATE LTD",
+    "HONEY VIEW HARDWARE",
+    "HORIZON FISHERIES",
+    "HOSPITALITY LTD",
+    "HUIZHOU ALPHA SAUNA & SWIMMING POOL EQUIPMENT CO.LTD",
+    "HYDRO GLOBAL PVT LTD",
+    "HYDROGLOBAL PVT LTD",
+    "IFS GLOBAL PVT LTD",
+    "IKEBANA",
+    "ILAA MALDIVES PVT LTD",
+    "INNOVO MALDIVES",
+    "INTERNATIONAL FOOD SOLUTION PVT LTD",
+    "ISLAND BAZAAR",
+    "JIM TRADERS PVT LTD",
+    "JINAN RETEK INDUSTRIES INC",
+    "JVD TECHNOLOGIES",
+    "KAANGSHENG INDUSTRY",
+    "KAILAAN TRENDS",
+    "KEMIN EXPORTS",
+    "KIMIRICA HUNTER INTERNATIONAL",
+    "KOOLTEMP MALDIVES",
+    "L&R TRADING",
+    "LEO STORES PVT LTD",
+    "LILY ENTERPRISE PVT LTD",
+    "LILY ENTERPRISES PVT LTD",
+    "LILY INTERNATIONAL LTD",
+    "LILY INTERNATIONAL PVT LTD",
+    "LINK SERVE",
+    "LIVING WATER",
+    "LOLLO WHOLESALE",
+    "LOST SOUVENIRS",
+    "LOTUS FIHAARA",
+    "LYCORN MALDIVES",
+    "LYCORN MALDIVES PVT LTD",
+    "M GLASS & ALU",
+    "M-GLASS & ALUMINIUM",
+    "M7 PRINT",
+    "MAA HARDWARE",
+    "MACHINERY PART",
+    "MAM PETTY CASH",
+    "MAM PETTY CASH MVR",
+    "MARITIME & MERCANTILE INTERNATIONAL MV",
+    "MAZIYA TRADERS",
+    "MIAAF PVT LTD",
+    "MISRAAB",
+    "MIYAMI TRADERS",
+    "MMX TRADERS PVT LTD",
+    "MU STORE",
+    "NASREENA ABDULLA (FISH SUPPLIER)",
+    "NOREXOR AB",
+    "NOVELTY BOOKSHOP",
+    "OEVAALI ART SHOP",
+    "OFFICE PLUS PVT LTD",
+    "OLIVA EFFICIENT HOLDINGS",
+    "OMEGA FIBER & CHEMICALS",
+    "OSMOSIS ASIA",
+    "OSTRAVA PRIVATE LTD",
+    "PACIFIC TECHNOLOGIES",
+    "PACIFIC TECHNOLOGIES PVT LTD",
+    "PALM TREE MARINE",
+    "PERSONAL COMPUTERS",
+    "PERSONAL COMPUTERS USD",
+    "POISE DISTRIBUTORS",
+    "POISE DISTRIBUTORS PVT LTD",
+    "POLL TABLE",
+    "PONY SPA",
+    "PREMIUM SUPPLIES",
+    "PRIME FERTILIZERS",
+    "PRINTLAB",
+    "PROCURE PLUS",
+    "PURE SHORES",
+    "PUREMIND TECHNOLOGY",
+    "RAINCO PVT LTD",
+    "RATERIA FABRICS",
+    "REDSTAR",
+    "REF COOL",
+    "REGIUM FOOD EXPORTD LLP",
+    "RESUINSA EXPERIENCES",
+    "REVOLUTION (HK) IMP & EXP CO. LTD",
+    "RMS MARINE SERVICE",
+    "ROGOWSKI TECHNOLOGY",
+    "ROOMNETTV",
+    "ROSEWARE CORPORATION",
+    "RUMBA",
+    "S&J SALES CORPORATION",
+    "SACH OVERSEAS",
+    "SAFCO INTERNATIONAL GEN TRD LLC",
+    "SALESCO PVT LTD",
+    "SAMAN TRADING",
+    "SAWHNEY FOOD STAFF TRADING CO.",
+    "SEA & SAND TRADING PVT LTD",
+    "SEAFOOD ENTERPRISES",
+    "SEAFOOD ENTERPRISES PVT LTD",
+    "SEAGEAR",
+    "SEALANDS PVT LTD",
+    "SEASPLASH MALDIVES",
+    "SERANDIB PVT LTD",
+    "SHENZHEN SANHE E-COMMERCE CO. LTD",
+    "SIMDI BONDED WAREHOUSE",
+    "SIMDI CONSUMER PRODUCTS",
+    "SIMDI TECH TECHNOLOGY",
+    "SONEE HARDWARE",
+    "SONEE HARDWARE PVT LTD",
+    "SOVEREIGN AGENCIES PVT LTD",
+    "STANDARD & ORIGIN",
+    "STANDARD & ORIGIN MARKETING",
+    "STEEL HARDWARE",
+    "SUN FRONT LIGHTING",
+    "SUPER POWER CO. LTD",
+    "SUPPLY GUIDE",
+    "T AND D WATER",
+    "TEMU",
+    "THANDIYA",
+    "THOOL",
+    "TIAN SHUAI FOOD",
+    "TOTAL BEVERAGES",
+    "TRADE MALDIVES PVT LTD",
+    "UNID HARDWARE",
+    "VB BROTHERS PVT LTD",
+    "VELIGAA HARDWARE",
+    "VILLA HAKATHA PVT LTD",
+    "VIRTUS GROUP GMBH",
+    "VISAKA TRADING",
+    "WANKUN (HANGZHOU) IMPORT AND EXPORT",
+    "WUHAN ZHAIKE NETWORK",
+    "XTAN GAVIN ELECTRONIC",
+    "YONKA PARIS",
+    "ZEGA MALDIVES",
+    "ZIP INVESTMENT PVT LTD"
+  ],
+  "aliases": {
+    "ADK GENERAL TRADING": [
+      "ADK GENERAL",
+      "ADK GRNERAL",
+      "ADK GENIRAL",
+      "ADK GENERAL TR",
+      "ADK GRNERAL TREDING",
+      "ADK GENERAL TARDING",
+      "ADK GENERAL TRADE",
+      "ADK GE NERAL TRADING",
+      "ADK GENERAL TRADE ING"
+    ],
+    "ADK PHARMACEUTICAL SUPPLY": [
+      "ADK PHARMACEUTICAL",
+      "ADK PHARMACEL SUPPLY",
+      "ADK PHARMACEUTIC SUPPLY",
+      "ADK PHARMACEUTICALS"
+    ],
+    "A&G ENERGY SOLUTIONS": [
+      "A&G ENERGY"
+    ],
+    "AIRSEAFOODS GMBH": [
+      "AIRSEAFOOD GMBH",
+      "ARSEAFOODS GMBH"
+    ],
+    "ALIHAVA CONSTRUCTION & TRADING CO PVT LTD": [
+      "ALIHAVA CONSTRUCTION",
+      "ALHAVA CONSTRUCTION & TRADING",
+      "ALIHAVA CONSTRUCTION & TRADING CO"
+    ],
+    "ALIA INVESTMENTS": [
+      "ALIA INVESTMENT",
+      "ALLA INVEST",
+      "ALIA INVESTMENTS PVT LTD",
+      "ALIA INVESTMENT PVT LTD"
+    ],
+    "ATOLL MARKET": [
+      "ATOLL"
+    ],
+    "ATOLLS PHARMACY": [
+      "ATOLLS PHARMAC",
+      "ATOLLS PHARMACHE",
+      "ATOLL PHARMACY"
+    ],
+    "BESTBUY MALDIVES PVT LTD": [
+      "BESTBUY",
+      "BESTBUY MALDIVES",
+      "BEST BUY MALDIVES",
+      "BESTBUY MALDIVES PRIVATE LIMITED",
+      "BESTBUY MALDIVES PRIVATE LIMITADE",
+      "BEST BUY MALDIVES PVT LTD",
+      "BESTBUY MALDIVES PVY LTD",
+      "BESTUBY MALDIVES PVT LTD",
+      "BSETBUY MALDIVES PVT LTD",
+      "BESTBYU MALDIVES PVT LTD",
+      "UNKNOWN SUPPLIER"
+    ],
+    "BIGWIG": [
+      "BIGIWG",
+      "BIGWIG MALDIVES"
+    ],
+    "BIZ SOLUTIONS": [
+      "BIZ SOLUTIION LTD",
+      "BIZ SOLUTION",
+      "BIZ SOLUTIONS PVT LTD",
+      "IBM SOLUTIONS"
+    ],
+    "BLENX PVT LTD": [
+      "BLENX",
+      "BLENX PV"
+    ],
+    "BLUE BIRD COMPANY": [
+      "BLUE BIRD COMPANT",
+      "BLUE BIRD COMPANY PVT LTD"
+    ],
+    "BROTHERHOOD SHOP": [
+      "BROTHERHOOD"
+    ],
+    "CHEF 2 CHEF LLC": [
+      "CHEF 2 CHEF",
+      "CHEF 2 CHEF LTD"
+    ],
+    "CHEMLAB PRIVATE LTD": [
+      "CHEMLAB PVT LTD",
+      "CHEMLAB PRIVATE LIMITED",
+      "CHEMLAB PRIVATE LIMITADE",
+      "CHEMLAB PRIVATE"
+    ],
+    "COLORLAND": [
+      "COLOR BANK"
+    ],
+    "COSMOPOLITAN": [
+      "COSMOPLLITA",
+      "COSMOPLITAN",
+      "COSMOPOLTON",
+      "COSMOPOLIT",
+      "COSMOPOLITA",
+      "COSMOPOLITION",
+      "COSMOPLIATAN",
+      "COSMAPOLITAN",
+      "COSMOPOTITAN",
+      "COSMOPOLITAN PVT LTD",
+      "COMSOPOLITAN",
+      "COSMOOLITAN",
+      "UNKNOWN SUPPLIER"
+    ],
+    "COSMERC MALDIVES": [
+      "COSMERC"
+    ],
+    "D BLUE PRIVATE LTD": [
+      "D BLUE PVT LTD"
+    ],
+    "DIANA TRADING": [
+      "DLANA TRADING",
+      "DHANA TRADING"
+    ],
+    "DITECH CONSTRUCTION SOLUTIONS": [
+      "DITECH CONSTRUCTION",
+      "DITECH CONTRUCTIONS SOLUTIONS",
+      "DITECH CONTRACTIONS SOLUTIONS"
+    ],
+    "EASTERN AND ALLIED SRI LANKA": [
+      "EASTERN AND ALLIED SRILANKA",
+      "EASTERN AND ALLIED",
+      "EASTERN & ALLIED"
+    ],
+    "EMPARAL PVT LTD": [
+      "EMPARAL",
+      "EMAPARAL",
+      "EMAPARAL PVT LTD",
+      "EMPARAL MALDIVES",
+      "EMPARAL PVT",
+      "EMPARAL PRIVATE LIMITADE",
+      "EMPARAL PRIVATE LIMITED",
+      "EMAPRAL PVT LTD"
+    ],
+    "EURO MARKETING PVT LTD": [
+      "EURO MARKETING",
+      "EURO MARK",
+      "EUTO MARKETING",
+      "EURO MARKETI FRIVET LIMITED",
+      "EURO MARKET PRIVATE LIMITADE",
+      "EURO MARKET PRIVATE LIMITED",
+      "EURO MARKETING PRIVATE LIMITED",
+      "EUROMARKETING PRIVATE LIMITADE",
+      "EURO MARKETING PRIVATE LIMITADE",
+      "EURO MARKETNG PVT LTD",
+      "EURO MRKETING PVT LTD"
+    ],
+    "EVO SOLUTIONS": [
+      "EVO SOLUTIONS PVT LTD"
+    ],
+    "F&B EVENING STORE PVT LTD": [
+      "F&B EVENING STORY PVT LTD",
+      "F & B EVENNING STORE PVT LTD",
+      "F&B EVENIN G STORE PVT LTD",
+      "ALIHAVA CONSTRUCTION & TRADING CO PVT LTD",
+      "ALAAN COMPANY PVT LTD"
+    ],
+    "FANTASY PVT LTD": [
+      "FANTASY",
+      "FANTASY PVT.LTD"
+    ],
+    "FEATHER INVESTMENT": [
+      "FEATHER INVESTMENTS",
+      "FATHERS INVESTMENT"
+    ],
+    "FOOD SPECIALTY MALDIVES": [
+      "FOOD SPECIALTY",
+      "FOOD SPECIALITY",
+      "FOOD SPECIALITY MALDIVES",
+      "FOOD SPECIAL MALDIVES",
+      "FOODS MALDIVES",
+      "FOOD SPECIATLY MALDIVES",
+      "FOOD SPECAILTY MALDIVES",
+      "FOOD S PECIALTY MALDIVES",
+      "FOOD SPECI ALTY MALDIVES",
+      "UNKNOWN SUPPLIER",
+      "MALDIVES FOOD SPECIALTY"
+    ],
+    "FRELLA INTERNATIONAL": [
+      "FRELLA INTERNATIONAL PVT LTD",
+      "FRELLA INTERNATIONAL PRIVATE LIMITED"
+    ],
+    "FRONTIER MARKETS ENTERPRISES PVT LTD": [
+      "FRONTIER MARKETS",
+      "FRONTIER MARKET",
+      "FORONTIER MARKETS",
+      "FRONTIEER MARKETS",
+      "FRONTIRE MARKET INTERPRISE",
+      "FRONTIER MARKET INTERPRISE",
+      "FRONTIRE MARKETING",
+      "FRONTIER MARKETS ENTERPRISES",
+      "FRONTANA MARKET INTERPRISE",
+      "FRONTIER MARKETS ENTERPRISE PVT LTD",
+      "FROTIER MARKET"
+    ],
+    "GLOBAL RIWA PVT LTD": [
+      "GLOBAL RIWA",
+      "GLOVAL RIWA",
+      "GOLBAL RIWA",
+      "GLOVAL RIWA PVT LTD",
+      "GLOBALRIWA PVT LTD",
+      "GLOVAL RIW PVT LTD",
+      "GLOABL RIWA PVT LTD",
+      "GLOBA L RIWA PVT LTD",
+      "GLO BAL RIWA PVT LTD"
+    ],
+    "GRAPE EXPECTATIONS PVT LTD": [
+      "GRAPE EXPECTATIONS",
+      "GRAPE EXPECTATION",
+      "ALAAN COMPANY PVT LTD"
+    ],
+    "GREEN PATH PVT LTD": [
+      "GREEN PATH",
+      "GREENPATH"
+    ],
+    "GUANGZHOU HENGYANG LIGHTING EQUIPMENT CO., LTD": [
+      "GUANGZHOU HENGYANG LIGHTING",
+      "GUANGZHOU HENGYANG"
+    ],
+    "HAPPY MARKET": [
+      "HAPPY MARKETS"
+    ],
+    "HMHI COMPANY": [
+      "HMHI COM LIMITED"
+    ],
+    "HORIZON FISHERIES": [
+      "HORIZON FISHIRES",
+      "HORIZON FISHERIES PVT LTD",
+      "HORIZONS FISHERIES"
+    ],
+    "HYDROGLOBAL PVT LTD": [
+      "HYDRO GLOBAL",
+      "HYDRO GLOVAL",
+      "HYDRO GLOBAL PVT LTD"
+    ],
+    "IFS GLOBAL PVT LTD": [
+      "IFS GLOBAL"
+    ],
+    "ILAA MALDIVES PVT LTD": [
+      "ILLA MALDIVES PVT LTD",
+      "ILAA MALDIVES",
+      "ILAA MALDIVESS PVT LTD",
+      "ILAA AMLDIVES PVT LTD",
+      "OISHI MALDIVES PVT LTD"
+    ],
+    "INNOVO MALDIVES": [
+      "INNOVO"
+    ],
+    "INTERNATIONAL FOOD SOLUTION PVT LTD": [
+      "INTERNATIONAL FOOD SOLUTION",
+      "INTERNATIONAL FOOD SOLUTIONS",
+      "INTERNATIONAL FOOD",
+      "INTERNATIONAL SOLUTION",
+      "INTERNATIONAL FOOD SOLUATION",
+      "INTERNATIONAL FOOD SOLUTION PVTD LTD",
+      "INTERNATIOANAL FOOD SOLUTION PVT LTD",
+      "INTERNATIONAL FOOD SOLUTIONS PVT LTD",
+      "INTERNATIONAL FOOD SLUTION PVT LTD",
+      "INTERNATIONAL FOOD SOLUYION PVT LTD",
+      "INTERNATIONLA FOOD SOLUTION PVT LTD",
+      "INTERNATIONAL FOODSO LUTION PVT LTD",
+      "INTERNATIONAL FOO D SOLUTION PVT LTD",
+      "INT ERNATIONAL FOOD SOLUTION PVT LTD",
+      "INT ERNATIONAL FOOD SOLUTION"
+    ],
+    "ISLAND BAZAAR": [
+      "ISLAND BAZAR"
+    ],
+    "JIM TRADERS PVT LTD": [
+      "JIM TRADERS",
+      "J.I.M TRADERS PVT LTD",
+      "J.I.M TRADERS"
+    ],
+    "JVD TECHNOLOGIES": [
+      "JVD TECHNOLOGIES  PTE LTD"
+    ],
+    "KAILAAN TRENDS": [
+      "KAILAAN TRADERS",
+      "KAILLAN TRADERS",
+      "KAILLAN TRENDS",
+      "KAILLAN"
+    ],
+    "LEO STORES PVT LTD": [
+      "LEO STORES"
+    ],
+    "LILY ENTERPRISES PVT LTD": [
+      "LILY ENTERPRISES",
+      "LILY ENTERPRISE",
+      "LILY INTERPRISE",
+      "LILY ENTERPRIESE",
+      "LILY ETERPRISES",
+      "LILY ETERPRIESE",
+      "HMHI COMPANY",
+      "PVT LTD"
+    ],
+    "LILY INTERNATIONAL PVT LTD": [
+      "LILY INTERNATIONAL",
+      "LILY INTERNATIUONAL PVT LTD",
+      "LILY INTERNATIOANL PVT LTD",
+      "LILY INTERNATIONAL PTV LTD",
+      "LILY NTERNATIONAL PVT LTD",
+      "LILY INTERNATIONAL PT LTD",
+      "LILY INT ERNATIONAL PVT LTD",
+      "LILY I NTERNATIONAL PVT LTD",
+      "LILY I NTERNATIONAL PTV LTD",
+      "LILY IN TERNATIONAL PVT LTD"
+    ],
+    "LOLLO WHOLESALE": [
+      "LOLLO WHOLE SALE",
+      "LOLLO WHOLESLAE"
+    ],
+    "LOTUS FIHAARA": [
+      "LOTUS FIHARA",
+      "LOTUS FIHAAI",
+      "LOTUS FLL",
+      "LOTUS",
+      "LOTUS FIIHAARA",
+      "LOTUS FII HAARA"
+    ],
+    "LYCORN MALDIVES": [
+      "LYCORN",
+      "LYCRN MALDIVES",
+      "LYCRON MALDIVES",
+      "LYCRON MALDEVES",
+      "LYCRON",
+      "LYCRON MALDIVES PVT LTD"
+    ],
+    "MAA HARDWARE": [
+      "MAA HARDAWRE",
+      "MAA HARDWARE PVT LTD"
+    ],
+    "MAM PETTY CASH": [
+      "MAM PETTY CASH-MVR",
+      "MAM-PETTY CASH-MVR",
+      "MAM-PETTY CASH"
+    ],
+    "MARITIME & MERCANTILE INTERNATIONAL MV": [
+      "MARITIME & MERCANTILE",
+      "MARITIME&MERCANTILE INTERNATIONAL",
+      "MARITIME & MERCANTILE INTERNATIONAL MV PV",
+      "MARITIME & MARCANTILE INTERNATIONAL MV PV",
+      "MARITIME & MERCANTILE INERNATIONAL MV PVT",
+      "MARITIME & MERCANTITLE INTERNATIONAL",
+      "MARITIME & ME RCANTILE INTERNATIONAL MV PV",
+      "MARITIME & ME RCANTILE INTERNATIONAL MV"
+    ],
+    "MIAAF PVT LTD": [
+      "MIAAF",
+      "MIAAF PVT"
+    ],
+    "MMX TRADERS PVT LTD": [
+      "MMX TRADERS",
+      "MMX TRADERSPVT LTD",
+      "MMX TRARDERS PVT LTD",
+      "MMX TRADE RS PVT LTD",
+      "UNKNOWN SUPPLIER"
+    ],
+    "NASREENA ABDULLA (FISH SUPPLIER)": [
+      "NASREENA ABDULLA",
+      "NASREEN ABDULLAH",
+      "NASREENA ABDULLAH"
+    ],
+    "OLIVA EFFICIENT HOLDINGS": [
+      "OLIVIA EFFICIENT HOLDINGS",
+      "OLIVA EFFICIENT HOLDINGS"
+    ],
+    "OMEGA FIBER & CHEMICALS": [
+      "OMIGA FIBER A CHEMICALES"
+    ],
+    "OSMOSIS ASIA": [
+      "OSMOSIS ASI A"
+    ],
+    "PERSONAL COMPUTERS": [
+      "PERSONAL COMPUTER",
+      "PERSONAL COMPUTERS USD"
+    ],
+    "POISE DISTRIBUTORS": [
+      "POISE DISTRIBUTORS PVT LTD"
+    ],
+    "PREMIUM SUPPLIES": [
+      "PREMIUM SUPPLY",
+      "PREMIUM SUPPLIER",
+      "PREMIUM SUPI",
+      "PREMIUM SUPPLER",
+      "PRIMIUM SUPPLIER"
+    ],
+    "PROCURE PLUS": [
+      "PROCURE PLUS PVT LTD",
+      "OFFICE PLUS PVT LTD"
+    ],
+    "PURE SHORES": [
+      "PURE SHOES",
+      "PURE SHORES PVT LTD"
+    ],
+    "RESUINSA EXPERIENCES": [
+      "RESUINSA EXPERINCES"
+    ],
+    "REVOLUTION (HK) IMP & EXP CO. LTD": [
+      "REVOLUTION  IMP& EXP CO.LTD"
+    ],
+    "RUMBA": [
+      "RUMBAA"
+    ],
+    "S&J SALES CORPORATION": [
+      "S&J SALES",
+      "S&J SSALES CORPOTATION",
+      "S&J SALES CORPOTATION"
+    ],
+    "SAFCO INTERNATIONAL GEN TRD LLC": [
+      "SAFCO INTERNATIONAL",
+      "SAFCO INTERNATIONAL GEN TRD",
+      "SAFCO INTERNATIONBAL GEN.TRD.LLC"
+    ],
+    "SALESCO PVT LTD": [
+      "SALESCO"
+    ],
+    "SAWHNEY FOOD STAFF TRADING CO.": [
+      "SAWHNEY FOODS",
+      "SAWHNEY FOOD STAFF",
+      "SAWHNEY",
+      "SAWHNER FOOD STAFF TRADING CO.",
+      "SAWHNEY FOOD STAFF TRADIGN CO",
+      "SAWHNEY FOOD STAFF TRADING CO.(SAFCO0",
+      "SAWNEY FOOD STAFF TRADING CO.",
+      "SAWHNEY FOODS PVT LTD"
+    ],
+    "SEAGEAR": [
+      "SEAEGEAR",
+      "SEAGEAR PVT LTD"
+    ],
+    "SEAFOOD ENTERPRISES PVT LTD": [
+      "SEAFOOD ENTERPRISES",
+      "SEAFOOD ENTERPRISE",
+      "SEAFOOD ENTERPRSES",
+      "SEAFOOD ETERPRISES",
+      "FRONTIER MARKETS ENTERPRISES PVT LTD"
+    ],
+    "SEALANDS PVT LTD": [
+      "SEALANDS PVT",
+      "SEA LANDS PVT LTD"
+    ],
+    "SEASPLASH MALDIVES": [
+      "SEASPLASH",
+      "SEAPLASH MALDIVES",
+      "SEAPLASH MALDIVES PVT LTD",
+      "SEAS PLASH"
+    ],
+    "SHENZHEN SANHE E-COMMERCE CO. LTD": [
+      "SHENZHEN SANHE E COMMERCE CO. LTD",
+      "SHENZHEN SANHE ECOMMERCE",
+      "SHENZHEN SANHE E-COMMERCE",
+      "SHENZHEN SANHE E CONNERCE CO.LTD",
+      "SHENZHEN SANH E E-COMMERCE CO.LTD"
+    ],
+    "SIMDI CONSUMER PRODUCTS": [
+      "SIMDI CONSUMER",
+      "SIMDI CONSUM PRODUCTS",
+      "SINDI CONSUMER",
+      "SUMDI CONSUME PRODUCT",
+      "SUMDI CONSUMER",
+      "SIDMI CONSUMER PRODUCTS",
+      "SIMDI RESU",
+      "SIMDI BEVERAGES",
+      "SIMD CONSUMER PRODUCT"
+    ],
+    "SIMDI TECH TECHNOLOGY": [
+      "SIMDI TECH"
+    ],
+    "SONEE HARDWARE": [
+      "SONEE HARDWARE PVT LTD",
+      "SONEE HARDWAR E"
+    ],
+    "SOVEREIGN AGENCIES PVT LTD": [
+      "SOVEREIGN INTERNATIONAL PTE LTD"
+    ],
+    "STANDARD & ORIGIN MARKETING": [
+      "STANDARD & ORIGIN",
+      "STANDARD AND ORIGIN",
+      "EURO MARKETING PVT LTD"
+    ],
+    "SUN FRONT LIGHTING": [
+      "SUN FRONT LIGHTIN"
+    ],
+    "T AND D WATER": [
+      "T AND D WATER PVT LTD"
+    ],
+    "TOTAL BEVERAGES": [
+      "TOTAL BEVERAGE",
+      "TOTAL BEVERAGE PVT LTD"
+    ],
+    "TRADE MALDIVES PVT LTD": [
+      "TRADE MALDIVES",
+      "RADIANT HEAT MALDIVES PVT LTD"
+    ],
+    "VB BROTHERS PVT LTD": [
+      "VB BROTHERS",
+      "VB BROTHER",
+      "VB BROTHER PVT LTD",
+      "UNKNOWN SUPPLIER"
+    ],
+    "VILLA HAKATHA PVT LTD": [
+      "VILLA HAKATHA",
+      "VILLA HAKATHA PRIVATE LIMITED",
+      "VILLA HAKATHA PRIVATE LIMITADE",
+      "VILLA HAKHATHA PRIVATE LIMITADE",
+      "VILLA HAKTHA  PVT LTD",
+      "VILL A HAKATHA PVT LTD",
+      "VILL HAKATHA PVT LTD"
+    ],
+    "VIRTUS GROUP GMBH": [
+      "VIRTUS GROUP"
+    ],
+    "WANKUN (HANGZHOU) IMPORT AND EXPORT": [
+      "WANKUN (HANGZHOU)",
+      "WANKUN IMPORT & EXPORT"
+    ],
+    "ZIP INVESTMENT PVT LTD": [
+      "ZIP INVESTMENT",
+      "ZIP INVESTMENTS",
+      "URBAN INVESTMENT PVT LTD",
+      "ALIA INVESMENTS PVT LTD",
+      "ALIA INVSTMENTS PVT LTD",
+      "ALIA IVESTMENT PVT LTD",
+      "ALIA INVESMENT PVT LTD"
+    ],
+    "BLUE BIRD COMPANT": [
+      "BLUE BIRD COMPANY"
+    ],
+    "SEAFOOD ENTERPRISES": [
+      "FRONTIER MARKETS ENTERPRISES PVT LTD"
+    ],
+    "HMHI COMPANY PRIVATE LTD": [
+      "UNKNOWN SUPPLIER"
+    ],
+    "OFFICE PLUS PVT LTD": [
+      "OFFICE PLUS PVT LT"
+    ],
+    "HYDRO GLOBAL PVT LTD": [
+      "ALIHAVA CONSTRUCTION & TRADING CO PVT LTD"
+    ],
+    "POISE DISTRIBUTORS PVT LTD": [
+      "ALIHAVA CONSTRUCTION & TRADING CO PVT LTD"
+    ],
+    "HUIZHOU ALPHA SAUNA & SWIMMING POOL EQUIPMENT CO.LTD": [
+      "GUANGZHOU HENGYANG LIGHTING EQUIPMENT CO., LTD"
+    ],
+    "REGIUM FOOD EXPORTD LLP": [
+      "EX"
+    ],
+    "ECOPURE WATERS INTERNATIONAL LTD": [
+      "LILY INTERNATIONAL PVT LTD"
+    ],
+    "RATERIA FABRICS": [
+      "ALIHAVA CONSTRUCTION & TRADING CO PVT LTD"
+    ],
+    "HEALTH AND GLOW PVT LTD": [
+      "ALIHAVA CONSTRUCTION & TRADING CO PVT LTD"
+    ],
+    "LYCORN MALDIVES PVT LTD": [
+      "ALIHAVA CONSTRUCTION & TRADING CO PVT LTD",
+      "ALAAN COMPANY PVT LTD"
+    ],
+    "SONEE HARDWARE PVT LTD": [
+      "ALIHAVA CONSTRUCTION & TRADING CO PVT LTD"
+    ],
+    "PACIFIC TECHNOLOGIES PVT LTD": [
+      "PACIFIC TECHNOLOGIES"
+    ],
+    "HMHI COMPANY LIMITADE": [
+      "UNKNOWN SUPPLIER"
+    ],
+    "ALAAN COMPANY PVT LTD": [
+      "HMHI COMPANY PRIVATE LTD"
+    ],
+    "HMHI COMPANY LIMITED": [
+      "HMHI COMPANY LIMITADE"
+    ],
+    "SEA & SAND TRADING PVT LTD": [
+      "ALAAN COMPANY PVT LTD"
+    ],
+    "HONEY VIEW HARDWARE": [
+      "HARDWARE LAB"
+    ],
+    "SIMDI BONDED WAREHOUSE": [
+      "WAREHOUSE"
+    ],
+    "ALIHAVA CONSTRUCTION & TRADING CO": [
+      "UNKNOWN SUPPLIER"
+    ],
+    "LILY ENTERPRISE PVT LTD": [
+      "ALAAN COMPANY PVT LTD"
+    ],
+    "EURO MARKETING": [
+      "UNKNOWN SUPPLIER"
+    ],
+    "ZEGA MALDIVES": [
+      "HMHI COMPANY"
+    ],
+    "M GLASS & ALU": [
+      "M GLASS ALU"
+    ],
+    "PERSONAL COMPUTERS USD": [
+      "USD"
+    ],
+    "BARQUE INVESTMENT PVT LTD": [
+      "PVT LTD"
+    ],
+    "BIZ SOLUTIONS PVT LTD": [
+      "BIZ SOLUTIONS PVT I"
+    ],
+    "STANDARD & ORIGIN": [
+      "MARKETING BUYER S DEPT MAM STAFF KITCHEN STANDARD ORIGIN",
+      "MARKETING BUYER S DEPT MAM ACCOUNTING STANDARD ORI"
+    ],
+    "LILY INTERNATIONAL LTD": [
+      "LTD BUYER S DEPT MAM ACCOUNTING LILY INTERNATION"
+    ],
+    "MAM PETTY CASH MVR": [
+      "MAM PETTY CASH MVI"
+    ]
+  },
+  "patterns": {
+    "grn_prefix": "RC-MAM-",
+    "grn_digits": 9,
+    "grn_min_digits": 4,
+    "grn_max_digits": 12,
+    "po_prefix": "MAM-",
+    "po_min_digits": 3,
+    "po_digits": 9,
+    "po_variable_digits": 6,
+    "grn_variable_digits": 5
+  },
+  "app_settings": {
+    "processing_mode": "custom",
+    "supplier_extraction_method": "both",
+    "dry_run": false,
+    "desktop_notifications": true,
+    "auto_ingest_watcher": true,
+    "auto_ingest_offline": false,
+    "auto_ingest_api": true,
+    "receiving_label_fuzzy": true,
+    "delete_temp_after_send": true,
+    "confidence_warn_threshold": 80,
+    "page_scan_region_enabled": false,
+    "page_scan_region_percent": 100,
+    "supplier_match_strategy": "combined",
+    "ocr_mode": "zone",
+    "ocr_word_correction_enabled": false,
+    "smart_cross_match_enabled": false,
+    "ocr_engine": "tesseract",
+    "extract_text_before_ocr": true,
+    "enhance_images": true,
+    "ocr_fallback_to_tesseract": true,
+    "enable_multi_threading": true,
+    "max_threads": 4,
+    "fuzzy_match_threshold": 85,
+    "image_scale_factor": 2,
+    "extraction_source": "auto",
+    "processed_transfer_path": "C:\\Users\\MAM-STORES\\OneDrive - outrigger.com\\Stores Shared\\STORE\\SCAN STORES\\2026",
+    "grn_next_dispatch_no": 21,
+    "scan_method": "hp",
+    "hp_window_title": "HP Scan - HP ScanJet Pro 3000 s3 (USB)",
+    "hp_button_text": "Scan",
+    "hp_captured_backend": "uia",
+    "hp_captured_window_title": "HP Scan - HP ScanJet Pro 3000 s3 (USB)",
+    "hp_captured_button_text": "Scan",
+    "hp_captured_button_class": "",
+    "hp_captured_control_type": "Button",
+    "auto_fix_supplier_by_invoice_pattern": true
+  },
+  "ai_settings": {
+    "enabled": false,
+    "provider": "openai",
+    "model": "gpt-4o-mini",
+    "api_key": "",
+    "custom_base_url": "",
+    "timeout_seconds": 20
+  },
+  "ocr_space": {
+    "api_key": "K88580411388957",
+    "language": "eng",
+    "isOverlayRequired": false,
+    "detectOrientation": true,
+    "scale": true,
+    "OCREngine": 2,
+    "isTable": false,
+    "filetype": "PDF",
+    "timeout_seconds": 30,
+    "max_upload_mb": 1.0
+  },
+  "invoice_prefix_fixes": {
+    "MSL": "MSI",
+    "MS1": "MSI"
+  },
+  "invoice_formats": {
+    "SEAGEAR": {
+      "sample_count": 10,
+      "formats": [
+        {
+          "template": "INV-{0}/SG/{1}",
+          "digit_lengths": [
+            6,
+            4
+          ],
+          "regex": "INV(?:[-/\\s.]{0,2})(\\d{5,7})(?:[-/\\s.]{0,2})SG(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "shape_regex": "(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(\\d{5,7})(?:[-/\\s.]{0,2})(?:[A-Z&]{1,3})(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "count": 6,
+          "share": 0.857
+        },
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "(\\d{5,7})",
+          "shape_regex": "(\\d{5,7})",
+          "count": 1,
+          "share": 0.143
+        },
+        {
+          "template": "INV-105265/SG{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "INV(?:[-/\\s.]{0,2})105265/SG(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "INV(?:[-/\\s.]{0,2})105265/SG(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        },
+        {
+          "template": "INV-84311/SG{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "INV(?:[-/\\s.]{0,2})84311/SG(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "INV(?:[-/\\s.]{0,2})84311/SG(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        },
+        {
+          "template": "INV-85750/SG{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "INV(?:[-/\\s.]{0,2})85750/SG(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "INV(?:[-/\\s.]{0,2})85750/SG(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "FOOD SPECIALTY MALDIVES": {
+      "sample_count": 94,
+      "formats": [
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            5
+          ],
+          "regex": "(\\d{4,6})",
+          "shape_regex": "(\\d{4,6})",
+          "count": 83,
+          "share": 0.883
+        },
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "(\\d{5,7})",
+          "shape_regex": "(\\d{5,7})",
+          "count": 9,
+          "share": 0.096
+        },
+        {
+          "template": "INV :{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "INV\\ :(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "INV\\ :(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 0.011,
+          "source": "derived_from_INVOICEREGEX.txt"
+        },
+        {
+          "template": "INV{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "INV(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "INV(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 0.011,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "BIGWIG": {
+      "sample_count": 15,
+      "formats": [
+        {
+          "template": "OM-INV-{0}-{1}",
+          "digit_lengths": [
+            4,
+            3
+          ],
+          "regex": "OM(?:[-/\\s.]{0,2})INV(?:[-/\\s.]{0,2})(\\d{3,5})(?:[-/\\s.]{0,2})(\\d{2,4})",
+          "shape_regex": "(?:[A-Z&]{1,3})(?:[-/\\s.]{0,2})(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(\\d{3,5})(?:[-/\\s.]{0,2})(\\d{2,4})",
+          "count": 9,
+          "share": 0.643
+        },
+        {
+          "template": "{0}-{1}",
+          "digit_lengths": [
+            4,
+            3
+          ],
+          "regex": "(\\d{3,5})(?:[-/\\s.]{0,2})(\\d{2,4})",
+          "shape_regex": "(\\d{3,5})(?:[-/\\s.]{0,2})(\\d{2,4})",
+          "count": 4,
+          "share": 0.286
+        },
+        {
+          "template": "OM-IN-{0}-{1}",
+          "digit_lengths": [
+            4,
+            3
+          ],
+          "regex": "OM(?:[-/\\s.]{0,2})IN(?:[-/\\s.]{0,2})(\\d{3,5})(?:[-/\\s.]{0,2})(\\d{2,4})",
+          "shape_regex": "(?:[A-Z&]{1,3})(?:[-/\\s.]{0,2})(?:[A-Z&]{1,3})(?:[-/\\s.]{0,2})(\\d{3,5})(?:[-/\\s.]{0,2})(\\d{2,4})",
+          "count": 1,
+          "share": 0.071
+        },
+        {
+          "template": "OM-INV-2026{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "OM(?:[-/\\s.]{0,2})INV(?:[-/\\s.]{0,2})2026(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "OM(?:[-/\\s.]{0,2})INV(?:[-/\\s.]{0,2})2026(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "LILY INTERNATIONAL PVT LTD": {
+      "sample_count": 24,
+      "formats": [
+        {
+          "template": "INV-{0}",
+          "digit_lengths": [
+            7
+          ],
+          "regex": "INV(?:[-/\\s.]{0,2})(\\d{6,8})",
+          "shape_regex": "(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(\\d{6,8})",
+          "count": 17,
+          "share": 0.739
+        },
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "(\\d{5,7})",
+          "shape_regex": "(\\d{5,7})",
+          "count": 4,
+          "share": 0.174
+        },
+        {
+          "template": "LLS/{0}/{1}",
+          "digit_lengths": [
+            4,
+            2
+          ],
+          "regex": "LLS(?:[-/\\s.]{0,2})(\\d{3,5})(?:[-/\\s.]{0,2})(\\d{1,3})",
+          "shape_regex": "(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(\\d{3,5})(?:[-/\\s.]{0,2})(\\d{1,3})",
+          "count": 1,
+          "share": 0.043
+        },
+        {
+          "template": "INV{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "INV(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "INV(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "F&B EVENING STORE": {
+      "sample_count": 88,
+      "formats": [
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            4
+          ],
+          "regex": "(\\d{3,5})",
+          "shape_regex": "(\\d{3,5})",
+          "count": 34,
+          "share": 0.386
+        },
+        {
+          "template": "{0}/ES/ICS/{1}",
+          "digit_lengths": [
+            2,
+            4
+          ],
+          "regex": "(\\d{1,3})(?:[-/\\s.]{0,2})ES(?:[-/\\s.]{0,2})ICS(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "shape_regex": "(\\d{1,3})(?:[-/\\s.]{0,2})(?:[A-Z&]{1,3})(?:[-/\\s.]{0,2})(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "count": 33,
+          "share": 0.375
+        },
+        {
+          "template": "{0}-ES-ICS-{1}",
+          "digit_lengths": [
+            2,
+            5
+          ],
+          "regex": "(\\d{1,3})(?:[-/\\s.]{0,2})ES(?:[-/\\s.]{0,2})ICS(?:[-/\\s.]{0,2})(\\d{4,6})",
+          "shape_regex": "(\\d{1,3})(?:[-/\\s.]{0,2})(?:[A-Z&]{1,3})(?:[-/\\s.]{0,2})(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(\\d{4,6})",
+          "count": 21,
+          "share": 0.239
+        }
+      ]
+    },
+    "HORIZON FISHERIES": {
+      "sample_count": 14,
+      "formats": [
+        {
+          "template": "FGS-{0}",
+          "digit_lengths": [
+            9
+          ],
+          "regex": "FGS(?:[-/\\s.]{0,2})(\\d{8,10})",
+          "shape_regex": "(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(\\d{8,10})",
+          "count": 6,
+          "share": 0.545
+        },
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "(\\d{5,7})",
+          "shape_regex": "(\\d{5,7})",
+          "count": 2,
+          "share": 0.182
+        },
+        {
+          "template": "FGS-{0}",
+          "digit_lengths": [
+            8
+          ],
+          "regex": "FGS(?:[-/\\s.]{0,2})(\\d{7,9})",
+          "shape_regex": "(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(\\d{7,9})",
+          "count": 1,
+          "share": 0.091
+        },
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            4
+          ],
+          "regex": "(\\d{3,5})",
+          "shape_regex": "(\\d{3,5})",
+          "count": 1,
+          "share": 0.091
+        },
+        {
+          "template": "EGS{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "EGS(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "EGS(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        },
+        {
+          "template": "FDS{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "FDS(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "FDS(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        },
+        {
+          "template": "FGS{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "FGS(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "FGS(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "GRAPE EXPECTATIONS PVT LTD": {
+      "sample_count": 31,
+      "formats": [
+        {
+          "template": "INV-{0}",
+          "digit_lengths": [
+            7
+          ],
+          "regex": "INV(?:[-/\\s.]{0,2})(\\d{6,8})",
+          "shape_regex": "(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(\\d{6,8})",
+          "count": 16,
+          "share": 0.533
+        },
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            5
+          ],
+          "regex": "(\\d{4,6})",
+          "shape_regex": "(\\d{4,6})",
+          "count": 13,
+          "share": 0.433
+        },
+        {
+          "template": "INV{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "INV(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "INV(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 0.033,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "LYCORN MALDIVES": {
+      "sample_count": 34,
+      "formats": [
+        {
+          "template": "LCM/{0}/{1}",
+          "digit_lengths": [
+            2,
+            4
+          ],
+          "regex": "LCM(?:[-/\\s.]{0,2})(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "shape_regex": "(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "count": 16,
+          "share": 0.5
+        },
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            4
+          ],
+          "regex": "(\\d{3,5})",
+          "shape_regex": "(\\d{3,5})",
+          "count": 13,
+          "share": 0.406
+        },
+        {
+          "template": "{0}-{1}",
+          "digit_lengths": [
+            2,
+            4
+          ],
+          "regex": "(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "shape_regex": "(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "count": 3,
+          "share": 0.094
+        },
+        {
+          "template": "LCM-26{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "LCM(?:[-/\\s.]{0,2})26(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "LCM(?:[-/\\s.]{0,2})26(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        },
+        {
+          "template": "LCM/25{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "LCM/25(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "LCM/25(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "GLOBAL RIWA PVT LTD": {
+      "sample_count": 20,
+      "formats": [
+        {
+          "template": "RW//{0}/{1}",
+          "digit_lengths": [
+            2,
+            4
+          ],
+          "regex": "RW(?:[-/\\s.]{0,2})(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "shape_regex": "(?:[A-Z&]{1,3})(?:[-/\\s.]{0,2})(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "count": 7,
+          "share": 0.438
+        },
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            3
+          ],
+          "regex": "(\\d{2,4})",
+          "shape_regex": "(\\d{2,4})",
+          "count": 6,
+          "share": 0.375
+        },
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            4
+          ],
+          "regex": "(\\d{3,5})",
+          "shape_regex": "(\\d{3,5})",
+          "count": 2,
+          "share": 0.125
+        },
+        {
+          "template": "RW-25{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "RW(?:[-/\\s.]{0,2})25(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "RW(?:[-/\\s.]{0,2})25(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        },
+        {
+          "template": "RW-26{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "RW(?:[-/\\s.]{0,2})26(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "RW(?:[-/\\s.]{0,2})26(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        },
+        {
+          "template": "RW-U{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "RW(?:[-/\\s.]{0,2})U(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "RW(?:[-/\\s.]{0,2})U(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        },
+        {
+          "template": "RW/25{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "RW/25(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "RW/25(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "INTERNATIONAL FOOD SOLUTION PVT LTD": {
+      "sample_count": 39,
+      "formats": [
+        {
+          "template": "MSI-{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "MSI(?:[-/\\s.]{0,2})(\\d{5,7})",
+          "shape_regex": "(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(\\d{5,7})",
+          "count": 24,
+          "share": 0.649
+        },
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "(\\d{5,7})",
+          "shape_regex": "(\\d{5,7})",
+          "count": 13,
+          "share": 0.351
+        },
+        {
+          "template": "INV-{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "INV(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "INV(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        },
+        {
+          "template": "MSI{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "MSI(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "MSI(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "BESTBUY MALDIVES PVT LTD": {
+      "sample_count": 88,
+      "formats": [
+        {
+          "template": "BB-{0}",
+          "digit_lengths": [
+            7
+          ],
+          "regex": "BB(?:[-/\\s.]{0,2})(\\d{6,8})",
+          "shape_regex": "(?:[A-Z&]{1,3})(?:[-/\\s.]{0,2})(\\d{6,8})",
+          "count": 61,
+          "share": 0.701
+        },
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            7
+          ],
+          "regex": "(\\d{6,8})",
+          "shape_regex": "(\\d{6,8})",
+          "count": 24,
+          "share": 0.276
+        },
+        {
+          "template": "BB{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "BB(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "BB(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "EURO MARKETING PVT LTD": {
+      "sample_count": 63,
+      "formats": [
+        {
+          "template": "EMH-{0}",
+          "digit_lengths": [
+            9
+          ],
+          "regex": "EMH(?:[-/\\s.]{0,2})(\\d{8,10})",
+          "shape_regex": "(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(\\d{8,10})",
+          "count": 34,
+          "share": 0.548
+        },
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            9
+          ],
+          "regex": "(\\d{8,10})",
+          "shape_regex": "(\\d{8,10})",
+          "count": 26,
+          "share": 0.419
+        },
+        {
+          "template": "EMH{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "EMH(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "EMH(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "ATOLL MARKET": {
+      "sample_count": 10,
+      "formats": [
+        {
+          "template": "{0}-{1}",
+          "digit_lengths": [
+            4,
+            4
+          ],
+          "regex": "(\\d{3,5})(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "shape_regex": "(\\d{3,5})(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "count": 9,
+          "share": 0.9
+        },
+        {
+          "template": "{0}-{1}",
+          "digit_lengths": [
+            5,
+            4
+          ],
+          "regex": "(\\d{4,6})(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "shape_regex": "(\\d{4,6})(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "count": 1,
+          "share": 0.1
+        }
+      ]
+    },
+    "BIZ SOLUTIONS": {
+      "sample_count": 15,
+      "formats": [
+        {
+          "template": "BIS/INV/{0}/{1}",
+          "digit_lengths": [
+            4,
+            3
+          ],
+          "regex": "BIS(?:[-/\\s.]{0,2})INV(?:[-/\\s.]{0,2})(\\d{3,5})(?:[-/\\s.]{0,2})(\\d{2,4})",
+          "shape_regex": "(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(\\d{3,5})(?:[-/\\s.]{0,2})(\\d{2,4})",
+          "count": 7,
+          "share": 0.583
+        },
+        {
+          "template": "{0}-{1}",
+          "digit_lengths": [
+            4,
+            3
+          ],
+          "regex": "(\\d{3,5})(?:[-/\\s.]{0,2})(\\d{2,4})",
+          "shape_regex": "(\\d{3,5})(?:[-/\\s.]{0,2})(\\d{2,4})",
+          "count": 4,
+          "share": 0.333
+        },
+        {
+          "template": "{0}.{1}",
+          "digit_lengths": [
+            2,
+            2
+          ],
+          "regex": "(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{1,3})",
+          "shape_regex": "(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{1,3})",
+          "count": 1,
+          "share": 0.083
+        },
+        {
+          "template": "BIS-INV-2026{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "BIS(?:[-/\\s.]{0,2})INV(?:[-/\\s.]{0,2})2026(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "BIS(?:[-/\\s.]{0,2})INV(?:[-/\\s.]{0,2})2026(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        },
+        {
+          "template": "BIS/INV/2025{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "BIS/INV/2025(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "BIS/INV/2025(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        },
+        {
+          "template": "IBM/2025/POS{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "IBM/2025/POS(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "IBM/2025/POS(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "ANAKEE": {
+      "sample_count": 16,
+      "formats": [
+        {
+          "template": "ANK/POS/{0}/C{1}/{2}",
+          "digit_lengths": [
+            4,
+            1,
+            4
+          ],
+          "regex": "ANK(?:[-/\\s.]{0,2})POS(?:[-/\\s.]{0,2})(\\d{3,5})(?:[-/\\s.]{0,2})C(\\d{1,2})(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "shape_regex": "(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(\\d{3,5})(?:[-/\\s.]{0,2})(?:[A-Z&]{1,2})(\\d{1,2})(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "count": 7,
+          "share": 0.467
+        },
+        {
+          "template": "ANK-POS-{0}-C{1}-{2}",
+          "digit_lengths": [
+            4,
+            1,
+            3
+          ],
+          "regex": "ANK(?:[-/\\s.]{0,2})POS(?:[-/\\s.]{0,2})(\\d{3,5})(?:[-/\\s.]{0,2})C(\\d{1,2})(?:[-/\\s.]{0,2})(\\d{2,4})",
+          "shape_regex": "(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(\\d{3,5})(?:[-/\\s.]{0,2})(?:[A-Z&]{1,2})(\\d{1,2})(?:[-/\\s.]{0,2})(\\d{2,4})",
+          "count": 2,
+          "share": 0.133
+        },
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            4
+          ],
+          "regex": "(\\d{3,5})",
+          "shape_regex": "(\\d{3,5})",
+          "count": 2,
+          "share": 0.133
+        },
+        {
+          "template": "ANK/POS/{0}/CS/{1}",
+          "digit_lengths": [
+            4,
+            2
+          ],
+          "regex": "ANK(?:[-/\\s.]{0,2})POS(?:[-/\\s.]{0,2})(\\d{3,5})(?:[-/\\s.]{0,2})CS(?:[-/\\s.]{0,2})(\\d{1,3})",
+          "shape_regex": "(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(\\d{3,5})(?:[-/\\s.]{0,2})(?:[A-Z&]{1,3})(?:[-/\\s.]{0,2})(\\d{1,3})",
+          "count": 1,
+          "share": 0.067
+        },
+        {
+          "template": "ANK/POS/2025/C1{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "ANK/POS/2025/C1(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "ANK/POS/2025/C1(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "PREMIUM SUPPLIES": {
+      "sample_count": 25,
+      "formats": [
+        {
+          "template": "INV-PS-{0}-{1}",
+          "digit_lengths": [
+            2,
+            4
+          ],
+          "regex": "INV(?:[-/\\s.]{0,2})PS(?:[-/\\s.]{0,2})(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "shape_regex": "(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(?:[A-Z&]{1,3})(?:[-/\\s.]{0,2})(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "count": 12,
+          "share": 0.522
+        },
+        {
+          "template": "{0}-{1}",
+          "digit_lengths": [
+            2,
+            4
+          ],
+          "regex": "(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "shape_regex": "(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "count": 6,
+          "share": 0.261
+        },
+        {
+          "template": "PS-{0}-{1}",
+          "digit_lengths": [
+            2,
+            4
+          ],
+          "regex": "PS(?:[-/\\s.]{0,2})(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "shape_regex": "(?:[A-Z&]{1,3})(?:[-/\\s.]{0,2})(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "count": 1,
+          "share": 0.043
+        },
+        {
+          "template": "INV-PS-{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "INV(?:[-/\\s.]{0,2})PS(?:[-/\\s.]{0,2})(\\d{5,7})",
+          "shape_regex": "(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(?:[A-Z&]{1,3})(?:[-/\\s.]{0,2})(\\d{5,7})",
+          "count": 1,
+          "share": 0.043
+        },
+        {
+          "template": "INV-PS{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "INV(?:[-/\\s.]{0,2})PS(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "INV(?:[-/\\s.]{0,2})PS(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        },
+        {
+          "template": "INV-PS-26{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "INV(?:[-/\\s.]{0,2})PS(?:[-/\\s.]{0,2})26(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "INV(?:[-/\\s.]{0,2})PS(?:[-/\\s.]{0,2})26(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "LOLLO WHOLESALE": {
+      "sample_count": 17,
+      "formats": [
+        {
+          "template": "LW/{0}/C{1}/{2}",
+          "digit_lengths": [
+            2,
+            1,
+            5
+          ],
+          "regex": "LW(?:[-/\\s.]{0,2})(\\d{1,3})(?:[-/\\s.]{0,2})C(\\d{1,2})(?:[-/\\s.]{0,2})(\\d{4,6})",
+          "shape_regex": "(?:[A-Z&]{1,3})(?:[-/\\s.]{0,2})(\\d{1,3})(?:[-/\\s.]{0,2})(?:[A-Z&]{1,2})(\\d{1,2})(?:[-/\\s.]{0,2})(\\d{4,6})",
+          "count": 7,
+          "share": 0.467
+        },
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            5
+          ],
+          "regex": "(\\d{4,6})",
+          "shape_regex": "(\\d{4,6})",
+          "count": 4,
+          "share": 0.267
+        },
+        {
+          "template": "LW/{0}/C{1}/{2}",
+          "digit_lengths": [
+            2,
+            1,
+            4
+          ],
+          "regex": "LW(?:[-/\\s.]{0,2})(\\d{1,3})(?:[-/\\s.]{0,2})C(\\d{1,2})(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "shape_regex": "(?:[A-Z&]{1,3})(?:[-/\\s.]{0,2})(\\d{1,3})(?:[-/\\s.]{0,2})(?:[A-Z&]{1,2})(\\d{1,2})(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "count": 2,
+          "share": 0.133
+        },
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            4
+          ],
+          "regex": "(\\d{3,5})",
+          "shape_regex": "(\\d{3,5})",
+          "count": 1,
+          "share": 0.067
+        },
+        {
+          "template": "LW/25/C3{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "LW/25/C3(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "LW/25/C3(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        },
+        {
+          "template": "LW/26/C3{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "LW/26/C3(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "LW/26/C3(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "VB BROTHERS PVT LTD": {
+      "sample_count": 25,
+      "formats": [
+        {
+          "template": "SI-VBW/T{0}/{1}/{2}",
+          "digit_lengths": [
+            1,
+            2,
+            5
+          ],
+          "regex": "SI(?:[-/\\s.]{0,2})VBW(?:[-/\\s.]{0,2})T(\\d{1,2})(?:[-/\\s.]{0,2})(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{4,6})",
+          "shape_regex": "(?:[A-Z&]{1,3})(?:[-/\\s.]{0,2})(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(?:[A-Z&]{1,2})(\\d{1,2})(?:[-/\\s.]{0,2})(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{4,6})",
+          "count": 11,
+          "share": 0.478
+        },
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            5
+          ],
+          "regex": "(\\d{4,6})",
+          "shape_regex": "(\\d{4,6})",
+          "count": 7,
+          "share": 0.304
+        },
+        {
+          "template": "SI-VBW T{0} {1} {2}",
+          "digit_lengths": [
+            1,
+            2,
+            4
+          ],
+          "regex": "SI(?:[-/\\s.]{0,2})VBW(?:[-/\\s.]{0,2})T(\\d{1,2})(?:[-/\\s.]{0,2})(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "shape_regex": "(?:[A-Z&]{1,3})(?:[-/\\s.]{0,2})(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(?:[A-Z&]{1,2})(\\d{1,2})(?:[-/\\s.]{0,2})(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "count": 2,
+          "share": 0.087
+        },
+        {
+          "template": "SI-BBW/T{0}/{1}/{2}",
+          "digit_lengths": [
+            1,
+            2,
+            5
+          ],
+          "regex": "SI(?:[-/\\s.]{0,2})BBW(?:[-/\\s.]{0,2})T(\\d{1,2})(?:[-/\\s.]{0,2})(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{4,6})",
+          "shape_regex": "(?:[A-Z&]{1,3})(?:[-/\\s.]{0,2})(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(?:[A-Z&]{1,2})(\\d{1,2})(?:[-/\\s.]{0,2})(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{4,6})",
+          "count": 1,
+          "share": 0.043
+        },
+        {
+          "template": "SI-VBW/T2/25{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "SI(?:[-/\\s.]{0,2})VBW/T2/25(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "SI(?:[-/\\s.]{0,2})VBW/T2/25(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        },
+        {
+          "template": "SI-VBW/T2/26{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "SI(?:[-/\\s.]{0,2})VBW/T2/26(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "SI(?:[-/\\s.]{0,2})VBW/T2/26(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "HAPPY MARKET": {
+      "sample_count": 32,
+      "formats": [
+        {
+          "template": "HMIN{0}",
+          "digit_lengths": [
+            7
+          ],
+          "regex": "HMIN(\\d{6,8})",
+          "shape_regex": "(?:[A-Z&]{3,5})(\\d{6,8})",
+          "count": 19,
+          "share": 0.613
+        },
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "(\\d{5,7})",
+          "shape_regex": "(\\d{5,7})",
+          "count": 10,
+          "share": 0.323
+        },
+        {
+          "template": "HMIN-{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "HMIN(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "HMIN(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "FANTASY PVT LTD": {
+      "sample_count": 50,
+      "formats": [
+        {
+          "template": "CRD/{0}-{1}",
+          "digit_lengths": [
+            5,
+            4
+          ],
+          "regex": "CRD(?:[-/\\s.]{0,2})(\\d{4,6})(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "shape_regex": "(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(\\d{4,6})(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "count": 35,
+          "share": 0.745
+        },
+        {
+          "template": "{0}-{1}",
+          "digit_lengths": [
+            5,
+            4
+          ],
+          "regex": "(\\d{4,6})(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "shape_regex": "(\\d{4,6})(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "count": 7,
+          "share": 0.149
+        },
+        {
+          "template": "{0}-{1}",
+          "digit_lengths": [
+            4,
+            4
+          ],
+          "regex": "(\\d{3,5})(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "shape_regex": "(\\d{3,5})(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "count": 3,
+          "share": 0.064
+        },
+        {
+          "template": "CRD/04713{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "CRD/04713(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "CRD/04713(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        },
+        {
+          "template": "CRD/05932{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "CRD/05932(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "CRD/05932(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        },
+        {
+          "template": "CRD/06331{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "CRD/06331(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "CRD/06331(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "HMHI COMPANY": {
+      "sample_count": 6,
+      "formats": [
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            3
+          ],
+          "regex": "(\\d{2,4})",
+          "shape_regex": "(\\d{2,4})",
+          "count": 5,
+          "share": 0.833
+        },
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            4
+          ],
+          "regex": "(\\d{3,5})",
+          "shape_regex": "(\\d{3,5})",
+          "count": 1,
+          "share": 0.167
+        }
+      ]
+    },
+    "LOTUS FIHAARA": {
+      "sample_count": 16,
+      "formats": [
+        {
+          "template": "LFF/{0}",
+          "digit_lengths": [
+            7
+          ],
+          "regex": "LFF(?:[-/\\s.]{0,2})(\\d{6,8})",
+          "shape_regex": "(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(\\d{6,8})",
+          "count": 10,
+          "share": 0.667
+        },
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            7
+          ],
+          "regex": "(\\d{6,8})",
+          "shape_regex": "(\\d{6,8})",
+          "count": 5,
+          "share": 0.333
+        },
+        {
+          "template": "LFF{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "LFF(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "LFF(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "MU STORE": {
+      "sample_count": 17,
+      "formats": [
+        {
+          "template": "INV/{0}/{1}",
+          "digit_lengths": [
+            4,
+            6
+          ],
+          "regex": "INV(?:[-/\\s.]{0,2})(\\d{3,5})(?:[-/\\s.]{0,2})(\\d{5,7})",
+          "shape_regex": "(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(\\d{3,5})(?:[-/\\s.]{0,2})(\\d{5,7})",
+          "count": 11,
+          "share": 0.688
+        },
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            5
+          ],
+          "regex": "(\\d{4,6})",
+          "shape_regex": "(\\d{4,6})",
+          "count": 4,
+          "share": 0.25
+        },
+        {
+          "template": "INV/2025{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "INV/2025(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "INV/2025(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "MMX TRADERS PVT LTD": {
+      "sample_count": 43,
+      "formats": [
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            3
+          ],
+          "regex": "(\\d{2,4})",
+          "shape_regex": "(\\d{2,4})",
+          "count": 8,
+          "share": 0.25
+        },
+        {
+          "template": "MMX/{0}/JUN/{1}",
+          "digit_lengths": [
+            4,
+            4
+          ],
+          "regex": "MMX(?:[-/\\s.]{0,2})(\\d{3,5})(?:[-/\\s.]{0,2})JUN(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "shape_regex": "(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(\\d{3,5})(?:[-/\\s.]{0,2})(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "count": 7,
+          "share": 0.219
+        },
+        {
+          "template": "MMX/{0}/MAY/{1}",
+          "digit_lengths": [
+            4,
+            4
+          ],
+          "regex": "MMX(?:[-/\\s.]{0,2})(\\d{3,5})(?:[-/\\s.]{0,2})MAY(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "shape_regex": "(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(\\d{3,5})(?:[-/\\s.]{0,2})(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "count": 5,
+          "share": 0.156
+        },
+        {
+          "template": "MMX/{0}/APR/{1}",
+          "digit_lengths": [
+            4,
+            4
+          ],
+          "regex": "MMX(?:[-/\\s.]{0,2})(\\d{3,5})(?:[-/\\s.]{0,2})APR(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "shape_regex": "(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(\\d{3,5})(?:[-/\\s.]{0,2})(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "count": 4,
+          "share": 0.125
+        },
+        {
+          "template": "DEC{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "DEC(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "DEC(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 0.031,
+          "source": "derived_from_INVOICEREGEX.txt"
+        },
+        {
+          "template": "FEB{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "FEB(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "FEB(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 0.031,
+          "source": "derived_from_INVOICEREGEX.txt"
+        },
+        {
+          "template": "MMX/2025/FEB{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "MMX/2025/FEB(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "MMX/2025/FEB(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 0.031,
+          "source": "derived_from_INVOICEREGEX.txt"
+        },
+        {
+          "template": "MMX/2025/MAY{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "MMX/2025/MAY(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "MMX/2025/MAY(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 0.031,
+          "source": "derived_from_INVOICEREGEX.txt"
+        },
+        {
+          "template": "MMX/2025/NOV{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "MMX/2025/NOV(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "MMX/2025/NOV(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 0.031,
+          "source": "derived_from_INVOICEREGEX.txt"
+        },
+        {
+          "template": "MMX/2025/SEP{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "MMX/2025/SEP(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "MMX/2025/SEP(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 0.031,
+          "source": "derived_from_INVOICEREGEX.txt"
+        },
+        {
+          "template": "NOV{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "NOV(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "NOV(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 0.031,
+          "source": "derived_from_INVOICEREGEX.txt"
+        },
+        {
+          "template": "MMX{0}JULY{1}",
+          "digit_lengths": [
+            4,
+            4
+          ],
+          "regex": "MMX(?:[-/\\s.]{0,2})(\\d{3,6})(?:[-/\\s.]{0,2})JULY(?:[-/\\s.]{0,2})(\\d{3,6})",
+          "shape_regex": "(?:[A-Z&]{1,3})(?:[-/\\s.]{0,2})(\\d{3,6})(?:[-/\\s.]{0,2})(?:[A-Z&]{1,4})(?:[-/\\s.]{0,2})(\\d{3,6})",
+          "count": 1,
+          "share": 0.031,
+          "active": true
+        }
+      ]
+    },
+    "EMPARAL PVT LTD": {
+      "sample_count": 80,
+      "formats": [
+        {
+          "template": "E{0}/{1}",
+          "digit_lengths": [
+            2,
+            4
+          ],
+          "regex": "E(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "shape_regex": "(?:[A-Z&]{1,2})(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "count": 51,
+          "share": 0.654
+        },
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            4
+          ],
+          "regex": "(\\d{3,5})",
+          "shape_regex": "(\\d{3,5})",
+          "count": 22,
+          "share": 0.282
+        },
+        {
+          "template": "E25{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "E25(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "E25(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        },
+        {
+          "template": "E26{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "E26(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "E26(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "OEVAALI ART SHOP": {
+      "sample_count": 1,
+      "formats": [
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            4
+          ],
+          "regex": "(\\d{3,5})",
+          "shape_regex": "(\\d{3,5})",
+          "count": 1,
+          "share": 1.0
+        }
+      ]
+    },
+    "STEEL HARDWARE": {
+      "sample_count": 4,
+      "formats": [
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "(\\d{5,7})",
+          "shape_regex": "(\\d{5,7})",
+          "count": 3,
+          "share": 0.75
+        },
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            5
+          ],
+          "regex": "(\\d{4,6})",
+          "shape_regex": "(\\d{4,6})",
+          "count": 1,
+          "share": 0.25
+        }
+      ]
+    },
+    "KOOLTEMP MALDIVES": {
+      "sample_count": 2,
+      "formats": [
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "(\\d{5,7})",
+          "shape_regex": "(\\d{5,7})",
+          "count": 2,
+          "share": 1.0
+        }
+      ]
+    },
+    "NASREENA ABDULLA (FISH SUPPLIER)": {
+      "sample_count": 12,
+      "formats": [
+        {
+          "template": "{0}-{1}",
+          "digit_lengths": [
+            4,
+            4
+          ],
+          "regex": "(\\d{3,5})(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "shape_regex": "(\\d{3,5})(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "count": 10,
+          "share": 0.909
+        },
+        {
+          "template": "{0}-{1}",
+          "digit_lengths": [
+            4,
+            3
+          ],
+          "regex": "(\\d{3,5})(?:[-/\\s.]{0,2})(\\d{2,4})",
+          "shape_regex": "(\\d{3,5})(?:[-/\\s.]{0,2})(\\d{2,4})",
+          "count": 1,
+          "share": 0.091
+        },
+        {
+          "template": "2026{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "2026(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "2026(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "VILLA HAKATHA PVT LTD": {
+      "sample_count": 18,
+      "formats": [
+        {
+          "template": "VT{0}-{1}",
+          "digit_lengths": [
+            1,
+            7
+          ],
+          "regex": "VT(\\d{1,2})(?:[-/\\s.]{0,2})(\\d{6,8})",
+          "shape_regex": "(?:[A-Z&]{1,3})(\\d{1,2})(?:[-/\\s.]{0,2})(\\d{6,8})",
+          "count": 12,
+          "share": 0.706
+        },
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "(\\d{5,7})",
+          "shape_regex": "(\\d{5,7})",
+          "count": 3,
+          "share": 0.176
+        },
+        {
+          "template": "VT{0}-{1}",
+          "digit_lengths": [
+            1,
+            6
+          ],
+          "regex": "VT(\\d{1,2})(?:[-/\\s.]{0,2})(\\d{5,7})",
+          "shape_regex": "(?:[A-Z&]{1,3})(\\d{1,2})(?:[-/\\s.]{0,2})(\\d{5,7})",
+          "count": 1,
+          "share": 0.059
+        },
+        {
+          "template": "VT2{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "VT2(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "VT2(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "GREEN PATH PVT LTD": {
+      "sample_count": 17,
+      "formats": [
+        {
+          "template": "GP-{0}/ICS/{1}",
+          "digit_lengths": [
+            2,
+            4
+          ],
+          "regex": "GP(?:[-/\\s.]{0,2})(\\d{1,3})(?:[-/\\s.]{0,2})ICS(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "shape_regex": "(?:[A-Z&]{1,3})(?:[-/\\s.]{0,2})(\\d{1,3})(?:[-/\\s.]{0,2})(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "count": 8,
+          "share": 0.533
+        },
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            4
+          ],
+          "regex": "(\\d{3,5})",
+          "shape_regex": "(\\d{3,5})",
+          "count": 5,
+          "share": 0.333
+        },
+        {
+          "template": "GP {0} ICS {1}",
+          "digit_lengths": [
+            3,
+            4
+          ],
+          "regex": "GP(?:[-/\\s.]{0,2})(\\d{2,4})(?:[-/\\s.]{0,2})ICS(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "shape_regex": "(?:[A-Z&]{1,3})(?:[-/\\s.]{0,2})(\\d{2,4})(?:[-/\\s.]{0,2})(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "count": 1,
+          "share": 0.067
+        },
+        {
+          "template": "GP/25/ICS{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "GP/25/ICS(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "GP/25/ICS(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        },
+        {
+          "template": "GP/26/ICS{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "GP/26/ICS(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "GP/26/ICS(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "STANDARD & ORIGIN MARKETING": {
+      "sample_count": 46,
+      "formats": [
+        {
+          "template": "S&O/{0}/ICS/{1}",
+          "digit_lengths": [
+            2,
+            4
+          ],
+          "regex": "S\\&O(?:[-/\\s.]{0,2})(\\d{1,3})(?:[-/\\s.]{0,2})ICS(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "shape_regex": "(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(\\d{1,3})(?:[-/\\s.]{0,2})(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "count": 29,
+          "share": 0.644
+        },
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            4
+          ],
+          "regex": "(\\d{3,5})",
+          "shape_regex": "(\\d{3,5})",
+          "count": 14,
+          "share": 0.311
+        },
+        {
+          "template": "S&O-26-ICS{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "S\\&O(?:[-/\\s.]{0,2})26(?:[-/\\s.]{0,2})ICS(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "S\\&O(?:[-/\\s.]{0,2})26(?:[-/\\s.]{0,2})ICS(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 0.022,
+          "source": "derived_from_INVOICEREGEX.txt"
+        },
+        {
+          "template": "S&O/.25/ICS{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "S\\&O/\\.25/ICS(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "S\\&O/\\.25/ICS(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 0.022,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "KAILAAN TRENDS": {
+      "sample_count": 7,
+      "formats": [
+        {
+          "template": "INV/{0}/{1}",
+          "digit_lengths": [
+            4,
+            5
+          ],
+          "regex": "INV(?:[-/\\s.]{0,2})(\\d{3,5})(?:[-/\\s.]{0,2})(\\d{4,6})",
+          "shape_regex": "(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(\\d{3,5})(?:[-/\\s.]{0,2})(\\d{4,6})",
+          "count": 3,
+          "share": 0.5
+        },
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            3
+          ],
+          "regex": "(\\d{2,4})",
+          "shape_regex": "(\\d{2,4})",
+          "count": 2,
+          "share": 0.333
+        },
+        {
+          "template": "INV/{0}/{1}",
+          "digit_lengths": [
+            4,
+            6
+          ],
+          "regex": "INV(?:[-/\\s.]{0,2})(\\d{3,5})(?:[-/\\s.]{0,2})(\\d{5,7})",
+          "shape_regex": "(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(\\d{3,5})(?:[-/\\s.]{0,2})(\\d{5,7})",
+          "count": 1,
+          "share": 0.167
+        },
+        {
+          "template": "INV/2025{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "INV/2025(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "INV/2025(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "EGO TIMBER": {
+      "sample_count": 1,
+      "formats": [
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            5
+          ],
+          "regex": "(\\d{4,6})",
+          "shape_regex": "(\\d{4,6})",
+          "count": 1,
+          "share": 1.0
+        }
+      ]
+    },
+    "SONEE HARDWARE": {
+      "sample_count": 9,
+      "formats": [
+        {
+          "template": "CINV-{0}",
+          "digit_lengths": [
+            7
+          ],
+          "regex": "CINV(?:[-/\\s.]{0,2})(\\d{6,8})",
+          "shape_regex": "(?:[A-Z&]{3,5})(?:[-/\\s.]{0,2})(\\d{6,8})",
+          "count": 7,
+          "share": 0.875
+        },
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            7
+          ],
+          "regex": "(\\d{6,8})",
+          "shape_regex": "(\\d{6,8})",
+          "count": 1,
+          "share": 0.125
+        },
+        {
+          "template": "CINV{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "CINV(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "CINV(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "FRONTIER MARKETS ENTERPRISES PVT LTD": {
+      "sample_count": 37,
+      "formats": [
+        {
+          "template": "INV/{0}/{1}",
+          "digit_lengths": [
+            4,
+            5
+          ],
+          "regex": "INV(?:[-/\\s.]{0,2})(\\d{3,5})(?:[-/\\s.]{0,2})(\\d{4,6})",
+          "shape_regex": "(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(\\d{3,5})(?:[-/\\s.]{0,2})(\\d{4,6})",
+          "count": 27,
+          "share": 0.794
+        },
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            5
+          ],
+          "regex": "(\\d{4,6})",
+          "shape_regex": "(\\d{4,6})",
+          "count": 7,
+          "share": 0.206
+        },
+        {
+          "template": "INV-2025{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "INV(?:[-/\\s.]{0,2})2025(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "INV(?:[-/\\s.]{0,2})2025(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        },
+        {
+          "template": "INV-2026{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "INV(?:[-/\\s.]{0,2})2026(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "INV(?:[-/\\s.]{0,2})2026(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        },
+        {
+          "template": "INV/2026{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "INV/2026(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "INV/2026(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "COSMOPOLITAN": {
+      "sample_count": 45,
+      "formats": [
+        {
+          "template": "MDV-{0}",
+          "digit_lengths": [
+            7
+          ],
+          "regex": "MDV(?:[-/\\s.]{0,2})(\\d{6,8})",
+          "shape_regex": "(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(\\d{6,8})",
+          "count": 25,
+          "share": 0.568
+        },
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "(\\d{5,7})",
+          "shape_regex": "(\\d{5,7})",
+          "count": 16,
+          "share": 0.364
+        },
+        {
+          "template": "MDV{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "MDV(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "MDV(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "INNOVO MALDIVES": {
+      "sample_count": 34,
+      "formats": [
+        {
+          "template": "IS/{0}/{1}",
+          "digit_lengths": [
+            2,
+            4
+          ],
+          "regex": "IS(?:[-/\\s.]{0,2})(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "shape_regex": "(?:[A-Z&]{1,3})(?:[-/\\s.]{0,2})(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "count": 24,
+          "share": 0.727
+        },
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            4
+          ],
+          "regex": "(\\d{3,5})",
+          "shape_regex": "(\\d{3,5})",
+          "count": 7,
+          "share": 0.212
+        },
+        {
+          "template": "IS-18{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "IS(?:[-/\\s.]{0,2})18(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "IS(?:[-/\\s.]{0,2})18(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "ZIP INVESTMENT PVT LTD": {
+      "sample_count": 7,
+      "formats": [
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            5
+          ],
+          "regex": "(\\d{4,6})",
+          "shape_regex": "(\\d{4,6})",
+          "count": 2,
+          "share": 0.5
+        },
+        {
+          "template": "INV/THI{0}",
+          "digit_lengths": [
+            4
+          ],
+          "regex": "INV(?:[-/\\s.]{0,2})THI(\\d{3,5})",
+          "shape_regex": "(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(?:[A-Z&]{2,4})(\\d{3,5})",
+          "count": 1,
+          "share": 0.25
+        },
+        {
+          "template": "INV T{0}",
+          "digit_lengths": [
+            7
+          ],
+          "regex": "INV(?:[-/\\s.]{0,2})T(\\d{6,8})",
+          "shape_regex": "(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(?:[A-Z&]{1,2})(\\d{6,8})",
+          "count": 1,
+          "share": 0.25
+        },
+        {
+          "template": "753/UI{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "753/UI(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "753/UI(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        },
+        {
+          "template": "INV-{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "INV(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "INV(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        },
+        {
+          "template": "YAM/ICS/25{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "YAM/ICS/25(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "YAM/ICS/25(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "COLORLAND": {
+      "sample_count": 6,
+      "formats": [
+        {
+          "template": "DCL/{0}/{1}/{2}",
+          "digit_lengths": [
+            1,
+            2,
+            5
+          ],
+          "regex": "DCL(?:[-/\\s.]{0,2})(\\d{1,2})(?:[-/\\s.]{0,2})(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{4,6})",
+          "shape_regex": "(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(\\d{1,2})(?:[-/\\s.]{0,2})(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{4,6})",
+          "count": 2,
+          "share": 0.4
+        },
+        {
+          "template": "DC/{0}/{1}/{2}",
+          "digit_lengths": [
+            1,
+            2,
+            5
+          ],
+          "regex": "DC(?:[-/\\s.]{0,2})(\\d{1,2})(?:[-/\\s.]{0,2})(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{4,6})",
+          "shape_regex": "(?:[A-Z&]{1,3})(?:[-/\\s.]{0,2})(\\d{1,2})(?:[-/\\s.]{0,2})(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{4,6})",
+          "count": 2,
+          "share": 0.4
+        },
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "(\\d{5,7})",
+          "shape_regex": "(\\d{5,7})",
+          "count": 1,
+          "share": 0.2
+        },
+        {
+          "template": "DC/5/26{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "DC/5/26(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "DC/5/26(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "CSC ENGINEERING": {
+      "sample_count": 2,
+      "formats": [
+        {
+          "template": "IN-{0}-{1}",
+          "digit_lengths": [
+            4,
+            4
+          ],
+          "regex": "IN(?:[-/\\s.]{0,2})(\\d{3,5})(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "shape_regex": "(?:[A-Z&]{1,3})(?:[-/\\s.]{0,2})(\\d{3,5})(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "count": 1,
+          "share": 1.0
+        },
+        {
+          "template": "1441{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "1441(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "1441(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "IFS GLOBAL PVT LTD": {
+      "sample_count": 7,
+      "formats": [
+        {
+          "template": "GSI-{0}",
+          "digit_lengths": [
+            5
+          ],
+          "regex": "GSI(?:[-/\\s.]{0,2})(\\d{4,6})",
+          "shape_regex": "(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(\\d{4,6})",
+          "count": 3,
+          "share": 0.5
+        },
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            5
+          ],
+          "regex": "(\\d{4,6})",
+          "shape_regex": "(\\d{4,6})",
+          "count": 2,
+          "share": 0.333
+        },
+        {
+          "template": "GS{0}-{1}",
+          "digit_lengths": [
+            1,
+            5
+          ],
+          "regex": "GS(\\d{1,2})(?:[-/\\s.]{0,2})(\\d{4,6})",
+          "shape_regex": "(?:[A-Z&]{1,3})(\\d{1,2})(?:[-/\\s.]{0,2})(\\d{4,6})",
+          "count": 1,
+          "share": 0.167
+        },
+        {
+          "template": "GSI{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "GSI(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "GSI(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "MARITIME & MERCANTILE INTERNATIONAL MV": {
+      "sample_count": 4,
+      "formats": [
+        {
+          "template": "ARINV-{0}",
+          "digit_lengths": [
+            8
+          ],
+          "regex": "ARINV(?:[-/\\s.]{0,2})(\\d{7,9})",
+          "shape_regex": "(?:[A-Z&]{4,6})(?:[-/\\s.]{0,2})(\\d{7,9})",
+          "count": 2,
+          "share": 0.667
+        },
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            8
+          ],
+          "regex": "(\\d{7,9})",
+          "shape_regex": "(\\d{7,9})",
+          "count": 1,
+          "share": 0.333
+        },
+        {
+          "template": "ARINV{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "ARINV(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "ARINV(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "FEATHER INVESTMENT": {
+      "sample_count": 55,
+      "formats": [
+        {
+          "template": "{0}-FI-INV-{1}",
+          "digit_lengths": [
+            2,
+            4
+          ],
+          "regex": "(\\d{1,3})(?:[-/\\s.]{0,2})FI(?:[-/\\s.]{0,2})INV(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "shape_regex": "(\\d{1,3})(?:[-/\\s.]{0,2})(?:[A-Z&]{1,3})(?:[-/\\s.]{0,2})(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "count": 22,
+          "share": 0.415
+        },
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            4
+          ],
+          "regex": "(\\d{3,5})",
+          "shape_regex": "(\\d{3,5})",
+          "count": 15,
+          "share": 0.283
+        },
+        {
+          "template": "{0}-FI-INV-{1}",
+          "digit_lengths": [
+            2,
+            3
+          ],
+          "regex": "(\\d{1,3})(?:[-/\\s.]{0,2})FI(?:[-/\\s.]{0,2})INV(?:[-/\\s.]{0,2})(\\d{2,4})",
+          "shape_regex": "(\\d{1,3})(?:[-/\\s.]{0,2})(?:[A-Z&]{1,3})(?:[-/\\s.]{0,2})(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(\\d{2,4})",
+          "count": 9,
+          "share": 0.17
+        },
+        {
+          "template": "{0}/F{1}/INV/{2}",
+          "digit_lengths": [
+            2,
+            1,
+            3
+          ],
+          "regex": "(\\d{1,3})(?:[-/\\s.]{0,2})F(\\d{1,2})(?:[-/\\s.]{0,2})INV(?:[-/\\s.]{0,2})(\\d{2,4})",
+          "shape_regex": "(\\d{1,3})(?:[-/\\s.]{0,2})(?:[A-Z&]{1,2})(\\d{1,2})(?:[-/\\s.]{0,2})(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(\\d{2,4})",
+          "count": 4,
+          "share": 0.075
+        },
+        {
+          "template": "26-FI-INV{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "26(?:[-/\\s.]{0,2})FI(?:[-/\\s.]{0,2})INV(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "26(?:[-/\\s.]{0,2})FI(?:[-/\\s.]{0,2})INV(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        },
+        {
+          "template": "26/FI/INV{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "26/FI/INV(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "26/FI/INV(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "ADK GENERAL TRADING": {
+      "sample_count": 11,
+      "formats": [
+        {
+          "template": "GT/{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "GT(?:[-/\\s.]{0,2})(\\d{5,7})",
+          "shape_regex": "(?:[A-Z&]{1,3})(?:[-/\\s.]{0,2})(\\d{5,7})",
+          "count": 7,
+          "share": 0.7
+        },
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "(\\d{5,7})",
+          "shape_regex": "(\\d{5,7})",
+          "count": 2,
+          "share": 0.2
+        },
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            5
+          ],
+          "regex": "(\\d{4,6})",
+          "shape_regex": "(\\d{4,6})",
+          "count": 1,
+          "share": 0.1
+        },
+        {
+          "template": "GT{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "GT(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "GT(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "ARAABY PVT LTD": {
+      "sample_count": 8,
+      "formats": [
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            5
+          ],
+          "regex": "(\\d{4,6})",
+          "shape_regex": "(\\d{4,6})",
+          "count": 7,
+          "share": 1.0
+        },
+        {
+          "template": "INV-{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "INV(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "INV(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "ASTRABON": {
+      "sample_count": 2,
+      "formats": [
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            5
+          ],
+          "regex": "(\\d{4,6})",
+          "shape_regex": "(\\d{4,6})",
+          "count": 2,
+          "share": 1.0
+        }
+      ]
+    },
+    "FAITH PHARMACY": {
+      "sample_count": 2,
+      "formats": [
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            5
+          ],
+          "regex": "(\\d{4,6})",
+          "shape_regex": "(\\d{4,6})",
+          "count": 2,
+          "share": 1.0
+        }
+      ]
+    },
+    "ATOLLS PHARMACY": {
+      "sample_count": 6,
+      "formats": [
+        {
+          "template": "AP/{0}/{1}-{2}",
+          "digit_lengths": [
+            4,
+            2,
+            2
+          ],
+          "regex": "AP(?:[-/\\s.]{0,2})(\\d{3,5})(?:[-/\\s.]{0,2})(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{1,3})",
+          "shape_regex": "(?:[A-Z&]{1,3})(?:[-/\\s.]{0,2})(\\d{3,5})(?:[-/\\s.]{0,2})(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{1,3})",
+          "count": 4,
+          "share": 1.0
+        },
+        {
+          "template": "AP-8434-06{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "AP(?:[-/\\s.]{0,2})8434(?:[-/\\s.]{0,2})06(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "AP(?:[-/\\s.]{0,2})8434(?:[-/\\s.]{0,2})06(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        },
+        {
+          "template": "AP/8098/04{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "AP/8098/04(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "AP/8098/04(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "ADK PHARMACEUTICAL SUPPLY": {
+      "sample_count": 6,
+      "formats": [
+        {
+          "template": "{0}-{1}",
+          "digit_lengths": [
+            2,
+            7
+          ],
+          "regex": "(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{6,8})",
+          "shape_regex": "(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{6,8})",
+          "count": 4,
+          "share": 0.8
+        },
+        {
+          "template": "{0}/{1}",
+          "digit_lengths": [
+            2,
+            8
+          ],
+          "regex": "(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{7,9})",
+          "shape_regex": "(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{7,9})",
+          "count": 1,
+          "share": 0.2
+        },
+        {
+          "template": "14{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "14(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "14(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "MIYAMI TRADERS": {
+      "sample_count": 3,
+      "formats": [
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "(\\d{5,7})",
+          "shape_regex": "(\\d{5,7})",
+          "count": 3,
+          "share": 1.0
+        }
+      ]
+    },
+    "SAMAN TRADING": {
+      "sample_count": 6,
+      "formats": [
+        {
+          "template": "INV/{0}/{1}",
+          "digit_lengths": [
+            4,
+            5
+          ],
+          "regex": "INV(?:[-/\\s.]{0,2})(\\d{3,5})(?:[-/\\s.]{0,2})(\\d{4,6})",
+          "shape_regex": "(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(\\d{3,5})(?:[-/\\s.]{0,2})(\\d{4,6})",
+          "count": 3,
+          "share": 0.6
+        },
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            4
+          ],
+          "regex": "(\\d{3,5})",
+          "shape_regex": "(\\d{3,5})",
+          "count": 2,
+          "share": 0.4
+        },
+        {
+          "template": "INV/2026{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "INV/2026(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "INV/2026(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "SALESCO PVT LTD": {
+      "sample_count": 7,
+      "formats": [
+        {
+          "template": "SH{0}-{1}-{2}",
+          "digit_lengths": [
+            1,
+            2,
+            5
+          ],
+          "regex": "SH(\\d{1,2})(?:[-/\\s.]{0,2})(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{4,6})",
+          "shape_regex": "(?:[A-Z&]{1,3})(\\d{1,2})(?:[-/\\s.]{0,2})(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{4,6})",
+          "count": 2,
+          "share": 0.4
+        },
+        {
+          "template": "SH{0}/{1}/{2}",
+          "digit_lengths": [
+            1,
+            2,
+            4
+          ],
+          "regex": "SH(\\d{1,2})(?:[-/\\s.]{0,2})(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "shape_regex": "(?:[A-Z&]{1,3})(\\d{1,2})(?:[-/\\s.]{0,2})(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "count": 1,
+          "share": 0.2
+        },
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            4
+          ],
+          "regex": "(\\d{3,5})",
+          "shape_regex": "(\\d{3,5})",
+          "count": 1,
+          "share": 0.2
+        },
+        {
+          "template": "SHI {0} {1}",
+          "digit_lengths": [
+            2,
+            5
+          ],
+          "regex": "SHI(?:[-/\\s.]{0,2})(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{4,6})",
+          "shape_regex": "(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{4,6})",
+          "count": 1,
+          "share": 0.2
+        },
+        {
+          "template": "SH1-26{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "SH1(?:[-/\\s.]{0,2})26(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "SH1(?:[-/\\s.]{0,2})26(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        },
+        {
+          "template": "SH1/26{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "SH1/26(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "SH1/26(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "ASTERS": {
+      "sample_count": 3,
+      "formats": [
+        {
+          "template": "{0}P{1}",
+          "digit_lengths": [
+            5,
+            13
+          ],
+          "regex": "(\\d{4,6})P(\\d{12,14})",
+          "shape_regex": "(\\d{4,6})(?:[A-Z&]{1,2})(\\d{12,14})",
+          "count": 2,
+          "share": 0.667
+        },
+        {
+          "template": "{0}P{1}",
+          "digit_lengths": [
+            5,
+            12
+          ],
+          "regex": "(\\d{4,6})P(\\d{11,13})",
+          "shape_regex": "(\\d{4,6})(?:[A-Z&]{1,2})(\\d{11,13})",
+          "count": 1,
+          "share": 0.333
+        }
+      ]
+    },
+    "PROCURE PLUS": {
+      "sample_count": 19,
+      "formats": [
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            8
+          ],
+          "regex": "(\\d{7,9})",
+          "shape_regex": "(\\d{7,9})",
+          "count": 16,
+          "share": 0.941
+        },
+        {
+          "template": "INV-{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "INV(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "INV(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        },
+        {
+          "template": "OFPI/25{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "OFPI/25(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "OFPI/25(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "UNID HARDWARE": {
+      "sample_count": 2,
+      "formats": [
+        {
+          "template": "{0}/{1}",
+          "digit_lengths": [
+            4,
+            2
+          ],
+          "regex": "(\\d{3,5})(?:[-/\\s.]{0,2})(\\d{1,3})",
+          "shape_regex": "(\\d{3,5})(?:[-/\\s.]{0,2})(\\d{1,3})",
+          "count": 2,
+          "share": 1.0
+        }
+      ]
+    },
+    "PACIFIC TECHNOLOGIES": {
+      "sample_count": 2,
+      "formats": [
+        {
+          "template": "PTINV{0}",
+          "digit_lengths": [
+            9
+          ],
+          "regex": "PTINV(\\d{8,10})",
+          "shape_regex": "(?:[A-Z&]{4,6})(\\d{8,10})",
+          "count": 2,
+          "share": 1.0
+        }
+      ]
+    },
+    "BARQUE INVESTMENT": {
+      "sample_count": 11,
+      "formats": [
+        {
+          "template": "BI/{0}/{1}",
+          "digit_lengths": [
+            2,
+            5
+          ],
+          "regex": "BI(?:[-/\\s.]{0,2})(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{4,6})",
+          "shape_regex": "(?:[A-Z&]{1,3})(?:[-/\\s.]{0,2})(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{4,6})",
+          "count": 7,
+          "share": 0.7
+        },
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            4
+          ],
+          "regex": "(\\d{3,5})",
+          "shape_regex": "(\\d{3,5})",
+          "count": 2,
+          "share": 0.2
+        },
+        {
+          "template": "{0}-{1}",
+          "digit_lengths": [
+            2,
+            5
+          ],
+          "regex": "(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{4,6})",
+          "shape_regex": "(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{4,6})",
+          "count": 1,
+          "share": 0.1
+        },
+        {
+          "template": "BI/26{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "BI/26(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "BI/26(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "MAA HARDWARE": {
+      "sample_count": 16,
+      "formats": [
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            2
+          ],
+          "regex": "(\\d{1,3})",
+          "shape_regex": "(\\d{1,3})",
+          "count": 3,
+          "share": 0.231
+        },
+        {
+          "template": "MAA-{0}-JUN-{1}",
+          "digit_lengths": [
+            4,
+            3
+          ],
+          "regex": "MAA(?:[-/\\s.]{0,2})(\\d{3,5})(?:[-/\\s.]{0,2})JUN(?:[-/\\s.]{0,2})(\\d{2,4})",
+          "shape_regex": "(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(\\d{3,5})(?:[-/\\s.]{0,2})(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(\\d{2,4})",
+          "count": 3,
+          "share": 0.231
+        },
+        {
+          "template": "MAA-{0}-APR-{1}",
+          "digit_lengths": [
+            4,
+            4
+          ],
+          "regex": "MAA(?:[-/\\s.]{0,2})(\\d{3,5})(?:[-/\\s.]{0,2})APR(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "shape_regex": "(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(\\d{3,5})(?:[-/\\s.]{0,2})(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "count": 2,
+          "share": 0.154
+        },
+        {
+          "template": "MAA/{0}/APR/{1}",
+          "digit_lengths": [
+            4,
+            3
+          ],
+          "regex": "MAA(?:[-/\\s.]{0,2})(\\d{3,5})(?:[-/\\s.]{0,2})APR(?:[-/\\s.]{0,2})(\\d{2,4})",
+          "shape_regex": "(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(\\d{3,5})(?:[-/\\s.]{0,2})(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(\\d{2,4})",
+          "count": 1,
+          "share": 0.077
+        },
+        {
+          "template": "2026/FEB{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "2026/FEB(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "2026/FEB(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        },
+        {
+          "template": "APR{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "APR(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "APR(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        },
+        {
+          "template": "MAY{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "MAY(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "MAY(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "JIM TRADERS PVT LTD": {
+      "sample_count": 37,
+      "formats": [
+        {
+          "template": "JM{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "JM(\\d{5,7})",
+          "shape_regex": "(?:[A-Z&]{1,3})(\\d{5,7})",
+          "count": 29,
+          "share": 0.806
+        },
+        {
+          "template": "JIM{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "JIM(\\d{5,7})",
+          "shape_regex": "(?:[A-Z&]{2,4})(\\d{5,7})",
+          "count": 5,
+          "share": 0.139
+        },
+        {
+          "template": "JIM/CR{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "JIM/CR(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "JIM/CR(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "AMAGI EXPORTS": {
+      "sample_count": 22,
+      "formats": [
+        {
+          "template": "{0} AFE {1}",
+          "digit_lengths": [
+            2,
+            5
+          ],
+          "regex": "(\\d{1,3})(?:[-/\\s.]{0,2})AFE(?:[-/\\s.]{0,2})(\\d{4,6})",
+          "shape_regex": "(\\d{1,3})(?:[-/\\s.]{0,2})(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(\\d{4,6})",
+          "count": 11,
+          "share": 0.524
+        },
+        {
+          "template": "{0}AFE {1}",
+          "digit_lengths": [
+            2,
+            5
+          ],
+          "regex": "(\\d{1,3})AFE(?:[-/\\s.]{0,2})(\\d{4,6})",
+          "shape_regex": "(\\d{1,3})(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(\\d{4,6})",
+          "count": 4,
+          "share": 0.19
+        },
+        {
+          "template": "{0}AFE{1}",
+          "digit_lengths": [
+            2,
+            5
+          ],
+          "regex": "(\\d{1,3})AFE(\\d{4,6})",
+          "shape_regex": "(\\d{1,3})(?:[A-Z&]{2,4})(\\d{4,6})",
+          "count": 4,
+          "share": 0.19
+        },
+        {
+          "template": "{0} AE {1}",
+          "digit_lengths": [
+            2,
+            5
+          ],
+          "regex": "(\\d{1,3})(?:[-/\\s.]{0,2})AE(?:[-/\\s.]{0,2})(\\d{4,6})",
+          "shape_regex": "(\\d{1,3})(?:[-/\\s.]{0,2})(?:[A-Z&]{1,3})(?:[-/\\s.]{0,2})(\\d{4,6})",
+          "count": 1,
+          "share": 0.048
+        },
+        {
+          "template": "03AFE-{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "03AFE(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "03AFE(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "MIAAF PVT LTD": {
+      "sample_count": 17,
+      "formats": [
+        {
+          "template": "INV-{0}",
+          "digit_lengths": [
+            4
+          ],
+          "regex": "INV(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "shape_regex": "(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "count": 10,
+          "share": 0.625
+        },
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            4
+          ],
+          "regex": "(\\d{3,5})",
+          "shape_regex": "(\\d{3,5})",
+          "count": 6,
+          "share": 0.375
+        },
+        {
+          "template": "INV{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "INV(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "INV(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "VISAKA TRADING": {
+      "sample_count": 2,
+      "formats": [
+        {
+          "template": "VTCI/{0}/{1}-{2}",
+          "digit_lengths": [
+            3,
+            2,
+            2
+          ],
+          "regex": "VTCI(?:[-/\\s.]{0,2})(\\d{2,4})(?:[-/\\s.]{0,2})(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{1,3})",
+          "shape_regex": "(?:[A-Z&]{3,5})(?:[-/\\s.]{0,2})(\\d{2,4})(?:[-/\\s.]{0,2})(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{1,3})",
+          "count": 1,
+          "share": 1.0
+        },
+        {
+          "template": "VTCI/011/24{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "VTCI/011/24(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "VTCI/011/24(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "AYAAN EXPORT": {
+      "sample_count": 2,
+      "formats": [
+        {
+          "template": "AY-{0}-{1}-INV/{2}",
+          "digit_lengths": [
+            2,
+            2,
+            2
+          ],
+          "regex": "AY(?:[-/\\s.]{0,2})(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{1,3})(?:[-/\\s.]{0,2})INV(?:[-/\\s.]{0,2})(\\d{1,3})",
+          "shape_regex": "(?:[A-Z&]{1,3})(?:[-/\\s.]{0,2})(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{1,3})(?:[-/\\s.]{0,2})(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(\\d{1,3})",
+          "count": 1,
+          "share": 1.0
+        },
+        {
+          "template": "AY-25-26-INV{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "AY(?:[-/\\s.]{0,2})25(?:[-/\\s.]{0,2})26(?:[-/\\s.]{0,2})INV(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "AY(?:[-/\\s.]{0,2})25(?:[-/\\s.]{0,2})26(?:[-/\\s.]{0,2})INV(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "HENMAN TRADING": {
+      "sample_count": 3,
+      "formats": [
+        {
+          "template": "SD{0}",
+          "digit_lengths": [
+            5
+          ],
+          "regex": "SD(\\d{4,6})",
+          "shape_regex": "(?:[A-Z&]{1,3})(\\d{4,6})",
+          "count": 2,
+          "share": 0.667
+        },
+        {
+          "template": "XF{0}",
+          "digit_lengths": [
+            5
+          ],
+          "regex": "XF(\\d{4,6})",
+          "shape_regex": "(?:[A-Z&]{1,3})(\\d{4,6})",
+          "count": 1,
+          "share": 0.333
+        }
+      ]
+    },
+    "SHENZHEN SANHE E-COMMERCE CO. LTD": {
+      "sample_count": 8,
+      "formats": [
+        {
+          "template": "AF-{0}-{1}",
+          "digit_lengths": [
+            8,
+            5
+          ],
+          "regex": "AF(?:[-/\\s.]{0,2})(\\d{7,9})(?:[-/\\s.]{0,2})(\\d{4,6})",
+          "shape_regex": "(?:[A-Z&]{1,3})(?:[-/\\s.]{0,2})(\\d{7,9})(?:[-/\\s.]{0,2})(\\d{4,6})",
+          "count": 3,
+          "share": 1.0
+        },
+        {
+          "template": "AF-20250823{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "AF(?:[-/\\s.]{0,2})20250823(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "AF(?:[-/\\s.]{0,2})20250823(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        },
+        {
+          "template": "AF-20251121{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "AF(?:[-/\\s.]{0,2})20251121(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "AF(?:[-/\\s.]{0,2})20251121(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        },
+        {
+          "template": "AF-20260314{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "AF(?:[-/\\s.]{0,2})20260314(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "AF(?:[-/\\s.]{0,2})20260314(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        },
+        {
+          "template": "AF-20260509{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "AF(?:[-/\\s.]{0,2})20260509(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "AF(?:[-/\\s.]{0,2})20260509(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        },
+        {
+          "template": "AF-20260516{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "AF(?:[-/\\s.]{0,2})20260516(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "AF(?:[-/\\s.]{0,2})20260516(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "TIAN SHUAI FOOD": {
+      "sample_count": 2,
+      "formats": [
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "(\\d{5,7})",
+          "shape_regex": "(\\d{5,7})",
+          "count": 1,
+          "share": 1.0
+        },
+        {
+          "template": "TS2504221{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "TS2504221(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "TS2504221(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "EASTERN AND ALLIED SRI LANKA": {
+      "sample_count": 17,
+      "formats": [
+        {
+          "template": "FV{0}",
+          "digit_lengths": [
+            5
+          ],
+          "regex": "FV(\\d{4,6})",
+          "shape_regex": "(?:[A-Z&]{1,3})(\\d{4,6})",
+          "count": 8,
+          "share": 0.533
+        },
+        {
+          "template": "FV{0}/FV{1}",
+          "digit_lengths": [
+            5,
+            5
+          ],
+          "regex": "FV(\\d{4,6})(?:[-/\\s.]{0,2})FV(\\d{4,6})",
+          "shape_regex": "(?:[A-Z&]{1,3})(\\d{4,6})(?:[-/\\s.]{0,2})(?:[A-Z&]{1,3})(\\d{4,6})",
+          "count": 6,
+          "share": 0.4
+        },
+        {
+          "template": "FV19915{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "FV19915(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "FV19915(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        },
+        {
+          "template": "FV20007{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "FV20007(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "FV20007(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "CHEF 2 CHEF LLC": {
+      "sample_count": 17,
+      "formats": [
+        {
+          "template": "C{0}C-EX-MAL-OUR-{1}",
+          "digit_lengths": [
+            1,
+            3
+          ],
+          "regex": "C(\\d{1,2})C(?:[-/\\s.]{0,2})EX(?:[-/\\s.]{0,2})MAL(?:[-/\\s.]{0,2})OUR(?:[-/\\s.]{0,2})(\\d{2,4})",
+          "shape_regex": "(?:[A-Z&]{1,2})(\\d{1,2})(?:[A-Z&]{1,2})(?:[-/\\s.]{0,2})(?:[A-Z&]{1,3})(?:[-/\\s.]{0,2})(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(\\d{2,4})",
+          "count": 9,
+          "share": 0.562
+        },
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            3
+          ],
+          "regex": "(\\d{2,4})",
+          "shape_regex": "(\\d{2,4})",
+          "count": 6,
+          "share": 0.375
+        },
+        {
+          "template": "C2C-EX-MAL-OUR{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "C2C(?:[-/\\s.]{0,2})EX(?:[-/\\s.]{0,2})MAL(?:[-/\\s.]{0,2})OUR(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "C2C(?:[-/\\s.]{0,2})EX(?:[-/\\s.]{0,2})MAL(?:[-/\\s.]{0,2})OUR(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "S&J SALES CORPORATION": {
+      "sample_count": 31,
+      "formats": [
+        {
+          "template": "TRV/{0}/{1}",
+          "digit_lengths": [
+            2,
+            3
+          ],
+          "regex": "TRV(?:[-/\\s.]{0,2})(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{2,4})",
+          "shape_regex": "(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{2,4})",
+          "count": 10,
+          "share": 0.333
+        },
+        {
+          "template": "TRV/{0}/{1}",
+          "digit_lengths": [
+            2,
+            2
+          ],
+          "regex": "TRV(?:[-/\\s.]{0,2})(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{1,3})",
+          "shape_regex": "(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{1,3})",
+          "count": 10,
+          "share": 0.333
+        },
+        {
+          "template": "{0}/{1}",
+          "digit_lengths": [
+            2,
+            2
+          ],
+          "regex": "(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{1,3})",
+          "shape_regex": "(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{1,3})",
+          "count": 6,
+          "share": 0.2
+        },
+        {
+          "template": "TRV-{0}-{1}",
+          "digit_lengths": [
+            2,
+            1
+          ],
+          "regex": "TRV(?:[-/\\s.]{0,2})(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{1,2})",
+          "shape_regex": "(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{1,2})",
+          "count": 2,
+          "share": 0.067
+        },
+        {
+          "template": "TRV-26{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "TRV(?:[-/\\s.]{0,2})26(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "TRV(?:[-/\\s.]{0,2})26(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "SAWHNEY FOOD STAFF TRADING CO.": {
+      "sample_count": 18,
+      "formats": [
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            7
+          ],
+          "regex": "(\\d{6,8})",
+          "shape_regex": "(\\d{6,8})",
+          "count": 9,
+          "share": 0.562
+        },
+        {
+          "template": "SF EX {0}",
+          "digit_lengths": [
+            7
+          ],
+          "regex": "SF(?:[-/\\s.]{0,2})EX(?:[-/\\s.]{0,2})(\\d{6,8})",
+          "shape_regex": "(?:[A-Z&]{1,3})(?:[-/\\s.]{0,2})(?:[A-Z&]{1,3})(?:[-/\\s.]{0,2})(\\d{6,8})",
+          "count": 7,
+          "share": 0.438
+        },
+        {
+          "template": "SF-EX{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "SF(?:[-/\\s.]{0,2})EX(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "SF(?:[-/\\s.]{0,2})EX(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        },
+        {
+          "template": "SF/EX{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "SF/EX(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "SF/EX(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "AIRSEAFOODS GMBH": {
+      "sample_count": 14,
+      "formats": [
+        {
+          "template": "{0}-{1}-{2}-{3}",
+          "digit_lengths": [
+            2,
+            2,
+            2,
+            5
+          ],
+          "regex": "(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{4,6})",
+          "shape_regex": "(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{4,6})",
+          "count": 8,
+          "share": 0.615
+        },
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            3
+          ],
+          "regex": "(\\d{2,4})",
+          "shape_regex": "(\\d{2,4})",
+          "count": 2,
+          "share": 0.154
+        },
+        {
+          "template": "{0}-{1}-{2}",
+          "digit_lengths": [
+            2,
+            2,
+            4
+          ],
+          "regex": "(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "shape_regex": "(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "count": 1,
+          "share": 0.077
+        },
+        {
+          "template": "{0}-{1}-{2}",
+          "digit_lengths": [
+            2,
+            3,
+            7
+          ],
+          "regex": "(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{2,4})(?:[-/\\s.]{0,2})(\\d{6,8})",
+          "shape_regex": "(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{2,4})(?:[-/\\s.]{0,2})(\\d{6,8})",
+          "count": 1,
+          "share": 0.077
+        },
+        {
+          "template": "RE-2025{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "RE(?:[-/\\s.]{0,2})2025(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "RE(?:[-/\\s.]{0,2})2025(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "ILAA MALDIVES PVT LTD": {
+      "sample_count": 7,
+      "formats": [
+        {
+          "template": "INV-{0}-{1}",
+          "digit_lengths": [
+            2,
+            8
+          ],
+          "regex": "INV(?:[-/\\s.]{0,2})(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{7,9})",
+          "shape_regex": "(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{7,9})",
+          "count": 3,
+          "share": 1.0
+        },
+        {
+          "template": "INV 20{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "INV\\ 20(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "INV\\ 20(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        },
+        {
+          "template": "INV-20{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "INV(?:[-/\\s.]{0,2})20(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "INV(?:[-/\\s.]{0,2})20(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        },
+        {
+          "template": "INV/20{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "INV/20(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "INV/20(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        },
+        {
+          "template": "OI/INV/25{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "OI/INV/25(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "OI/INV/25(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "MAM PETTY CASH": {
+      "sample_count": 8,
+      "formats": [
+        {
+          "template": "GTS-INV-{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "GTS(?:[-/\\s.]{0,2})INV(?:[-/\\s.]{0,2})(\\d{5,7})",
+          "shape_regex": "(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(\\d{5,7})",
+          "count": 1,
+          "share": 0.167
+        },
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            5
+          ],
+          "regex": "(\\d{4,6})",
+          "shape_regex": "(\\d{4,6})",
+          "count": 1,
+          "share": 0.167
+        },
+        {
+          "template": "H-{0}",
+          "digit_lengths": [
+            4
+          ],
+          "regex": "H(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "shape_regex": "(?:[A-Z&]{1,2})(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "count": 1,
+          "share": 0.167
+        },
+        {
+          "template": "{0}.{1}.{2}",
+          "digit_lengths": [
+            2,
+            2,
+            4
+          ],
+          "regex": "(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "shape_regex": "(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "count": 1,
+          "share": 0.167
+        },
+        {
+          "template": "GTS-INV{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "GTS(?:[-/\\s.]{0,2})INV(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "GTS(?:[-/\\s.]{0,2})INV(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        },
+        {
+          "template": "MC-POSB-26-CI{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "MC(?:[-/\\s.]{0,2})POSB(?:[-/\\s.]{0,2})26(?:[-/\\s.]{0,2})CI(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "MC(?:[-/\\s.]{0,2})POSB(?:[-/\\s.]{0,2})26(?:[-/\\s.]{0,2})CI(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "BLENX PVT LTD": {
+      "sample_count": 5,
+      "formats": [
+        {
+          "template": "BL-{0}",
+          "digit_lengths": [
+            7
+          ],
+          "regex": "BL(?:[-/\\s.]{0,2})(\\d{6,8})",
+          "shape_regex": "(?:[A-Z&]{1,3})(?:[-/\\s.]{0,2})(\\d{6,8})",
+          "count": 3,
+          "share": 0.75
+        },
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            7
+          ],
+          "regex": "(\\d{6,8})",
+          "shape_regex": "(\\d{6,8})",
+          "count": 1,
+          "share": 0.25
+        },
+        {
+          "template": "BL{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "BL(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "BL(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "GGT": {
+      "sample_count": 2,
+      "formats": [
+        {
+          "template": "INV-{0}-{1}",
+          "digit_lengths": [
+            4,
+            6
+          ],
+          "regex": "INV(?:[-/\\s.]{0,2})(\\d{3,5})(?:[-/\\s.]{0,2})(\\d{5,7})",
+          "shape_regex": "(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(\\d{3,5})(?:[-/\\s.]{0,2})(\\d{5,7})",
+          "count": 1,
+          "share": 1.0
+        },
+        {
+          "template": "INV-2026{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "INV(?:[-/\\s.]{0,2})2026(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "INV(?:[-/\\s.]{0,2})2026(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "SIMDI CONSUMER PRODUCTS": {
+      "sample_count": 24,
+      "formats": [
+        {
+          "template": "SCPD-PSI-{0}-{1}",
+          "digit_lengths": [
+            2,
+            5
+          ],
+          "regex": "SCPD(?:[-/\\s.]{0,2})PSI(?:[-/\\s.]{0,2})(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{4,6})",
+          "shape_regex": "(?:[A-Z&]{3,5})(?:[-/\\s.]{0,2})(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{4,6})",
+          "count": 12,
+          "share": 0.6
+        },
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            4
+          ],
+          "regex": "(\\d{3,5})",
+          "shape_regex": "(\\d{3,5})",
+          "count": 4,
+          "share": 0.2
+        },
+        {
+          "template": "SCPD/PSI/{0}/{1}",
+          "digit_lengths": [
+            2,
+            4
+          ],
+          "regex": "SCPD(?:[-/\\s.]{0,2})PSI(?:[-/\\s.]{0,2})(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "shape_regex": "(?:[A-Z&]{3,5})(?:[-/\\s.]{0,2})(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "count": 1,
+          "share": 0.05
+        },
+        {
+          "template": "SCP-PSI-{0}-{1}",
+          "digit_lengths": [
+            2,
+            5
+          ],
+          "regex": "SCP(?:[-/\\s.]{0,2})PSI(?:[-/\\s.]{0,2})(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{4,6})",
+          "shape_regex": "(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{4,6})",
+          "count": 1,
+          "share": 0.05
+        },
+        {
+          "template": "R-SI/25{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "R(?:[-/\\s.]{0,2})SI/25(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "R(?:[-/\\s.]{0,2})SI/25(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        },
+        {
+          "template": "SCPD-PSI-26{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "SCPD(?:[-/\\s.]{0,2})PSI(?:[-/\\s.]{0,2})26(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "SCPD(?:[-/\\s.]{0,2})PSI(?:[-/\\s.]{0,2})26(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        },
+        {
+          "template": "SCPD/PSI/25{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "SCPD/PSI/25(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "SCPD/PSI/25(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        },
+        {
+          "template": "SCPD/PSI/26{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "SCPD/PSI/26(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "SCPD/PSI/26(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "ALIHAVA CONSTRUCTION & TRADING CO PVT LTD": {
+      "sample_count": 16,
+      "formats": [
+        {
+          "template": "AH-INV-{0}-{1}",
+          "digit_lengths": [
+            2,
+            3
+          ],
+          "regex": "AH(?:[-/\\s.]{0,2})INV(?:[-/\\s.]{0,2})(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{2,4})",
+          "shape_regex": "(?:[A-Z&]{1,3})(?:[-/\\s.]{0,2})(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{2,4})",
+          "count": 9,
+          "share": 0.643
+        },
+        {
+          "template": "{0} {1}",
+          "digit_lengths": [
+            2,
+            3
+          ],
+          "regex": "(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{2,4})",
+          "shape_regex": "(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{2,4})",
+          "count": 5,
+          "share": 0.357
+        },
+        {
+          "template": "AH-INV-25{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "AH(?:[-/\\s.]{0,2})INV(?:[-/\\s.]{0,2})25(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "AH(?:[-/\\s.]{0,2})INV(?:[-/\\s.]{0,2})25(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        },
+        {
+          "template": "AH-INV-26{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "AH(?:[-/\\s.]{0,2})INV(?:[-/\\s.]{0,2})26(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "AH(?:[-/\\s.]{0,2})INV(?:[-/\\s.]{0,2})26(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "POISE DISTRIBUTORS": {
+      "sample_count": 6,
+      "formats": [
+        {
+          "template": "INV-{0}-{1}",
+          "digit_lengths": [
+            4,
+            5
+          ],
+          "regex": "INV(?:[-/\\s.]{0,2})(\\d{3,5})(?:[-/\\s.]{0,2})(\\d{4,6})",
+          "shape_regex": "(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(\\d{3,5})(?:[-/\\s.]{0,2})(\\d{4,6})",
+          "count": 3,
+          "share": 0.75
+        },
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            4
+          ],
+          "regex": "(\\d{3,5})",
+          "shape_regex": "(\\d{3,5})",
+          "count": 1,
+          "share": 0.25
+        },
+        {
+          "template": "INV/2025{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "INV/2025(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "INV/2025(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        },
+        {
+          "template": "INV/2026{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "INV/2026(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "INV/2026(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "BROTHERHOOD SHOP": {
+      "sample_count": 1,
+      "formats": [
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            9
+          ],
+          "regex": "(\\d{8,10})",
+          "shape_regex": "(\\d{8,10})",
+          "count": 1,
+          "share": 1.0
+        }
+      ]
+    },
+    "TOTAL BEVERAGES": {
+      "sample_count": 4,
+      "formats": [
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            3
+          ],
+          "regex": "(\\d{2,4})",
+          "shape_regex": "(\\d{2,4})",
+          "count": 2,
+          "share": 0.667
+        },
+        {
+          "template": "INV-{0}-{1}",
+          "digit_lengths": [
+            4,
+            5
+          ],
+          "regex": "INV(?:[-/\\s.]{0,2})(\\d{3,5})(?:[-/\\s.]{0,2})(\\d{4,6})",
+          "shape_regex": "(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(\\d{3,5})(?:[-/\\s.]{0,2})(\\d{4,6})",
+          "count": 1,
+          "share": 0.333
+        },
+        {
+          "template": "INV-2026{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "INV(?:[-/\\s.]{0,2})2026(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "INV(?:[-/\\s.]{0,2})2026(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "SEAFOOD ENTERPRISES PVT LTD": {
+      "sample_count": 20,
+      "formats": [
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            4
+          ],
+          "regex": "(\\d{3,5})",
+          "shape_regex": "(\\d{3,5})",
+          "count": 10,
+          "share": 0.526
+        },
+        {
+          "template": "SE/{0}/{1}",
+          "digit_lengths": [
+            2,
+            4
+          ],
+          "regex": "SE(?:[-/\\s.]{0,2})(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "shape_regex": "(?:[A-Z&]{1,3})(?:[-/\\s.]{0,2})(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "count": 6,
+          "share": 0.316
+        },
+        {
+          "template": "WE/{0}/{1}",
+          "digit_lengths": [
+            2,
+            4
+          ],
+          "regex": "WE(?:[-/\\s.]{0,2})(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "shape_regex": "(?:[A-Z&]{1,3})(?:[-/\\s.]{0,2})(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "count": 1,
+          "share": 0.053
+        },
+        {
+          "template": "SE/25{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "SE/25(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "SE/25(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 0.053,
+          "source": "derived_from_INVOICEREGEX.txt"
+        },
+        {
+          "template": "SE/26{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "SE/26(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "SE/26(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 0.053,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "ROGOWSKI TECHNOLOGY": {
+      "sample_count": 1,
+      "formats": [
+        {
+          "template": "{0}-PY{1}J",
+          "digit_lengths": [
+            2,
+            5
+          ],
+          "regex": "(\\d{1,3})(?:[-/\\s.]{0,2})PY(\\d{4,6})J",
+          "shape_regex": "(\\d{1,3})(?:[-/\\s.]{0,2})(?:[A-Z&]{1,3})(\\d{4,6})(?:[A-Z&]{1,2})",
+          "count": 1,
+          "share": 1.0
+        }
+      ]
+    },
+    "COUNTLINE": {
+      "sample_count": 9,
+      "formats": [
+        {
+          "template": "{0}/{1}",
+          "digit_lengths": [
+            2,
+            6
+          ],
+          "regex": "(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{5,7})",
+          "shape_regex": "(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{5,7})",
+          "count": 7,
+          "share": 0.875
+        },
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            5
+          ],
+          "regex": "(\\d{4,6})",
+          "shape_regex": "(\\d{4,6})",
+          "count": 1,
+          "share": 0.125
+        },
+        {
+          "template": "26{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "26(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "26(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "ALBA INTERNATIONAL": {
+      "sample_count": 6,
+      "formats": [
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "(\\d{5,7})",
+          "shape_regex": "(\\d{5,7})",
+          "count": 6,
+          "share": 1.0
+        }
+      ]
+    },
+    "OSMOSIS ASIA": {
+      "sample_count": 4,
+      "formats": [
+        {
+          "template": "OSM/INV/{0}/{1}",
+          "digit_lengths": [
+            2,
+            4
+          ],
+          "regex": "OSM(?:[-/\\s.]{0,2})INV(?:[-/\\s.]{0,2})(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "shape_regex": "(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "count": 1,
+          "share": 0.5
+        },
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            3
+          ],
+          "regex": "(\\d{2,4})",
+          "shape_regex": "(\\d{2,4})",
+          "count": 1,
+          "share": 0.5
+        },
+        {
+          "template": "OSM/INV/25{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "OSM/INV/25(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "OSM/INV/25(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        },
+        {
+          "template": "OSM/INV/26{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "OSM/INV/26(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "OSM/INV/26(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "FRELLA INTERNATIONAL": {
+      "sample_count": 10,
+      "formats": [
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            3
+          ],
+          "regex": "(\\d{2,4})",
+          "shape_regex": "(\\d{2,4})",
+          "count": 4,
+          "share": 0.571
+        },
+        {
+          "template": "INV/{0}/{1}",
+          "digit_lengths": [
+            4,
+            5
+          ],
+          "regex": "INV(?:[-/\\s.]{0,2})(\\d{3,5})(?:[-/\\s.]{0,2})(\\d{4,6})",
+          "shape_regex": "(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(\\d{3,5})(?:[-/\\s.]{0,2})(\\d{4,6})",
+          "count": 3,
+          "share": 0.429
+        },
+        {
+          "template": "INV-2026{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "INV(?:[-/\\s.]{0,2})2026(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "INV(?:[-/\\s.]{0,2})2026(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        },
+        {
+          "template": "INV/2025{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "INV/2025(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "INV/2025(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        },
+        {
+          "template": "INV/2026{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "INV/2026(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "INV/2026(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "VELIGAA HARDWARE": {
+      "sample_count": 4,
+      "formats": [
+        {
+          "template": "{0}/CORP/ICS/{1}",
+          "digit_lengths": [
+            2,
+            4
+          ],
+          "regex": "(\\d{1,3})(?:[-/\\s.]{0,2})CORP(?:[-/\\s.]{0,2})ICS(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "shape_regex": "(\\d{1,3})(?:[-/\\s.]{0,2})(?:[A-Z&]{3,5})(?:[-/\\s.]{0,2})(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "count": 4,
+          "share": 1.0
+        }
+      ]
+    },
+    "PRIME FERTILIZERS": {
+      "sample_count": 2,
+      "formats": [
+        {
+          "template": "{0}/KND/INV/{1}",
+          "digit_lengths": [
+            2,
+            3
+          ],
+          "regex": "(\\d{1,3})(?:[-/\\s.]{0,2})KND(?:[-/\\s.]{0,2})INV(?:[-/\\s.]{0,2})(\\d{2,4})",
+          "shape_regex": "(\\d{1,3})(?:[-/\\s.]{0,2})(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(\\d{2,4})",
+          "count": 1,
+          "share": 1.0
+        },
+        {
+          "template": "26/KND/INV{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "26/KND/INV(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "26/KND/INV(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "DITECH CONSTRUCTION SOLUTIONS": {
+      "sample_count": 2,
+      "formats": [
+        {
+          "template": "DIN-{0}",
+          "digit_lengths": [
+            4
+          ],
+          "regex": "DIN(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "shape_regex": "(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "count": 1,
+          "share": 1.0
+        },
+        {
+          "template": "DIN{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "DIN(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "DIN(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "LILY ENTERPRISES PVT LTD": {
+      "sample_count": 22,
+      "formats": [
+        {
+          "template": "LLS/{0}/{1}",
+          "digit_lengths": [
+            4,
+            2
+          ],
+          "regex": "LLS(?:[-/\\s.]{0,2})(\\d{3,5})(?:[-/\\s.]{0,2})(\\d{1,3})",
+          "shape_regex": "(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(\\d{3,5})(?:[-/\\s.]{0,2})(\\d{1,3})",
+          "count": 6,
+          "share": 0.286
+        },
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "(\\d{5,7})",
+          "shape_regex": "(\\d{5,7})",
+          "count": 5,
+          "share": 0.238
+        },
+        {
+          "template": "{0}-{1}",
+          "digit_lengths": [
+            4,
+            2
+          ],
+          "regex": "(\\d{3,5})(?:[-/\\s.]{0,2})(\\d{1,3})",
+          "shape_regex": "(\\d{3,5})(?:[-/\\s.]{0,2})(\\d{1,3})",
+          "count": 4,
+          "share": 0.19
+        },
+        {
+          "template": "INV-{0}",
+          "digit_lengths": [
+            7
+          ],
+          "regex": "INV(?:[-/\\s.]{0,2})(\\d{6,8})",
+          "shape_regex": "(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(\\d{6,8})",
+          "count": 1,
+          "share": 0.048
+        },
+        {
+          "template": "0551{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "0551(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "0551(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 0.048,
+          "source": "derived_from_INVOICEREGEX.txt"
+        },
+        {
+          "template": "LLS-1473{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "LLS(?:[-/\\s.]{0,2})1473(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "LLS(?:[-/\\s.]{0,2})1473(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 0.048,
+          "source": "derived_from_INVOICEREGEX.txt"
+        },
+        {
+          "template": "LLS-1525{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "LLS(?:[-/\\s.]{0,2})1525(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "LLS(?:[-/\\s.]{0,2})1525(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 0.048,
+          "source": "derived_from_INVOICEREGEX.txt"
+        },
+        {
+          "template": "LLS/0370{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "LLS/0370(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "LLS/0370(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 0.048,
+          "source": "derived_from_INVOICEREGEX.txt"
+        },
+        {
+          "template": "LLS/0586{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "LLS/0586(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "LLS/0586(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 0.048,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "RESUINSA EXPERIENCES": {
+      "sample_count": 1,
+      "formats": [
+        {
+          "template": "EX:{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "EX:(\\d{5,7})",
+          "shape_regex": "(?:[A-Z&]{2,4})(\\d{5,7})",
+          "count": 1,
+          "share": 1.0
+        }
+      ]
+    },
+    "SAFCO INTERNATIONAL GEN TRD LLC": {
+      "sample_count": 2,
+      "formats": [
+        {
+          "template": "SF/EX/{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "SF(?:[-/\\s.]{0,2})EX(?:[-/\\s.]{0,2})(\\d{5,7})",
+          "shape_regex": "(?:[A-Z&]{1,3})(?:[-/\\s.]{0,2})(?:[A-Z&]{1,3})(?:[-/\\s.]{0,2})(\\d{5,7})",
+          "count": 1,
+          "share": 1.0
+        },
+        {
+          "template": "SF/EX{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "SF/EX(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "SF/EX(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "COSMERC MALDIVES": {
+      "sample_count": 2,
+      "formats": [
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            4
+          ],
+          "regex": "(\\d{3,5})",
+          "shape_regex": "(\\d{3,5})",
+          "count": 1,
+          "share": 0.5
+        },
+        {
+          "template": "{0}-{1}",
+          "digit_lengths": [
+            2,
+            4
+          ],
+          "regex": "(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "shape_regex": "(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "count": 1,
+          "share": 0.5
+        }
+      ]
+    },
+    "ALIA INVESTMENTS": {
+      "sample_count": 5,
+      "formats": [
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            4
+          ],
+          "regex": "(\\d{3,5})",
+          "shape_regex": "(\\d{3,5})",
+          "count": 2,
+          "share": 0.667
+        },
+        {
+          "template": "YAM-ICS-{0}-{1}",
+          "digit_lengths": [
+            2,
+            4
+          ],
+          "regex": "YAM(?:[-/\\s.]{0,2})ICS(?:[-/\\s.]{0,2})(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "shape_regex": "(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "count": 1,
+          "share": 0.333
+        },
+        {
+          "template": "YAM/ICS/25{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "YAM/ICS/25(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "YAM/ICS/25(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        },
+        {
+          "template": "YAM/ICS/26{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "YAM/ICS/26(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "YAM/ICS/26(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "MACHINERY PART": {
+      "sample_count": 1,
+      "formats": [
+        {
+          "template": "{0} MP CIV {1}",
+          "digit_lengths": [
+            4,
+            4
+          ],
+          "regex": "(\\d{3,5})(?:[-/\\s.]{0,2})MP(?:[-/\\s.]{0,2})CIV(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "shape_regex": "(\\d{3,5})(?:[-/\\s.]{0,2})(?:[A-Z&]{1,3})(?:[-/\\s.]{0,2})(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "count": 1,
+          "share": 1.0
+        }
+      ]
+    },
+    "EVO SOLUTIONS": {
+      "sample_count": 4,
+      "formats": [
+        {
+          "template": "TI-{0}-{1}/EVS/{2}",
+          "digit_lengths": [
+            1,
+            4,
+            4
+          ],
+          "regex": "TI(?:[-/\\s.]{0,2})(\\d{1,2})(?:[-/\\s.]{0,2})(\\d{3,5})(?:[-/\\s.]{0,2})EVS(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "shape_regex": "(?:[A-Z&]{1,3})(?:[-/\\s.]{0,2})(\\d{1,2})(?:[-/\\s.]{0,2})(\\d{3,5})(?:[-/\\s.]{0,2})(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "count": 1,
+          "share": 1.0
+        },
+        {
+          "template": "TI-3-2287/EVS{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "TI(?:[-/\\s.]{0,2})3(?:[-/\\s.]{0,2})2287/EVS(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "TI(?:[-/\\s.]{0,2})3(?:[-/\\s.]{0,2})2287/EVS(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        },
+        {
+          "template": "TI-3-2895/EVS{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "TI(?:[-/\\s.]{0,2})3(?:[-/\\s.]{0,2})2895/EVS(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "TI(?:[-/\\s.]{0,2})3(?:[-/\\s.]{0,2})2895/EVS(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        },
+        {
+          "template": "TI-3-3715/EVS{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "TI(?:[-/\\s.]{0,2})3(?:[-/\\s.]{0,2})3715/EVS(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "TI(?:[-/\\s.]{0,2})3(?:[-/\\s.]{0,2})3715/EVS(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "A&G ENERGY SOLUTIONS": {
+      "sample_count": 4,
+      "formats": [
+        {
+          "template": "A&G/INV/{0}/{1}",
+          "digit_lengths": [
+            4,
+            4
+          ],
+          "regex": "A\\&G(?:[-/\\s.]{0,2})INV(?:[-/\\s.]{0,2})(\\d{3,5})(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "shape_regex": "(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(\\d{3,5})(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "count": 2,
+          "share": 0.667,
+          "active": true
+        },
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            4
+          ],
+          "regex": "(\\d{3,5})",
+          "shape_regex": "(\\d{3,5})",
+          "count": 1,
+          "share": 0.333
+        },
+        {
+          "template": "A&G/INV/2026{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "A\\&G/INV/2026(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "A\\&G/INV/2026(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "THANDIYA": {
+      "sample_count": 5,
+      "formats": [
+        {
+          "template": "{0}/{1}",
+          "digit_lengths": [
+            3,
+            4
+          ],
+          "regex": "(\\d{2,4})(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "shape_regex": "(\\d{2,4})(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "count": 3,
+          "share": 0.75
+        },
+        {
+          "template": "INV-{0}-{1}-{2}",
+          "digit_lengths": [
+            2,
+            2,
+            4
+          ],
+          "regex": "INV(?:[-/\\s.]{0,2})(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "shape_regex": "(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "count": 1,
+          "share": 0.25
+        },
+        {
+          "template": "097{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "097(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "097(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "PURE SHORES": {
+      "sample_count": 3,
+      "formats": [
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            3
+          ],
+          "regex": "(\\d{2,4})",
+          "shape_regex": "(\\d{2,4})",
+          "count": 1,
+          "share": 1.0
+        },
+        {
+          "template": "FEB{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "FEB(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "FEB(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        },
+        {
+          "template": "PS25FEB{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "PS25FEB(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "PS25FEB(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "CHEMLAB PRIVATE LTD": {
+      "sample_count": 7,
+      "formats": [
+        {
+          "template": "CL-I-{0}",
+          "digit_lengths": [
+            4
+          ],
+          "regex": "CL(?:[-/\\s.]{0,2})I(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "shape_regex": "(?:[A-Z&]{1,3})(?:[-/\\s.]{0,2})(?:[A-Z&]{1,2})(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "count": 4,
+          "share": 0.667
+        },
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            4
+          ],
+          "regex": "(\\d{3,5})",
+          "shape_regex": "(\\d{3,5})",
+          "count": 2,
+          "share": 0.333
+        },
+        {
+          "template": "CL-I{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "CL(?:[-/\\s.]{0,2})I(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "CL(?:[-/\\s.]{0,2})I(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "SUPPLY GUIDE": {
+      "sample_count": 2,
+      "formats": [
+        {
+          "template": "TI-{0}-{1}",
+          "digit_lengths": [
+            2,
+            2
+          ],
+          "regex": "TI(?:[-/\\s.]{0,2})(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{1,3})",
+          "shape_regex": "(?:[A-Z&]{1,3})(?:[-/\\s.]{0,2})(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{1,3})",
+          "count": 1,
+          "share": 1.0
+        },
+        {
+          "template": "TI-26{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "TI(?:[-/\\s.]{0,2})26(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "TI(?:[-/\\s.]{0,2})26(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "PRINTLAB": {
+      "sample_count": 5,
+      "formats": [
+        {
+          "template": "INV-{0}-{1}",
+          "digit_lengths": [
+            4,
+            4
+          ],
+          "regex": "INV(?:[-/\\s.]{0,2})(\\d{3,5})(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "shape_regex": "(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(\\d{3,5})(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "count": 3,
+          "share": 0.75
+        },
+        {
+          "template": "{0}-{1}",
+          "digit_lengths": [
+            4,
+            4
+          ],
+          "regex": "(\\d{3,5})(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "shape_regex": "(\\d{3,5})(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "count": 1,
+          "share": 0.25
+        },
+        {
+          "template": "INV-2026{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "INV(?:[-/\\s.]{0,2})2026(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "INV(?:[-/\\s.]{0,2})2026(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "SUN FRONT LIGHTING": {
+      "sample_count": 5,
+      "formats": [
+        {
+          "template": "SL-{0}-{1}",
+          "digit_lengths": [
+            5,
+            2
+          ],
+          "regex": "SL(?:[-/\\s.]{0,2})(\\d{4,6})(?:[-/\\s.]{0,2})(\\d{1,3})",
+          "shape_regex": "(?:[A-Z&]{1,3})(?:[-/\\s.]{0,2})(\\d{4,6})(?:[-/\\s.]{0,2})(\\d{1,3})",
+          "count": 2,
+          "share": 0.5
+        },
+        {
+          "template": "{0}-{1}",
+          "digit_lengths": [
+            5,
+            2
+          ],
+          "regex": "(\\d{4,6})(?:[-/\\s.]{0,2})(\\d{1,3})",
+          "shape_regex": "(\\d{4,6})(?:[-/\\s.]{0,2})(\\d{1,3})",
+          "count": 1,
+          "share": 0.25
+        },
+        {
+          "template": "{0}-{1}",
+          "digit_lengths": [
+            6,
+            2
+          ],
+          "regex": "(\\d{5,7})(?:[-/\\s.]{0,2})(\\d{1,3})",
+          "shape_regex": "(\\d{5,7})(?:[-/\\s.]{0,2})(\\d{1,3})",
+          "count": 1,
+          "share": 0.25
+        },
+        {
+          "template": "SL-48121{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "SL(?:[-/\\s.]{0,2})48121(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "SL(?:[-/\\s.]{0,2})48121(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "PERSONAL COMPUTERS": {
+      "sample_count": 6,
+      "formats": [
+        {
+          "template": "INV-{0}-{1}",
+          "digit_lengths": [
+            4,
+            5
+          ],
+          "regex": "INV(?:[-/\\s.]{0,2})(\\d{3,5})(?:[-/\\s.]{0,2})(\\d{4,6})",
+          "shape_regex": "(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(\\d{3,5})(?:[-/\\s.]{0,2})(\\d{4,6})",
+          "count": 2,
+          "share": 0.5
+        },
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            4
+          ],
+          "regex": "(\\d{3,5})",
+          "shape_regex": "(\\d{3,5})",
+          "count": 2,
+          "share": 0.5
+        },
+        {
+          "template": "INV-2026{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "INV(?:[-/\\s.]{0,2})2026(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "INV(?:[-/\\s.]{0,2})2026(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        },
+        {
+          "template": "INV/2025{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "INV/2025(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "INV/2025(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "CGT PVT LTD": {
+      "sample_count": 2,
+      "formats": [
+        {
+          "template": "INV-{0}-{1}",
+          "digit_lengths": [
+            4,
+            6
+          ],
+          "regex": "INV(?:[-/\\s.]{0,2})(\\d{3,5})(?:[-/\\s.]{0,2})(\\d{5,7})",
+          "shape_regex": "(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(\\d{3,5})(?:[-/\\s.]{0,2})(\\d{5,7})",
+          "count": 2,
+          "share": 1.0
+        }
+      ]
+    },
+    "HARDWARE LAB": {
+      "sample_count": 3,
+      "formats": [
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            4
+          ],
+          "regex": "(\\d{3,5})",
+          "shape_regex": "(\\d{3,5})",
+          "count": 2,
+          "share": 1.0
+        },
+        {
+          "template": "HCS/25/ICS{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "HCS/25/ICS(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "HCS/25/ICS(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "MAZIYA TRADERS": {
+      "sample_count": 2,
+      "formats": [
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "(\\d{5,7})",
+          "shape_regex": "(\\d{5,7})",
+          "count": 2,
+          "share": 1.0
+        }
+      ]
+    },
+    "REF COOL": {
+      "sample_count": 3,
+      "formats": [
+        {
+          "template": "RFEL-{0}-{1}",
+          "digit_lengths": [
+            2,
+            3
+          ],
+          "regex": "RFEL(?:[-/\\s.]{0,2})(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{2,4})",
+          "shape_regex": "(?:[A-Z&]{3,5})(?:[-/\\s.]{0,2})(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{2,4})",
+          "count": 1,
+          "share": 0.5
+        },
+        {
+          "template": "RFCL-POS-{0}-{1}",
+          "digit_lengths": [
+            2,
+            4
+          ],
+          "regex": "RFCL(?:[-/\\s.]{0,2})POS(?:[-/\\s.]{0,2})(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "shape_regex": "(?:[A-Z&]{3,5})(?:[-/\\s.]{0,2})(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "count": 1,
+          "share": 0.5
+        },
+        {
+          "template": "RFCL-POS-26{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "RFCL(?:[-/\\s.]{0,2})POS(?:[-/\\s.]{0,2})26(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "RFCL(?:[-/\\s.]{0,2})POS(?:[-/\\s.]{0,2})26(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "SEASPLASH MALDIVES": {
+      "sample_count": 4,
+      "formats": [
+        {
+          "template": "SI-{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "SI(?:[-/\\s.]{0,2})(\\d{5,7})",
+          "shape_regex": "(?:[A-Z&]{1,3})(?:[-/\\s.]{0,2})(\\d{5,7})",
+          "count": 2,
+          "share": 0.667
+        },
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "(\\d{5,7})",
+          "shape_regex": "(\\d{5,7})",
+          "count": 1,
+          "share": 0.333
+        },
+        {
+          "template": "SI{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "SI(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "SI(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "SEALANDS PVT LTD": {
+      "sample_count": 2,
+      "formats": [
+        {
+          "template": "INV-SLI {0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "INV(?:[-/\\s.]{0,2})SLI(?:[-/\\s.]{0,2})(\\d{5,7})",
+          "shape_regex": "(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(\\d{5,7})",
+          "count": 1,
+          "share": 1.0
+        },
+        {
+          "template": "INV-SL1{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "INV(?:[-/\\s.]{0,2})SL1(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "INV(?:[-/\\s.]{0,2})SL1(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "HASSAN MARINE EQUIPMENT SHOP": {
+      "sample_count": 3,
+      "formats": [
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            8
+          ],
+          "regex": "(\\d{7,9})",
+          "shape_regex": "(\\d{7,9})",
+          "count": 3,
+          "share": 1.0
+        }
+      ]
+    },
+    "TRADE MALDIVES PVT LTD": {
+      "sample_count": 10,
+      "formats": [
+        {
+          "template": "TM/{0}/{1}",
+          "digit_lengths": [
+            2,
+            6
+          ],
+          "regex": "TM(?:[-/\\s.]{0,2})(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{5,7})",
+          "shape_regex": "(?:[A-Z&]{1,3})(?:[-/\\s.]{0,2})(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{5,7})",
+          "count": 5,
+          "share": 0.714
+        },
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            3
+          ],
+          "regex": "(\\d{2,4})",
+          "shape_regex": "(\\d{2,4})",
+          "count": 2,
+          "share": 0.286
+        },
+        {
+          "template": "C25{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "C25(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "C25(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        },
+        {
+          "template": "TM-26{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "TM(?:[-/\\s.]{0,2})26(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "TM(?:[-/\\s.]{0,2})26(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        },
+        {
+          "template": "TM/26{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "TM/26(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "TM/26(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "F&B EVENING STORE PVT LTD": {
+      "sample_count": 29,
+      "formats": [
+        {
+          "template": "{0}/ES/ICS/{1}",
+          "digit_lengths": [
+            2,
+            4
+          ],
+          "regex": "(\\d{1,3})(?:[-/\\s.]{0,2})ES(?:[-/\\s.]{0,2})ICS(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "shape_regex": "(\\d{1,3})(?:[-/\\s.]{0,2})(?:[A-Z&]{1,3})(?:[-/\\s.]{0,2})(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "count": 11,
+          "share": 0.393
+        },
+        {
+          "template": "{0}/ES/ICS/{1}",
+          "digit_lengths": [
+            2,
+            5
+          ],
+          "regex": "(\\d{1,3})(?:[-/\\s.]{0,2})ES(?:[-/\\s.]{0,2})ICS(?:[-/\\s.]{0,2})(\\d{4,6})",
+          "shape_regex": "(\\d{1,3})(?:[-/\\s.]{0,2})(?:[A-Z&]{1,3})(?:[-/\\s.]{0,2})(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(\\d{4,6})",
+          "count": 8,
+          "share": 0.286
+        },
+        {
+          "template": "{0}{1}",
+          "digit_lengths": [
+            2,
+            2
+          ],
+          "regex": "(\\d{2,4})(?:[-/\\s.]{0,2})(\\d{2,4})",
+          "shape_regex": "(\\d{2,4})(?:[-/\\s.]{0,2})(\\d{2,4})",
+          "count": 5,
+          "share": 0.179,
+          "active": true
+        },
+        {
+          "template": "{0}/ES/ICS/{1}S{2}",
+          "digit_lengths": [
+            2,
+            1,
+            2
+          ],
+          "regex": "(\\d{1,3})(?:[-/\\s.]{0,2})ES(?:[-/\\s.]{0,2})ICS(?:[-/\\s.]{0,2})(\\d{1,2})S(\\d{1,3})",
+          "shape_regex": "(\\d{1,3})(?:[-/\\s.]{0,2})(?:[A-Z&]{1,3})(?:[-/\\s.]{0,2})(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(\\d{1,2})(?:[A-Z&]{1,2})(\\d{1,3})",
+          "count": 2,
+          "share": 0.071
+        },
+        {
+          "template": "{0}/ES/CS/{1}",
+          "digit_lengths": [
+            2,
+            4
+          ],
+          "regex": "(\\d{1,3})(?:[-/\\s.]{0,2})ES(?:[-/\\s.]{0,2})CS(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "shape_regex": "(\\d{1,3})(?:[-/\\s.]{0,2})(?:[A-Z&]{1,3})(?:[-/\\s.]{0,2})(?:[A-Z&]{1,3})(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "count": 1,
+          "share": 0.036
+        },
+        {
+          "template": "25/ES/ICS{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "25/ES/ICS(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "25/ES/ICS(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 0.036,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "H2O MALDIVES": {
+      "sample_count": 1,
+      "formats": [
+        {
+          "template": "{0}/{1}",
+          "digit_lengths": [
+            2,
+            4
+          ],
+          "regex": "(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "shape_regex": "(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "count": 1,
+          "share": 1.0
+        }
+      ]
+    },
+    "OSTRAVA PRIVATE LTD": {
+      "sample_count": 2,
+      "formats": [
+        {
+          "template": "OSTIN{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "OSTIN(\\d{5,7})",
+          "shape_regex": "(?:[A-Z&]{4,6})(\\d{5,7})",
+          "count": 2,
+          "share": 1.0
+        }
+      ]
+    },
+    "CHEMCITY MALDIVES": {
+      "sample_count": 2,
+      "formats": [
+        {
+          "template": "CMIN-{0}-{1}",
+          "digit_lengths": [
+            2,
+            4
+          ],
+          "regex": "CMIN(?:[-/\\s.]{0,2})(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "shape_regex": "(?:[A-Z&]{3,5})(?:[-/\\s.]{0,2})(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "count": 1,
+          "share": 1.0
+        },
+        {
+          "template": "CMIN-26{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "CMIN(?:[-/\\s.]{0,2})26(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "CMIN(?:[-/\\s.]{0,2})26(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "MISRAAB": {
+      "sample_count": 4,
+      "formats": [
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            7
+          ],
+          "regex": "(\\d{6,8})",
+          "shape_regex": "(\\d{6,8})",
+          "count": 4,
+          "share": 1.0
+        }
+      ]
+    },
+    "ISLAND BAZAAR": {
+      "sample_count": 2,
+      "formats": [
+        {
+          "template": "IB/{0}/INV/{1}",
+          "digit_lengths": [
+            4,
+            2
+          ],
+          "regex": "IB(?:[-/\\s.]{0,2})(\\d{3,5})(?:[-/\\s.]{0,2})INV(?:[-/\\s.]{0,2})(\\d{1,3})",
+          "shape_regex": "(?:[A-Z&]{1,3})(?:[-/\\s.]{0,2})(\\d{3,5})(?:[-/\\s.]{0,2})(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(\\d{1,3})",
+          "count": 1,
+          "share": 1.0
+        },
+        {
+          "template": "IB/2026/INV{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "IB/2026/INV(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "IB/2026/INV(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "D BLUE PRIVATE LTD": {
+      "sample_count": 2,
+      "formats": [
+        {
+          "template": "INO{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "INO(\\d{5,7})",
+          "shape_regex": "(?:[A-Z&]{2,4})(\\d{5,7})",
+          "count": 1,
+          "share": 0.5
+        },
+        {
+          "template": "IN{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "IN(\\d{5,7})",
+          "shape_regex": "(?:[A-Z&]{1,3})(\\d{5,7})",
+          "count": 1,
+          "share": 0.5
+        }
+      ]
+    },
+    "GUANGZHOU HENGYANG LIGHTING EQUIPMENT CO., LTD": {
+      "sample_count": 1,
+      "formats": [
+        {
+          "template": "{0}.{1}.{2}",
+          "digit_lengths": [
+            4,
+            2,
+            2
+          ],
+          "regex": "(\\d{3,5})(?:[-/\\s.]{0,2})(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{1,3})",
+          "shape_regex": "(\\d{3,5})(?:[-/\\s.]{0,2})(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{1,3})",
+          "count": 1,
+          "share": 1.0
+        }
+      ]
+    },
+    "BLUE BIRD COMPANY": {
+      "sample_count": 4,
+      "formats": [
+        {
+          "template": "B{0}-{1}",
+          "digit_lengths": [
+            2,
+            4
+          ],
+          "regex": "B(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "shape_regex": "(?:[A-Z&]{1,2})(\\d{1,3})(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "count": 2,
+          "share": 1.0
+        },
+        {
+          "template": "B25{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "B25(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "B25(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        },
+        {
+          "template": "B26{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "B26(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "B26(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "SOVEREIGN AGENCIES PVT LTD": {
+      "sample_count": 2,
+      "formats": [
+        {
+          "template": "T{0}.{1}",
+          "digit_lengths": [
+            4,
+            2
+          ],
+          "regex": "T(\\d{3,5})(?:[-/\\s.]{0,2})(\\d{1,3})",
+          "shape_regex": "(?:[A-Z&]{1,2})(\\d{3,5})(?:[-/\\s.]{0,2})(\\d{1,3})",
+          "count": 1,
+          "share": 0.5
+        },
+        {
+          "template": "E{0}",
+          "digit_lengths": [
+            4
+          ],
+          "regex": "E(\\d{3,5})",
+          "shape_regex": "(?:[A-Z&]{1,2})(\\d{3,5})",
+          "count": 1,
+          "share": 0.5
+        }
+      ]
+    },
+    "RAINCO PVT LTD": {
+      "sample_count": 2,
+      "formats": [
+        {
+          "template": "{0}MAY GWE {1}",
+          "digit_lengths": [
+            2,
+            4
+          ],
+          "regex": "(\\d{1,3})MAY(?:[-/\\s.]{0,2})GWE(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "shape_regex": "(\\d{1,3})(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(?:[A-Z&]{2,4})(?:[-/\\s.]{0,2})(\\d{3,5})",
+          "count": 1,
+          "share": 1.0
+        },
+        {
+          "template": "RSMI25{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "RSMI25(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "RSMI25(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "GLOSSY HOME": {
+      "sample_count": 2,
+      "formats": [
+        {
+          "template": "{0}-{1}",
+          "digit_lengths": [
+            6,
+            3
+          ],
+          "regex": "(\\d{5,7})(?:[-/\\s.]{0,2})(\\d{2,4})",
+          "shape_regex": "(\\d{5,7})(?:[-/\\s.]{0,2})(\\d{2,4})",
+          "count": 1,
+          "share": 1.0
+        },
+        {
+          "template": "202602{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "202602(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "202602(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "RUMBA": {
+      "sample_count": 2,
+      "formats": [
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            4
+          ],
+          "regex": "(\\d{3,5})",
+          "shape_regex": "(\\d{3,5})",
+          "count": 2,
+          "share": 1.0
+        }
+      ]
+    },
+    "PUREMIND TECHNOLOGY": {
+      "sample_count": 1,
+      "formats": [
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            9
+          ],
+          "regex": "(\\d{8,10})",
+          "shape_regex": "(\\d{8,10})",
+          "count": 1,
+          "share": 1.0
+        }
+      ]
+    },
+    "WANKUN (HANGZHOU) IMPORT AND EXPORT": {
+      "sample_count": 2,
+      "formats": [
+        {
+          "template": "WK{0}/{1}",
+          "digit_lengths": [
+            8,
+            8
+          ],
+          "regex": "WK(\\d{7,9})(?:[-/\\s.]{0,2})(\\d{7,9})",
+          "shape_regex": "(?:[A-Z&]{1,3})(\\d{7,9})(?:[-/\\s.]{0,2})(\\d{7,9})",
+          "count": 1,
+          "share": 1.0
+        },
+        {
+          "template": "WK26013101{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "WK26013101(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "WK26013101(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "KIMIRICA HUNTER INTERNATIONAL": {
+      "sample_count": 1,
+      "formats": [
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            10
+          ],
+          "regex": "(\\d{9,11})",
+          "shape_regex": "(\\d{9,11})",
+          "count": 1,
+          "share": 1.0
+        }
+      ]
+    },
+    "DIANA TRADING": {
+      "sample_count": 3,
+      "formats": [
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            5
+          ],
+          "regex": "(\\d{4,6})",
+          "shape_regex": "(\\d{4,6})",
+          "count": 3,
+          "share": 1.0
+        }
+      ]
+    },
+    "REDSTAR": {
+      "sample_count": 1,
+      "formats": [
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "(\\d{5,7})",
+          "shape_regex": "(\\d{5,7})",
+          "count": 1,
+          "share": 1.0
+        }
+      ]
+    },
+    "HYDROGLOBAL PVT LTD": {
+      "sample_count": 3,
+      "formats": [
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            3
+          ],
+          "regex": "(\\d{2,4})",
+          "shape_regex": "(\\d{2,4})",
+          "count": 2,
+          "share": 1.0
+        },
+        {
+          "template": "HGU{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "HGU(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "HGU(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "OMEGA FIBER & CHEMICALS": {
+      "sample_count": 1,
+      "formats": [
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            4
+          ],
+          "regex": "(\\d{3,5})",
+          "shape_regex": "(\\d{3,5})",
+          "count": 1,
+          "share": 1.0
+        }
+      ]
+    },
+    "FEEF SIDE CO.": {
+      "sample_count": 1,
+      "formats": [
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            3
+          ],
+          "regex": "(\\d{2,4})",
+          "shape_regex": "(\\d{2,4})",
+          "count": 1,
+          "share": 1.0
+        }
+      ]
+    },
+    "VIRTUS GROUP GMBH": {
+      "sample_count": 2,
+      "formats": [
+        {
+          "template": "{0}-{1}",
+          "digit_lengths": [
+            4,
+            5
+          ],
+          "regex": "(\\d{3,5})(?:[-/\\s.]{0,2})(\\d{4,6})",
+          "shape_regex": "(\\d{3,5})(?:[-/\\s.]{0,2})(\\d{4,6})",
+          "count": 1,
+          "share": 1.0
+        },
+        {
+          "template": "RE-2025{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "RE(?:[-/\\s.]{0,2})2025(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "RE(?:[-/\\s.]{0,2})2025(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "L&R TRADING": {
+      "sample_count": 1,
+      "formats": [
+        {
+          "template": "{0}-{1}",
+          "digit_lengths": [
+            4,
+            3
+          ],
+          "regex": "(\\d{3,5})(?:[-/\\s.]{0,2})(\\d{2,4})",
+          "shape_regex": "(\\d{3,5})(?:[-/\\s.]{0,2})(\\d{2,4})",
+          "count": 1,
+          "share": 1.0
+        }
+      ]
+    },
+    "JINAN RETEK INDUSTRIES INC": {
+      "sample_count": 1,
+      "formats": [
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            8
+          ],
+          "regex": "(\\d{7,9})",
+          "shape_regex": "(\\d{7,9})",
+          "count": 1,
+          "share": 1.0
+        }
+      ]
+    },
+    "POLL TABLE": {
+      "sample_count": 1,
+      "formats": [
+        {
+          "template": "TPT{0}",
+          "digit_lengths": [
+            5
+          ],
+          "regex": "TPT(\\d{4,6})",
+          "shape_regex": "(?:[A-Z&]{2,4})(\\d{4,6})",
+          "count": 1,
+          "share": 1.0
+        }
+      ]
+    },
+    "SERANDIB PVT LTD": {
+      "sample_count": 1,
+      "formats": [
+        {
+          "template": "SR-25{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "SR(?:[-/\\s.]{0,2})25(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "SR(?:[-/\\s.]{0,2})25(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "WUHAN ZHAIKE NETWORK": {
+      "sample_count": 1,
+      "formats": [
+        {
+          "template": "AN251011{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "AN251011(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "AN251011(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "JVD TECHNOLOGIES": {
+      "sample_count": 1,
+      "formats": [
+        {
+          "template": "FINV25{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "FINV25(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "FINV25(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "SUPER POWER CO. LTD": {
+      "sample_count": 1,
+      "formats": [
+        {
+          "template": "ESP/2025{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "ESP/2025(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "ESP/2025(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "T AND D WATER": {
+      "sample_count": 4,
+      "formats": [
+        {
+          "template": "INV-0714{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "INV(?:[-/\\s.]{0,2})0714(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "INV(?:[-/\\s.]{0,2})0714(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        },
+        {
+          "template": "INV-0758{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "INV(?:[-/\\s.]{0,2})0758(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "INV(?:[-/\\s.]{0,2})0758(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        },
+        {
+          "template": "INV-0763{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "INV(?:[-/\\s.]{0,2})0763(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "INV(?:[-/\\s.]{0,2})0763(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        },
+        {
+          "template": "INV-0888{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "INV(?:[-/\\s.]{0,2})0888(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "INV(?:[-/\\s.]{0,2})0888(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "DONAD INVESTMENT": {
+      "sample_count": 1,
+      "formats": [
+        {
+          "template": "DI/25{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "DI/25(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "DI/25(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "THOOL": {
+      "sample_count": 1,
+      "formats": [
+        {
+          "template": "TH/2025/INV{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "TH/2025/INV(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "TH/2025/INV(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "HAMILTON INTERNATIONAL": {
+      "sample_count": 1,
+      "formats": [
+        {
+          "template": "HI-B2B{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "HI(?:[-/\\s.]{0,2})B2B(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "HI(?:[-/\\s.]{0,2})B2B(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "RMS MARINE SERVICE": {
+      "sample_count": 1,
+      "formats": [
+        {
+          "template": "1710/RMS{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "1710/RMS(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "1710/RMS(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "REVOLUTION (HK) IMP & EXP CO. LTD": {
+      "sample_count": 1,
+      "formats": [
+        {
+          "template": "RVC25052301{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "RVC25052301(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "RVC25052301(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "SIMDI TECH TECHNOLOGY": {
+      "sample_count": 1,
+      "formats": [
+        {
+          "template": "STI/PS/25{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "STI/PS/25(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "shape_regex": "STI/PS/25(?:[-/\\s.]{0,2})(\\d{3,9})",
+          "count": 1,
+          "share": 1.0,
+          "source": "derived_from_INVOICEREGEX.txt"
+        }
+      ]
+    },
+    "BLUE BIRD COMPANT": {
+      "sample_count": 1,
+      "formats": [
+        {
+          "template": "B{0}{1}",
+          "digit_lengths": [
+            2,
+            4
+          ],
+          "regex": "B(?:[-/\\s.]{0,2})(\\d{2,4})(?:[-/\\s.]{0,2})(\\d{3,6})",
+          "shape_regex": "(?:[A-Z&]{1,2})(?:[-/\\s.]{0,2})(\\d{2,4})(?:[-/\\s.]{0,2})(\\d{3,6})",
+          "count": 1,
+          "share": 1.0,
+          "active": true
+        }
+      ]
+    },
+    "SEAFOOD ENTERPRISES": {
+      "sample_count": 1,
+      "formats": [
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            4
+          ],
+          "regex": "(\\d{3,6})",
+          "shape_regex": "(\\d{3,6})",
+          "count": 1,
+          "share": 1.0,
+          "active": true
+        }
+      ]
+    },
+    "HMHI COMPANY PRIVATE LTD": {
+      "sample_count": 1,
+      "formats": [
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            4
+          ],
+          "regex": "(\\d{3,6})",
+          "shape_regex": "(\\d{3,6})",
+          "count": 1,
+          "share": 1.0,
+          "active": true
+        }
+      ]
+    },
+    "OFFICE PLUS PVT LTD": {
+      "sample_count": 1,
+      "formats": [
+        {
+          "template": "OFPI{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "OFPI(?:[-/\\s.]{0,2})(\\d{5,8})",
+          "shape_regex": "(?:[A-Z&]{1,4})(?:[-/\\s.]{0,2})(\\d{5,8})",
+          "count": 1,
+          "share": 1.0,
+          "active": true
+        }
+      ]
+    },
+    "HYDRO GLOBAL PVT LTD": {
+      "sample_count": 2,
+      "formats": [
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "(\\d{5,8})",
+          "shape_regex": "(\\d{5,8})",
+          "count": 2,
+          "share": 1.0,
+          "active": true
+        }
+      ]
+    },
+    "POISE DISTRIBUTORS PVT LTD": {
+      "sample_count": 1,
+      "formats": [
+        {
+          "template": "AHINV{0}{1}",
+          "digit_lengths": [
+            2,
+            2
+          ],
+          "regex": "AH(?:[-/\\s.]{0,2})INV(?:[-/\\s.]{0,2})(\\d{2,4})(?:[-/\\s.]{0,2})(\\d{2,4})",
+          "shape_regex": "(?:[A-Z&]{1,2})(?:[-/\\s.]{0,2})(?:[A-Z&]{1,3})(?:[-/\\s.]{0,2})(\\d{2,4})(?:[-/\\s.]{0,2})(\\d{2,4})",
+          "count": 1,
+          "share": 1.0,
+          "active": true
+        }
+      ]
+    },
+    "HUIZHOU ALPHA SAUNA & SWIMMING POOL EQUIPMENT CO.LTD": {
+      "sample_count": 1,
+      "formats": [
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            9
+          ],
+          "regex": "(\\d{8,11})",
+          "shape_regex": "(\\d{8,11})",
+          "count": 1,
+          "share": 1.0,
+          "active": true
+        }
+      ]
+    },
+    "REGIUM FOOD EXPORTD LLP": {
+      "sample_count": 1,
+      "formats": [
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            4
+          ],
+          "regex": "(\\d{3,6})",
+          "shape_regex": "(\\d{3,6})",
+          "count": 1,
+          "share": 1.0,
+          "active": true
+        }
+      ]
+    },
+    "ECOPURE WATERS INTERNATIONAL LTD": {
+      "sample_count": 1,
+      "formats": [
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            7
+          ],
+          "regex": "(\\d{6,9})",
+          "shape_regex": "(\\d{6,9})",
+          "count": 1,
+          "share": 1.0,
+          "active": true
+        }
+      ]
+    },
+    "RATERIA FABRICS": {
+      "sample_count": 1,
+      "formats": [
+        {
+          "template": "AHINV{0}{1}",
+          "digit_lengths": [
+            3,
+            4
+          ],
+          "regex": "AH(?:[-/\\s.]{0,2})INV(?:[-/\\s.]{0,2})(\\d{2,5})(?:[-/\\s.]{0,2})(\\d{3,6})",
+          "shape_regex": "(?:[A-Z&]{1,2})(?:[-/\\s.]{0,2})(?:[A-Z&]{1,3})(?:[-/\\s.]{0,2})(\\d{2,5})(?:[-/\\s.]{0,2})(\\d{3,6})",
+          "count": 1,
+          "share": 1.0,
+          "active": true
+        }
+      ]
+    },
+    "HEALTH AND GLOW PVT LTD": {
+      "sample_count": 2,
+      "formats": [
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            4
+          ],
+          "regex": "(\\d{3,6})",
+          "shape_regex": "(\\d{3,6})",
+          "count": 2,
+          "share": 1.0,
+          "active": true
+        }
+      ]
+    },
+    "LYCORN MALDIVES PVT LTD": {
+      "sample_count": 2,
+      "formats": [
+        {
+          "template": "AHINV{0}{1}",
+          "digit_lengths": [
+            2,
+            2
+          ],
+          "regex": "AH(?:[-/\\s.]{0,2})INV(?:[-/\\s.]{0,2})(\\d{2,4})(?:[-/\\s.]{0,2})(\\d{2,4})",
+          "shape_regex": "(?:[A-Z&]{1,2})(?:[-/\\s.]{0,2})(?:[A-Z&]{1,3})(?:[-/\\s.]{0,2})(\\d{2,4})(?:[-/\\s.]{0,2})(\\d{2,4})",
+          "count": 1,
+          "share": 0.5,
+          "active": true
+        },
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            8
+          ],
+          "regex": "(\\d{7,10})",
+          "shape_regex": "(\\d{7,10})",
+          "count": 1,
+          "share": 0.5,
+          "active": true
+        }
+      ]
+    },
+    "SONEE HARDWARE PVT LTD": {
+      "sample_count": 1,
+      "formats": [
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            7
+          ],
+          "regex": "(\\d{6,9})",
+          "shape_regex": "(\\d{6,9})",
+          "count": 1,
+          "share": 1.0,
+          "active": true
+        }
+      ]
+    },
+    "PACIFIC TECHNOLOGIES PVT LTD": {
+      "sample_count": 1,
+      "formats": [
+        {
+          "template": "PTINV{0}",
+          "digit_lengths": [
+            9
+          ],
+          "regex": "PTINV(?:[-/\\s.]{0,2})(\\d{8,11})",
+          "shape_regex": "(?:[A-Z&]{1,5})(?:[-/\\s.]{0,2})(\\d{8,11})",
+          "count": 1,
+          "share": 1.0,
+          "active": true
+        }
+      ]
+    },
+    "HMHI COMPANY LIMITADE": {
+      "sample_count": 1,
+      "formats": [
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            5
+          ],
+          "regex": "(\\d{4,7})",
+          "shape_regex": "(\\d{4,7})",
+          "count": 1,
+          "share": 1.0,
+          "active": true
+        }
+      ]
+    },
+    "ALAAN COMPANY PVT LTD": {
+      "sample_count": 1,
+      "formats": [
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "(\\d{5,8})",
+          "shape_regex": "(\\d{5,8})",
+          "count": 1,
+          "share": 1.0,
+          "active": true
+        }
+      ]
+    },
+    "HMHI COMPANY LIMITED": {
+      "sample_count": 1,
+      "formats": [
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            5
+          ],
+          "regex": "(\\d{4,7})",
+          "shape_regex": "(\\d{4,7})",
+          "count": 1,
+          "share": 1.0,
+          "active": true
+        }
+      ]
+    },
+    "SEA & SAND TRADING PVT LTD": {
+      "sample_count": 1,
+      "formats": [
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            7
+          ],
+          "regex": "(\\d{6,9})",
+          "shape_regex": "(\\d{6,9})",
+          "count": 1,
+          "share": 1.0,
+          "active": true
+        }
+      ]
+    },
+    "HONEY VIEW HARDWARE": {
+      "sample_count": 1,
+      "formats": [
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            5
+          ],
+          "regex": "(\\d{4,7})",
+          "shape_regex": "(\\d{4,7})",
+          "count": 1,
+          "share": 1.0,
+          "active": true
+        }
+      ]
+    },
+    "SIMDI BONDED WAREHOUSE": {
+      "sample_count": 1,
+      "formats": [
+        {
+          "template": "BEVEPS{0}{1}{2}",
+          "digit_lengths": [
+            1,
+            2,
+            5
+          ],
+          "regex": "BEVE(?:[-/\\s.]{0,2})PS(?:[-/\\s.]{0,2})(\\d{2,3})(?:[-/\\s.]{0,2})(\\d{2,4})(?:[-/\\s.]{0,2})(\\d{4,7})",
+          "shape_regex": "(?:[A-Z&]{1,4})(?:[-/\\s.]{0,2})(?:[A-Z&]{1,2})(?:[-/\\s.]{0,2})(\\d{2,3})(?:[-/\\s.]{0,2})(\\d{2,4})(?:[-/\\s.]{0,2})(\\d{4,7})",
+          "count": 1,
+          "share": 1.0,
+          "active": true
+        }
+      ]
+    },
+    "LILY ENTERPRISE PVT LTD": {
+      "sample_count": 1,
+      "formats": [
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            8
+          ],
+          "regex": "(\\d{7,10})",
+          "shape_regex": "(\\d{7,10})",
+          "count": 1,
+          "share": 1.0,
+          "active": true
+        }
+      ]
+    },
+    "ZEGA MALDIVES": {
+      "sample_count": 1,
+      "formats": [
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            4
+          ],
+          "regex": "(\\d{3,6})",
+          "shape_regex": "(\\d{3,6})",
+          "count": 1,
+          "share": 1.0,
+          "active": true
+        }
+      ]
+    },
+    "M GLASS & ALU": {
+      "sample_count": 1,
+      "formats": [
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            9
+          ],
+          "regex": "(\\d{8,11})",
+          "shape_regex": "(\\d{8,11})",
+          "count": 1,
+          "share": 1.0,
+          "active": true
+        }
+      ]
+    },
+    "PERSONAL COMPUTERS USD": {
+      "sample_count": 1,
+      "formats": [
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            5
+          ],
+          "regex": "(\\d{4,7})",
+          "shape_regex": "(\\d{4,7})",
+          "count": 1,
+          "share": 1.0,
+          "active": true
+        }
+      ]
+    },
+    "BARQUE INVESTMENT PVT LTD": {
+      "sample_count": 1,
+      "formats": [
+        {
+          "template": "{0}{1}",
+          "digit_lengths": [
+            2,
+            5
+          ],
+          "regex": "(\\d{2,4})(?:[-/\\s.]{0,2})(\\d{4,7})",
+          "shape_regex": "(\\d{2,4})(?:[-/\\s.]{0,2})(\\d{4,7})",
+          "count": 1,
+          "share": 1.0,
+          "active": true
+        }
+      ]
+    },
+    "BIZ SOLUTIONS PVT LTD": {
+      "sample_count": 1,
+      "formats": [
+        {
+          "template": "{0}{1}",
+          "digit_lengths": [
+            4,
+            3
+          ],
+          "regex": "(\\d{3,6})(?:[-/\\s.]{0,2})(\\d{2,5})",
+          "shape_regex": "(\\d{3,6})(?:[-/\\s.]{0,2})(\\d{2,5})",
+          "count": 1,
+          "share": 1.0,
+          "active": true
+        }
+      ]
+    },
+    "STANDARD & ORIGIN": {
+      "sample_count": 2,
+      "formats": [
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            4
+          ],
+          "regex": "(\\d{3,6})",
+          "shape_regex": "(\\d{3,6})",
+          "count": 2,
+          "share": 1.0,
+          "active": true
+        }
+      ]
+    },
+    "MAM PETTY CASH MVR": {
+      "sample_count": 1,
+      "formats": [
+        {
+          "template": "{0}",
+          "digit_lengths": [
+            6
+          ],
+          "regex": "(\\d{5,8})",
+          "shape_regex": "(\\d{5,8})",
+          "count": 1,
+          "share": 1.0,
+          "active": true
+        }
+      ]
+    }
+  }
+}

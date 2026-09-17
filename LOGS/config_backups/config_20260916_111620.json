@@ -163,7 +163,6 @@
         "SEAFOOD ENTERPRISES PVT LTD",
         "SEAGEAR",
         "SEALANDS PVT LTD",
-        "SEAPLASH M LTD",
         "SEASPLASH MALDIVES",
         "SERANDIB PVT LTD",
         "SHENZHEN SANHE E-COMMERCE CO. LTD",
@@ -743,9 +742,6 @@
         ],
         "PACIFIC TECHNOLOGIES": [
             "PACIFIC TECHNOLOGIES PVT LTD"
-        ],
-        "SEAPLASH M LTD": [
-            "LTD SEAPLASH M"
         ]
     },
     "patterns": {
@@ -786,7 +782,7 @@
         "image_scale_factor": 2,
         "extraction_source": "auto",
         "processed_transfer_path": "C:\\Users\\MAM-STORES\\OneDrive - outrigger.com\\Stores Shared\\STORE\\SCAN STORES\\2026",
-        "grn_next_dispatch_no": 22,
+        "grn_next_dispatch_no": 21,
         "scan_method": "hp",
         "hp_window_title": "Maafushivaru - Document Processing Hub",
         "hp_button_text": "Scan",
@@ -6853,22 +6849,6 @@
             ]
         },
         "MAM PETTY CASH MVR": {
-            "sample_count": 1,
-            "formats": [
-                {
-                    "template": "{0}",
-                    "digit_lengths": [
-                        6
-                    ],
-                    "regex": "(\\d{5,8})",
-                    "shape_regex": "(\\d{5,8})",
-                    "count": 1,
-                    "share": 1.0,
-                    "active": true
-                }
-            ]
-        },
-        "SEAPLASH M LTD": {
             "sample_count": 1,
             "formats": [
                 {
