@@ -83,6 +83,7 @@
         "HOSPITALITY LTD",
         "HUIZHOU ALPHA SAUNA & SWIMMING POOL EQUIPMENT CO.LTD",
         "HYDROGLOBAL PVT LTD",
+        "IBM SOLUTIONS",
         "IFS GLOBAL PVT LTD",
         "IKEBANA",
         "ILAA MALDIVES PVT LTD",
@@ -746,6 +747,9 @@
         ],
         "SEAPLASH M LTD": [
             "LTD SEAPLASH M"
+        ],
+        "IBM SOLUTIONS": [
+            "BIZ SOLUTIONS"
         ]
     },
     "patterns": {
@@ -786,7 +790,7 @@
         "image_scale_factor": 2,
         "extraction_source": "auto",
         "processed_transfer_path": "C:\\Users\\MAM-STORES\\OneDrive - outrigger.com\\Stores Shared\\STORE\\SCAN STORES\\2026",
-        "grn_next_dispatch_no": 22,
+        "grn_next_dispatch_no": 25,
         "scan_method": "hp",
         "hp_window_title": "Maafushivaru - Document Processing Hub",
         "hp_button_text": "Scan",
@@ -6878,6 +6882,22 @@
                     ],
                     "regex": "(\\d{5,8})",
                     "shape_regex": "(\\d{5,8})",
+                    "count": 1,
+                    "share": 1.0,
+                    "active": true
+                }
+            ]
+        },
+        "IBM SOLUTIONS": {
+            "sample_count": 1,
+            "formats": [
+                {
+                    "template": "{0}",
+                    "digit_lengths": [
+                        4
+                    ],
+                    "regex": "(\\d{3,6})",
+                    "shape_regex": "(\\d{3,6})",
                     "count": 1,
                     "share": 1.0,
                     "active": true

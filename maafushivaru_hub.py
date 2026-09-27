@@ -1569,7 +1569,9 @@ class OCRWorkerMixin:
     def _extract_date_from_receiving_text(self, text: str) -> str:
         u = text.upper()
         patterns = [
-            r"RECEIVED\s*[OAU]N\s*[:\-]?\s*(\d{1,2})[\/\-\.](\d{1,2})[\/\-\.](\d{2,4})",
+            # OCR commonly reads "RECEIVED" as "RECELVED" (I -> L).
+            # Accept the common OCR variants while keeping the field-specific match.
+            r"RECE[I L1]VED\s*[OAU]N\s*[:\-]?\s*(\d{1,2})[\/\-\.](\d{1,2})[\/\-\.](\d{2,4})",
             r"RECEIVED\s*DATE\s*[:\-]?\s*(\d{1,2})[\/\-\.](\d{1,2})[\/\-\.](\d{2,4})",
             r"DATE\s*RECEIVED\s*[:\-]?\s*(\d{1,2})[\/\-\.](\d{1,2})[\/\-\.](\d{2,4})",
             r"RECEIPT\s*DATE\s*[:\-]?\s*(\d{1,2})[\/\-\.](\d{1,2})[\/\-\.](\d{2,4})",
