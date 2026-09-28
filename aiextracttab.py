@@ -31,6 +31,14 @@ from maafushivaru_hub import (
     SUCCESS,
     WARNING,
     ERROR,
+    GRN_ONLINE,
+    GRN_OFFLINE,
+    grn_engine_choices,
+    grn_choice_label,
+    grn_choice_parts,
+    local_engine_keys,
+    local_engine_label,
+    local_engine_installed,
 )
 
 try:
@@ -41,6 +49,191 @@ except ImportError:
     OCRSpaceExtractor = None
 
 import supplier_learning as sl
+
+
+# The visible GRN Dispatch screen can use either the existing OCR.space
+# pipeline or a fully local engine (Tesseract / PaddleOCR / EasyOCR). Both
+# return the exact same result schema and call the same field parser below.
+_GRN_ENGINE_ONLINE = GRN_ONLINE
+_GRN_ENGINE_OFFLINE = GRN_OFFLINE
+
+# Online: the three OCR.space API engines are individually selectable.
+# Offline: every local engine is selectable (installed ones are marked).
+_GRN_ENGINE_CHOICES = grn_engine_choices()
+
+
+def _aix_selected_local_engine(app) -> str:
+    """The local (offline) engine currently selected in Settings."""
+    var = getattr(app, "_local_engine_var", None)
+    value = var.get() if var is not None else None
+    if value not in local_engine_keys():
+        value = app.cfg.get("app_settings", {}).get("local_ocr_engine", "tesseract")
+    if value not in local_engine_keys():
+        value = "tesseract"
+    return str(value)
+
+
+def _aix_selected_online_engine(app) -> int:
+    """The OCR.space API engine number (1/2/3) currently selected."""
+    var = getattr(app, "_online_engine_var", None)
+    try:
+        num = int(var.get()) if var is not None else 2
+    except Exception:
+        num = 2
+    if num not in (1, 2, 3):
+        try:
+            num = int(app.cfg.get("ocr_space", {}).get("OCREngine", 2) or 2)
+        except Exception:
+            num = 2
+    if num not in (1, 2, 3):
+        num = 2
+    return num
+
+
+def _aix_selected_engine(app) -> str:
+    """Return the selected unified engine without depending on a Tk widget."""
+    var = getattr(app, "_grn_engine_var", None)
+    selected = var.get() if var is not None else app.cfg.get(
+        "app_settings", {}
+    ).get("grn_processing_engine", _GRN_ENGINE_OFFLINE)
+    return _GRN_ENGINE_ONLINE if selected == _GRN_ENGINE_ONLINE else _GRN_ENGINE_OFFLINE
+
+
+def _aix_selected_choice(app) -> str:
+    """The label shown in the GRN Dispatch engine combo for the live selection."""
+    engine = _aix_selected_engine(app)
+    if engine == _GRN_ENGINE_ONLINE:
+        return grn_choice_label(_GRN_ENGINE_ONLINE, _aix_selected_online_engine(app))
+    return grn_choice_label(_GRN_ENGINE_OFFLINE, _aix_selected_local_engine(app))
+
+
+def _aix_engine_display(engine: str) -> str:
+    """Backward-compatible label for a mode (used by older call sites)."""
+    return ("Online — OCR.space Engine 2 (Enhanced)" if engine == _GRN_ENGINE_ONLINE
+            else "Offline — Tesseract (Local)")
+
+
+def _aix_engine_description(app) -> str:
+    """Human readable name of the engine the next run will use."""
+    if _aix_selected_engine(app) == _GRN_ENGINE_ONLINE:
+        num = _aix_selected_online_engine(app)
+        name = {1: "Engine 1 (Default)", 2: "Engine 2 (Enhanced)",
+                3: "Engine 3 (Extra Accurate)"}.get(num, f"Engine {num}")
+        return f"ONLINE · OCR.space {name}"
+    return f"OFFLINE · {local_engine_label(_aix_selected_local_engine(app))}"
+
+
+def _aix_engine_problem(app):
+    """(problem, message) for the selected engine, e.g. when it is missing."""
+    if _aix_selected_engine(app) == _GRN_ENGINE_ONLINE:
+        if not OCR_SPACE_AVAILABLE:
+            return True, (
+                "OCR.space (ONLINE) is not available: ai_supplier_matcher.py could not be "
+                "loaded. Select an OFFLINE engine, or restore that file."
+            )
+        return False, ""
+    key = _aix_selected_local_engine(app)
+    if not local_engine_installed(key):
+        return True, (
+            f"OCR engine not found: {local_engine_label(key)} is not installed on this "
+            f"computer. Install it from Settings → OCR Engines, or select another engine."
+        )
+    return False, ""
+
+
+def _aix_refresh_mode_ui(app):
+    """Keep the GRN screen's controls and badges aligned with its engine."""
+    engine = _aix_selected_engine(app)
+    online = engine == _GRN_ENGINE_ONLINE
+    mode_text = _aix_engine_description(app)
+    if online:
+        health_text = "OCR.space: ready" if OCR_SPACE_AVAILABLE else "OCR.space: unavailable"
+    else:
+        key = _aix_selected_local_engine(app)
+        health_text = (
+            f"{local_engine_label(key)}: ready" if local_engine_installed(key)
+            else f"{local_engine_label(key)}: NOT INSTALLED"
+        )
+
+    if hasattr(app, "_aix_mode_badge_var"):
+        app._aix_mode_badge_var.set(mode_text)
+    if hasattr(app, "_aix_engine_health_var"):
+        app._aix_engine_health_var.set(health_text)
+    if hasattr(app, "_aix_engine_health_lbl"):
+        ok = (OCR_SPACE_AVAILABLE if online
+              else local_engine_installed(_aix_selected_local_engine(app)))
+        app._aix_engine_health_lbl.configure(fg=SUCCESS if ok else ERROR)
+    if hasattr(app, "_aix_btn_process"):
+        app._aix_btn_process.configure(
+            text="⚡  Process New PDFs (Online)" if online else "⚡  Process New PDFs (Offline)"
+        )
+    # Keep the combo in step with Settings: this combo is the visible place the
+    # working engine is chosen on this screen.
+    combo = getattr(app, "_aix_engine_combo", None)
+    choice_var = getattr(app, "_aix_engine_choice_var", None)
+    if combo is not None and choice_var is not None:
+        try:
+            combo.configure(values=grn_engine_choices())
+            choice_var.set(_aix_selected_choice(app))
+        except Exception:
+            pass
+    refresh_header = getattr(app, "_refresh_processing_mode_badge", None)
+    if callable(refresh_header):
+        refresh_header()
+    if hasattr(app, "_aix_usage_var"):
+        _aix_refresh_usage_label(app)
+
+
+def _aix_on_engine_selected(app, _event=None):
+    """The GRN Dispatch combo changed: apply mode + concrete engine."""
+    choice_var = getattr(app, "_aix_engine_choice_var", None)
+    choice = choice_var.get() if choice_var is not None else ""
+    mode, value = grn_choice_parts(choice)
+
+    # A missing engine must never be silently accepted.
+    if mode == _GRN_ENGINE_OFFLINE and not local_engine_installed(str(value)):
+        label = local_engine_label(str(value))
+        messagebox.showerror(
+            "OCR Engine Not Found",
+            f"{label} is not installed on this computer.\n\n"
+            f"Install it from Settings → OCR Engines → Install, or choose another engine.",
+            parent=app,
+        )
+        if choice_var is not None:
+            choice_var.set(_aix_selected_choice(app))
+        return
+    if mode == _GRN_ENGINE_ONLINE and not OCR_SPACE_AVAILABLE:
+        messagebox.showerror(
+            "OCR.space Unavailable",
+            "The ONLINE engine (OCR.space) is not available because "
+            "ai_supplier_matcher.py could not be loaded.\n\n"
+            "Select an OFFLINE engine instead.",
+            parent=app,
+        )
+        if choice_var is not None:
+            choice_var.set(_aix_selected_choice(app))
+        return
+
+    if hasattr(app, "_grn_engine_var"):
+        app._grn_engine_var.set(mode)
+    else:
+        app.cfg.setdefault("app_settings", {})["grn_processing_engine"] = mode
+    if mode == _GRN_ENGINE_OFFLINE and hasattr(app, "_local_engine_var"):
+        app._local_engine_var.set(str(value))
+        app.cfg.setdefault("app_settings", {})["local_ocr_engine"] = str(value)
+        app.cfg.setdefault("app_settings", {})["ocr_engine"] = str(value)
+        if hasattr(app, "_engine_var"):
+            app._engine_var.set(str(value))
+    if mode == _GRN_ENGINE_ONLINE and hasattr(app, "_online_engine_var"):
+        app._online_engine_var.set(int(value))
+        app.cfg.setdefault("app_settings", {})["online_ocr_engine"] = int(value)
+        app.cfg.setdefault("ocr_space", {})["OCREngine"] = int(value)
+
+    callback = getattr(app, "_on_grn_engine_changed", None)
+    if callable(callback):
+        callback()
+    _aix_refresh_mode_ui(app)
+    _aix_log(app, "SYSTEM", f"Engine changed to {_aix_engine_description(app)}.")
 
 
 def _aix_get_ownership_index(app):
@@ -132,6 +325,15 @@ def _aix_get_usage_this_month(app) -> int:
 
 
 def _aix_refresh_usage_label(app):
+    if _aix_selected_engine(app) == _GRN_ENGINE_OFFLINE:
+        if hasattr(app, "_aix_usage_var"):
+            app._aix_usage_var.set("Offline local processing — no OCR.space credits used")
+        if hasattr(app, "_aix_usage_lbl"):
+            try:
+                app._aix_usage_lbl.configure(fg=SUCCESS)
+            except Exception:
+                pass
+        return
     used = _aix_get_usage_this_month(app)
     remaining = max(_OCR_FREE_MONTHLY_QUOTA - used, 0)
     text = f"OCR.space credits — used: {used} / {_OCR_FREE_MONTHLY_QUOTA}   remaining: {remaining}"
@@ -377,7 +579,7 @@ def add_ai_extract_tab(app):
     # Next result count at which the "generate sheet now?" dialog should fire.
     app._aix_next_sheet_prompt = _AIX_SHEET_PROMPT_EVERY
 
-    frame = app._make_tab("AI Extract")
+    frame = app._make_tab("GRN Dispatch")
     frame.configure(style="TFrame")
 
     ctrl_bar = tk.Frame(frame, bg=PANEL2, height=52)
@@ -394,17 +596,9 @@ def add_ai_extract_tab(app):
     if not SCAN_BUTTON_AVAILABLE:
         app._aix_btn_do_scan.state(["disabled"])
 
-    app._aix_btn_scan = ttk.Button(
-        ctrl_bar,
-        text="✂  Scan & Trim PDFs",
-        style="Accent.TButton",
-        command=lambda: _aix_start_scan_trim(app),
-    )
-    app._aix_btn_scan.pack(side=tk.LEFT, padx=4, pady=8)
-
     app._aix_btn_process = ttk.Button(
         ctrl_bar,
-        text="🤖  Process (OCR.space API)",
+        text="⚡  Process New PDFs",
         style="Success.TButton",
         command=lambda: _aix_start_process(app),
     )
@@ -412,7 +606,7 @@ def add_ai_extract_tab(app):
 
     app._aix_btn_send = ttk.Button(
         ctrl_bar,
-        text="📤  Send to Tabs",
+        text="✅  Process All",
         command=lambda: _aix_send_to_tabs(app),
     )
     app._aix_btn_send.pack(side=tk.LEFT, padx=4, pady=8)
@@ -446,54 +640,48 @@ def add_ai_extract_tab(app):
     # --- Debug button ---
     ttk.Button(
         ctrl_bar,
-        text="🔧  Debug OCR",
+        text="🔧  Debug Engines",
         command=lambda: _aix_open_debug_window(app),
     ).pack(side=tk.LEFT, padx=4, pady=8)
-    
-    # --- OCR.space engine selector ---
+
+    # Engine selection controls the same result/field pipeline; it only
+    # changes the OCR source. The header badge independently confirms the
+    # active ONLINE/OFFLINE mode everywhere in the application.
+    engine_frame = tk.Frame(ctrl_bar, bg=PANEL2)
+    engine_frame.pack(side=tk.RIGHT, padx=16, pady=8)
+    app._aix_mode_badge_var = tk.StringVar()
     tk.Label(
-        ctrl_bar,
-        text="OCR Engine:",
+        engine_frame,
+        textvariable=app._aix_mode_badge_var,
         bg=PANEL2,
-        fg=TEXT,
-        font=("Segoe UI", 9),
-    ).pack(side=tk.LEFT, padx=(12, 2), pady=8)
-
-    _ocr_engine_options = [
-        "Engine 1 (Default)",
-        "Engine 2 (Enhanced)",
-        "Engine 3 (Extra Accurate)",
-    ]
-    app._aix_ocr_engine_var = tk.StringVar(value=_ocr_engine_options[1])  # default Engine 2
-
-    # Pre-select based on what's in config
-    _cfg_engine = app.cfg.get("ocr_space", {}).get("OCREngine", 2)
-    if _cfg_engine == 1:
-        app._aix_ocr_engine_var.set(_ocr_engine_options[0])
-    elif _cfg_engine == 3:
-        app._aix_ocr_engine_var.set(_ocr_engine_options[2])
-    else:
-        app._aix_ocr_engine_var.set(_ocr_engine_options[1])
-
-    app._aix_ocr_engine_combo = ttk.Combobox(
-        ctrl_bar,
-        textvariable=app._aix_ocr_engine_var,
-        values=_ocr_engine_options,
-        state="readonly",
-        width=22,
-    )
-    app._aix_ocr_engine_combo.pack(side=tk.LEFT, padx=(0, 8), pady=8)
-
-    # --- Status badge ---
-    badge_text  = "OCR.space: ready"   if OCR_SPACE_AVAILABLE else "OCR.space: MISSING"
-    badge_color = SUCCESS              if OCR_SPACE_AVAILABLE else ERROR
-    tk.Label(
-        ctrl_bar,
-        text=badge_text,
-        bg=PANEL2,
-        fg=badge_color,
+        fg=ACCENT,
         font=("Segoe UI", 9, "bold"),
-    ).pack(side=tk.RIGHT, padx=16, pady=8)
+    ).pack(side=tk.RIGHT, padx=(12, 0))
+    app._aix_engine_health_var = tk.StringVar()
+    app._aix_engine_health_lbl = tk.Label(
+        engine_frame,
+        textvariable=app._aix_engine_health_var,
+        bg=PANEL2,
+        fg=SUCCESS,
+        font=("Segoe UI", 8),
+    )
+    app._aix_engine_health_lbl.pack(side=tk.RIGHT, padx=(8, 0))
+    tk.Label(engine_frame, text="Engine:", bg=PANEL2, fg=TEXT,
+             font=("Segoe UI", 9)).pack(side=tk.LEFT, padx=(0, 4))
+    app._aix_engine_choice_var = tk.StringVar(value=_aix_selected_choice(app))
+    app._aix_engine_combo = ttk.Combobox(
+        engine_frame,
+        textvariable=app._aix_engine_choice_var,
+        values=grn_engine_choices(),
+        state="readonly",
+        width=44,
+    )
+    app._aix_engine_combo.pack(side=tk.LEFT)
+    # The label can be long ("Offline — PaddleOCR (Local) · not installed"), so
+    # give the selector room instead of squeezing it against the health text.
+    app._aix_engine_combo.configure(width=44)
+    engine_frame.pack_configure(fill=tk.X)
+    app._aix_engine_combo.bind("<<ComboboxSelected>>", lambda e: _aix_on_engine_selected(app, e))
 
     prog_bar = tk.Frame(frame, bg=PANEL, height=6)
     prog_bar.pack(fill=tk.X)
@@ -528,14 +716,14 @@ def add_ai_extract_tab(app):
     hdr_bar.pack(fill=tk.X)
     tk.Label(
         hdr_bar,
-        text="AI Extract Results",
+        text="GRN Dispatch Results",
         bg=PANEL,
         fg=TEXT,
         font=("Segoe UI", 11, "bold"),
     ).pack(side=tk.LEFT, padx=20, pady=(12, 4))
     tk.Label(
         hdr_bar,
-        text="1) Scan  ->  2) Scan & Trim  ->  3) Process (OCR.space API)  ->  4) Send to Tabs  ·  Double-click a cell to edit",
+        text="1) Scan  →  2) Process New PDFs  →  3) Review/edit  →  4) Process All  ·  Double-click a cell to edit",
         bg=PANEL,
         fg=MUTED,
         font=("Segoe UI", 8),
@@ -588,7 +776,7 @@ def add_ai_extract_tab(app):
         ),
     )
     app._aix_tree._edit_on_preview_cb = lambda row_id: _aix_preview(app, row_id)
-    _aix_refresh_usage_label(app)
+    _aix_refresh_mode_ui(app)
 
 def _aix_remove_entry(app, row_id: str, delete_files: bool = False):
     """Remove a single row from the AI Extract results tree.
@@ -819,10 +1007,10 @@ def _aix_find_receiving_pages(app, pdf_path: str) -> List[int]:
                     try:
                         rect = page.rect
                         clip = fitz.Rect(0, 0, rect.width, rect.height * 0.40)
-                        scale = app.cfg["app_settings"].get("image_scale_factor", 2)
+                        scale = app._ocr_scale()
                         pix = page.get_pixmap(matrix=fitz.Matrix(scale, scale), clip=clip)
                         arr = app._preprocess_image(pix)
-                        arr = app._correct_rotation(arr)
+                        arr = app._correct_rotation(arr, full_page=False)
                         text = app._run_ocr(arr)
                     except Exception as e:
                         logging.debug(f"[AI EXTRACT] page OCR failed p{i}: {e}")
@@ -999,7 +1187,13 @@ def _aix_process_single_file(app, extractor, src_path: str, temp_dir: str, targe
     app._set_status(f"[AI EXTRACT] OCR.space {fname}", ACCENT)
 
     try:
-        text, err = extractor.extract_from_file(temp_path)
+        # The extractor is built per run with the OCR.space engine number
+        # selected in Settings (1 Default / 2 Enhanced / 3 Extra Accurate), so
+        # changing it takes effect on the very next document.
+        ocr_cfg = dict(app.cfg.get("ocr_space", {}))
+        ocr_cfg["OCREngine"] = _aix_selected_online_engine(app)
+        _online_extractor = OCRSpaceExtractor(config=ocr_cfg)
+        text, err = _online_extractor.extract_from_file(temp_path)
     except Exception as e:
         text, err = "", str(e)
 
@@ -1032,26 +1226,115 @@ def _aix_process_single_file(app, extractor, src_path: str, temp_dir: str, targe
         "temp_path": temp_path,
         "raw_path": src_path,
         "scan_index": idx,
+        "scan_no": idx,
         "was_modified": was_modified,
         "pages_used": n_pages,
         "raw_ocr_text": text,
         "parsed_fields": dict(fields),
+        "ocr_engine_key": "ocr_space",
+        "ocr_engine_name": f"OCR.space Engine {int(ocr_cfg.get('OCREngine', 2) or 2)}",
+    }
+    return result, err
+
+
+def _aix_process_single_file_local(app, src_path: str, idx: int = 1):
+    """Run the local half of the unified GRN Dispatch OCR pipeline.
+
+    This function deliberately calls the same text-field parser and returns
+    the same result schema as the OCR.space path. The OCR source is the only
+    difference: originals stay local and no API upload copy is created.
+
+    The LOCAL ENGINE used here is the one selected in Settings → OCR Engines
+    (Tesseract / PaddleOCR / EasyOCR) — it is passed explicitly per call, so a
+    queued batch always uses one deterministic engine.
+    """
+    fname = os.path.basename(src_path)
+    engine_key = _aix_selected_local_engine(app)
+    engine_name = local_engine_label(engine_key)
+    try:
+        pdf = fitz.open(src_path)
+        try:
+            pages_used = pdf.page_count
+        finally:
+            pdf.close()
+    except Exception:
+        pages_used = 1
+
+    _aix_set_api_status(app, f"{engine_name} reading {fname}...", ACCENT)
+    app._set_status(f"[GRN DISPATCH · OFFLINE · {engine_name}] {fname}", ACCENT)
+    try:
+        # Force the selected engine per call without mutating shared config.
+        text = app._extract_text(src_path, engine_override=engine_key)
+        err = ""
+    except Exception as exc:
+        # OCRUnavailableError (engine missing / not runnable) lands here with a
+        # human-readable message shown in the result row and the status bar.
+        text, err = "", str(exc)
+
+    text = (text or "").upper()
+    if not err and len(text.strip()) < 30:
+        # Do not leave a blank-looking row: say WHY nothing was read.
+        detail = getattr(app, "_last_ocr_error", "") or "no error reported by Tesseract"
+        err = (f"{engine_name} returned no readable text ({len(text.strip())} chars; {detail}). "
+               f"Check that the PDF opens and is not blank, or use Debug Engines.")
+        logging.error(f"[GRN DISPATCH] {fname}: {err}")
+    try:
+        fields = _aix_extract_fields_from_text(app, src_path, text)
+    except Exception as exc:
+        fields = {
+            "date": "", "supplier": "UNKNOWN SUPPLIER", "po": "MAM-0000",
+            "invoice": "", "usd": "", "mvr": "", "eur": "", "gbp": "",
+            "sgd": "", "grn": "RC-MAM-0000", "confidence": 0.0,
+        }
+        err = err or f"Field extraction failed: {exc}"
+
+    if err:
+        _aix_set_api_status(app, f"{engine_name} error on {fname}: {err}", ERROR)
+    else:
+        _aix_set_api_status(app, f"{engine_name} OK — {fname} ({len(text)} chars)", SUCCESS)
+
+    result = {
+        "doc_id": f"{fname}|aix-local|{idx}",
+        "file": fname,
+        "date": fields["date"],
+        "supplier": fields["supplier"],
+        "po": fields["po"] or "MAM-0000",
+        "invoice": fields["invoice"],
+        "usd": fields["usd"],
+        "mvr": fields["mvr"],
+        "eur": fields["eur"],
+        "gbp": fields["gbp"],
+        "sgd": fields["sgd"],
+        "grn": fields["grn"] or "RC-MAM-0000",
+        "confidence": fields["confidence"],
+        "is_valid": err == "",
+        "errors": err,
+        "temp_path": "",
+        "raw_path": src_path,
+        "scan_index": idx,
+        "scan_no": idx,
+        "was_modified": False,
+        "pages_used": pages_used,
+        "raw_ocr_text": text,
+        "parsed_fields": dict(fields),
+        "processing_engine": _GRN_ENGINE_OFFLINE,
+        "ocr_engine_key": engine_key,
+        "ocr_engine_name": engine_name,
     }
     return result, err
 
 
 def _aix_start_process(app, auto=False):
-    """Run OCR.space extraction over every PDF in SCANNED.
+    """Process new PDFs through the selected unified GRN Dispatch engine.
 
-    auto=True  -> unattended mode used by the auto-ingest watcher:
-                  no blocking message boxes, and on completion the results
-                  are pushed straight to the OCR Renamer / GRN Dispatch tabs
-                  via the `app._aix_on_complete` one-shot callback.
+    The engine is captured before the serial worker starts, so a UI change
+    cannot mix local and online OCR inside the same queued batch.
     """
     if app._aix_running:
         return
 
-    if not OCR_SPACE_AVAILABLE:
+    engine = _aix_selected_engine(app)
+    if engine == _GRN_ENGINE_ONLINE and not OCR_SPACE_AVAILABLE:
         if auto:
             app._set_status(
                 "[AUTO-INGEST API] OCR.space extractor unavailable - skipped.", ERROR
@@ -1061,20 +1344,39 @@ def _aix_start_process(app, auto=False):
         messagebox.showerror(
             "OCR.space Unavailable",
             "OCRSpaceExtractor could not be imported from ai_supplier_matcher.py.\n"
-            "Make sure that file exists and loads without errors.",
+            "Choose Offline — Tesseract (Local), or make sure that file exists and loads without errors.",
         )
         return
 
+    # A selected OFFLINE engine that is not installed must be reported clearly
+    # instead of producing rows full of "no readable text".
+    if engine == _GRN_ENGINE_OFFLINE:
+        local_key = _aix_selected_local_engine(app)
+        if not local_engine_installed(local_key):
+            msg = (
+                f"OCR engine not found: {local_engine_label(local_key)} is not installed "
+                f"on this computer.\n\n"
+                f"Open Settings → OCR Engines and press “Install”, or select another engine."
+            )
+            app._set_status(msg.splitlines()[0], ERROR)
+            if not auto:
+                messagebox.showerror("OCR Engine Not Found", msg)
+            return
+
     scanned = app.dirs.get("scanned", "")
-    temp = app._aix_temp_folder
-    os.makedirs(temp, exist_ok=True)
+    # TEMP API PDFS and upload-size preparation belong exclusively to the
+    # online OCR.space path. Offline Tesseract reads each original PDF
+    # directly at its native resolution and never creates a compressed copy.
+    temp = app._aix_temp_folder if engine == _GRN_ENGINE_ONLINE else ""
+    if engine == _GRN_ENGINE_ONLINE:
+        os.makedirs(temp, exist_ok=True)
 
     files = app._get_pdf_files_strict_order(scanned)
     if not files:
         if auto:
-            app._set_status("[AUTO-INGEST API] SCANNED empty - nothing to process.", WARNING)
+            app._set_status("[AUTO-INGEST] SCANNED empty - nothing to process.", WARNING)
             return
-        messagebox.showwarning("AI Extract", "SCANNED folder is empty. Nothing to process.")
+        messagebox.showwarning("GRN Dispatch", "SCANNED folder is empty. Nothing to process.")
         return
 
     # Results are PERSISTENT and ACCUMULATE across runs (manual or auto-ingest);
@@ -1087,7 +1389,7 @@ def _aix_start_process(app, auto=False):
     }
     files = [f for f in files if os.path.basename(f) not in _already]
     if not files:
-        msg = "AI Extract: no new PDFs (all already in the result tree)."
+        msg = "GRN Dispatch: no new PDFs (all already in the result table)."
         _aix_set_api_status(app, msg, MUTED)
         app._set_status(msg, MUTED)
         if auto:
@@ -1103,7 +1405,7 @@ def _aix_start_process(app, auto=False):
 
     used_this_month = _aix_get_usage_this_month(app)
     remaining = _OCR_FREE_MONTHLY_QUOTA - used_this_month
-    if remaining <= 0:
+    if engine == _GRN_ENGINE_ONLINE and remaining <= 0:
         if auto:
             logging.warning(
                 "[AUTO-INGEST API] Free OCR.space quota reached "
@@ -1116,41 +1418,43 @@ def _aix_start_process(app, auto=False):
         ):
             return
 
-    # Compression threshold is driven by the configurable OCR.space upload limit
-    # (Settings -> OCR.space "Max upload MB"), defaulting to 1.0 MB. Files at or
-    # below this size are copied as-is; larger files are compressed first.
-    try:
-        target_mb = float(app.cfg.get("ocr_space", {}).get("max_upload_mb", 1.0))
-    except (TypeError, ValueError):
-        target_mb = 1.0
-    if target_mb <= 0:
-        target_mb = 1.0
+    # Only the online API has an upload-size limit. Offline processing reads
+    # the original PDF directly, without any 1 MB target or recompression.
+    target_mb = 1.0
+    if engine == _GRN_ENGINE_ONLINE:
+        try:
+            target_mb = float(app.cfg.get("ocr_space", {}).get("max_upload_mb", 1.0))
+        except (TypeError, ValueError):
+            target_mb = 1.0
+        if target_mb <= 0:
+            target_mb = 1.0
 
+    run_detail = (
+        f"upload limit {target_mb:.2f} MB"
+        if engine == _GRN_ENGINE_ONLINE
+        else "original PDFs, no compression or upload limit"
+    )
     _aix_log(app, "PROCESS",
-             f"Run started ({'auto' if auto else 'manual'}): {len(files)} file(s), "
-             f"compress threshold {target_mb:.2f} MB.")
+             f"{engine.upper()} run started ({'auto' if auto else 'manual'}): {len(files)} file(s), "
+             f"serial order: {[os.path.basename(f) for f in files]}, {run_detail}.")
 
     app._aix_running = True
     app._set_buttons_state("disabled")
-    app._set_status("AI Extract: preparing & OCR.space processing started...", ACCENT)
-    _aix_set_api_status(app, "Preparing files...", ACCENT)
+    app._set_status(f"GRN Dispatch: {engine} processing started...", ACCENT)
+    _aix_set_api_status(
+        app,
+        "Preparing online upload copies..." if engine == _GRN_ENGINE_ONLINE
+        else "Reading original PDFs locally — no compression...",
+        ACCENT,
+    )
 
     # NOTE: we intentionally do NOT clear app._aix_results / the result tree
     # here. Results persist and accumulate until the user presses "Clear".
     # Duplicate processing is prevented by the skip-set built above.
 
-    ocr_cfg = dict(app.cfg.get("ocr_space", {}))
-    _engine_label = getattr(app, "_aix_ocr_engine_var", None)
-    if _engine_label is not None:
-        _sel = _engine_label.get()
-        if "Engine 1" in _sel:
-            ocr_cfg["OCREngine"] = 1
-        elif "Engine 3" in _sel:
-            ocr_cfg["OCREngine"] = 3
-        else:
-            ocr_cfg["OCREngine"] = 2
-
-    extractor = OCRSpaceExtractor(config=ocr_cfg)
+    extractor = None
+    if engine == _GRN_ENGINE_ONLINE:
+        extractor = OCRSpaceExtractor(config=dict(app.cfg.get("ocr_space", {})))
 
     def worker():
         n_ok = 0
@@ -1162,15 +1466,19 @@ def _aix_start_process(app, auto=False):
 
             for idx, src_path in enumerate(files, 1):
                 fname = os.path.basename(src_path)
-                app._set_status(f"[AI EXTRACT] Processing {fname} ({idx}/{total})", ACCENT)
+                app._set_status(f"[GRN DISPATCH · {engine.upper()}] {fname} ({idx}/{total})", ACCENT)
 
-                result, err = _aix_process_single_file(app, extractor, src_path, temp, target_mb, idx)
+                if engine == _GRN_ENGINE_ONLINE:
+                    result, err = _aix_process_single_file(app, extractor, src_path, temp, target_mb, idx)
+                    result["processing_engine"] = _GRN_ENGINE_ONLINE
+                else:
+                    result, err = _aix_process_single_file_local(app, src_path, idx)
 
                 if err == "":
                     n_ok += 1
                 else:
                     n_fail += 1
-                    logging.warning(f"[AI EXTRACT] OCR.space error [{fname}]: {err}")
+                    logging.warning(f"[GRN DISPATCH] {engine} OCR error [{fname}]: {err}")
 
                 total_pages_used += result.get("pages_used", 0)
 
@@ -1187,16 +1495,16 @@ def _aix_start_process(app, auto=False):
                 SUCCESS if n_fail == 0 else WARNING,
             )
             app._set_status(
-                f"OCR complete - {n_ok} ok, {n_fail} with errors. Click 'Send to Tabs' to apply.",
+                f"OCR complete - {n_ok} ok, {n_fail} with errors. Click 'Process All' to apply.",
                 SUCCESS if n_fail == 0 else WARNING,
             )
             _aix_log(app, "PROCESS",
-                     f"Run complete - {n_ok} ok, {n_fail} error(s), {total_pages_used} page(s) used.")
-            app._notify("Maafushivaru - AI Extract Complete", f"{n_ok} processed, {n_fail} errors.")
+                     f"{engine.upper()} run complete - {n_ok} ok, {n_fail} error(s), {total_pages_used} page(s) used.")
+            app._notify("Maafushivaru - GRN Dispatch Complete", f"{n_ok} processed, {n_fail} errors.")
 
         except Exception as e:
-            logging.error(f"[AI EXTRACT] process error: {e}", exc_info=True)
-            app._set_status(f"AI Extract process failed: {e}", ERROR)
+            logging.error(f"[GRN DISPATCH] process error: {e}", exc_info=True)
+            app._set_status(f"GRN Dispatch process failed: {e}", ERROR)
             _aix_set_api_status(app, f"Fatal error: {e}", ERROR)
         finally:
             app._aix_running = False
@@ -1476,9 +1784,356 @@ def _aix_extract_explicit_supplier(app, text: str) -> str:
     return ""
 
 
+def _levenshtein(a: str, b: str) -> int:
+    """Small edit distance used for OCR-tolerant supplier matching."""
+    if a == b:
+        return 0
+    if not a:
+        return len(b)
+    if not b:
+        return len(a)
+    prev = list(range(len(b) + 1))
+    for i, ca in enumerate(a, 1):
+        cur = [i]
+        for j, cb in enumerate(b, 1):
+            cur.append(min(cur[-1] + 1, prev[j] + 1, prev[j - 1] + (ca != cb)))
+        prev = cur
+    return prev[-1]
+
+
+# Company-form words that carry no identifying information. They are removed
+# from BOTH sides before comparing, so "X CO PVT LTD" and "X" compare equal.
+_SUPPLIER_NOISE_WORDS = {
+    "PVT", "PVT.", "LTD", "LTD.", "LIMITED", "PRIVATE", "CO", "CO.",
+    "COMPANY", "INC", "LLC", "PLC", "GMBH",
+}
+
+
+def _aix_norm_supplier(value: str) -> str:
+    """Normalise a supplier string for comparison.
+
+    Upper-cases, turns "&" and "AND" into one token, drops punctuation and the
+    company-form noise words, so OCR variants of the same name collapse onto a
+    single comparable form.
+    """
+    v = str(value or "").upper()
+    v = v.replace("&", " AND ")
+    v = re.sub(r"[^A-Z0-9]+", " ", v)
+    tokens = [t for t in v.split() if t and t not in _SUPPLIER_NOISE_WORDS]
+    return " ".join(tokens)
+
+
+def _aix_supplier_bands(lines: List[str]) -> List[List[str]]:
+    """Return the OCR line-ranges that hold a supplier name.
+
+    Birchstreet prints the supplier inside the block between the LAST
+    "Buyer's Dept." / "Buyer's Name" line above it and the
+    "Source document number" line below it, e.g.
+
+        BUYER'S DEPT.: MAM ACCOUNTING
+        ALIHAVA CONS'92        <- OCR damaged the "&" into '92
+        SUPPLIER:
+        & TRADING CO           <- the rest of the name, BELOW the label
+        SOURCE DOCUMENT NUMBER:
+
+    A document can hold several such blocks (one per receiving report page),
+    so every block is returned in document order. Anchoring on the SUPPLIER
+    label keeps earlier header lines ("BUYER'S NAME:", "STOREROOM NAME:",
+    "INVOICE NUMBER:") out of the name — which is exactly what used to make
+    "BUYER'S DEPT.: MAM ACCOUNTING" leak into the supplier field.
+
+    When a report has no SUPPLIER label at all, the lines directly after the
+    last buyer marker are used instead, so the name is still found.
+    """
+    buyer_re = re.compile(r"BUYER'?S?\s+(?:DEPT|DEPARTMENT)|BUYER'?S?\s+NAME",
+                          re.IGNORECASE)
+    end_re = re.compile(r"SOURCE\s+DOCUMENT|TRACKING\s+NUMBER|BILL\s+OF\s+LADING|"
+                        r"DELIVERY\s+NOTE", re.IGNORECASE)
+    label_re = re.compile(r"^\s*(?:SUPPLIER(?:\s+NAME)?|VENDOR)\s*[:\-]?\s*(.*?)\s*$",
+                          re.IGNORECASE)
+
+    def _block_around(anchor: int) -> List[str]:
+        """Lines between the nearest buyer marker above and the end marker below."""
+        top = None
+        for j in range(anchor - 1, max(-1, anchor - 12), -1):
+            if buyer_re.search(lines[j]):
+                top = j + 1
+                break
+        if top is None:
+            top = max(0, anchor - 6)
+        bottom = len(lines)
+        for j in range(anchor + 1, min(len(lines), anchor + 12)):
+            if end_re.search(lines[j]):
+                bottom = j
+                break
+        return [ln for ln in lines[top:bottom]]
+
+    label_positions = [i for i, ln in enumerate(lines) if label_re.match(ln)]
+    bands: List[List[str]] = []
+    for pos in label_positions:
+        block = _block_around(pos)
+        if block:
+            bands.append(block)
+
+    if bands:
+        return bands
+
+    # No SUPPLIER label anywhere: fall back to the last buyer marker's block.
+    buyer_positions = [i for i, ln in enumerate(lines) if buyer_re.search(ln)]
+    if buyer_positions:
+        block = [ln for ln in lines[buyer_positions[-1] + 1:] if ln.strip()]
+        # Stop at the first report-field label.
+        trimmed = []
+        for ln in block:
+            if end_re.search(ln) or re.match(
+                    r"^\s*(?:DIRECT\s+TOTAL|TOTAL|AMOUNT|INVOICE|DATE|PO\b|"
+                    r"PURCHASE\s+ORDER|STATUS|SIGNATURE)\b", ln, re.IGNORECASE):
+                break
+            trimmed.append(ln)
+        if trimmed:
+            return [trimmed]
+    return []
+
+
+def _aix_repair_supplier_band(lines: List[str]) -> List[str]:
+    """Drop the SUPPLIER/VENDOR label itself and repair common OCR artefacts.
+
+    * The label line ("SUPPLIER:", "VENDOR :") is removed, but a value printed
+      on the same line is kept ("SUPPLIER: (USD)" -> "(USD)", which is then
+      discarded as currency metadata later).
+    * "&" is frequently mis-read in scanned report headers: ALIHAVA CONS'92
+      + & TRADING CO. Apostrophe-number tokens attached to a word are restored
+      to "&".
+    * Field labels such as "DIRECT TOTAL AMOUNT:" are never supplier text.
+    """
+    label_re = re.compile(r"^\s*(?:SUPPLIER(?:\s+NAME)?|VENDOR)\s*[:\-]?\s*(.*?)\s*$",
+                          re.IGNORECASE)
+    stop_re = re.compile(
+        r"^\s*(?:DIRECT\s+TOTAL|TOTAL|SUBTOTAL|AMOUNT|INVOICE|DATE|PURCHASE\s+ORDER|"
+        r"PO\b|TRACKING|BILL\s+OF\s+LADING|DELIVERY\s+NOTE|SOURCE\s+DOCUMENT|"
+        r"STATUS|SIGNATURE|PHONE|DEPT\b|BUYER|STOREROOM|RECEIVING\s+NOTES|"
+        r"PRODUCT\s+DISBURSEMENT|PICKED\s+UP\s+BY|DELIVERED\s+TO|"
+        r"DEPARTMENT|LOCATION|QTY|LINE\s+ORDER|REC'?D)\b",
+        re.IGNORECASE,
+    )
+
+    out: List[str] = []
+    for raw in lines:
+        line = (raw or "").strip()
+        if not line:
+            continue
+        if stop_re.search(line):
+            continue
+        m = label_re.match(line)
+        if m:
+            rest = (m.group(1) or "").strip(" :-")
+            if rest:
+                out.append(rest)
+            continue
+        out.append(line)
+    return out
+
+
+def _aix_normalize_supplier_band(lines: List[str]) -> str:
+    """Join the band into one clean supplier string."""
+    if not lines:
+        return ""
+    joined = " ".join(lines)
+    joined = joined.replace("\u2019", "'").replace("\u2018", "'")
+
+    # OCR mis-reads of "&": the scanner reads the ampersand as an apostrophe
+    # followed by 9 / 92 / 9B (ALIHAVA CONS'92 -> ALIHAVA CONS &).
+    joined = re.sub(r"(?<=[A-Z])'?9[2B]?(?![0-9])", " & ", joined)
+    # A standalone 8 / 9 / B where the ampersand belongs.
+    joined = re.sub(r"(?<![A-Z0-9])[89B](?![0-9A-Z])", " & ", joined)
+
+    # Keep only supplier-safe characters, then collapse repeated separators.
+    joined = re.sub(r"[^A-Za-z0-9&.,()'\-/ ]+", " ", joined)
+    joined = re.sub(r"\s*&\s*(?:&\s*)+", " & ", joined)
+    joined = re.sub(r"\s*&\s*", " & ", joined)
+    joined = re.sub(r"\s+", " ", joined)
+    return joined.strip(" .,-")
+
+
+def _aix_supplier_candidates(app) -> List[tuple]:
+    """Every configured supplier with its aliases as (normalised, canonical)."""
+    configured = app.cfg.get("suppliers", [])
+    entries = (configured.items() if isinstance(configured, dict)
+               else ((x, []) for x in configured))
+
+    pairs: List[tuple] = []
+    for canonical, aliases in entries:
+        values = [canonical]
+        if isinstance(aliases, (list, tuple, set)):
+            values.extend(aliases)
+        elif isinstance(aliases, dict):
+            values.extend(list(aliases.keys()) + list(aliases.values()))
+        elif aliases:
+            values.append(aliases)
+        for value in values:
+            norm = _aix_norm_supplier(value)
+            if norm:
+                pairs.append((norm, str(canonical).upper()))
+    # De-duplicate while preserving order.
+    seen = set()
+    unique = []
+    for norm, canonical in pairs:
+        if (norm, canonical) in seen:
+            continue
+        seen.add((norm, canonical))
+        unique.append((norm, canonical))
+    return unique
+
+
+def _aix_tokens_match(cand_token: str, known_token: str) -> bool:
+    """One OCR token against one configured token (prefix- or typo-tolerant)."""
+    if cand_token == known_token:
+        return True
+    short, long = sorted((cand_token, known_token), key=len)
+    if len(short) >= 4 and long.startswith(short):
+        return True          # CONS  -> CONSTRUCTION
+    if len(short) >= 6 and _levenshtein(cand_token, known_token) <= 1:
+        return True          # one character slip
+    return False
+
+
+def _aix_token_coverage(cand_tokens: List[str], known_tokens: List[str]):
+    """How well the candidate's tokens line up with the configured name.
+
+    Returns (coverage, leftovers) where coverage is the share of candidate
+    tokens that were found in the configured name and leftovers are the
+    configured tokens that were not consumed. A good match has coverage >= 0.8
+    and leftovers made of nothing but company-form words (already stripped by
+    the normaliser, so leftovers must be empty for a clean match).
+    """
+    if not cand_tokens or not known_tokens:
+        return 0.0, list(known_tokens)
+    used = set()
+    matched = 0
+    for token in cand_tokens:
+        for idx, known in enumerate(known_tokens):
+            if idx in used:
+                continue
+            if _aix_tokens_match(token, known):
+                used.add(idx)
+                matched += 1
+                break
+    coverage = matched / float(len(cand_tokens))
+    leftovers = [t for i, t in enumerate(known_tokens) if i not in used]
+    return coverage, leftovers
+
+
+def _aix_match_supplier_name(app, candidate: str) -> str:
+    """Match a raw supplier string against the configured suppliers.
+
+    Returns the canonical supplier name when a confident match is found, else
+    an empty string. Order of confidence:
+      1. identical after normalisation
+      2. one name contained in the other
+      3. token alignment (OCR truncation / typos, e.g. CONS -> CONSTRUCTION)
+      4. a distinctive brand token alone (ALIHAVA)
+      5. rapidfuzz token-sort similarity
+    """
+    target = _aix_norm_supplier(candidate)
+    if not target:
+        return ""
+    target_tokens = target.split()
+    pairs = _aix_supplier_candidates(app)
+    if not pairs:
+        return ""
+
+    # 1) exact
+    for norm, canonical in pairs:
+        if norm == target:
+            return canonical
+
+    # 2) containment (meaningful lengths only)
+    best = ("", 0.0)
+    if len(target) >= 10:
+        for norm, canonical in pairs:
+            if len(norm) >= 10 and (norm in target or target in norm):
+                score = 96.0 + min(3.0, (len(norm) / max(len(target), 1)) * 3)
+                if score > best[1]:
+                    best = (canonical, score)
+
+    # 3) token alignment
+    for norm, canonical in pairs:
+        coverage, leftovers = _aix_token_coverage(target_tokens, norm.split())
+        if coverage >= 0.8 and not leftovers:
+            score = 90.0 + coverage * 8.0
+            if score > best[1]:
+                best = (canonical, score)
+        elif coverage >= 0.99 and leftovers and all(len(t) <= 3 for t in leftovers):
+            # Only tiny company-form fragments left over.
+            score = 88.0
+            if score > best[1]:
+                best = (canonical, score)
+
+    if best[0]:
+        return best[0]
+
+    # 4) distinctive brand token alone ("ALIHAVA")
+    if len(target_tokens) == 1 and len(target) >= 6:
+        first_tokens = {}
+        for norm, canonical in pairs:
+            first = norm.split()[0]
+            first_tokens.setdefault(first, set()).add(canonical)
+        owners = first_tokens.get(target)
+        if owners and len(owners) == 1:
+            return next(iter(owners))
+
+    # 5) fuzzy fallback (rapidfuzz is optional)
+    try:
+        from rapidfuzz import process as rf_proc, fuzz as rf_fuzz
+        norms = [norm for norm, _c in pairs]
+        result = rf_proc.extractOne(target, norms, scorer=rf_fuzz.token_sort_ratio,
+                                    score_cutoff=90)
+        if result:
+            for norm, canonical in pairs:
+                if norm == result[0]:
+                    return canonical
+    except Exception:
+        pass
+    return ""
+
+
+def _aix_extract_supplier_from_band(app, text: str) -> str:
+    """Read the supplier straight out of the Buyer's Dept. -> Source document band.
+
+    This is the authoritative reader for Birchstreet receiving reports: the
+    supplier name may sit ABOVE, ON or BELOW the "Supplier:" label (and is
+    sometimes split across several lines), so every non-label line of the band
+    is joined and matched against the configured suppliers. The raw (cleaned)
+    band text is returned when no configured supplier matches, so the user can
+    see what was read and correct it in the grid.
+    """
+    if not text:
+        return ""
+    best_raw = ""
+    for block in re.split(r"\f|\n{3,}", text):
+        lines = [ln.strip() for ln in block.splitlines() if ln.strip()]
+        for band in _aix_supplier_bands(lines):
+            cleaned = _aix_repair_supplier_band(band)
+            if not cleaned:
+                continue
+            raw = _aix_normalize_supplier_band(cleaned)
+            if not raw:
+                continue
+            matched = _aix_match_supplier_name(app, raw)
+            if matched:
+                return matched
+            if len(raw) > len(best_raw):
+                best_raw = raw
+    return best_raw
+
+
 def _aix_extract_fields_from_text(app, pdf_path: str, text: str) -> Dict:
-    # Explicit Receiving Report supplier is authoritative.
-    explicit_supplier = _aix_extract_explicit_supplier(app, text)
+    # The Receiving Report supplier block is authoritative. It is read first
+    # from the "Buyer's Dept." -> "Source document number" band (which handles
+    # a name split above/below the "Supplier:" label), then from the explicit
+    # label matcher, and finally from the general OCR supplier matcher.
+    band_supplier = _aix_extract_supplier_from_band(app, text)
+    explicit_supplier = band_supplier or _aix_extract_explicit_supplier(app, text)
     supplier = explicit_supplier or _aix_extract_supplier_raw(app, text)
     confidence = 100.0 if explicit_supplier else (100.0 if supplier else 0.0)
 
@@ -1760,26 +2415,26 @@ def _aix_extract_supplier_raw(app, text: str) -> str:
     return ""
 
 # ---------------------------------------------------------------------------
-# STEP 3: SEND TO TABS
+# STEP 3: PROCESS ALL (finalise reviewed documents)
 # ---------------------------------------------------------------------------
 def _aix_send_to_tabs(app, auto=False):
     if app._aix_running:
         if auto:
             return
-        messagebox.showinfo("AI Extract", "Please wait for the current task to finish.")
+        messagebox.showinfo("GRN Dispatch", "Please wait for the current task to finish.")
         return
 
     if not app._aix_results:
         if auto:
-            app._set_status("[AUTO-INGEST API] No results to send to tabs.", WARNING)
+            app._set_status("[AUTO-INGEST] No GRN Dispatch results to finalise.", WARNING)
             return
-        messagebox.showwarning("AI Extract", "No results to send. Run 'Process' first.")
+        messagebox.showwarning("GRN Dispatch", "No results to process. Run 'Process New PDFs' first.")
         return
 
     if not auto and not messagebox.askyesno(
-        "Send to Tabs",
-        f"Send {len(app._aix_results)} result(s) to OCR Renamer / GRN Dispatch "
-        f"and move their PDFs from SCANNED to PROCESSED?",
+        "Process All",
+        f"Finalise {len(app._aix_results)} reviewed result(s), rename their PDFs, "
+        f"and move them from SCANNED to PROCESSED?",
     ):
         return
 
@@ -1871,9 +2526,9 @@ def _aix_send_to_tabs(app, auto=False):
         result["sent"] = True
 
     app._refresh_dashboard_stats()
-    _aix_log(app, "SEND", f"Sent to tabs - {n_renamed} renamed, {n_missing} missing.")
+    _aix_log(app, "SEND", f"Process All complete - {n_renamed} renamed, {n_missing} missing.")
     app._set_status(
-        f"Sent to tabs - {n_renamed} renamed, {n_missing} missing.",
+        f"Process All complete - {n_renamed} renamed, {n_missing} missing.",
         SUCCESS if n_missing == 0 else WARNING,
     )
 
@@ -1889,8 +2544,8 @@ def _aix_send_to_tabs(app, auto=False):
         )
         return
     messagebox.showinfo(
-        "Send to Tabs",
-        f"Done.\n\nRenamed: {n_renamed}\nMissing originals: {n_missing}\n\nCheck the OCR Renamer and GRN Dispatch tabs.",
+        "Process All",
+        f"Done.\n\nRenamed: {n_renamed}\nMissing originals: {n_missing}\n\nThe GRN Dispatch register is ready to export.",
     )
 
 
@@ -2028,7 +2683,8 @@ def _aix_retry_row(app, row_id: str):
         )
         return
 
-    if not OCR_SPACE_AVAILABLE:
+    engine = result.get("processing_engine") or _aix_selected_engine(app)
+    if engine == _GRN_ENGINE_ONLINE and not OCR_SPACE_AVAILABLE:
         messagebox.showerror(
             "OCR.space Unavailable",
             "OCRSpaceExtractor could not be imported from ai_supplier_matcher.py.",
@@ -2044,8 +2700,8 @@ def _aix_retry_row(app, row_id: str):
 
     fname = os.path.basename(src_path)
     app._aix_tree.item(row_id, tags=("modified",))  # orange = "in progress" while retrying
-    app._set_status(f"[AI EXTRACT] Retrying {fname}...", ACCENT)
-    _aix_log(app, "PROCESS", f"[TRY AGAIN] Re-OCR requested for {fname}")
+    app._set_status(f"[GRN DISPATCH · {engine.upper()}] Retrying {fname}...", ACCENT)
+    _aix_log(app, "PROCESS", f"[TRY AGAIN · {engine.upper()}] Re-OCR requested for {fname}")
 
     if not hasattr(app, "_aix_retry_queue"):
         app._aix_retry_queue = queue.Queue()
@@ -2057,34 +2713,29 @@ def _aix_retry_row(app, row_id: str):
     if target_mb <= 0:
         target_mb = 1.0
 
-    ocr_cfg = dict(app.cfg.get("ocr_space", {}))
-    _engine_label = getattr(app, "_aix_ocr_engine_var", None)
-    if _engine_label is not None:
-        _sel = _engine_label.get()
-        if "Engine 1" in _sel:
-            ocr_cfg["OCREngine"] = 1
-        elif "Engine 3" in _sel:
-            ocr_cfg["OCREngine"] = 3
-        else:
-            ocr_cfg["OCREngine"] = 2
-    extractor = OCRSpaceExtractor(config=ocr_cfg)
+    extractor = OCRSpaceExtractor(config=dict(app.cfg.get("ocr_space", {}))) if engine == _GRN_ENGINE_ONLINE else None
 
     def worker():
         try:
-            temp = app._aix_temp_folder
-            os.makedirs(temp, exist_ok=True)
-            # Force a fresh OCR pass: drop any stale temp copy so
-            # _aix_process_single_file doesn't think it can reuse it.
-            stale_temp = os.path.join(temp, fname)
-            if os.path.exists(stale_temp):
-                try:
-                    os.remove(stale_temp)
-                except OSError:
-                    pass
-            new_result, err = _aix_process_single_file(
-                app, extractor, src_path, temp, target_mb,
-                idx=result.get("scan_index", 1),
-            )
+            if engine == _GRN_ENGINE_ONLINE:
+                temp = app._aix_temp_folder
+                os.makedirs(temp, exist_ok=True)
+                # Force a fresh online OCR pass: drop a stale upload copy.
+                stale_temp = os.path.join(temp, fname)
+                if os.path.exists(stale_temp):
+                    try:
+                        os.remove(stale_temp)
+                    except OSError:
+                        pass
+                new_result, err = _aix_process_single_file(
+                    app, extractor, src_path, temp, target_mb,
+                    idx=result.get("scan_index", 1),
+                )
+                new_result["processing_engine"] = _GRN_ENGINE_ONLINE
+            else:
+                new_result, err = _aix_process_single_file_local(
+                    app, src_path, idx=result.get("scan_index", 1)
+                )
             _aix_log(
                 app, "PROCESS",
                 f"[TRY AGAIN] {fname}: supplier={new_result['supplier']}, "
@@ -2215,19 +2866,19 @@ def _aix_on_tree_edit(app, row_id, col_index, old_val, new_val):
                      f"Edit synced to tabs: {result.get('file','')} "
                      f"(supplier={result.get('supplier','')}, grn={result.get('grn','')}, "
                      f"invoice={result.get('invoice','') or '-'})")
-            app._set_status("AI Extract edit applied + synced to OCR Renamer / GRN Dispatch.", SUCCESS)
+            app._set_status("GRN Dispatch edit applied and file/register records synced.", SUCCESS)
         else:
-            app._set_status("AI Extract cell updated.")
+            app._set_status("GRN Dispatch cell updated.")
     else:
-        app._set_status("AI Extract cell updated.")
+        app._set_status("GRN Dispatch cell updated.")
 
 
 def _aix_clear(app):
     n = len(app._aix_results)
     if n and not messagebox.askyesno(
         "Clear Results",
-        f"Clear all {n} result(s) from AI Extract?\n\n"
-        f"This also clears the OCR Renamer and GRN Dispatch tabs and all logs. "
+        f"Clear all {n} result(s) from GRN Dispatch?\n\n"
+        f"This also clears the linked internal processing records and all logs. "
         f"PDFs already sent to PROCESSED are not affected.",
     ):
         return
@@ -2238,7 +2889,7 @@ def _aix_clear(app):
         app._aix_tree.delete(i)
     # Reset the "generate sheet now?" milestone.
     app._aix_next_sheet_prompt = _AIX_SHEET_PROMPT_EVERY
-    # Clearing AI Extract also clears the OCR Renamer and GRN Dispatch tabs.
+    # Clearing the unified screen also clears linked compatibility records.
     try:
         app._clear_rename_results()
     except Exception as e:
@@ -2260,14 +2911,14 @@ def _aix_clear(app):
     except Exception:
         pass
     _aix_update_count(app)
-    app._set_status("Cleared AI Extract, OCR Renamer, GRN Dispatch results and all logs.")
+    app._set_status("Cleared GRN Dispatch results and all logs.")
 
 
 def _aix_export_excel(app):
-    """Export the CURRENT AI Extract results to a brand-new Excel sheet.
+    """Export the current GRN Dispatch results to a brand-new Excel sheet.
     Each call writes a new timestamped GRN_OUTPUT_*.xlsx (never overwrites)."""
     if not app._aix_results:
-        messagebox.showwarning("AI Extract", "No results to export. Run 'Process' first.")
+        messagebox.showwarning("GRN Dispatch", "No results to export. Run 'Process New PDFs' first.")
         return
     # Use the live tree order so the sheet matches what the user sees.
     rows = []
@@ -2303,12 +2954,12 @@ def _aix_maybe_prompt_sheet(app):
     # Advance to the next milestone so we don't re-prompt for the same batch.
     app._aix_next_sheet_prompt = ((n // _AIX_SHEET_PROMPT_EVERY) + 1) * _AIX_SHEET_PROMPT_EVERY
     # Informational only - no export button here. The user generates the sheet
-    # whenever they like with the "Export Excel" button on the AI Extract tab.
+    # whenever they like with the "Export Excel" button on GRN Dispatch.
     messagebox.showinfo(
-        "AI Extract",
+        "GRN Dispatch",
         f"{n} PDFs have been processed and are ready in the results.\n\n"
         f"You can generate the Excel sheet now — just click "
-        f"\"📊 Export Excel\" on the AI Extract tab whenever you're ready.",
+        f"\"📊 Export Excel\" on GRN Dispatch whenever you're ready.",
     )
     
 # ---------------------------------------------------------------------------
@@ -2461,7 +3112,7 @@ def _aix_show_logs(app):
     tk.Label(win, text="📜  Logs", bg=PANEL, fg=TEXT,
              font=("Segoe UI", 12, "bold")).pack(anchor="w", padx=16, pady=(14, 2))
     tk.Label(win,
-             text="All AI Extract activity in one place - Compress, API, Process & Send. Updates live.",
+             text="All GRN Dispatch activity in one place — local OCR, API, processing and finalisation. Updates live.",
              bg=PANEL, fg=MUTED, font=("Segoe UI", 8)).pack(anchor="w", padx=16, pady=(0, 8))
 
     filt_bar = tk.Frame(win, bg=PANEL)
@@ -2566,164 +3217,184 @@ def _aix_show_compress_log(app):
 # ---------------------------------------------------------------------------
 def _aix_open_debug_window(app):
     """
-    Debug window: pick a file from TEMP API PDFS, pick an OCR engine,
-    run OCR.space, and inspect raw text + parsed fields side by side.
+    Debug window: pick any available document, run ANY OCR engine on it (local
+    Tesseract / PaddleOCR / EasyOCR or the three OCR.space API engines) and
+    inspect the raw text next to the parsed fields.
+
+    The controls are laid out with grid + fixed columns and the output panels
+    are created BEFORE the bottom bar, so the "Run OCR Test" button can never be
+    pushed out of the window by a long file name. If a window of this kind is
+    already open it is re-used (lifted) instead of creating a second one, which
+    is what used to make the Run button "disappear" until the app was restarted.
     """
-    if not OCR_SPACE_AVAILABLE:
-        messagebox.showerror(
-            "OCR.space Unavailable",
-            "OCRSpaceExtractor is not available. Cannot run debug.",
-        )
-        return
+    existing = getattr(app, "_aix_debug_window", None)
+    if existing is not None:
+        try:
+            if existing.winfo_exists():
+                existing.deiconify()
+                existing.lift()
+                existing.focus_force()
+                return
+        except Exception:
+            pass
 
-    temp_folder = app._aix_temp_folder
+    def _available_debug_files():
+        entries = {}
+        folders = [
+            ("SCANNED", app.dirs.get("scanned", "")),
+            ("TEMP API PDFS", app._aix_temp_folder),
+            ("PROCESSED", app.dirs.get("processed", "")),
+        ]
+        for label, folder in folders:
+            if not folder or not os.path.isdir(folder):
+                continue
+            for fname in sorted(os.listdir(folder)):
+                if fname.lower().endswith(".pdf"):
+                    entries[f"{label} · {fname}"] = os.path.join(folder, fname)
+        return entries
 
-    # Collect available PDF files
-    if os.path.isdir(temp_folder):
-        pdf_files = sorted(
-            [f for f in os.listdir(temp_folder) if f.lower().endswith(".pdf")]
-        )
-    else:
-        pdf_files = []
+    debug_file_paths = _available_debug_files()
+    pdf_files = list(debug_file_paths)
 
     # -----------------------------------------------------------------------
     # Build window
     # -----------------------------------------------------------------------
     win = tk.Toplevel(app)
-    win.title("AI Extract - OCR Engine Debugger")
-    win.geometry("1020x680")
+    win.title("GRN Dispatch - OCR Engine Debugger")
+    win.geometry("1180x740")
+    win.minsize(900, 560)
     win.configure(bg=PANEL)
     win.transient(app)
+    app._aix_debug_window = win
 
-    # --- Title bar ---
+    # The window grid: row 0 title, row 1 controls, row 2 output (expands),
+    # row 3 buttons. Only the output row grows, so the controls and the Run
+    # button always keep their space.
+    win.columnconfigure(0, weight=1)
+    win.rowconfigure(3, weight=1)
+
+    # Title and subtitle get their own grid rows: sharing one row made the
+    # subtitle sit on top of the title.
     tk.Label(
         win,
         text="🔧  OCR Engine Debugger",
         bg=PANEL,
         fg=TEXT,
         font=("Segoe UI", 12, "bold"),
-    ).pack(anchor="w", padx=16, pady=(14, 2))
+    ).grid(row=0, column=0, sticky="w", padx=16, pady=(14, 0))
 
     tk.Label(
         win,
-        text="Select a trimmed PDF and an engine, then click Run OCR Test.",
+        text=("Choose a document and an engine, then press Run OCR Test to compare the raw text "
+              "with the parsed fields. Engines that are not installed are shown in red."),
         bg=PANEL,
         fg=MUTED,
         font=("Segoe UI", 8),
-    ).pack(anchor="w", padx=16, pady=(0, 10))
+    ).grid(row=1, column=0, sticky="w", padx=16, pady=(2, 0))
 
-    # --- Controls row ---
-    ctrl = tk.Frame(win, bg=PANEL2, height=52)
-    ctrl.pack(fill=tk.X, padx=0)
-    ctrl.pack_propagate(False)
+    # --- Controls (grid, so nothing can be clipped away) ---
+    ctrl = tk.Frame(win, bg=PANEL2)
+    ctrl.grid(row=2, column=0, sticky="ew", pady=(10, 0))
+    ctrl.columnconfigure(3, weight=1)
 
-    # File dropdown
-    tk.Label(
-        ctrl,
-        text="File:",
-        bg=PANEL2,
-        fg=TEXT,
-        font=("Segoe UI", 9),
-    ).pack(side=tk.LEFT, padx=(14, 4), pady=10)
-
+    tk.Label(ctrl, text="File:", bg=PANEL2, fg=TEXT, font=("Segoe UI", 9)).grid(
+        row=0, column=0, padx=(14, 4), pady=10, sticky="w"
+    )
     _debug_file_var = tk.StringVar(
-        value=pdf_files[0] if pdf_files else "(no files in TEMP API PDFS)"
+        value=pdf_files[0] if pdf_files else "(no PDF files available)"
     )
     _debug_file_combo = ttk.Combobox(
         ctrl,
         textvariable=_debug_file_var,
         values=pdf_files if pdf_files else ["(no files)"],
         state="readonly",
-        width=36,
+        width=44,
     )
-    _debug_file_combo.pack(side=tk.LEFT, padx=(0, 14), pady=10)
+    _debug_file_combo.grid(row=0, column=1, padx=(0, 8), pady=10, sticky="w")
 
-    # Refresh file list button
     def _refresh_file_list():
-        if os.path.isdir(temp_folder):
-            updated = sorted(
-                [f for f in os.listdir(temp_folder) if f.lower().endswith(".pdf")]
-            )
-        else:
-            updated = []
+        nonlocal debug_file_paths
+        debug_file_paths = _available_debug_files()
+        updated = list(debug_file_paths)
         _debug_file_combo["values"] = updated if updated else ["(no files)"]
         if updated:
             _debug_file_var.set(updated[0])
 
-    ttk.Button(
-        ctrl,
-        text="↺ Refresh",
-        command=_refresh_file_list,
-    ).pack(side=tk.LEFT, padx=(0, 14), pady=10)
+    ttk.Button(ctrl, text="↺ Refresh", command=_refresh_file_list).grid(
+        row=0, column=2, padx=(0, 14), pady=10
+    )
 
-    # Engine selector
-    tk.Label(
-        ctrl,
-        text="Engine:",
-        bg=PANEL2,
-        fg=TEXT,
-        font=("Segoe UI", 9),
-    ).pack(side=tk.LEFT, padx=(0, 4), pady=10)
+    tk.Label(ctrl, text="Engine:", bg=PANEL2, fg=TEXT, font=("Segoe UI", 9)).grid(
+        row=0, column=3, padx=(0, 4), pady=10, sticky="w"
+    )
 
-    _debug_engine_var = tk.StringVar(value="Engine 2 (Enhanced)")
+    # Every engine: the three OCR.space API engines plus every local engine.
+    _debug_engines = grn_engine_choices(with_status=False)
+
+    _debug_engine_var = tk.StringVar(value=_aix_selected_choice(app))
     _debug_engine_combo = ttk.Combobox(
         ctrl,
         textvariable=_debug_engine_var,
-        values=[
-            "Engine 1 (Default)",
-            "Engine 2 (Enhanced)",
-            "Engine 3 (Extra Accurate)",
-        ],
+        values=_debug_engines,
         state="readonly",
-        width=22,
+        width=44,
     )
-    _debug_engine_combo.pack(side=tk.LEFT, padx=(0, 14), pady=10)
+    _debug_engine_combo.grid(row=0, column=4, padx=(0, 10), pady=10, sticky="w")
 
-    # Status label (right side of ctrl bar)
+    # Run button lives in the controls bar (always visible) ...
+    _debug_btn = ttk.Button(ctrl, text="▶  Run OCR Test", style="Accent.TButton")
+    _debug_btn.grid(row=0, column=5, padx=(0, 14), pady=10)
+
+    # ... and the live status gets its own row underneath.
     _debug_status_var = tk.StringVar(value="Ready.")
     _debug_status_lbl = tk.Label(
-        ctrl,
-        textvariable=_debug_status_var,
-        bg=PANEL2,
-        fg=MUTED,
-        font=("Segoe UI", 9),
+        ctrl, textvariable=_debug_status_var, bg=PANEL2, fg=MUTED,
+        font=("Segoe UI", 9), anchor="w", justify="left",
     )
-    _debug_status_lbl.pack(side=tk.RIGHT, padx=14, pady=10)
+    _debug_status_lbl.grid(row=1, column=0, columnspan=6, sticky="ew", padx=14, pady=(0, 8))
 
-    # Run button
-    _debug_btn = ttk.Button(ctrl, text="▶  Run OCR Test", style="Accent.TButton")
-    _debug_btn.pack(side=tk.LEFT, padx=(0, 8), pady=10)
+    def _engine_hint(_e=None):
+        """Explain the selected engine and warn when it is missing."""
+        mode, value = grn_choice_parts(_debug_engine_var.get())
+        if mode == "online":
+            if OCR_SPACE_AVAILABLE:
+                _debug_status_lbl.configure(fg=MUTED)
+                _debug_status_var.set(f"OCR.space API engine {value} selected.")
+            else:
+                _debug_status_lbl.configure(fg=ERROR)
+                _debug_status_var.set(
+                    "OCR.space is unavailable (ai_supplier_matcher.py not loaded)."
+                )
+        else:
+            if local_engine_installed(str(value)):
+                _debug_status_lbl.configure(fg=MUTED)
+                _debug_status_var.set(f"{local_engine_label(str(value))} selected.")
+            else:
+                _debug_status_lbl.configure(fg=ERROR)
+                _debug_status_var.set(
+                    f"⚠  {local_engine_label(str(value))} is not installed — "
+                    f"install it from Settings → OCR Engines."
+                )
+
+    _debug_engine_combo.bind("<<ComboboxSelected>>", _engine_hint)
+    _engine_hint()
 
     # -----------------------------------------------------------------------
     # Output area — left: raw OCR text / right: parsed fields
     # -----------------------------------------------------------------------
     pane = tk.Frame(win, bg=PANEL)
-    pane.pack(fill=tk.BOTH, expand=True, padx=16, pady=(10, 0))
+    pane.grid(row=3, column=0, sticky="nsew", padx=16, pady=(10, 0))
+    pane.columnconfigure(0, weight=1)
+    pane.rowconfigure(1, weight=1)
 
     # Left panel - raw OCR text
-    left = tk.Frame(pane, bg=PANEL)
-    left.pack(side=tk.LEFT, fill=tk.BOTH, expand=True, padx=(0, 6))
-
-    tk.Label(
-        left,
-        text="Raw OCR Text",
-        bg=PANEL,
-        fg=MUTED,
-        font=("Segoe UI", 9, "bold"),
-    ).pack(anchor="w", pady=(0, 4))
-
-    raw_frame = tk.Frame(left, bg=PANEL2)
-    raw_frame.pack(fill=tk.BOTH, expand=True)
-
+    tk.Label(pane, text="Raw OCR Text", bg=PANEL, fg=MUTED,
+             font=("Segoe UI", 9, "bold")).grid(row=0, column=0, sticky="w", pady=(0, 4))
+    raw_frame = tk.Frame(pane, bg=PANEL2)
+    raw_frame.grid(row=1, column=0, sticky="nsew", padx=(0, 6))
     raw_text = tk.Text(
-        raw_frame,
-        bg=PANEL2,
-        fg=TEXT,
-        font=("Consolas", 9),
-        wrap=tk.WORD,
-        relief="flat",
-        borderwidth=0,
-        selectbackground=ACCENT,
+        raw_frame, bg=PANEL2, fg=TEXT, font=("Consolas", 9), wrap=tk.WORD,
+        relief="flat", borderwidth=0, selectbackground=ACCENT,
     )
     raw_sb = ttk.Scrollbar(raw_frame, orient="vertical", command=raw_text.yview)
     raw_text.configure(yscrollcommand=raw_sb.set)
@@ -2731,49 +3402,49 @@ def _aix_open_debug_window(app):
     raw_sb.pack(side=tk.RIGHT, fill=tk.Y)
 
     # Right panel - parsed fields
-    right = tk.Frame(pane, bg=PANEL)
-    right.pack(side=tk.LEFT, fill=tk.BOTH, expand=False, padx=(6, 0))
-    right.configure(width=320)
-
-    tk.Label(
-        right,
-        text="Parsed Fields",
-        bg=PANEL,
-        fg=MUTED,
-        font=("Segoe UI", 9, "bold"),
-    ).pack(anchor="w", pady=(0, 4))
-
-    fields_frame = tk.Frame(right, bg=PANEL2)
-    fields_frame.pack(fill=tk.BOTH, expand=True)
-
+    tk.Label(pane, text="Parsed Fields", bg=PANEL, fg=MUTED,
+             font=("Segoe UI", 9, "bold")).grid(row=0, column=1, sticky="w", pady=(0, 4))
+    fields_frame = tk.Frame(pane, bg=PANEL2)
+    fields_frame.grid(row=1, column=1, sticky="nsew")
     fields_text = tk.Text(
-        fields_frame,
-        bg=PANEL2,
-        fg=TEXT,
-        font=("Consolas", 9),
-        wrap=tk.WORD,
-        relief="flat",
-        borderwidth=0,
-        selectbackground=ACCENT,
-        width=38,
+        fields_frame, bg=PANEL2, fg=TEXT, font=("Consolas", 9), wrap=tk.WORD,
+        relief="flat", borderwidth=0, selectbackground=ACCENT, width=46,
     )
-    fields_text.pack(fill=tk.BOTH, expand=True, padx=6, pady=6)
+    fields_sb = ttk.Scrollbar(fields_frame, orient="vertical", command=fields_text.yview)
+    fields_text.configure(yscrollcommand=fields_sb.set)
+    fields_text.pack(side=tk.LEFT, fill=tk.BOTH, expand=True, padx=6, pady=6)
+    fields_sb.pack(side=tk.RIGHT, fill=tk.Y)
 
     # -----------------------------------------------------------------------
     # Bottom bar
     # -----------------------------------------------------------------------
     bot = tk.Frame(win, bg=PANEL)
-    bot.pack(fill=tk.X, padx=16, pady=10)
+    bot.grid(row=4, column=0, sticky="ew", padx=16, pady=10)
 
     def _copy_raw():
         win.clipboard_clear()
         win.clipboard_append(raw_text.get("1.0", tk.END))
         win.update()
 
-    ttk.Button(bot, text="📋  Copy Raw Text", command=_copy_raw).pack(
+    def _copy_fields():
+        win.clipboard_clear()
+        win.clipboard_append(fields_text.get("1.0", tk.END))
+        win.update()
+
+    ttk.Button(bot, text="📋  Copy Raw Text", command=_copy_raw).pack(side=tk.LEFT, padx=(0, 8))
+    ttk.Button(bot, text="📋  Copy Fields", command=_copy_fields).pack(side=tk.LEFT, padx=(0, 8))
+    ttk.Button(bot, text="⚙  Engine Settings",
+               command=lambda: app.notebook.select(app._settings_tab_frame)
+               if getattr(app, "_settings_tab_frame", None) is not None else None).pack(
         side=tk.LEFT, padx=(0, 8)
     )
     ttk.Button(bot, text="Close", command=win.destroy).pack(side=tk.RIGHT)
+
+    def _on_close():
+        app._aix_debug_window = None
+        win.destroy()
+
+    win.protocol("WM_DELETE_WINDOW", _on_close)
 
     # -----------------------------------------------------------------------
     # Run OCR logic
@@ -2784,29 +3455,44 @@ def _aix_open_debug_window(app):
             messagebox.showwarning("Debug OCR", "No file selected.", parent=win)
             return
 
-        fpath = os.path.join(temp_folder, fname)
+        fpath = debug_file_paths.get(fname, "")
         if not os.path.exists(fpath):
+            messagebox.showerror("Debug OCR", f"File not found:\n{fpath}", parent=win)
+            return
+
+        mode, value = grn_choice_parts(_debug_engine_var.get())
+        use_local = mode == "offline"
+        engine_key = str(value) if use_local else "ocr_space"
+        engine_num = int(value) if not use_local else 0
+        engine_label = (local_engine_label(engine_key) if use_local
+                        else f"OCR.space Engine {engine_num}")
+
+        # Availability guard — the same wording the pipeline uses.
+        if use_local and not local_engine_installed(engine_key):
+            _debug_status_lbl.configure(fg=ERROR)
+            _debug_status_var.set(f"{engine_label} is not installed.")
+            messagebox.showerror(
+                "OCR Engine Not Found",
+                f"{engine_label} is not installed on this computer.\n\n"
+                f"Install it from Settings → OCR Engines, or select another engine.",
+                parent=win,
+            )
+            return
+        if not use_local and not OCR_SPACE_AVAILABLE:
+            _debug_status_lbl.configure(fg=ERROR)
+            _debug_status_var.set("OCR.space is unavailable.")
             messagebox.showerror(
                 "Debug OCR",
-                f"File not found:\n{fpath}",
+                "OCR.space is unavailable. Choose a local engine instead.",
                 parent=win,
             )
             return
 
-        # Determine engine number from selection
-        sel = _debug_engine_var.get()
-        if "Engine 1" in sel:
-            engine_num = 1
-        elif "Engine 3" in sel:
-            engine_num = 3
-        else:
-            engine_num = 2
-
         _debug_btn.configure(state="disabled")
-        _debug_status_var.set(f"Running OCR.space Engine {engine_num} on {fname} ...")
+        _debug_status_lbl.configure(fg=ACCENT)
+        _debug_status_var.set(f"Running {engine_label} on {fname} ...")
         win.update_idletasks()
 
-        # Clear previous output
         raw_text.configure(state="normal")
         raw_text.delete("1.0", tk.END)
         fields_text.configure(state="normal")
@@ -2814,18 +3500,19 @@ def _aix_open_debug_window(app):
 
         def _worker():
             try:
-                ocr_cfg = dict(app.cfg.get("ocr_space", {}))
-                ocr_cfg["OCREngine"] = engine_num
-
-                extractor = OCRSpaceExtractor(config=ocr_cfg)
-                text, err = extractor.extract_from_file(fpath)
+                if use_local:
+                    text = app._extract_text(fpath, engine_override=engine_key)
+                    err = ""
+                else:
+                    ocr_cfg = dict(app.cfg.get("ocr_space", {}))
+                    ocr_cfg["OCREngine"] = engine_num
+                    extractor = OCRSpaceExtractor(config=ocr_cfg)
+                    text, err = extractor.extract_from_file(fpath)
                 text_upper = (text or "").upper()
 
-                # Extract fields
                 fields = _aix_extract_fields_from_text(app, fpath, text_upper)
 
                 def _update_ui():
-                    # Raw text panel
                     raw_text.configure(state="normal")
                     raw_text.delete("1.0", tk.END)
                     if err:
@@ -2833,11 +3520,10 @@ def _aix_open_debug_window(app):
                     raw_text.insert(tk.END, text or "(no text returned)")
                     raw_text.configure(state="disabled")
 
-                    # Parsed fields panel
                     fields_text.configure(state="normal")
                     fields_text.delete("1.0", tk.END)
                     lines_out = [
-                        f"Engine         : {engine_num}",
+                        f"Engine         : {engine_label}",
                         f"File           : {fname}",
                         f"OCR Error      : {err or 'None'}",
                         "",
@@ -2863,10 +3549,9 @@ def _aix_open_debug_window(app):
                     fields_text.insert(tk.END, "\n".join(lines_out))
                     fields_text.configure(state="disabled")
 
-                    status_color = MUTED if not err else WARNING
-                    _debug_status_lbl.configure(fg=status_color)
+                    _debug_status_lbl.configure(fg=MUTED if not err else WARNING)
                     _debug_status_var.set(
-                        f"Done. Engine {engine_num}  |  "
+                        f"Done. {engine_label}  |  "
                         f"Supplier: {fields.get('supplier', 'UNKNOWN')}  |  "
                         f"Chars: {len(text or '')}"
                     )
@@ -2875,7 +3560,11 @@ def _aix_open_debug_window(app):
                 win.after(0, _update_ui)
 
             except Exception as ex:
-                def _show_err():
+                # Capture the exception as a default argument. Python clears
+                # the `except ... as ex` variable when the except block ends;
+                # without this, the Tk callback raises NameError and hides the
+                # real PaddleOCR error.
+                def _show_err(ex=ex):
                     _debug_status_var.set(f"Error: {ex}")
                     _debug_status_lbl.configure(fg=ERROR)
                     _debug_btn.configure(state="normal")
@@ -2887,6 +3576,7 @@ def _aix_open_debug_window(app):
         threading.Thread(target=_worker, daemon=True).start()
 
     _debug_btn.configure(command=_run_debug)
+
 
 # ---------------------------------------------------------------------------
 # QUEUE POLLING

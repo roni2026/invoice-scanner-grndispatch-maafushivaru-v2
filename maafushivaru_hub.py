@@ -3,6 +3,123 @@
 # v5.2 - Watchdog auto-ingest, desktop notifications, confidence scoring,
 #         supplier learning, scroll fix, live status bar, professional UI
 
+from __future__ import annotations
+
+# ---------------------------------------------------------------------------
+# PYTHON INTERPRETER BOOTSTRAP
+# ---------------------------------------------------------------------------
+# PaddleOCR only works on Python 3.12 here, but many PCs have several Pythons
+# installed and plain `python` may point at the wrong one (packages then look
+# "not installed" because pip installed them into a different interpreter).
+# On start-up this block picks ONE interpreter for the whole application:
+#   1. MAAFUSHIVARU_PYTHON environment variable, or "python_exe" under
+#      "app_settings" in config.json (full path to python.exe), if set;
+#   2. otherwise Python 3.12 (found via the `py` launcher / usual folders);
+#   3. otherwise the interpreter that started the script.
+# If that is not the running interpreter the script re-launches itself with it,
+# so installs, checks and PaddleOCR all use the same Python.
+_PREFERRED_PYTHON = (3, 12)
+
+
+def _bootstrap_python():
+    import os, sys, json, shutil, subprocess
+    if os.environ.get("MAAFUSHIVARU_BOOTSTRAPPED") == "1" or getattr(sys, "frozen", False):
+        return
+    script = os.path.abspath(__file__)
+
+    def probe(exe):
+        """(major, minor, real_path) of a python executable, or None."""
+        try:
+            out = subprocess.run(
+                [exe, "-c", "import sys;print(sys.version_info[0],sys.version_info[1]);print(sys.executable)"],
+                capture_output=True, text=True, timeout=25)
+            lines = (out.stdout or "").strip().splitlines()
+            if out.returncode == 0 and len(lines) >= 2:
+                ma, mi = lines[0].split()
+                return int(ma), int(mi), lines[1].strip()
+        except Exception:
+            pass
+        return None
+
+    def same(a, b):
+        return os.path.normcase(os.path.abspath(a)) == os.path.normcase(os.path.abspath(b))
+
+    # 1. explicit override
+    target = os.environ.get("MAAFUSHIVARU_PYTHON", "").strip()
+    if not target:
+        for cfg_path in (os.path.join(os.getcwd(), "config.json"),
+                         os.path.join(os.path.dirname(script), "config.json")):
+            try:
+                with open(cfg_path, encoding="utf-8") as fh:
+                    target = str(json.load(fh).get("app_settings", {}).get("python_exe", "")).strip()
+                if target:
+                    break
+            except Exception:
+                continue
+    if target and not os.path.isfile(target):
+        print(f"[BOOT] Configured Python not found: {target} - ignoring it.", flush=True)
+        target = ""
+
+    # 2. Python 3.12
+    if not target:
+        if sys.version_info[:2] == _PREFERRED_PYTHON:
+            print(f"[BOOT] Python {sys.version.split()[0]} at {sys.executable}", flush=True)
+            return
+        want = "%d.%d" % _PREFERRED_PYTHON
+        candidates = []
+        if os.name == "nt":
+            if shutil.which("py"):
+                try:
+                    r = subprocess.run(["py", f"-{want}", "-c", "import sys;print(sys.executable)"],
+                                       capture_output=True, text=True, timeout=25)
+                    if r.returncode == 0 and r.stdout.strip():
+                        candidates.append(r.stdout.strip().splitlines()[0])
+                except Exception:
+                    pass
+            nodot = want.replace(".", "")
+            for base in (os.environ.get("LOCALAPPDATA", "") and os.path.join(os.environ["LOCALAPPDATA"], "Programs", "Python"),
+                         os.environ.get("ProgramFiles", r"C:\Program Files") and os.path.join(os.environ.get("ProgramFiles", r"C:\Program Files"), "Python" + nodot),
+                         "C:\\"):
+                if base:
+                    d = base if os.path.basename(base).lower().startswith("python" + nodot) else os.path.join(base, "Python" + nodot)
+                    candidates.append(os.path.join(d, "python.exe"))
+        else:
+            for name in (f"python{want}", "python3"):
+                w = shutil.which(name)
+                if w:
+                    candidates.append(w)
+        for cand in candidates:
+            if cand and os.path.isfile(cand):
+                info = probe(cand)
+                if info and info[:2] == _PREFERRED_PYTHON:
+                    target = info[2]
+                    break
+
+    if not target:
+        print(f"[BOOT] Python {sys.version.split()[0]} at {sys.executable}", flush=True)
+        print("[BOOT] WARNING: Python %d.%d was not found. PaddleOCR needs it - install it from "
+              "python.org, or set \"python_exe\" in config.json." % _PREFERRED_PYTHON, flush=True)
+        return
+    if same(target, sys.executable):
+        print(f"[BOOT] Python {sys.version.split()[0]} at {sys.executable}", flush=True)
+        return
+
+    print(f"[BOOT] Started with Python {sys.version.split()[0]} ({sys.executable}).", flush=True)
+    print(f"[BOOT] Switching to {target} so every package is installed and checked in the "
+          "same Python...", flush=True)
+    env = dict(os.environ, MAAFUSHIVARU_BOOTSTRAPPED="1")
+    try:
+        rc = subprocess.call([target, script] + sys.argv[1:], env=env)
+    except KeyboardInterrupt:
+        rc = 130
+    except Exception as exc:
+        print(f"[BOOT] Could not switch interpreter ({exc}); continuing here.", flush=True)
+        return
+    sys.exit(rc)
+
+
+_bootstrap_python()
+
 import os
 import re
 import io
@@ -135,11 +252,21 @@ except ImportError:
     def infer_supplier_from_invoice(text, suppliers, aliases):
         return None, 0.0
 
+# Central OCR engine / dependency manager (availability checks, installers and
+# the persisted first-run setup state). The application keeps working without
+# it, but then no engine can be installed from inside the interface.
+try:
+    import ocr_engine_manager as oem
+    ENGINE_MANAGER_AVAILABLE = True
+except ImportError:
+    oem = None
+    ENGINE_MANAGER_AVAILABLE = False
+
 # ---------------------------------------------------------------------------
 # CONSTANTS / COLORS
 # ---------------------------------------------------------------------------
 APP_TITLE   = "Maafushivaru - Document Processing Hub"
-APP_VERSION = "v5.2"
+APP_VERSION = "v5.4"
 
 # Color palette — professional dark theme
 BG       = "#0A0F1E"          # deepest background
@@ -167,6 +294,109 @@ ENGINE_MODULES = {"tesseract": "pytesseract", "paddleocr": "paddleocr", "easyocr
 _ENGINE_CACHE  = {}
 NUMBER_FMT = "#,##0.00"
 
+# ---------------------------------------------------------------------------
+# GRN DISPATCH ENGINE CHOICES
+# ---------------------------------------------------------------------------
+# ONLINE  -> OCR.space API, with the three API engines (1 Default, 2 Enhanced,
+#            3 Extra Accurate) individually selectable.
+# OFFLINE -> a LOCAL engine (Tesseract / PaddleOCR / EasyOCR), selectable in
+#            Settings so the offline pipeline is no longer hard-wired to one
+#            engine. The choice is persisted and honoured by both manual and
+#            auto-ingest runs.
+GRN_ONLINE = "online"
+GRN_OFFLINE = "offline"
+
+
+def _engine_mgr():
+    """The OCR engine manager when available (install/availability helpers)."""
+    return oem if ENGINE_MANAGER_AVAILABLE else None
+
+
+def local_engine_keys() -> "List[str]":
+    """Keys of the local (offline) OCR engines."""
+    mgr = _engine_mgr()
+    if mgr is not None:
+        return mgr.offline_engine_keys()
+    return ["tesseract"]
+
+
+def local_engine_label(key: str) -> str:
+    mgr = _engine_mgr()
+    if mgr is not None:
+        return mgr.engine_short(key)
+    return ENGINE_LABELS.get(key, key)
+
+
+def local_engine_installed(key: str) -> bool:
+    """Deep availability check for a local engine (python module + program)."""
+    mgr = _engine_mgr()
+    if mgr is not None:
+        try:
+            return bool(mgr.engine_installed(key))
+        except Exception:
+            pass
+    try:
+        __import__(ENGINE_MODULES.get(key, key))
+        if key == "tesseract" and pytesseract is not None:
+            pytesseract.get_tesseract_version()
+        return True
+    except Exception:
+        return False
+
+
+def grn_engine_choices(with_status: bool = True) -> "List[str]":
+    """Every selectable GRN Dispatch engine (ONLINE first, then the local ones).
+
+    `with_status=False` drops the "not installed" annotation; the debugger uses
+    that form because it reports each engine's status separately.
+    """
+    mgr = _engine_mgr()
+    if mgr is not None:
+        return mgr.choice_labels(with_status=with_status)
+    return [
+        "Online — OCR.space Engine 1 (Default)",
+        "Online — OCR.space Engine 2 (Enhanced)",
+        "Online — OCR.space Engine 3 (Extra Accurate)",
+        "Offline — Tesseract (Local)",
+    ]
+
+
+def grn_choice_label(mode: str, value) -> str:
+    """Label for a saved (mode, value) pair, tolerating old config files."""
+    mgr = _engine_mgr()
+    if mgr is not None:
+        return mgr.label_for_spec(mode, value)
+    if mode == GRN_ONLINE:
+        num = value if value in (1, 2, 3) else 2
+        return {
+            1: "Online — OCR.space Engine 1 (Default)",
+            2: "Online — OCR.space Engine 2 (Enhanced)",
+            3: "Online — OCR.space Engine 3 (Extra Accurate)",
+        }[num]
+    return f"Offline — {ENGINE_LABELS.get(str(value), 'Tesseract OCR')} (Local)"
+
+
+def grn_choice_parts(label: str):
+    """Split a combo label back into (mode, value).
+
+    `value` is the OCR.space engine number for ONLINE, or the local engine key
+    for OFFLINE. Unknown labels fall back to OFFLINE + Tesseract so a stale
+    saved value can never break the pipeline.
+    """
+    mgr = _engine_mgr()
+    if mgr is not None:
+        return mgr.parse_choice(label)
+    text = (label or "").lower()
+    if text.startswith("online"):
+        for num in (1, 2, 3):
+            if f"engine {num}" in text:
+                return GRN_ONLINE, num
+        return GRN_ONLINE, 2
+    for key in ("easyocr", "paddleocr"):
+        if key in text:
+            return GRN_OFFLINE, key
+    return GRN_OFFLINE, "tesseract"
+
 ZONE_OCR_REGIONS = {
     # Each entry is (top_pct, bottom_pct, left_pct, right_pct)
     # These cover the areas where GRN, PO, supplier, date and invoice
@@ -182,6 +412,32 @@ _ZONE_MIN_CHARS = 20
 
 # How many zones must succeed for us to trust zone results over full-page OCR.
 _ZONE_MIN_SUCCESS = 2
+
+# Scanned (image-only) pages are OCR'd at no less than this many DPI. The old
+# behaviour rendered at image_scale_factor x 72 DPI (2 -> 144 DPI), which is far
+# too small for Birchstreet printouts (tiny table text): Tesseract returned
+# little or nothing. 300 DPI matches the scanner's native resolution.
+_OCR_MIN_DPI = 300
+
+# A page whose OCR text contains this many recognisable report/invoice words
+# (or a GRN / PO marker) is considered "read correctly".
+_OCR_GOOD_HITS = 6
+_OCR_VOCAB = frozenset("""
+RECEIVING RECORD REPORT PURCHASE ORDER INVOICE SUPPLIER BUYER STOREROOM
+DEPARTMENT SUBTOTAL TOTAL TAX FREIGHT DISCOUNT AMOUNT DATE NUMBER DELIVERY
+CUSTOMER DESCRIPTION QTY UNIT RATE ITEM CODE PRICE STATUS COMPLETE NOTES
+PRODUCT GST MVR USD EUR GBP SGD SHOP CASH BILL PAYMENT DUE REFERENCE
+""".split())
+_GRN_MARK_RE = re.compile(r"RC[-\s]*MAM[-\s]*\d{3,}")
+_PO_MARK_RE = re.compile(r"PO[-\s]*MAM[-\s]*\d{3,}")
+
+
+class OCRUnavailableError(RuntimeError):
+    """Raised when Tesseract itself cannot run (binary/module missing).
+
+    This used to be swallowed and turned into an empty string, which showed up
+    in the UI as 'no text extracted' with no explanation.
+    """
 
 # ---------------------------------------------------------------------------
 # THREAD-LOCAL SUPPLIER TRACKING
@@ -721,6 +977,23 @@ class OCRWorkerMixin:
     # ------------- ENGINE HELPERS -------------
     @staticmethod
     def _check_engine(key):
+        """True when the engine is really usable (module AND program present).
+
+        `paddleocr`/`easyocr` previously reported "Installed" as soon as the
+        python package was importable, even when the engine could not run.
+        The deep check lives in ocr_engine_manager so the Settings screen and
+        the pipeline always agree.
+        """
+        if key == "tesseract":
+            if pytesseract is None:
+                return False
+            try:
+                pytesseract.get_tesseract_version()
+                return True
+            except Exception:
+                return False
+        if key in ("paddleocr", "easyocr"):
+            return local_engine_installed(key)
         try:
             __import__(ENGINE_MODULES.get(key, key))
             return True
@@ -728,65 +1001,208 @@ class OCRWorkerMixin:
             return False
 
     def _get_engine_instance(self, key):
+        """Create (and cache) a heavy local engine instance, or raise.
+
+        The import happens HERE, inside the worker thread, never at startup:
+        importing easyocr/paddleocr loads PyTorch/PaddlePaddle which takes
+        several seconds and a lot of memory.
+        """
         if key in _ENGINE_CACHE:
             return _ENGINE_CACHE[key]
         if key == "paddleocr":
             from paddleocr import PaddleOCR
-            _ENGINE_CACHE[key] = PaddleOCR(use_angle_cls=True, lang="en", show_log=False)
+            # PaddleOCR 3.x replaced the deprecated `use_angle_cls` option
+            # with `use_textline_orientation`. Keep a fallback for older
+            # PaddleOCR 2.x installations.
+            try:
+                _ENGINE_CACHE[key] = PaddleOCR(
+                    use_textline_orientation=True,
+                    lang="en",
+                )
+            except (TypeError, ValueError):
+                try:
+                    _ENGINE_CACHE[key] = PaddleOCR(
+                        use_angle_cls=True,
+                        lang="en",
+                        show_log=False,
+                    )
+                except TypeError:
+                    _ENGINE_CACHE[key] = PaddleOCR(
+                        use_angle_cls=True,
+                        lang="en",
+                    )
         elif key == "easyocr":
             import easyocr
             _ENGINE_CACHE[key] = easyocr.Reader(["en"], verbose=False)
+        elif key == "tesseract":
+            self._ensure_tesseract()
         return _ENGINE_CACHE.get(key)
 
+    def _run_local_engine_ocr(self, arr, engine_key: str) -> str:
+        """Run one local (offline) engine on a grayscale array.
+
+        Raises OCRUnavailableError with a readable message when the engine is
+        not installed, so the UI can say "engine not found" instead of
+        silently returning nothing.
+        """
+        if engine_key == "tesseract":
+            self._ensure_tesseract()
+            psm = self.cfg["app_settings"].get("ocr_psm", 6)
+            oem_val = self.cfg["app_settings"].get("ocr_oem", 3)
+            try:
+                return self._fix_ocr_tokens(
+                    pytesseract.image_to_string(arr, config=f"--oem {oem_val} --psm {psm}")
+                ).upper()
+            except Exception as e:
+                self._last_ocr_error = f"Tesseract OCR failed: {e}"
+                if isinstance(e, getattr(pytesseract, "TesseractNotFoundError", ())):
+                    raise OCRUnavailableError(
+                        "Tesseract OCR is not installed (program not found). "
+                        "Install it from https://github.com/UB-Mannheim/tesseract/wiki, "
+                        "or open Settings → OCR Engines and press Install."
+                    )
+                return ""
+
+        if not self._check_engine(engine_key):
+            raise OCRUnavailableError(
+                f"{ENGINE_LABELS.get(engine_key, engine_key)} is not installed on this "
+                f"computer. Open Settings → OCR Engines and press Install, or select "
+                f"Tesseract OCR / an Online engine instead."
+            )
+        try:
+            instance = self._get_engine_instance(engine_key)
+        except Exception as e:
+            raise OCRUnavailableError(
+                f"{ENGINE_LABELS.get(engine_key, engine_key)} could not be started: {e}"
+            )
+        if instance is None:
+            raise OCRUnavailableError(
+                f"{ENGINE_LABELS.get(engine_key, engine_key)} engine is not available."
+            )
+        if engine_key == "paddleocr":
+            # PaddleOCR 3.x uses `predict()` and returns Result objects whose
+            # JSON data contains `rec_texts`. Older 2.x releases use `ocr()`.
+            if hasattr(instance, "predict"):
+                results = instance.predict(arr)
+                texts = []
+                for res in results:
+                    data = getattr(res, "json", None)
+                    if callable(data):
+                        data = data()
+                    if isinstance(data, str):
+                        try:
+                            data = json.loads(data)
+                        except Exception:
+                            data = None
+                    if isinstance(data, dict):
+                        data = data.get("res", data)
+                        rec_texts = data.get("rec_texts", []) if isinstance(data, dict) else []
+                        if rec_texts:
+                            texts.extend(str(t) for t in rec_texts if str(t).strip())
+                return " ".join(texts).upper()
+            r = instance.ocr(arr, cls=True)
+            return " ".join(l[1][0] for l in r[0]).upper() if r and r[0] else ""
+        if engine_key == "easyocr":
+            return " ".join(instance.readtext(arr, detail=0)).upper()
+        return ""
+
     # ------------- IMAGE / OCR -------------
-    def _preprocess_image(self, pix):
+    @staticmethod
+    def _remove_table_lines(gray):
+        """Erase the long horizontal/vertical ruling lines of Birchstreet tables.
+
+        Tesseract treats grid lines as glyph strokes: they glue to characters
+        ("MVR1,060.00" -> "MVRI.060.00"), split cells into ragged fragments and
+        push it into the wrong layout mode. OCR.space removes them internally;
+        we do the same here with morphological opening, scaled to the DPI.
+        """
+        try:
+            h, w = gray.shape[:2]
+            k = max(0.5, w / 2480.0)
+            bw = cv2.adaptiveThreshold(gray, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
+                                       cv2.THRESH_BINARY_INV, 41, 15)
+            hor = cv2.morphologyEx(bw, cv2.MORPH_OPEN,
+                                   cv2.getStructuringElement(cv2.MORPH_RECT, (max(25, int(80 * k)), 1)))
+            ver = cv2.morphologyEx(bw, cv2.MORPH_OPEN,
+                                   cv2.getStructuringElement(cv2.MORPH_RECT, (1, max(25, int(60 * k)))))
+            mask = cv2.dilate(cv2.bitwise_or(hor, ver), np.ones((3, 3), np.uint8))
+            out = gray.copy()
+            out[mask > 0] = 255
+            return out
+        except Exception as e:
+            logging.debug(f"Table-line removal skipped: {e}")
+            return gray
+
+    def _preprocess_image(self, pix, denoise: Optional[bool] = None):
+        """Return a clean GRAYSCALE image for OCR.
+
+        The old version always finished with a hard Otsu black/white threshold.
+        On 300 DPI scans that eats thin strokes and merges neighbours (wrong
+        characters everywhere). Tesseract's own LSTM binariser (Leptonica) does
+        a much better job on grayscale, so we no longer threshold unless
+        app_settings["ocr_binarize"] is explicitly turned on.
+        """
         img = np.frombuffer(pix.samples, dtype=np.uint8).reshape(pix.h, pix.w, pix.n)
         if pix.n == 4:
-            img = cv2.cvtColor(img, cv2.COLOR_BGRA2BGR)
-            gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+            gray = cv2.cvtColor(img, cv2.COLOR_RGBA2GRAY)
         elif pix.n == 3:
-            gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+            gray = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
         else:
             gray = img.squeeze() if img.ndim == 3 else img
+        gray = np.ascontiguousarray(gray)
 
-        if self.cfg["app_settings"].get("enhance_images", True):
-            clahe = cv2.createCLAHE(clipLimit=2.5, tileGridSize=(8, 8))
+        s = self.cfg["app_settings"]
+        if s.get("enhance_images", False):
+            clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8))
             gray = clahe.apply(gray)
-            gray = cv2.fastNlMeansDenoising(gray, None, 10, 7, 21)
-            kernel = np.array([[0, -1, 0], [-1, 5, -1], [0, -1, 0]], dtype=np.float32)
-            gray = cv2.filter2D(gray, -1, kernel)
+            if denoise is None:
+                denoise = max(gray.shape[:2]) < 2400
+            if denoise:
+                gray = cv2.fastNlMeansDenoising(gray, None, 10, 7, 21)
 
-        _, out = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
-        return out
+        if s.get("ocr_remove_table_lines", True):
+            gray = self._remove_table_lines(gray)
 
-    def _correct_rotation(self, arr: np.ndarray) -> np.ndarray:
+        if s.get("ocr_binarize", False):
+            _, gray = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+        return gray
+
+    def _correct_rotation(self, arr: np.ndarray, full_page: bool = True) -> np.ndarray:
         """
-        Correct both 90/180/270 rotations (via Tesseract OSD) and
-        small deskew angles (tilted scans) via Hough line analysis.
-        Falls back gracefully if either step fails.
+        Correct 90/180/270 rotations (Tesseract OSD) and small deskew angles.
+
+        OSD is only trusted on a FULL page image and only when Tesseract reports
+        a confident orientation. On the header/zone crops the old code
+        (a) let OSD guess from a few lines of text, which flipped upright
+        strips upside-down, and (b) when OSD raised "too few characters" it
+        rotated every wide crop 90 degrees. Both destroyed the text and were the
+        reason zone OCR returned nothing usable. Crops are now never rotated.
         """
-        # --- Step 1: coarse rotation via Tesseract OSD ---
-        try:
-            osd = pytesseract.image_to_osd(arr, config="--psm 0 -c min_characters_to_try=5")
-            m = re.search(r"Rotate:\s*(\d+)", osd)
-            angle = int(m.group(1)) if m else 0
-            if angle == 90:
-                arr = cv2.rotate(arr, cv2.ROTATE_90_COUNTERCLOCKWISE)
-            elif angle == 180:
-                arr = cv2.rotate(arr, cv2.ROTATE_180)
-            elif angle == 270:
-                arr = cv2.rotate(arr, cv2.ROTATE_90_CLOCKWISE)
-        except Exception:
-            # Fallback: if image is landscape, assume it needs 90° rotation
-            h, w = arr.shape[:2]
-            if w > h * 1.3:
-                arr = cv2.rotate(arr, cv2.ROTATE_90_CLOCKWISE)
+        if full_page and min(arr.shape[:2]) >= 800:
+            try:
+                osd = pytesseract.image_to_osd(arr, config="--psm 0 -c min_characters_to_try=50")
+                m = re.search(r"Rotate:\s*(\d+)", osd)
+                c = re.search(r"Orientation confidence:\s*([\d.]+)", osd)
+                angle = int(m.group(1)) if m else 0
+                conf = float(c.group(1)) if c else 0.0
+                if angle and conf >= 3.0:
+                    if angle == 90:
+                        arr = cv2.rotate(arr, cv2.ROTATE_90_COUNTERCLOCKWISE)
+                    elif angle == 180:
+                        arr = cv2.rotate(arr, cv2.ROTATE_180)
+                    elif angle == 270:
+                        arr = cv2.rotate(arr, cv2.ROTATE_90_CLOCKWISE)
+                    logging.info(f"OCR: rotated page by {angle} deg (OSD confidence {conf:.1f})")
+            except Exception as e:
+                # OSD unavailable / too little text: leave the page as it is.
+                logging.debug(f"OSD skipped: {e}")
 
         # --- Step 2: fine deskew for small tilt angles (±15°) ---
-        try:
-            arr = self._deskew(arr)
-        except Exception as e:
-            logging.debug(f"Deskew skipped: {e}")
+        if full_page:
+            try:
+                arr = self._deskew(arr)
+            except Exception as e:
+                logging.debug(f"Deskew skipped: {e}")
 
         return arr
 
@@ -848,15 +1264,496 @@ class OCRWorkerMixin:
             borderValue=border_val,
         )
         return rotated
+    # ------------- TESSERACT "OCR.space-style" REPORT PIPELINE -------------
+    _OCR_DIGIT_FIX = str.maketrans({"O": "0", "o": "0", "Q": "0", "D": "0", "I": "1", "l": "1",
+                                    "|": "1", "!": "1", "S": "5", "s": "5", "B": "8", "Z": "2"})
+    _OCR_LOOKALIKE = "OoQDIl|!SsBZ"
+    _MONEY_OK = re.compile(r"(?:[1-9]\d{0,2}(?:,\d{3})+|[1-9]\d*|0)\.\d{1,4}")
+
+    @classmethod
+    def _fix_ocr_tokens(cls, text: str) -> str:
+        """Repair letter-for-digit slips in tokens that can ONLY be numeric.
+
+        Only tightly-scoped shapes are touched, so ordinary words are safe:
+          * amounts after a currency code   (MVRO.00 -> MVR0.00, MVRI75.68 -> MVR175.68)
+            An ambiguous amount (leading O/I/l...) is resolved against the other,
+            unambiguous amounts on the same page (a spurious extra letter, as in
+            "MVRI175.68" for MVR175.68, is dropped when 175.68 appears elsewhere).
+          * decimal comma slips              (2,00 -> 2.00, 0,00 -> 0.00)
+          * TIN / GST registration numbers   (1142076GSTO01 -> 1142076GST001)
+          * bracketed phone numbers          ((960)668-000! -> (960)668-0001)
+        """
+        if not text:
+            return text
+
+        def _val(s):
+            try:
+                return round(float(s.replace(",", "")), 4)
+            except ValueError:
+                return None
+
+        known = set()
+        for m in re.finditer(r"\b(?:MVR|USD|EUR|GBP|SGD)\s?(\d[\d,]*\.\d{1,4})\b", text):
+            v = _val(m.group(1))
+            if v is not None:
+                known.add(v)
+        for m in re.finditer(r"(?<![\w.,])(\d{1,3}(?:,\d{3})*\.\d{2})(?![\w.])", text):
+            v = _val(m.group(1))
+            if v is not None:
+                known.add(v)
+
+        lk = cls._OCR_LOOKALIKE
+
+        def _money(m):
+            cur, sp, tok = m.group(1), m.group(2), m.group(3)
+            cands = [tok.translate(cls._OCR_DIGIT_FIX)]
+            if tok[0] in lk and len(tok) > 1:
+                cands.append(tok[1:].translate(cls._OCR_DIGIT_FIX))
+            valid = [c for c in cands if cls._MONEY_OK.fullmatch(c)]
+            if not valid:
+                return m.group(0)
+            pick = next((c for c in valid if _val(c) in known), valid[0])
+            return cur + sp + pick
+
+        text = re.sub(r"\b(MVR|USD|EUR|GBP|SGD)(\s?)([0-9OoQDIl|!SsBZ][0-9OoQDIl|!SsBZ,\.]*)", _money, text)
+        # A decimal comma with exactly two digits is never a thousands separator.
+        text = re.sub(r"(?<![\d,.])(\d{1,3}),(\d{2})(?![\d,])", r"\1.\2", text)
+        text = re.sub(r"\b(\d{5,})(GST)([0-9OoSsIl|!]{3})\b",
+                      lambda m: m.group(1) + m.group(2) + m.group(3).translate(cls._OCR_DIGIT_FIX), text)
+        text = re.sub(r"(\(\d{3}\)\s?\d{3}-\d{3})([Il|!])(?!\w)", r"\g<1>1", text)
+        return text
+
+    _TABLE_START_RE = re.compile(r"PURCHASE\s+ORDERS|ITEM\s*(?:SKU|CODE)|ITEM\s+DESC", re.I)
+
+    def _tess_data(self, gray, psm: int = 6):
+        """Run Tesseract once with per-word boxes. Low-confidence purely numeric
+        tokens (item codes, quantities such as "84555:" / "2,00") are re-read in
+        isolation at 1.6x with a digits-only whitelist; only a same-length digit
+        string is accepted, so a code is never lengthened or shortened."""
+        from pytesseract import Output
+        oem = self.cfg["app_settings"].get("ocr_oem", 3)
+        d = pytesseract.image_to_data(gray, config=f"--oem {oem} --psm {psm}", output_type=Output.DICT)
+        for i in range(len(d["text"])):
+            w = (d["text"][i] or "").strip()
+            try:
+                conf = float(d["conf"][i])
+            except (TypeError, ValueError):
+                conf = -1
+            if not w or conf >= 88 or not re.fullmatch(r"\d[\d.,]*[:;.,]?", w):
+                continue
+            x, y, ww, h = d["left"][i], d["top"][i], d["width"][i], d["height"][i]
+            pad = int(h * 0.35)
+            reg = gray[max(0, y - pad):y + h + pad, max(0, x - pad):x + ww + pad]
+            if reg.size == 0:
+                continue
+            reads = []
+            for fx in (1.6, 2.2):
+                r2 = cv2.resize(reg, None, fx=fx, fy=fx, interpolation=cv2.INTER_CUBIC)
+                r2 = cv2.copyMakeBorder(r2, 20, 20, 20, 20, cv2.BORDER_CONSTANT, value=255)
+                reads.append(pytesseract.image_to_string(
+                    r2, config="--oem 3 --psm 8 -c tessedit_char_whitelist=0123456789.,").strip().strip(".,"))
+            core = w.rstrip(":;.,")
+            # two independent re-reads must agree, be numeric and keep the same length
+            if reads[0] == reads[1] and re.fullmatch(r"\d[\d.,]*", reads[0]) \
+                    and len(reads[0]) == len(core) and reads[0] != core:
+                d["text"][i] = reads[0]
+        return d
+
+    def _layout_cells(self, d, img_w: int):
+        """Turn Tesseract word boxes into OCR.space-style text lines.
+
+        OCR.space prints the header of a Birchstreet report column by column, one
+        label/value cell per line ("Invoice number: 14290", then "Invoice subtotal
+        amount: ...", ...), and the stacked supplier name as two lines. The
+        downstream field parsers (supplier band between "Buyer's Dept." and "Source
+        document number", invoice number, totals...) rely on exactly that layout.
+        Tesseract's --psm 6 glues neighbouring columns into one long row instead
+        ("INVOICE NUMBER: 14290 PO DATE: 09/15/2026 SUPPLIER: ..."), which made the
+        parsers pick "PERSONAL COMPUTERS" as supplier and "14290 PO" as invoice.
+
+        Above the line-item table: find the empty vertical gutters that cut the
+        header into columns, then emit each column top-to-bottom (left to right).
+        From the table down: keep normal row-by-row lines.
+        Returns a list of dicts: {text, conf, col, y, h}.
+        """
+        words = []
+        for i in range(len(d["text"])):
+            t = (d["text"][i] or "").strip()
+            try:
+                c = float(d["conf"][i])
+            except (TypeError, ValueError):
+                c = -1
+            if not t or c < 0:
+                continue
+            words.append({"t": t, "x": d["left"][i], "y": d["top"][i], "w": d["width"][i],
+                          "h": d["height"][i], "c": c})
+        if not words:
+            return []
+        hs = sorted(w["h"] for w in words)
+        mh = hs[len(hs) // 2] or 30
+
+        def cluster(ws):
+            ws = sorted(ws, key=lambda w: w["y"] + w["h"] / 2.0)
+            rows, cys = [], []
+            for w in ws:
+                cy = w["y"] + w["h"] / 2.0
+                if rows and abs(cy - cys[-1][0] / cys[-1][1]) <= 0.55 * mh:
+                    rows[-1].append(w)
+                    cys[-1][0] += cy
+                    cys[-1][1] += 1
+                else:
+                    rows.append([w])
+                    cys.append([cy, 1])
+            return rows
+
+        def _speck(w):
+            a = len(re.findall(r"[A-Za-z0-9]", w["t"]))
+            if a and w["h"] < 0.5 * mh and w["w"] < 0.8 * mh:
+                return True                 # 4-5 px dust dot read as "i" / "5"
+            if a > 2:
+                return False
+            if w["t"].isdigit() or re.fullmatch(r"\d[.,:]?", w["t"]):
+                return w["c"] < 40          # real one-digit numbers keep a decent score
+            return w["c"] < 60
+
+        def clean_row(row, col):
+            row = sorted(row, key=lambda w: w["x"])
+            good = [w for w in row if not _speck(w)]
+            # logo-stain specks ("I 5 J \u00abA, SIMDI CONSUME") are dropped anywhere in the
+            # line, but only when real words remain - a line is never emptied by this
+            if good:
+                row = good
+            if not row or max(w["c"] for w in row) < 45:
+                return None                  # nothing here Tesseract believes in
+            alpha = [w for w in row if len(re.findall(r"[A-Za-z]", w["t"])) >= 3]
+            return {"text": " ".join(w["t"] for w in row),
+                    "words": [(w["t"], w["c"]) for w in row],
+                    "conf": (sum(w["c"] for w in alpha) / len(alpha)) if alpha else 0.0,
+                    "n_alpha": len(alpha), "col": col,
+                    "y": min(w["y"] for w in row), "h": max(w["h"] for w in row),
+                    "x": row[0]["x"]}
+
+        # where does the line-item table start?
+        cut_y = None
+        for row in cluster(words):
+            txt = " ".join(w["t"] for w in sorted(row, key=lambda w: w["x"]))
+            if self._TABLE_START_RE.search(txt):
+                cut_y = min(w["y"] for w in row) - 2
+                break
+
+        out = []
+        if cut_y is None:
+            for row in cluster(words):
+                r = clean_row(row, 0)
+                if r:
+                    out.append(r)
+            return out
+
+        head = [w for w in words if w["y"] + w["h"] / 2.0 < cut_y]
+        body = [w for w in words if w["y"] + w["h"] / 2.0 >= cut_y]
+
+        # vertical gutters across the header = column separators. A gutter may be
+        # crossed by a few full-width items (a title, a long "Purchase Order #" line);
+        # they must not glue the columns together, so a small vote is tolerated.
+        cnt = np.zeros(img_w + 2, dtype=np.int32)
+        for w in head:
+            if w["h"] < 0.5 * mh or (w["c"] < 30 and len(re.findall(r"[A-Za-z0-9]", w["t"])) <= 2):
+                continue                                    # specks must not bridge gutters
+            cnt[max(0, w["x"]):min(img_w + 1, w["x"] + w["w"] + 1)] += 1
+        thr = max(1, int(0.06 * max(1, len(cluster(head)))))
+        cov = cnt > thr
+        min_gap = max(int(self.cfg["app_settings"].get("ocr_column_gap_px", 0) or 0), 0) or max(40, int(1.4 * mh))
+        bounds = []
+        xs = np.where(cnt > 0)[0]
+        first, last = (int(xs[0]), int(xs[-1])) if len(xs) else (0, 0)
+        i = first
+        while i <= last:
+            if not cov[i]:
+                j = i
+                while j <= last and not cov[j]:
+                    j += 1
+                if j - i >= min_gap:
+                    bounds.append((i + j) // 2)
+                i = j
+            else:
+                i += 1
+
+        def col_of(w):
+            cx = w["x"] + w["w"] / 2.0
+            return sum(1 for b in bounds if cx > b)
+
+        # A phrase that straddles a gutter ("Purchase Order #: PO-MAM-000021414") must stay
+        # in one piece: split each printed row only where the gap is wide, then send each
+        # whole segment to the column its first word starts in.
+        split_gap = max(20, int(1.0 * mh))
+        cols = {}
+        for row in cluster(head):
+            row = sorted(row, key=lambda w: w["x"])
+            seg = [row[0]]
+            segs = []
+            for prev, w in zip(row, row[1:]):
+                if w["x"] - (prev["x"] + prev["w"]) > split_gap:
+                    segs.append(seg)
+                    seg = []
+                seg.append(w)
+            segs.append(seg)
+            for sg in segs:
+                cols.setdefault(col_of(sg[0]), []).extend(sg)
+        for ci in sorted(cols):
+            for row in cluster(cols[ci]):
+                r = clean_row(row, ci)
+                if r:
+                    out.append(r)
+        for row in cluster(body):
+            r = clean_row(row, -1)
+            if r:
+                out.append(r)
+        return out
+
+    def _rescue_supplier_lines(self, lines, clean_gray, d):
+        """Repair a garbled stacked supplier name. It is printed on two lines to the
+        right of the "Supplier:" label and sits beside a logo stain, so it can come
+        back as junk ("Supplier: ne aaa"). Only runs when the supplier line (or the
+        name line right above it) has no confident word; the name is then re-read
+        from a crop of the area to the right of the label."""
+        try:
+            idx = next((k for k, l in enumerate(lines)
+                        if re.match(r"\s*SUPPLIER\b", l["text"], re.I)), None)
+            if idx is None:
+                return lines
+            cur = lines[idx]
+            rest_words = [(t, c) for t, c in cur.get("words", [])[1:]]
+            prev = lines[idx - 1] if idx > 0 else None
+            weak_cur = bool(rest_words) and (
+                sum(c for _, c in rest_words) / len(rest_words) < 55
+                or not re.search(r"[A-Za-z]{3,}", " ".join(t for t, _ in rest_words)))
+            weak_prev = prev is not None and prev["col"] == cur["col"] and \
+                (prev["n_alpha"] < 1 or prev["conf"] < 45) and prev is not None
+            if not (weak_cur or weak_prev):
+                return lines
+            H, W = clean_gray.shape[:2]
+            for i, t in enumerate(d["text"]):
+                if (t or "").strip().lower().startswith("supplier"):
+                    x, y, w, h = d["left"][i], d["top"][i], d["width"][i], d["height"][i]
+                    reg = clean_gray[max(0, int(y - 2.4 * h)):int(y + 1.4 * h), min(W - 1, x + w):W]
+                    if reg.size == 0:
+                        continue
+                    reg = cv2.copyMakeBorder(reg, 20, 20, 20, 20, cv2.BORDER_CONSTANT, value=255)
+                    raw = pytesseract.image_to_string(reg, config="--oem 3 --psm 6")
+                    got = [ln.strip() for ln in raw.splitlines() if len(re.findall(r"[A-Za-z]", ln)) >= 3]
+                    if not got:
+                        return lines
+                    cur["text"] = "Supplier: " + got[-1]
+                    cur["words"], cur["conf"], cur["n_alpha"] = [("Supplier:", 90.0), (got[-1], 90.0)], 90.0, 2
+                    nxt = lines[idx + 1] if idx + 1 < len(lines) else None
+                    if nxt is not None and nxt["col"] == cur["col"] and nxt["text"].strip().upper() in got[-1].upper():
+                        del lines[idx + 1]           # the name's last line was read twice
+                    if len(got) >= 2 and prev is not None and prev["col"] == cur["col"]:
+                        prev["text"] = " ".join(got[:-1])
+                        prev["conf"], prev["n_alpha"] = 90.0, 1
+                    return lines
+        except Exception as e:
+            logging.debug(f"Supplier rescue skipped: {e}")
+        return lines
+
+    _REPORT_LABELS = (
+        "RECEIVING RECORD #", "PURCHASE ORDER #", "RECEIVED BY", "RECEIVED ON", "BUYER'S NAME",
+        "BUYER'S PHONE", "BUYER'S DEPT.", "STOREROOM NAME", "PO STATUS", "INVOICE NUMBER",
+        "INVOICE SUBTOTAL AMOUNT", "INVOICE FREIGHT AMOUNT", "INVOICE TAX AMOUNT",
+        "INVOICE LESS DISCOUNT AMOUNT", "INVOICE TOTAL", "PO DATE", "PO SUBTOTAL",
+        "PO FREIGHT AMOUNT", "PO TAX AMOUNT", "PO LESS DISCOUNT AMOUNT", "PO TOTAL", "SUPPLIER",
+        "SOURCE DOCUMENT NUMBER", "TRACKING NUMBER", "BILL OF LADING NUMBER",
+        "DELIVERY NOTE NUMBER", "DIRECT TOTAL AMOUNT", "RECEIVING NOTES", "PRODUCT DISBURSEMENT",
+        "PICKED UP BY", "DELIVERED TO", "DEPARTMENT", "LOCATION", "DATE", "SIGNATURE",
+        "INVOICE NO", "INVOICE DATE", "DUE DATE", "SALES ORDER NO", "SHOP TIN", "CUSTOMER",
+        "CUSTOMER REFERENCE", "TIN", "AMOUNT IN WORDS", "PREPARED BY", "CHECKED BY",
+    )
+
+    @classmethod
+    def _fix_report_labels(cls, text: str) -> str:
+        """Snap a slightly misread field label back to the real Birchstreet/invoice
+        label ("RECCIVED ON:" -> "RECEIVED ON:"). Different Tesseract model files
+        (fast / best / the older bundled one) slip on different letters, and the
+        field parsers look these labels up literally. Only the text before the first
+        colon is touched and only when a known label is a very close match."""
+        import difflib
+        out = []
+        for ln in text.splitlines():
+            m = re.match(r"^(\s*)([A-Z][A-Z' .#/&-]{2,40}?)(\s*:.*)$", ln)
+            if m:
+                lab = m.group(2).strip()
+                if lab not in cls._REPORT_LABELS:
+                    c = difflib.get_close_matches(lab, cls._REPORT_LABELS, n=1, cutoff=0.86)
+                    if c:
+                        ln = m.group(1) + c[0] + m.group(3)
+            out.append(ln)
+        return "\n".join(out)
+
+    @staticmethod
+    def _drop_noise_lines(text: str) -> str:
+        """Remove lines that hold no real word/number (logo stains, scanner specks)."""
+        return "\n".join(ln for ln in text.splitlines() if re.search(r"[A-Za-z]{2,}|\d{2,}", ln))
+
+    def _use_report_ocr(self, engine_override: Optional[str] = None) -> bool:
+        """The specialised Birchstreet report pipeline (layout cells, label
+        repair, supplier-line rescue) is Tesseract-only because it uses word
+        boxes. Any other local engine is OCR'd with the generic path below.
+        """
+        eng = engine_override or self.cfg["app_settings"].get("ocr_engine", "tesseract")
+        return eng == "tesseract" and pytesseract is not None
+
+    def _ocr_page_report(self, page, scale: float, engine_override: Optional[str] = None) -> str:
+        """Tesseract pipeline tuned for Birchstreet receiving reports + supplier
+        invoices, producing OCR.space-style text. Returns "" when the text does not
+        look like a real report so the caller can fall back to _ocr_page_robust.
+
+        1. Render the top part of the page at >=300 DPI (line items and totals are
+           always near the top). If ink touches the crop edge the table continues,
+           so it is re-read with a taller crop instead of silently losing rows.
+        2. Grayscale + table-line removal (no hard binarisation).
+        3. --psm 6 word boxes, then the header is laid out column by column with one
+           cell per line (see _layout_cells), exactly like OCR.space.
+        4. Re-read shaky numbers, repair the supplier block, fix letter/digit slips.
+        """
+        eng = engine_override or self.cfg["app_settings"].get("ocr_engine", "tesseract")
+        if eng != "tesseract":
+            # Word-box layout needs Tesseract; other local engines use the
+            # generic page OCR so the selected engine is still respected.
+            return self._ocr_page_robust(page, scale, engine_override=engine_override)
+        self._ensure_tesseract()
+        s = self.cfg["app_settings"]
+        try:
+            first = float(s.get("tesseract_crop_top_percent", 60)) / 100.0
+        except (TypeError, ValueError):
+            first = 0.60
+        first = min(max(first, 0.2), 0.93)
+        best = ""
+        for pct in ((first, 0.93) if first < 0.93 else (first,)):
+            rect = page.rect
+            clip = fitz.Rect(0, 0, rect.width, rect.height * pct)
+            pix = page.get_pixmap(matrix=fitz.Matrix(scale, scale), clip=clip)
+            clean = self._preprocess_image(pix)
+            d = self._tess_data(clean, psm=6)
+            if s.get("ocr_layout_cells", True):
+                lines = self._layout_cells(d, clean.shape[1])
+                lines = self._rescue_supplier_lines(lines, clean, d)
+                text = "\n".join(l["text"] for l in lines)
+            else:
+                text = pytesseract.image_to_string(clean, config="--oem 3 --psm 6")
+            text = self._fix_report_labels(self._fix_ocr_tokens(self._drop_noise_lines(text)).upper())
+            best = text
+            band = clean[-max(4, int(clean.shape[0] * 0.02)):]
+            if float((band < 128).mean()) <= 0.003 or pct >= 0.93:
+                break
+        if self._text_quality(best) < _OCR_GOOD_HITS:
+            return ""
+        return best
+
+    # ------------- OCR HELPERS (offline / Tesseract) -------------
+    def _ocr_scale(self) -> float:
+        """Render scale for OCR. Never lower than _OCR_MIN_DPI (default 300 DPI)
+        so small print on scanned Birchstreet reports stays readable."""
+        s = self.cfg.get("app_settings", {})
+        try:
+            base = float(s.get("image_scale_factor", 2) or 2)
+        except (TypeError, ValueError):
+            base = 2.0
+        try:
+            min_dpi = float(s.get("ocr_min_dpi", _OCR_MIN_DPI))
+        except (TypeError, ValueError):
+            min_dpi = float(_OCR_MIN_DPI)
+        return max(base, min_dpi / 72.0)
+
+    def _ensure_tesseract(self):
+        """Fail loudly (instead of returning empty text) when Tesseract cannot run."""
+        if pytesseract is None:
+            raise OCRUnavailableError(
+                "Python package 'pytesseract' is not installed. Run: pip install pytesseract"
+            )
+        if getattr(self, "_tess_ready", False):
+            return
+        try:
+            pytesseract.get_tesseract_version()
+        except Exception:
+            self._configure_tesseract()  # re-run discovery (PATH / Program Files / config.json)
+            try:
+                pytesseract.get_tesseract_version()
+            except Exception as e:
+                raise OCRUnavailableError(
+                    "Tesseract OCR could not be started (" + str(e).strip().splitlines()[0][:160] + "). "
+                    "Install it from https://github.com/UB-Mannheim/tesseract/wiki and either add it to "
+                    "PATH or set \"tesseract_cmd\" in config.json to the full path of tesseract.exe."
+                )
+        self._tess_ready = True
+
+    @staticmethod
+    def _pix_to_gray(pix):
+        img = np.frombuffer(pix.samples, dtype=np.uint8).reshape(pix.h, pix.w, pix.n)
+        if pix.n == 4:
+            return cv2.cvtColor(img, cv2.COLOR_RGBA2GRAY)
+        if pix.n == 3:
+            return cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
+        return img.squeeze() if img.ndim == 3 else img
+
+    @staticmethod
+    def _text_quality(text: str) -> int:
+        """How many recognisable report/invoice words (plus GRN/PO markers) the
+        OCR text holds. Upside-down or garbled OCR scores ~0 even when long."""
+        t = (text or "").upper()
+        hits = len(_OCR_VOCAB.intersection(re.findall(r"[A-Z]{3,}", t)))
+        if _GRN_MARK_RE.search(t):
+            hits += 5
+        if _PO_MARK_RE.search(t):
+            hits += 5
+        return hits
+
+    def _ocr_page_robust(self, page, scale: float, engine_override: Optional[str] = None) -> str:
+        """OCR one full page, retrying with different settings until the text
+        actually looks like a receiving report / invoice.
+
+        Pass 1: configured preprocessing at >=300 DPI.
+        Pass 2: plain grayscale, page-segmentation mode 4 (tables / columns).
+        Pass 3: only if the text is still garbage, try the other orientations.
+        """
+        pix = page.get_pixmap(matrix=fitz.Matrix(scale, scale))
+        enhanced = self._correct_rotation(self._preprocess_image(pix), full_page=True)
+        best = self._run_ocr(enhanced, engine_override=engine_override).upper()
+        best_q = self._text_quality(best)
+        if best_q >= _OCR_GOOD_HITS:
+            return best
+
+        gray = self._pix_to_gray(pix)
+        txt = self._run_ocr(gray, engine_override=engine_override, psm=4).upper()
+        q = self._text_quality(txt)
+        if q > best_q or (q == best_q and len(txt) > len(best)):
+            best, best_q = txt, q
+        if best_q >= _OCR_GOOD_HITS:
+            return best
+
+        if best_q < 3:
+            for rot in (cv2.ROTATE_180, cv2.ROTATE_90_CLOCKWISE, cv2.ROTATE_90_COUNTERCLOCKWISE):
+                txt = self._run_ocr(cv2.rotate(gray, rot), engine_override=engine_override, psm=4).upper()
+                q = self._text_quality(txt)
+                if q > best_q:
+                    best, best_q = txt, q
+                if best_q >= _OCR_GOOD_HITS:
+                    break
+        logging.info(f"OCR page finished with low confidence (quality={best_q}, chars={len(best)})")
+        return best
+
     def _ocr_zone(self, page, scale: float, top_pct: float, bottom_pct: float,
-                  left_pct: float, right_pct: float) -> str:
+                  left_pct: float, right_pct: float, engine_override: Optional[str] = None) -> str:
         """
         OCR a rectangular sub-region of a fitz Page.
-        Coordinates are given as fractions of the page dimensions (0.0–1.0).
+        Coordinates are given as fractions of the page dimensions (0.0-1.0).
         Returns upper-cased text, or empty string on failure.
         """
         try:
             rect = page.rect
+            # A little vertical overlap so a zone edge never slices a text line in half.
+            pad = 0.012
+            top_pct = max(0.0, top_pct - (pad if top_pct > 0 else 0.0))
+            bottom_pct = min(1.0, bottom_pct + (pad if bottom_pct < 1 else 0.0))
             clip = fitz.Rect(
                 rect.width  * left_pct,
                 rect.height * top_pct,
@@ -869,30 +1766,37 @@ class OCRWorkerMixin:
             if pix.w == 0 or pix.h == 0:
                 return ""
             arr = self._preprocess_image(pix)
-            arr = self._correct_rotation(arr)
-            return self._run_ocr(arr).upper()
+            # Crops are never rotated/deskewed (see _correct_rotation docstring).
+            arr = self._correct_rotation(arr, full_page=False)
+            return self._run_ocr(arr, engine_override=engine_override).upper()
+        except OCRUnavailableError:
+            raise
         except Exception as e:
-            logging.debug(f"Zone OCR failed: {e}")
+            logging.warning(f"Zone OCR failed: {e}")
+            self._last_ocr_error = f"Zone OCR failed: {e}"
             return ""
 
-    def _extract_text_zone(self, pdf_path: str) -> str:
+    def _extract_text_zone(self, pdf_path: str, engine_override: Optional[str] = None) -> str:
         """
         Zone-based text extraction for Birchstreet receiving report PDFs.
 
         Strategy:
         1. For each page, try native PDF text first (fast, free).
-        2. If native text is thin, OCR only the 4 targeted header zones
-           (top ~38% of page) instead of the full page.
-        3. Concatenate zone texts — this gives all the data we need
-           (GRN, PO, supplier, date, invoice number, totals) while
-           skipping the large line-item table at the bottom.
-        4. Fall back to full-page OCR if zone results are too sparse.
+        2. If native text is thin, OCR only the header region (top ~38% of the
+           page) at >=300 DPI instead of the full page. The zones are OCR'd as
+           ONE crop: slicing them into thin bands cut text lines in half and
+           broke the stacked supplier name ("SIMDI CONSUMER" above the
+           "Supplier:" label, "PRODUCTS" beside it) that Birchstreet prints.
+        3. Accept the zone text ONLY if it really reads like a report (enough
+           recognisable words / GRN / PO markers). Otherwise fall back to a
+           robust full-page OCR (multiple settings / orientations).
 
         Returns the combined upper-cased text for all pages.
         """
         full = ""
-        scale = self.cfg["app_settings"].get("image_scale_factor", 2)
+        scale = self._ocr_scale()
         use_native_flag = self.cfg["app_settings"].get("extract_text_before_ocr", True)
+        self._last_ocr_error = ""
 
         try:
             doc = fitz.open(pdf_path)
@@ -904,87 +1808,107 @@ class OCRWorkerMixin:
                     if use_native_flag:
                         native = page.get_text("text").upper()
                         if len(native.strip()) >= 50:
-                            page_text = native
-                            full += page_text + "\n"
-                            continue   # Native text is good — skip OCR entirely
+                            full += native + "\n"
+                            continue   # Native text is good - skip OCR entirely
 
-                    # --- Step 2: Zone OCR (targeted regions only) ---
-                    zone_texts = []
-                    success_count = 0
-                    for zone_name, (top, bottom, left, right) in ZONE_OCR_REGIONS.items():
-                        zt = self._ocr_zone(page, scale, top, bottom, left, right)
-                        if len(zt.strip()) >= _ZONE_MIN_CHARS:
-                            success_count += 1
-                        zone_texts.append(zt)
+                    # --- Step 2a: OCR.space-style report pipeline (Tesseract only) ---
+                    if self._use_report_ocr(engine_override):
+                        rp = self._ocr_page_report(page, scale, engine_override=engine_override)
+                        if rp.strip():
+                            full += rp + "\n"
+                            continue
 
-                    combined_zones = "\n".join(zone_texts)
+                    # --- Step 2: OCR the header region (union of all zones) as one crop ---
+                    zs = list(ZONE_OCR_REGIONS.values())
+                    top = min(z[0] for z in zs)
+                    bottom = max(z[1] for z in zs)
+                    left = min(z[2] for z in zs)
+                    right = max(z[3] for z in zs)
+                    combined_zones = self._ocr_zone(
+                        page, scale, top, bottom, left, right,
+                        engine_override=engine_override,
+                    )
+                    success_count = 1 if len(combined_zones.strip()) >= _ZONE_MIN_CHARS else 0
+                    zones_ok = (
+                        success_count >= 1
+                        and self._text_quality(combined_zones) >= _OCR_GOOD_HITS
+                    )
 
-                    # --- Step 3: Fall back to full-page OCR if zones are sparse ---
-                    if success_count < _ZONE_MIN_SUCCESS:
-                        logging.debug(f"Zone OCR insufficient ({success_count} zones) — falling back to full page")
-                        pix = page.get_pixmap(matrix=fitz.Matrix(scale, scale))
-                        arr = self._preprocess_image(pix)
-                        arr = self._correct_rotation(arr)
-                        page_text = self._run_ocr(arr).upper()
-                    else:
+                    # --- Step 3: robust full-page OCR when zones are sparse/garbled ---
+                    if zones_ok:
                         page_text = combined_zones
+                    else:
+                        logging.info(
+                            f"Zone OCR insufficient (zones={success_count}, "
+                            f"quality={self._text_quality(combined_zones)}) - full-page OCR"
+                        )
+                        page_text = self._ocr_page_robust(page, scale, engine_override=engine_override)
 
                     full += page_text + "\n"
             finally:
                 doc.close()
+        except OCRUnavailableError:
+            raise
         except Exception as e:
-            logging.error(f"Zone text extraction failed [{pdf_path}]: {e}")
+            logging.error(f"Zone text extraction failed [{pdf_path}]: {e}", exc_info=True)
+            self._last_ocr_error = f"Text extraction failed: {e}"
+        if not full.strip():
+            logging.error(f"OCR returned NO text for [{pdf_path}] "
+                          f"(last error: {getattr(self, '_last_ocr_error', '') or 'none'})")
         return full
 
-    def _run_ocr(self, arr):
-        eng = self.cfg["app_settings"].get("ocr_engine", "tesseract")
-        fb = self.cfg["app_settings"].get("ocr_fallback_to_tesseract", True)
-        if eng == "paddleocr":
-            try:
-                instance = self._get_engine_instance("paddleocr")
-                if instance is None:
-                    raise RuntimeError("PaddleOCR engine not available")
-                r = instance.ocr(arr, cls=True)
-                return " ".join(l[1][0] for l in r[0]).upper() if r and r[0] else ""
-            except Exception as e:
-                logging.warning(f"PaddleOCR failed:{e}")
-                if not fb:
-                    return ""
-                logging.info("Falling back to Tesseract OCR")
-        elif eng == "easyocr":
-            try:
-                instance = self._get_engine_instance("easyocr")
-                if instance is None:
-                    raise RuntimeError("EasyOCR engine not available")
-                return " ".join(instance.readtext(arr, detail=0)).upper()
-            except Exception as e:
-                logging.warning(f"EasyOCR failed:{e}")
-                if not fb:
-                    return ""
-                logging.info("Falling back to Tesseract OCR")
-        psm = self.cfg["app_settings"].get("ocr_psm", 6)
-        oem = self.cfg["app_settings"].get("ocr_oem", 3)
-        try:
-            return pytesseract.image_to_string(arr, config=f"--oem {oem} --psm {psm}").upper()
-        except Exception as e:
-            logging.error(f"Tesseract OCR failed: {e}")
-            return ""
+    def _run_ocr(self, arr, engine_override: Optional[str] = None, psm: Optional[int] = None):
+        """Run OCR with the configured engine or an explicit per-call override.
 
-    def _extract_text(self, pdf_path: str) -> str:
+        The GRN Dispatch local pipeline passes ``tesseract`` here instead of
+        changing the shared configuration while a background job is running.
+        That keeps local and online jobs isolated and makes the selected engine
+        deterministic for every document in a queued batch.
+
+        The GRN Dispatch local pipeline passes the engine selected in Settings
+        ("tesseract" / "paddleocr" / "easyocr"). A missing engine raises
+        OCRUnavailableError, so the UI shows "engine not found" instead of a
+        silent empty result, and never silently swaps in a different engine.
+
+        `psm` is only meaningful for Tesseract; the deep-learning engines ignore
+        it (their call sites still pass it, which is harmless).
+        """
+        eng = engine_override or self.cfg["app_settings"].get("ocr_engine", "tesseract")
+        if eng not in ENGINE_LABELS:
+            eng = "tesseract"
+
+        if eng == "tesseract":
+            return self._run_local_engine_ocr(arr, "tesseract")
+
+        try:
+            return self._run_local_engine_ocr(arr, eng)
+        except OCRUnavailableError:
+            # The engine the user selected is genuinely missing: report it
+            # instead of pretending the document was blank.
+            raise
+        except Exception as e:
+            logging.warning(f"{ENGINE_LABELS.get(eng, eng)} failed: {e}")
+            self._last_ocr_error = f"{ENGINE_LABELS.get(eng, eng)} failed: {e}"
+            if not self.cfg["app_settings"].get("ocr_fallback_to_tesseract", True):
+                return ""
+            logging.info("Falling back to Tesseract OCR")
+            return self._run_local_engine_ocr(arr, "tesseract")
+
+    def _extract_text(self, pdf_path: str, engine_override: Optional[str] = None) -> str:
         """
         Route to zone OCR or full OCR depending on the ocr_mode setting.
-        'zone'  → fast targeted extraction (new)
-        'full'  → original full-page extraction (legacy behaviour)
+        'zone'  -> fast targeted extraction
+        'full'  -> full-page extraction (legacy behaviour)
         """
         ocr_mode = self.cfg["app_settings"].get("ocr_mode", "full")
         if ocr_mode == "zone":
-            return self._extract_text_zone(pdf_path)
+            return self._extract_text_zone(pdf_path, engine_override=engine_override)
 
-        # ---- original full-page logic (unchanged) ----
         full = ""
-        scale = self.cfg["app_settings"].get("image_scale_factor", 2)
+        scale = self._ocr_scale()
         mode = self.cfg["app_settings"].get("extraction_source", "auto")
         use_native_flag = self.cfg["app_settings"].get("extract_text_before_ocr", True)
+        self._last_ocr_error = ""
 
         try:
             doc = fitz.open(pdf_path)
@@ -1011,17 +1935,27 @@ class OCRWorkerMixin:
                             rect  = page.rect
                             clip  = fitz.Rect(0, 0, rect.width, rect.height * scan_pct / 100.0)
                             pix   = page.get_pixmap(matrix=fitz.Matrix(scale, scale), clip=clip)
+                            arr = self._preprocess_image(pix)
+                            arr = self._correct_rotation(arr, full_page=False)
+                            pt = self._run_ocr(arr, engine_override=engine_override).upper()
                         else:
-                            pix   = page.get_pixmap(matrix=fitz.Matrix(scale, scale))
-                        arr = self._preprocess_image(pix)
-                        arr = self._correct_rotation(arr)
-                        pt = self._run_ocr(arr).upper()
+                            pt = ""
+                            if self._use_report_ocr(engine_override):
+                                pt = self._ocr_page_report(page, scale, engine_override=engine_override)
+                            if not pt.strip():
+                                pt = self._ocr_page_robust(page, scale, engine_override=engine_override)
 
                     full += (pt or "") + "\n"
             finally:
                 doc.close()
+        except OCRUnavailableError:
+            raise
         except Exception as e:
-            logging.error(f"Text extraction failed [{pdf_path}]: {e}")
+            logging.error(f"Text extraction failed [{pdf_path}]: {e}", exc_info=True)
+            self._last_ocr_error = f"Text extraction failed: {e}"
+        if not full.strip():
+            logging.error(f"OCR returned NO text for [{pdf_path}] "
+                          f"(last error: {getattr(self, '_last_ocr_error', '') or 'none'})")
         return full
 
     def _normalize_text(self, t):
@@ -1534,7 +2468,7 @@ class OCRWorkerMixin:
                             pix_header = page.get_pixmap(matrix=fitz.Matrix(scale, scale), clip=header_clip)
                             if pix_header.w > 0 and pix_header.h > 0:
                                 arr_header = self._preprocess_image(pix_header)
-                                arr_header = self._correct_rotation(arr_header)
+                                arr_header = self._correct_rotation(arr_header, full_page=False)
                                 ocr_header = self._run_ocr(arr_header).upper()
                             else:
                                 ocr_header = ""
@@ -2298,8 +3232,11 @@ class OCRWorkerMixin:
 
     def _get_pdf_files_strict_order(self, folder: str) -> List[str]:
         """
-        Return PDFs in strict descending filename-number order:
-        SCAN_0040, SCAN_0039, ..., SCAN_0001
+        Return PDFs in chronological filename-number order:
+        SCAN_0001, SCAN_0002, ..., SCAN_0040.
+
+        Both the online and local GRN Dispatch workers consume this one list
+        serially, so a burst of scans retains its scanner sequence.
         """
         if not folder or not os.path.isdir(folder):
             return []
@@ -2312,7 +3249,6 @@ class OCRWorkerMixin:
 
         files.sort(
             key=lambda p: (self._extract_scan_number(p), os.path.basename(p).upper()),
-            reverse=True,
         )
         return files
 
@@ -2534,11 +3470,16 @@ class MaafushivaruHub(tk.Tk, OCRWorkerMixin):
                 self.iconbitmap(str(ip))
         except Exception:
             pass
-        self.geometry("1440x920")
-        self.minsize(1120, 720)
+        _sw, _sh = self.winfo_screenwidth(), self.winfo_screenheight()
+        self.geometry(f"{min(1440, _sw - 80)}x{min(920, _sh - 120)}+20+20")
+        self.minsize(min(1120, _sw - 80), min(720, _sh - 120))
         self.configure(bg=BG)
-        # ✅ Start maximized so nothing is clipped on scaled displays
-        self.state("zoomed")  # Windows; use "normal" + wm_attributes on Linux
+        # Start maximized on Windows; some Tk window managers (including the
+        # Linux runtime used for verification) do not recognise "zoomed".
+        try:
+            self.state("zoomed")
+        except tk.TclError:
+            pass
         # ... rest of __init__ unchanged ...
 
         # State
@@ -2561,6 +3502,15 @@ class MaafushivaruHub(tk.Tk, OCRWorkerMixin):
 
         self.config_path = self._find_config()
         self.cfg = self._load_config()
+        self._ensure_config_file()
+        if ENGINE_MANAGER_AVAILABLE:
+            # Expose the configured C:\PaddleOCR\venv site-packages before any
+            # PaddleOCR runtime import occurs. The application itself continues
+            # running from its normal Python environment.
+            try:
+                oem.configure_runtime(self.cfg)
+            except Exception as e:
+                logging.debug(f"PaddleOCR runtime configuration skipped: {e}")
         self.dirs = self._resolve_dirs()
         self._ensure_dirs()
         self._configure_tesseract()
@@ -2569,6 +3519,7 @@ class MaafushivaruHub(tk.Tk, OCRWorkerMixin):
         # Tk variables
         self._status_var = tk.StringVar(value="Ready — waiting for files.")
         self._engine_badge_var = tk.StringVar(value="")
+        self._processing_mode_badge_var = tk.StringVar(value="")
         self._watcher_badge_var = tk.StringVar(value="")
         self._threads_var = tk.BooleanVar(
             value=self.cfg.get("app_settings", {}).get("enable_multi_threading", True)
@@ -2579,15 +3530,48 @@ class MaafushivaruHub(tk.Tk, OCRWorkerMixin):
         self._notify_var = tk.BooleanVar(
             value=self.cfg.get("app_settings", {}).get("desktop_notifications", True)
         )
-        # Two mutually-exclusive auto-ingest modes (replace the legacy single
-        # "auto_ingest_watcher" flag):
-        #   offline -> OCR rename + GRN dispatch, fully local
-        #   api     -> AI Extract (OCR.space) with size-check + auto compress
+        # GRN Dispatch has one explicit engine selector (ONLINE / OFFLINE) plus
+        # the concrete engine inside each mode:
+        #   ONLINE  -> OCR.space engine number 1 / 2 / 3
+        #   OFFLINE -> local engine key: tesseract / paddleocr / easyocr
+        # The legacy watcher booleans remain for compatibility, but are derived
+        # from this choice so one PDF can never enter both pipelines.
+        settings = self.cfg.get("app_settings", {})
+        selected_grn_engine = settings.get("grn_processing_engine", "")
+        if selected_grn_engine not in (GRN_ONLINE, GRN_OFFLINE):
+            selected_grn_engine = GRN_ONLINE if settings.get("auto_ingest_api") else GRN_OFFLINE
+        self._grn_engine_var = tk.StringVar(value=selected_grn_engine)
+
+        # Concrete engine inside the OFFLINE mode (defaults to Tesseract).
+        self._local_engine_var = tk.StringVar(
+            value=settings.get("local_ocr_engine", "tesseract")
+        )
+        # Concrete engine inside the ONLINE mode (OCR.space API engine 1/2/3).
+        self._online_engine_var = tk.IntVar(
+            value=int(self.cfg.get("ocr_space", {}).get("OCREngine", 2) or 2)
+        )
+        # The single label shown in the GRN Dispatch combo.
+        self._grn_choice_var = tk.StringVar(
+            value=grn_choice_label(
+                selected_grn_engine,
+                self._local_engine_var.get()
+                if selected_grn_engine == GRN_OFFLINE
+                else self._online_engine_var.get(),
+            )
+        )
+        # Engine-install activity guard (one install at a time).
+        self._engine_install_running = False
+        self._auto_ingest_enabled_var = tk.BooleanVar(
+            value=bool(settings.get(
+                "auto_ingest_enabled",
+                settings.get("auto_ingest_offline", False) or settings.get("auto_ingest_api", False),
+            ))
+        )
         self._watcher_offline_var = tk.BooleanVar(
-            value=self.cfg.get("app_settings", {}).get("auto_ingest_offline", False)
+            value=self._auto_ingest_enabled_var.get() and selected_grn_engine == "offline"
         )
         self._watcher_api_var = tk.BooleanVar(
-            value=self.cfg.get("app_settings", {}).get("auto_ingest_api", False)
+            value=self._auto_ingest_enabled_var.get() and selected_grn_engine == "online"
         )
         # One-shot hook the AI Extract poller calls when an auto run finishes.
         self._aix_on_complete = None
@@ -2611,14 +3595,62 @@ class MaafushivaruHub(tk.Tk, OCRWorkerMixin):
         self._build_style()
         self._build_layout()
         self._refresh_engine_badge()
+        self._refresh_processing_mode_badge()
         self._refresh_dashboard_stats()
-
-        # Start watcher if either auto-ingest mode was enabled on last run
-        if self._watcher_offline_var.get() or self._watcher_api_var.get():
-            self.after(500, self._start_watcher)
 
         # Poll watcher queue
         self.after(500, self._poll_watcher_queue)
+
+        # First-time setup: verify the application libraries, offer to install
+        # the OCR engines and remember the answer. It runs BEFORE the watcher
+        # starts so a fresh installation never fails on a missing engine.
+        if self._engine_setup_required():
+            self.after(400, lambda: self._run_engine_setup_wizard(first_run=True))
+            self.after(900, self._start_watcher_if_enabled)
+            self.after(1400, self._startup_auto_ingest)
+        else:
+            self.after(600, self._start_watcher_if_enabled)
+            self.after(1100, self._startup_auto_ingest)
+
+    def _start_watcher_if_enabled(self):
+        """Start the auto-ingest watcher when it was enabled on the last run."""
+        if self._watcher_offline_var.get() or self._watcher_api_var.get():
+            self._start_watcher()
+
+    def _startup_auto_ingest(self):
+        """Process PDFs that were already waiting in SCANNED when the app opened.
+
+        With auto-ingest ON the software must not wait for a NEW file to appear:
+        whatever is already sitting in SCANNED is picked up on startup and run
+        through the selected engine strictly in scan order — SCAN_0001 first,
+        then SCAN_0002, and so on — exactly like a manual "Process New PDFs".
+        """
+        if self._active_ingest_mode() == "off":
+            return
+        try:
+            scanned = self.dirs.get("scanned", "")
+            pending = self._get_pdf_files_strict_order(scanned)
+        except Exception as e:
+            logging.warning(f"[STARTUP] Could not scan the SCANNED folder: {e}")
+            return
+        if not pending:
+            self._set_status(
+                f"Auto-ingest ({self._active_ingest_mode()}) is ON — watching SCANNED for new scans."
+            )
+            return
+
+        names = ", ".join(os.path.basename(p) for p in pending[:5])
+        more = f" … (+{len(pending) - 5} more)" if len(pending) > 5 else ""
+        logging.info(
+            "[STARTUP] Auto-ingest processing %d existing PDF(s) in order: %s",
+            len(pending), [os.path.basename(p) for p in pending],
+        )
+        self._set_status(
+            f"[AUTO-INGEST {self._active_ingest_mode().upper()}] Processing "
+            f"{len(pending)} existing scan(s) in order: {names}{more}",
+            ACCENT,
+        )
+        self._auto_ingest_grn_dispatch()
 
     # ------------------------------------------------------------------
     # CONFIG / PATH / LOGGING
@@ -2660,6 +3692,13 @@ class MaafushivaruHub(tk.Tk, OCRWorkerMixin):
                 "auto_ingest_watcher": False,
                 "auto_ingest_offline": False,
                 "auto_ingest_api": False,
+                "auto_ingest_enabled": False,
+                "grn_processing_engine": "offline",
+                "local_ocr_engine": "tesseract",
+                "online_ocr_engine": 2,
+                "engine_setup_completed": False,
+                "serial_scan_next": 1,
+                "engine_setup_state": {},
                 "receiving_label_fuzzy": True,
                 "delete_temp_after_send": True,
                 "confidence_warn_threshold": 80,
@@ -2711,6 +3750,13 @@ class MaafushivaruHub(tk.Tk, OCRWorkerMixin):
             logging.warning(f"Config load failed, using defaults: {e}")
             return default
 
+        # --- Backward-compat migration (BEFORE the defaults are merged) ------
+        # Merging the default values first would pre-fill every new key and
+        # hide the legacy ones, which silently discarded an existing engine
+        # choice and its auto-ingest switch. The migration therefore runs on
+        # the file as it was actually saved.
+        self._migrate_legacy_settings(cfg)
+
         for key, value in default.items():
             if key not in cfg:
                 cfg[key] = value
@@ -2719,22 +3765,66 @@ class MaafushivaruHub(tk.Tk, OCRWorkerMixin):
                     if subkey not in cfg[key]:
                         cfg[key][subkey] = subvalue
 
-        # --- Backward-compat migration -------------------------------------
-        # The old single "auto_ingest_watcher" flag is replaced by two
-        # explicit modes. If the legacy flag was on and neither new mode is
-        # set, default it to the OFFLINE pipeline (its previous behaviour).
-        s = cfg.setdefault("app_settings", {})
-        if s.get("auto_ingest_watcher") and not s.get("auto_ingest_offline") and not s.get("auto_ingest_api"):
-            s["auto_ingest_offline"] = True
-        # Safety: the two modes are mutually exclusive. If both somehow ended
-        # up enabled, API wins and offline is cleared.
-        if s.get("auto_ingest_offline") and s.get("auto_ingest_api"):
-            s["auto_ingest_offline"] = False
-
         # --- Validate critical config values -------------------------------
         self._validate_config(cfg)
 
         return cfg
+
+    def _migrate_legacy_settings(self, cfg: dict):
+        """Bring an older config.json forward without losing the user's choices.
+
+        Legacy -> current mapping:
+          auto_ingest_watcher          -> auto_ingest_offline / auto_ingest_enabled
+          ocr_engine                   -> local_ocr_engine (the OFFLINE engine)
+          ocr_space.OCREngine          -> online_ocr_engine (the ONLINE engine)
+          grn_processing_engine        -> GRN_ONLINE / GRN_OFFLINE
+        """
+        s = cfg.setdefault("app_settings", {})
+
+        # 1) One visible mode selector (ONLINE / OFFLINE).
+        if s.get("grn_processing_engine") not in (GRN_ONLINE, GRN_OFFLINE):
+            s["grn_processing_engine"] = GRN_ONLINE if s.get("auto_ingest_api") else GRN_OFFLINE
+
+        # 2) The old single watcher flag becomes the OFFLINE auto-ingest switch.
+        if "auto_ingest_offline" not in s and "auto_ingest_api" not in s:
+            s["auto_ingest_offline"] = bool(s.get("auto_ingest_watcher", False))
+            s["auto_ingest_api"] = False
+        if s.get("auto_ingest_offline") and s.get("auto_ingest_api"):
+            # The two modes are mutually exclusive; the ONLINE one wins.
+            s["auto_ingest_offline"] = False
+        if "auto_ingest_enabled" not in s:
+            s["auto_ingest_enabled"] = bool(
+                s.get("auto_ingest_offline") or s.get("auto_ingest_api")
+            )
+
+        # 3) Concrete engine inside the OFFLINE mode.
+        if s.get("local_ocr_engine") not in ENGINE_LABELS:
+            legacy_engine = s.get("ocr_engine")
+            s["local_ocr_engine"] = (legacy_engine if legacy_engine in ENGINE_LABELS
+                                     else "tesseract")
+        s["ocr_engine"] = s["local_ocr_engine"]
+
+        # 4) Concrete engine inside the ONLINE mode (OCR.space 1 / 2 / 3).
+        try:
+            online = int(s.get("online_ocr_engine", 0) or 0)
+        except (TypeError, ValueError):
+            online = 0
+        if online not in (1, 2, 3):
+            try:
+                online = int(cfg.get("ocr_space", {}).get("OCREngine", 2) or 2)
+            except (TypeError, ValueError):
+                online = 2
+        if online not in (1, 2, 3):
+            online = 2
+        s["online_ocr_engine"] = online
+        cfg.setdefault("ocr_space", {})["OCREngine"] = online
+
+        # 5) The serial scan counter keeps numbering across restarts.
+        try:
+            nxt = int(s.get("serial_scan_next", 1) or 1)
+        except (TypeError, ValueError):
+            nxt = 1
+        s["serial_scan_next"] = max(1, nxt)
 
     def _validate_config(self, cfg: dict):
         """Validate and sanitize config values on startup."""
@@ -2763,6 +3853,17 @@ class MaafushivaruHub(tk.Tk, OCRWorkerMixin):
         # Validate OCR engine name
         if s.get("ocr_engine", "tesseract") not in ENGINE_LABELS:
             s["ocr_engine"] = "tesseract"
+        if s.get("local_ocr_engine", "tesseract") not in ENGINE_LABELS:
+            s["local_ocr_engine"] = "tesseract"
+        if s.get("grn_processing_engine", GRN_OFFLINE) not in (GRN_ONLINE, GRN_OFFLINE):
+            s["grn_processing_engine"] = GRN_OFFLINE
+        try:
+            s["online_ocr_engine"] = int(s.get("online_ocr_engine", 2))
+        except (TypeError, ValueError):
+            s["online_ocr_engine"] = 2
+        if s["online_ocr_engine"] not in (1, 2, 3):
+            s["online_ocr_engine"] = 2
+        s["auto_ingest_enabled"] = bool(s.get("auto_ingest_enabled", False))
         # Validate processing mode
         if s.get("processing_mode", "legacy") not in ("legacy", "custom"):
             s["processing_mode"] = "legacy"
@@ -2803,6 +3904,23 @@ class MaafushivaruHub(tk.Tk, OCRWorkerMixin):
         with open(self.config_path, "w", encoding="utf-8") as f:
             json.dump(self.cfg, f, indent=4)
         self._set_status("Settings saved.")
+
+    def _ensure_config_file(self):
+        """Write config.json on a brand-new installation.
+
+        Without this the file only appeared after the user pressed "Save All
+        Settings", so the answers given in the first-time engine setup (and any
+        auto-ingest switch flipped on the first run) were lost on exit.
+        """
+        try:
+            if self.config_path.exists():
+                return
+            self.config_path.parent.mkdir(parents=True, exist_ok=True)
+            with open(self.config_path, "w", encoding="utf-8") as f:
+                json.dump(self.cfg, f, indent=4)
+            logging.info(f"Created a new configuration file: {self.config_path}")
+        except Exception as e:
+            logging.warning(f"Could not create the configuration file: {e}")
 
     def _resolve_base(self):
         base = self.cfg.get("folders", {}).get("base", ".")
@@ -2930,6 +4048,8 @@ class MaafushivaruHub(tk.Tk, OCRWorkerMixin):
     # WATCHDOG AUTO-INGEST
     # ------------------------------------------------------------------
     def _start_watcher(self):
+        if self._active_ingest_mode() == "off":
+            return
         if not WATCHDOG_AVAILABLE:
             messagebox.showwarning(
                 "Watchdog Not Installed",
@@ -2987,108 +4107,278 @@ class MaafushivaruHub(tk.Tk, OCRWorkerMixin):
 
     def _active_ingest_mode(self) -> str:
         """Return the currently selected auto-ingest mode: 'api', 'offline' or 'off'."""
+        if not self._auto_ingest_enabled_var.get():
+            return "off"
         if self._watcher_api_var.get():
             return "api"
         if self._watcher_offline_var.get():
             return "offline"
         return "off"
 
-    def _poll_watcher_queue(self):
-        """Check for new files detected by watchdog, then route to the active mode.
+    def _grn_engine_description(self) -> str:
+        """Short human description of the engine the next run will use."""
+        mode = self._grn_engine_var.get()
+        if mode == GRN_ONLINE:
+            num = int(self._online_engine_var.get() or 2)
+            name = {1: "Engine 1 (Default)", 2: "Engine 2 (Enhanced)",
+                    3: "Engine 3 (Extra Accurate)"}.get(num, f"Engine {num}")
+            return f"ONLINE · OCR.space {name}"
+        return f"OFFLINE · {local_engine_label(self._local_engine_var.get())}"
 
-        OFFLINE -> local OCR rename + GRN dispatch (_start_extract_and_process)
-        API     -> AI Extract (OCR.space): size-check, auto-compress >threshold,
-                   then auto send-to-tabs. Originals are never modified; they are
-                   only renamed when results are pushed to the tabs.
+    def _pending_ingest_files(self) -> List[str]:
+        """Every PDF waiting to be auto-ingested, in strict scan order.
+
+        The folder watcher only signals THAT something changed; the work list
+        is always rebuilt from the SCANNED folder itself. Sorting by the scan
+        number (SCAN_0001, SCAN_0002, ...) is what guarantees serial numbering:
+        even if the scanner drops several files at once, or the application is
+        opened with a backlog already sitting in SCANNED, SCAN_0001 is always
+        processed before SCAN_0002.
         """
+        try:
+            pending = self._get_pdf_files_strict_order(self.dirs.get("scanned", ""))
+        except Exception as e:
+            logging.warning(f"[WATCHER] Could not list SCANNED: {e}")
+            return []
+        # Never auto-ingest a file that is already in the results table (the
+        # user may have reviewed it) — but DO pick up the rest of the backlog.
+        try:
+            done = {
+                os.path.basename(r.get("raw_path", "") or r.get("file", ""))
+                for r in getattr(self, "_aix_results", [])
+            }
+        except Exception:
+            done = set()
+        return [p for p in pending if os.path.basename(p) not in done]
+
+    def _next_serial_scan(self) -> str:
+        """Describe the next scan to be processed, e.g. "SCAN_0003"."""
+        try:
+            nxt = int(self.cfg.get("app_settings", {}).get("serial_scan_next", 1) or 1)
+        except (TypeError, ValueError):
+            nxt = 1
+        return f"SCAN_{max(1, nxt):04d}"
+
+    def _advance_serial_scan(self, count: int = 1) -> None:
+        """Remember how many scans have been auto-ingested so the next run
+        continues the numbering (SCAN_0001, SCAN_0002, ...) instead of
+        restarting at 1."""
+        if count <= 0:
+            return
+        s = self.cfg.setdefault("app_settings", {})
+        try:
+            current = int(s.get("serial_scan_next", 1) or 1)
+        except (TypeError, ValueError):
+            current = 1
+        s["serial_scan_next"] = current + count
+        try:
+            self._save_config()
+        except Exception as e:
+            logging.debug(f"[WATCHER] Could not persist serial scan counter: {e}")
+
+    def _poll_watcher_queue(self):
+        """Drain the watcher signals, then hand the queue to the active engine.
+
+        OFFLINE -> the local engine selected in Settings (Tesseract/PaddleOCR/EasyOCR)
+        ONLINE  -> OCR.space API with the selected API engine (1/2/3)
+
+        The whole backlog is processed as ONE serial batch, so the numbering
+        runs SCAN_0001, SCAN_0002, ... within the batch and continues from
+        where it stopped on the next run.
+        """
+        changed = False
         try:
             while True:
                 pdf_path = self._watcher_queue.get_nowait()
-                if not os.path.exists(pdf_path):
-                    continue
-
-                mode = self._active_ingest_mode()
-                busy = self._worker_running or self._dispatch_running or getattr(self, "_aix_running", False)
-                if busy:
-                    # A run is already in progress. Re-queue this file and try
-                    # again on the next poll so nothing is dropped.
-                    self._watcher_queue.put(pdf_path)
-                    break
-
-                fname = os.path.basename(pdf_path)
-                try:
-                    size_mb = os.path.getsize(pdf_path) / (1024 * 1024)
-                except OSError:
-                    size_mb = 0.0
-
-                if mode == "api":
-                    self._set_status(
-                        f"[AUTO-INGEST API] Detected: {fname} ({size_mb:.2f} MB) — extracting...",
-                        ACCENT,
-                    )
-                    self.after(200, self._auto_ingest_api)
-                elif mode == "offline":
-                    self._set_status(
-                        f"[AUTO-INGEST OFFLINE] Detected: {fname} — processing...",
-                        ACCENT,
-                    )
-                    self.after(200, self._start_extract_and_process)
-                # mode == "off": ignore (watcher should not be running, but be safe)
+                changed = True
+                if pdf_path and not os.path.exists(pdf_path):
+                    logging.info(f"[WATCHER] Ignoring removed file: {pdf_path}")
         except queue.Empty:
             pass
+
+        mode = self._active_ingest_mode()
+        busy = (self._worker_running or self._dispatch_running
+                or getattr(self, "_aix_running", False))
+
+        if mode != "off" and not busy:
+            pending = self._pending_ingest_files()
+            if pending:
+                names = [os.path.basename(p) for p in pending]
+                first = names[0]
+                logging.info(
+                    "[WATCHER] %s%s | auto-ingest %d file(s) in order: %s",
+                    "Change detected: " if changed else "Startup backlog: ",
+                    mode, len(pending), names,
+                )
+                self._set_status(
+                    f"[AUTO-INGEST {mode.upper()}] Processing {len(pending)} scan(s) in order "
+                    f"— starting with {first}"
+                    + (f" (next: {self._next_serial_scan()})" if pending else ""),
+                    ACCENT,
+                )
+                self.after(200, self._auto_ingest_grn_dispatch)
+            elif changed:
+                logging.info("[WATCHER] Change detected but SCANNED has no new PDFs.")
+
         self.after(1500, self._poll_watcher_queue)
 
-    def _auto_ingest_api(self):
-        """Unattended AI Extract run for the API auto-ingest mode.
+    def _auto_ingest_grn_dispatch(self):
+        """Run the selected GRN Dispatch engine for the next queued batch.
 
-        Delegates to the AI Extract tab's processor, which already:
-          - copies files <= the configured size limit untouched, and
-          - compresses larger files into TEMP API PDFS first,
-        always leaving the original SCANNED PDF untouched. When OCR finishes,
-        the one-shot _aix_on_complete hook auto-pushes results to the tabs,
-        which is where originals are renamed.
+        Online (OCR.space) and Offline (Tesseract) both feed the same review
+        table and field-extraction logic. The worker processes its snapshot
+        serially; PDFs arriving during a run remain queued for the next run.
         """
         if getattr(self, "_aix_running", False) or self._worker_running or self._dispatch_running:
             return
         try:
             from aiextracttab import _aix_start_process, _aix_log, _aix_maybe_prompt_sheet
         except Exception as e:
-            logging.error(f"[AUTO-INGEST API] Could not import AI Extract functions: {e}", exc_info=True)
-            self._set_status(f"[AUTO-INGEST API] AI Extract unavailable: {e}", ERROR)
+            logging.error(f"[AUTO-INGEST] Could not import GRN Dispatch functions: {e}", exc_info=True)
+            self._set_status(f"[AUTO-INGEST] GRN Dispatch unavailable: {e}", ERROR)
             return
 
-        _aix_log(self, "SYSTEM", "Auto-ingest (API) triggered by folder watcher.")
-        # In API mode we ONLY extract and ACCUMULATE results in the AI Extract
-        # result tree - we do NOT auto-push them to the OCR Renamer / GRN
-        # Dispatch tabs. The user reviews / edits / renames in the result tree
-        # first, then clicks "Send to Tabs" manually. Results persist across
-        # tab switches and further auto-ingests until the user presses "Clear".
-        # The one-shot hook only offers to generate the sheet at the 30 mark.
-        self._aix_on_complete = lambda: _aix_maybe_prompt_sheet(self)
+        engine_desc = self._grn_engine_description()
+        pending = self._pending_ingest_files()
+        if pending:
+            first_no = self._next_serial_scan()
+            _aix_log(
+                self, "SYSTEM",
+                f"Auto-ingest ({engine_desc}) triggered — {len(pending)} file(s), "
+                f"serial order from {first_no}: "
+                f"{[os.path.basename(p) for p in pending]}."
+            )
+        else:
+            _aix_log(self, "SYSTEM", f"Auto-ingest ({engine_desc}) triggered by folder watcher.")
+
+        # Results accumulate in the visible GRN Dispatch table until the user
+        # reviews them and selects Process All, matching the manual workflow.
+        # The completion hook reports how the batch went and advances the
+        # serial scan counter so the next opened batch continues the numbering.
+        batch_size = len(pending)
+
+        def _on_complete():
+            try:
+                self._advance_serial_scan(batch_size)
+            except Exception as e:
+                logging.warning(f"[AUTO-INGEST] serial counter update failed: {e}")
+            _aix_maybe_prompt_sheet(self)
+
+        self._aix_on_complete = _on_complete
         _aix_start_process(self, auto=True)
+
+    # Backward-compatible name used by older launches and integrations.
+    def _auto_ingest_api(self):
+        self._auto_ingest_grn_dispatch()
+
+    def _on_grn_engine_changed(self, *_):
+        """Persist the visible engine choice and update related UI safely.
+
+        Keeps the OFFLINE (local engine) and ONLINE (OCR.space engine number)
+        sub-choices in sync, mirrors them into the legacy watcher booleans, and
+        warns when the selected engine is not installed on this machine.
+        """
+        selected = self._grn_engine_var.get()
+        if selected not in (GRN_ONLINE, GRN_OFFLINE):
+            selected = GRN_OFFLINE
+            self._grn_engine_var.set(selected)
+        enabled = self._auto_ingest_enabled_var.get()
+        self._watcher_offline_var.set(enabled and selected == GRN_OFFLINE)
+        self._watcher_api_var.set(enabled and selected == GRN_ONLINE)
+        self._persist_ingest_modes()
+        self._refresh_processing_mode_badge()
+        self._apply_watcher_state()
+        self._warn_if_engine_missing()
+
+    def _warn_if_engine_missing(self, show_dialog: bool = True):
+        """Report clearly when the selected engine cannot run on this PC."""
+        missing, message = self._selected_engine_problem()
+        if not missing:
+            return False
+        self._set_status(message, WARNING)
+        if show_dialog:
+            messagebox.showwarning("OCR Engine Not Found", message)
+        return True
+
+    def _selected_engine_problem(self):
+        """Return (is_problem, message) for the currently selected engine."""
+        mode = self._grn_engine_var.get()
+        if mode == GRN_ONLINE:
+            if not AI_MATCHER_AVAILABLE:
+                return True, (
+                    "The ONLINE engine (OCR.space) is not available: "
+                    "ai_supplier_matcher.py could not be loaded. "
+                    "Select an OFFLINE engine or restore that file."
+                )
+            return False, ""
+        key = self._local_engine_var.get()
+        if not local_engine_installed(key):
+            label = local_engine_label(key)
+            return True, (
+                f"OCR engine not found: {label} is not installed on this computer.\n\n"
+                f"Open Settings → OCR Engines and press “Install” next to {label}, "
+                f"or select a different engine."
+            )
+        return False, ""
+
+    def _on_auto_ingest_toggle(self):
+        enabled = self._auto_ingest_enabled_var.get()
+        selected = self._grn_engine_var.get()
+        self._watcher_offline_var.set(enabled and selected == "offline")
+        self._watcher_api_var.set(enabled and selected == "online")
+        self._persist_ingest_modes()
+        self._apply_watcher_state()
 
     def _on_watcher_offline_toggle(self):
         enabled = self._watcher_offline_var.get()
         if enabled:
-            # Mutually exclusive with API mode.
+            self._grn_engine_var.set("offline")
+            self._auto_ingest_enabled_var.set(True)
             self._watcher_api_var.set(False)
+        elif not self._watcher_api_var.get():
+            self._auto_ingest_enabled_var.set(False)
         self._persist_ingest_modes()
+        self._refresh_processing_mode_badge()
         self._apply_watcher_state()
 
     def _on_watcher_api_toggle(self):
         enabled = self._watcher_api_var.get()
         if enabled:
-            # Mutually exclusive with offline mode.
+            self._grn_engine_var.set("online")
+            self._auto_ingest_enabled_var.set(True)
             self._watcher_offline_var.set(False)
+        elif not self._watcher_offline_var.get():
+            self._auto_ingest_enabled_var.set(False)
         self._persist_ingest_modes()
+        self._refresh_processing_mode_badge()
         self._apply_watcher_state()
 
     def _persist_ingest_modes(self):
         s = self.cfg.setdefault("app_settings", {})
-        s["auto_ingest_offline"] = bool(self._watcher_offline_var.get())
-        s["auto_ingest_api"] = bool(self._watcher_api_var.get())
-        # Keep the legacy key roughly in sync so older code/exports still work.
-        s["auto_ingest_watcher"] = s["auto_ingest_offline"] or s["auto_ingest_api"]
+        engine = self._grn_engine_var.get()
+        enabled = bool(self._auto_ingest_enabled_var.get())
+        s["grn_processing_engine"] = engine
+        s["auto_ingest_enabled"] = enabled
+        s["auto_ingest_offline"] = enabled and engine == GRN_OFFLINE
+        s["auto_ingest_api"] = enabled and engine == GRN_ONLINE
+        # Concrete engine inside OFFLINE mode. `_engine_var` is the Settings
+        # radio selection; mirror it into `_local_engine_var` so the saved
+        # configuration and the live GRN pipeline cannot disagree.
+        local_engine = (
+            self._engine_var.get()
+            if hasattr(self, "_engine_var")
+            else self._local_engine_var.get()
+        )
+        self._local_engine_var.set(local_engine)
+        s["local_ocr_engine"] = local_engine
+        s["ocr_engine"] = local_engine
+        try:
+            s["online_ocr_engine"] = int(self._online_engine_var.get())
+        except (TypeError, ValueError):
+            s["online_ocr_engine"] = 2
+        self.cfg.setdefault("ocr_space", {})["OCREngine"] = s["online_ocr_engine"]
+        # Keep legacy keys in sync so older code/exports still work.
+        s["auto_ingest_watcher"] = enabled
         self._save_config()
 
     def _apply_watcher_state(self):
@@ -3279,8 +4569,10 @@ class MaafushivaruHub(tk.Tk, OCRWorkerMixin):
         self.notebook = ttk.Notebook(self)
         self.notebook.pack(fill=tk.BOTH, expand=True, padx=20, pady=(0, 0))
 
-        # Tab order: Dashboard -> Scan -> OCR Renamer -> GRN Dispatch ->
-        #            AI Extract -> Settings -> About
+        # Visible tab order: Dashboard -> Scan -> GRN Dispatch -> Settings ->
+        # About. The former OCR Renamer and GRN Dispatch views are built and
+        # hidden because their internal data structures are retained for
+        # compatibility with the unified screen.
         self._build_dashboard_tab()
         try:
             from scan_tab import add_scan_tab
@@ -3293,15 +4585,22 @@ class MaafushivaruHub(tk.Tk, OCRWorkerMixin):
             from aiextracttab import add_ai_extract_tab
             add_ai_extract_tab(self)
         except Exception as e:
-            logging.error(f"AI Extract tab failed to load: {e}", exc_info=True)
-            messagebox.showerror("AI Extract Tab Load Error", str(e))
+            logging.error(f"GRN Dispatch tab failed to load: {e}", exc_info=True)
+            messagebox.showerror("GRN Dispatch Tab Load Error", str(e))
+        for legacy_frame in (
+            getattr(self, "_legacy_renamer_tab", None),
+            getattr(self, "_legacy_dispatch_tab", None),
+        ):
+            if legacy_frame is not None:
+                try:
+                    self.notebook.hide(legacy_frame)
+                except tk.TclError:
+                    pass
         self._build_settings_tab()
         self._build_about_tab()
 
         self._process_buttons = [
-            getattr(self, "_btn_start_rename",   None),
-            getattr(self, "_btn_start_dispatch", None),
-            getattr(self, "_btn_extract_all",    None),
+            getattr(self, "_aix_btn_process", None),
         ]
         self._process_buttons = [b for b in self._process_buttons if b]
 
@@ -3354,6 +4653,15 @@ class MaafushivaruHub(tk.Tk, OCRWorkerMixin):
         )
         self._watcher_badge_lbl.pack(side=tk.RIGHT, padx=(12, 0), pady=20)
 
+        self._processing_mode_badge_lbl = tk.Label(
+            right,
+            textvariable=self._processing_mode_badge_var,
+            bg=PANEL2,
+            fg=SUCCESS,
+            font=("Segoe UI", 9, "bold"),
+        )
+        self._processing_mode_badge_lbl.pack(side=tk.RIGHT, padx=(12, 0), pady=20)
+
         tk.Label(
             right,
             textvariable=self._engine_badge_var,
@@ -3374,15 +4682,32 @@ class MaafushivaruHub(tk.Tk, OCRWorkerMixin):
         tk.Label(bar, textvariable=self._status_var, bg=PANEL2, fg=TEXT,
                  font=("Segoe UI", 9), anchor="w").pack(side=tk.LEFT, pady=8)
 
-        self._btn_extract_all = ttk.Button(
-            bar, text="⚡  Extract & Process",
-            style="Accent.TButton", command=self._start_extract_and_process,
-        )
-        self._btn_extract_all.pack(side=tk.RIGHT, padx=16, pady=4)
-
     def _refresh_engine_badge(self):
-        eng = self.cfg.get("app_settings", {}).get("ocr_engine", "tesseract")
-        self._engine_badge_var.set(f"OCR: {ENGINE_LABELS.get(eng, eng)}")
+        """Header badge: shows the engine the pipeline will actually use."""
+        eng = self.cfg.get("app_settings", {}).get("local_ocr_engine") or \
+            self.cfg.get("app_settings", {}).get("ocr_engine", "tesseract")
+        self._engine_badge_var.set(f"OCR: {local_engine_label(eng)}")
+
+    def _refresh_processing_mode_badge(self):
+        """Refresh the always-visible ONLINE/OFFLINE status in the header."""
+        engine_var = getattr(self, "_grn_engine_var", None)
+        selected = engine_var.get() if engine_var is not None else self.cfg.get(
+            "app_settings", {}
+        ).get("grn_processing_engine", GRN_OFFLINE)
+        online = selected == GRN_ONLINE
+        detail = self._grn_engine_description() if hasattr(self, "_grn_engine_var") else ""
+        if online:
+            num = int(getattr(self, "_online_engine_var", tk.IntVar(value=2)).get() or 2)
+            text = f"● ONLINE — OCR.space Engine {num}"
+        else:
+            key = getattr(self, "_local_engine_var", tk.StringVar(value="tesseract")).get()
+            text = f"● OFFLINE — {local_engine_label(key)}"
+        self._processing_mode_badge_var.set(text)
+        if hasattr(self, "_processing_mode_badge_lbl"):
+            self._processing_mode_badge_lbl.configure(fg=ACCENT if online else SUCCESS)
+        if hasattr(self, "_aix_mode_badge_var"):
+            self._aix_mode_badge_var.set(detail or ("ONLINE · OCR.space API" if online
+                                                    else "OFFLINE · Local Tesseract"))
 
     # ------------------------------------------------------------------
     # TAB HELPERS
@@ -3940,6 +5265,7 @@ class MaafushivaruHub(tk.Tk, OCRWorkerMixin):
 
     def _build_renamer_tab(self):
         frame = self._make_tab("OCR Renamer")
+        self._legacy_renamer_tab = frame
         frame.configure(style="TFrame")
 
         # Top control bar
@@ -4032,6 +5358,7 @@ class MaafushivaruHub(tk.Tk, OCRWorkerMixin):
     # ------------------------------------------------------------------
     def _build_dispatch_tab(self):
         frame = self._make_tab("GRN Dispatch")
+        self._legacy_dispatch_tab = frame
         frame.configure(style="TFrame")
 
         # Top control bar
@@ -4155,6 +5482,11 @@ class MaafushivaruHub(tk.Tk, OCRWorkerMixin):
     # ------------------------------------------------------------------
     def _build_settings_tab(self):
         frame = self._make_scrollable_tab("Settings")
+        # Used by the Debug Engines window's "Engine Settings" shortcut.
+        # `frame.master` is the CANVAS (holding the scrollable content), but
+        # the notebook tab itself is the canvas's parent, so select/move
+        # operations must target that.
+        self._settings_tab_frame = frame.master.master
 
         # Auto-ingest watcher
         wb = self._section(frame, "Auto-Ingest (Watched Folder)",
@@ -4169,30 +5501,43 @@ class MaafushivaruHub(tk.Tk, OCRWorkerMixin):
                 bg=PANEL, fg=WARNING, font=("Segoe UI", 9),
             ).pack(anchor="w", pady=(0, 8))
 
-        ttk.Checkbutton(
-            wf,
-            text="Enable Auto-Ingest (Offline) — new PDFs run local OCR Rename + GRN Dispatch",
-            variable=self._watcher_offline_var, command=self._on_watcher_offline_toggle,
-        ).pack(anchor="w", pady=4)
-        ttk.Checkbutton(
-            wf,
-            text="Enable Auto-Ingest (API) — new PDFs run AI Extract (OCR.space): "
-                 "auto size-check, compress if over the limit, then send to tabs",
-            variable=self._watcher_api_var, command=self._on_watcher_api_toggle,
-        ).pack(anchor="w", pady=4)
         tk.Label(
             wf,
             text=(
-                "Choose ONE mode — the two are mutually exclusive so a file is never "
-                "processed twice. New files are debounced by 3 seconds to wait for the full "
-                "copy to finish.\n"
-                "• Offline: fully local OCR — no internet, no upload limit.\n"
-                "• API: files at or below the OCR.space upload limit are sent as-is; "
-                "larger files are compressed into 'TEMP API PDFS' first. The original PDF in "
-                "SCANNED is never modified — it is only renamed when results are sent to the tabs."
+                "The engine is selected on the GRN Dispatch tab. Every document is placed in one "
+                "serial queue, so a rapid series of scans is processed one at a time without mixing "
+                "their order. New files are debounced for 3 seconds while the scanner finishes writing.\n"
+                "• Offline: the local engine chosen in Settings → OCR Engines; no internet or upload limit.\n"
+                "• Online: OCR.space API (engine 1/2/3 selected in Settings); large files are copied/"
+                "compressed into TEMP API PDFS. "
+                "Original PDFs stay in SCANNED until you choose Process All."
             ),
             bg=PANEL, fg=MUTED, font=("Segoe UI", 9), wraplength=850, justify="left",
         ).pack(anchor="w", pady=(0, 12))
+
+        ai_switch_row = tk.Frame(wf, bg=PANEL)
+        ai_switch_row.pack(fill=tk.X, pady=(0, 4))
+        ttk.Checkbutton(
+            ai_switch_row,
+            text="Auto-Ingest ON — OFFLINE mode",
+            variable=self._watcher_offline_var,
+            command=self._on_watcher_offline_toggle,
+            style="TCheckbutton",
+        ).pack(side=tk.LEFT, padx=(0, 20))
+        ttk.Checkbutton(
+            ai_switch_row,
+            text="Auto-Ingest ON — ONLINE mode",
+            variable=self._watcher_api_var,
+            command=self._on_watcher_api_toggle,
+            style="TCheckbutton",
+        ).pack(side=tk.LEFT)
+        tk.Label(
+            wf,
+            text=("Each mode has its own switch. Only one can be ON at a time — turning one on "
+                  "turns the other off, so the same PDF is never processed twice. The mode that "
+                  "is ON also becomes the working mode on the GRN Dispatch tab."),
+            bg=PANEL, fg=MUTED, font=("Segoe UI", 8), wraplength=880, justify="left",
+        ).pack(anchor="w", pady=(2, 12))
 
         # Desktop notifications
         nb = self._section(frame, "Desktop Notifications")
@@ -4344,21 +5689,144 @@ class MaafushivaruHub(tk.Tk, OCRWorkerMixin):
             ttk.Radiobutton(mb_inner, text=lbl, value=val, variable=self._supplier_method_var,
                             command=self._on_supplier_method_changed, style="TRadiobutton").pack(anchor="w", pady=4)
 
-        # OCR engine
-        eb = self._section(frame, "OCR Engine")
-        self._engine_var = tk.StringVar(value=self.cfg.get("app_settings", {}).get("ocr_engine", "tesseract"))
+        # ---- OCR engines: mode (ONLINE/OFFLINE), engine choice and installs ----
+        eb = self._section(
+            frame,
+            "OCR Engines",
+            subtitle="Choose the working engine and install any missing one here",
+        )
         eb_inner = tk.Frame(eb, bg=PANEL)
         eb_inner.pack(fill=tk.X, padx=20, pady=(0, 12))
-        for key, label in ENGINE_LABELS.items():
+
+        self._engine_var = tk.StringVar(
+            value=self.cfg.get("app_settings", {}).get("local_ocr_engine")
+            or self.cfg.get("app_settings", {}).get("ocr_engine", "tesseract")
+        )
+
+        # --- Mode row: ONLINE / OFFLINE with auto-ingest on/off for each ---
+        mode_row = tk.Frame(eb_inner, bg=PANEL)
+        mode_row.pack(fill=tk.X, pady=(0, 8))
+        tk.Label(mode_row, text="Working mode:", bg=PANEL, fg=MUTED,
+                 font=("Segoe UI", 9, "bold"), width=14, anchor="w").pack(side=tk.LEFT)
+        ttk.Radiobutton(
+            mode_row, text="ONLINE  (OCR.space API)", value=GRN_ONLINE,
+            variable=self._grn_engine_var, command=self._on_engine_changed,
+            style="TRadiobutton",
+        ).pack(side=tk.LEFT, padx=(0, 18))
+        ttk.Radiobutton(
+            mode_row, text="OFFLINE  (local engine)", value=GRN_OFFLINE,
+            variable=self._grn_engine_var, command=self._on_engine_changed,
+            style="TRadiobutton",
+        ).pack(side=tk.LEFT)
+
+        # --- Auto-ingest on/off for each mode ---
+        ai_row = tk.Frame(eb_inner, bg=PANEL)
+        ai_row.pack(fill=tk.X, pady=(0, 4))
+        tk.Label(ai_row, text="Auto-ingest:", bg=PANEL, fg=MUTED,
+                 font=("Segoe UI", 9, "bold"), width=14, anchor="w").pack(side=tk.LEFT)
+        ttk.Checkbutton(
+            ai_row,
+            text="ON for OFFLINE mode (watch SCANNED, process locally)",
+            variable=self._watcher_offline_var,
+            command=self._on_watcher_offline_toggle,
+            style="TCheckbutton",
+        ).pack(side=tk.LEFT, padx=(0, 18))
+        ttk.Checkbutton(
+            ai_row,
+            text="ON for ONLINE mode (watch SCANNED, upload to OCR.space)",
+            variable=self._watcher_api_var,
+            command=self._on_watcher_api_toggle,
+            style="TCheckbutton",
+        ).pack(side=tk.LEFT)
+        tk.Label(
+            eb_inner,
+            text=(
+                "Auto-ingest runs the engine selected below, in the mode selected above, for every new "
+                "PDF dropped into SCANNED. Only ONE mode can be active at a time — turning one ON turns "
+                "the other OFF. Scans are processed strictly in order: SCAN_0001, SCAN_0002, …"
+            ),
+            bg=PANEL, fg=MUTED, font=("Segoe UI", 8), wraplength=880, justify="left",
+        ).pack(anchor="w", pady=(0, 10))
+
+        # --- ONLINE engine choice (OCR.space engine 1/2/3) ---
+        online_row = tk.Frame(eb_inner, bg=PANEL)
+        online_row.pack(fill=tk.X, pady=(0, 2))
+        tk.Label(online_row, text="Online engine:", bg=PANEL, fg=MUTED,
+                 font=("Segoe UI", 9, "bold"), width=14, anchor="w").pack(side=tk.LEFT)
+        for num, name in ((1, "Engine 1 — Default"), (2, "Engine 2 — Enhanced"),
+                          (3, "Engine 3 — Extra Accurate")):
+            ttk.Radiobutton(
+                online_row, text=name, value=num, variable=self._online_engine_var,
+                command=self._on_engine_changed, style="TRadiobutton",
+            ).pack(side=tk.LEFT, padx=(0, 14))
+        self._online_engine_status_lbl = tk.Label(
+            eb_inner, text="", bg=PANEL, fg=MUTED, font=("Segoe UI", 8),
+        )
+        self._online_engine_status_lbl.pack(anchor="w", pady=(0, 10))
+
+        # --- LOCAL engine rows: radio + status + Install button ---
+        tk.Label(eb_inner, text="Local engines (used by OFFLINE mode):", bg=PANEL,
+                 fg=MUTED, font=("Segoe UI", 9, "bold")).pack(anchor="w", pady=(0, 2))
+
+        self._engine_rows = {}
+        self._engine_status_lbls = {}
+        self._engine_install_btns = {}
+        self._engine_progress_vars = {}
+        for key in local_engine_keys():
             row = tk.Frame(eb_inner, bg=PANEL)
-            row.pack(fill=tk.X, pady=5)
-            ttk.Radiobutton(row, text=label, value=key, variable=self._engine_var,
-                            command=self._on_engine_changed, style="TRadiobutton").pack(side=tk.LEFT)
-            st = "Installed" if self._check_engine(key) or key == "tesseract" else "Not installed"
-            tk.Label(row, text=st, bg=PANEL, fg=SUCCESS if st == "Installed" else ERROR,
-                     font=("Segoe UI", 9, "bold")).pack(side=tk.LEFT, padx=16)
-            if key != "tesseract":
-                ttk.Button(row, text="How to install", command=lambda k=key: self._install_engine(k)).pack(side=tk.RIGHT)
+            row.pack(fill=tk.X, pady=4)
+            ttk.Radiobutton(
+                row, text=ENGINE_LABELS.get(key, key), value=key,
+                variable=self._engine_var, command=self._on_engine_changed,
+                style="TRadiobutton",
+            ).pack(side=tk.LEFT)
+            st_lbl = tk.Label(row, text="", bg=PANEL, fg=MUTED,
+                              font=("Segoe UI", 9, "bold"))
+            st_lbl.pack(side=tk.LEFT, padx=14)
+            btn = ttk.Button(
+                row, text="⬇  Install", width=12,
+                command=lambda k=key: self._install_engine(k),
+            )
+            btn.pack(side=tk.RIGHT)
+            self._engine_rows[key] = row
+            self._engine_status_lbls[key] = st_lbl
+            self._engine_install_btns[key] = btn
+
+        # Live install log (shared by every engine install)
+        self._engine_install_status_var = tk.StringVar(value="")
+        tk.Label(
+            eb_inner, textvariable=self._engine_install_status_var, bg=PANEL,
+            fg=ACCENT, font=("Segoe UI", 9, "bold"),
+        ).pack(anchor="w", pady=(8, 2))
+        log_wrap = tk.Frame(eb_inner, bg=PANEL)
+        log_wrap.pack(fill=tk.X, pady=(0, 6))
+        self._engine_install_log = tk.Text(
+            log_wrap, height=6, bg=PANEL2, fg=TEXT, font=("Consolas", 8),
+            relief="flat", borderwidth=0, wrap=tk.WORD,
+        )
+        _log_sb = ttk.Scrollbar(log_wrap, orient="vertical", command=self._engine_install_log.yview)
+        self._engine_install_log.configure(yscrollcommand=_log_sb.set)
+        self._engine_install_log.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        _log_sb.pack(side=tk.RIGHT, fill=tk.Y)
+        self._engine_install_log.configure(state="disabled")
+
+        act_row = tk.Frame(eb_inner, bg=PANEL)
+        act_row.pack(fill=tk.X, pady=(2, 0))
+        ttk.Button(act_row, text="↻  Re-check engines",
+                   command=self._refresh_engine_rows).pack(side=tk.LEFT, padx=(0, 8))
+        ttk.Button(act_row, text="⬇  Install all missing",
+                   command=self._install_all_missing_engines).pack(side=tk.LEFT, padx=(0, 8))
+        ttk.Button(act_row, text="🧙  Run first-time setup again",
+                   command=self._run_engine_setup_wizard).pack(side=tk.LEFT)
+        if not ENGINE_MANAGER_AVAILABLE:
+            tk.Label(
+                eb_inner,
+                text="⚠  ocr_engine_manager.py not found — automatic installation is unavailable. "
+                     "Place it next to maafushivaru_hub.py to enable in-app installs.",
+                bg=PANEL, fg=WARNING, font=("Segoe UI", 9), wraplength=880, justify="left",
+            ).pack(anchor="w", pady=(6, 0))
+
+        self._refresh_engine_rows()
         # ── Supplier Match Strategy ──────────────────────────────────────
         smb = self._section(
             frame,
@@ -4610,7 +6078,12 @@ class MaafushivaruHub(tk.Tk, OCRWorkerMixin):
             anchor="w",
         ).pack(side=tk.LEFT)
 
-        self._ocr_space_engine_var = tk.IntVar(value=int(ocr_space_cfg.get("OCREngine", 2)))
+        # Same Tk variable as the ONLINE engine radio in Settings → OCR Engines:
+        # both controls always show the same engine, and the choice is stored in
+        # app_settings.online_ocr_engine (mirrored into ocr_space.OCREngine).
+        self._ocr_space_engine_var = getattr(
+            self, "_online_engine_var", tk.IntVar(value=int(ocr_space_cfg.get("OCREngine", 2)))
+        )
         for eng_num in (1, 2, 3):
             ttk.Radiobutton(
                 oerow,
@@ -5005,6 +6478,12 @@ class MaafushivaruHub(tk.Tk, OCRWorkerMixin):
         tk.Label(center, text=self.APP_VERSION, bg=BG, fg=MUTED, font=("Segoe UI", 11)).pack(pady=(4, 4))
         tk.Label(center, text="Author: Roni", bg=BG, fg=ACCENT, font=("Segoe UI", 13, "bold")).pack(pady=(0, 20))
 
+        if ENGINE_MANAGER_AVAILABLE:
+            tk.Label(
+                center, text=oem.dependency_summary(), bg=BG, fg=SUCCESS,
+                font=("Segoe UI", 9, "bold"),
+            ).pack(pady=(0, 10))
+
         items = [
             ("Auto-Ingest",       "watchdog monitors SCANNED — new PDFs process automatically (toggle in Settings)"),
             ("Notifications",     "plyer sends desktop alerts when batches complete or files fail"),
@@ -5028,10 +6507,10 @@ class MaafushivaruHub(tk.Tk, OCRWorkerMixin):
                      anchor="w").grid(row=i, column=1, sticky="w", pady=4)
 
         deps = [
-            ("watchdog",  "pip install watchdog",             WATCHDOG_AVAILABLE),
-            ("plyer",     "pip install plyer",                PLYER_AVAILABLE),
-            ("easyocr",   "pip install easyocr",              self._check_engine("easyocr")),
-            ("paddleocr", "pip install paddlepaddle paddleocr", self._check_engine("paddleocr")),
+            ("watchdog",  "watchdog",             WATCHDOG_AVAILABLE),
+            ("plyer",     "plyer",                PLYER_AVAILABLE),
+            ("easyocr",   "easyocr",              local_engine_installed("easyocr")),
+            ("paddleocr", "paddlepaddle paddleocr", local_engine_installed("paddleocr")),
         ]
         dep_frame = tk.Frame(center, bg=PANEL, padx=24, pady=16)
         dep_frame.pack(fill=tk.X, padx=20, pady=(12, 0))
@@ -5043,8 +6522,14 @@ class MaafushivaruHub(tk.Tk, OCRWorkerMixin):
             dot_color = SUCCESS if ok else MUTED
             tk.Label(r, text="●", bg=PANEL, fg=dot_color, font=("Segoe UI", 8)).pack(side=tk.LEFT, padx=(0, 8))
             tk.Label(r, text=name, bg=PANEL, fg=TEXT, font=("Consolas", 9), width=14, anchor="w").pack(side=tk.LEFT)
-            tk.Label(r, text=install if not ok else "installed", bg=PANEL,
-                     fg=MUTED if not ok else SUCCESS, font=("Consolas", 9)).pack(side=tk.LEFT)
+            tk.Label(r, text="installed" if ok else f"pip install {install}", bg=PANEL,
+                     fg=SUCCESS if ok else MUTED, font=("Consolas", 9)).pack(side=tk.LEFT)
+            if not ok and ENGINE_MANAGER_AVAILABLE:
+                if name in ENGINE_LABELS:
+                    _cmd = (lambda n=name: self._install_engine(n))
+                else:
+                    _cmd = (lambda n=name, spec=install: self._install_extra_dependency(n, spec))
+                ttk.Button(r, text="⬇  Install", width=11, command=_cmd).pack(side=tk.RIGHT)
 
     # ------------------------------------------------------------------
     # STATUS / FOLDERS / DASHBOARD
@@ -5663,12 +7148,573 @@ class MaafushivaruHub(tk.Tk, OCRWorkerMixin):
     # SETTINGS CALLBACKS
     # ------------------------------------------------------------------
     def _on_engine_changed(self):
-        self.cfg.setdefault("app_settings", {})["ocr_engine"] = self._engine_var.get()
+        """Called by every engine radio button (mode, online engine, local engine).
+
+        Persists the whole choice, refreshes every badge and warns when the
+        selected engine is not installed on this machine.
+        """
+        # `_engine_var` is the Settings radio-button variable while
+        # `_local_engine_var` is the live GRN Dispatch variable. They must be
+        # synchronized immediately; otherwise `_persist_ingest_modes()` can
+        # overwrite a newly selected PaddleOCR/EasyOCR choice with stale
+        # Tesseract and the header will continue to show Tesseract.
+        selected_local = self._engine_var.get()
+        self._local_engine_var.set(selected_local)
+        self.cfg.setdefault("app_settings", {})["ocr_engine"] = selected_local
+        mode = self._grn_engine_var.get()
+        if mode == GRN_ONLINE:
+            self._grn_choice_var.set(grn_choice_label(GRN_ONLINE, self._online_engine_var.get()))
+        else:
+            self._grn_choice_var.set(grn_choice_label(GRN_OFFLINE, self._engine_var.get()))
+        self._persist_ingest_modes()
         self._refresh_engine_badge()
+        self._refresh_engine_rows()
+        self._refresh_processing_mode_badge()
+        self._warn_if_engine_missing()
+
+    # ------------------------------------------------------------------
+    # ENGINE STATUS / INSTALLATION
+    # ------------------------------------------------------------------
+    def _refresh_engine_rows(self):
+        """Re-check every local engine and repaint its status/Install button."""
+        if not hasattr(self, "_engine_status_lbls"):
+            return
+        # During shutdown the <Destroy> handlers of open dialogs can still fire,
+        # so never touch widgets once the main window is gone.
+        try:
+            if not self.winfo_exists():
+                return
+        except tk.TclError:
+            return
+        for key, lbl in self._engine_status_lbls.items():
+            try:
+                installed = local_engine_installed(key)
+                if ENGINE_MANAGER_AVAILABLE:
+                    text = oem.engine_status_text(key)
+                else:
+                    text = "Installed" if installed else "Not installed"
+                lbl.configure(text=text, fg=SUCCESS if installed else ERROR)
+                btn = self._engine_install_btns.get(key)
+                if btn is not None:
+                    btn.configure(
+                        text=("↻  Reinstall" if installed else "⬇  Install"),
+                        state="disabled" if self._engine_install_running else "normal",
+                    )
+            except Exception as e:
+                logging.debug(f"Engine row refresh failed [{key}]: {e}")
+
+        # Online engine row
+        if hasattr(self, "_online_engine_status_lbl"):
+            if AI_MATCHER_AVAILABLE:
+                self._online_engine_status_lbl.configure(
+                    text="OCR.space API module loaded — ONLINE mode is ready "
+                         "(needs an internet connection and a valid API key).",
+                    fg=SUCCESS,
+                )
+            else:
+                self._online_engine_status_lbl.configure(
+                    text="⚠  ai_supplier_matcher.py could not be loaded — ONLINE mode is unavailable.",
+                    fg=ERROR,
+                )
+        # Selected engine warning (status bar only, no popup while painting)
+        self._warn_if_engine_missing(show_dialog=False)
+
+    def _engine_install_log_line(self, text: str):
+        """Append one line to the Settings install log (thread-safe via after)."""
+        # Echo to the console (PowerShell/cmd) so progress is visible there too.
+        try:
+            print(f"[SETUP] {text}", flush=True)
+        except Exception:
+            pass
+
+        def _do(msg=text):
+            try:
+                widget = getattr(self, "_engine_install_log", None)
+                if widget is None:
+                    return
+                widget.configure(state="normal")
+                widget.insert(tk.END, msg + "\n")
+                widget.see(tk.END)
+                widget.configure(state="disabled")
+            except Exception:
+                pass
+        try:
+            self.after(0, _do)
+        except Exception:
+            pass
+
+    def _engine_install_status_var_set(self, text: str):
+        try:
+            self.after(0, lambda t=text: self._engine_install_status_var.set(t))
+        except Exception:
+            pass
 
     def _install_engine(self, key):
-        messagebox.showinfo("Install Engine",
-                            f"To install {ENGINE_LABELS.get(key, key)}, run:\n\n  {ENGINE_INSTALL.get(key, '')}")
+        """Install one OCR engine (pip packages + the system program if needed)."""
+        if self._engine_install_running:
+            messagebox.showinfo(
+                "Installation Running",
+                "Another engine installation is already running. Please wait for it to finish.",
+            )
+            return
+        if not ENGINE_MANAGER_AVAILABLE:
+            self._install_engine_legacy_hint(key)
+            return
+
+        label = ENGINE_LABELS.get(key, key)
+        spec = oem.ENGINE_SPECS.get(key, {})
+        already = local_engine_installed(key)
+        size = spec.get("size_mb", 0)
+        size_text = f"\n\nDownload size: about {size} MB." if size else ""
+        extra = ("\nIt is already installed — this will reinstall / upgrade it." if already else "")
+        if not messagebox.askyesno(
+            "Install " + label,
+            f"Install {label} now?\n\n"
+            f"Packages: {', '.join(spec.get('packages', [])) or '—'}\n"
+            f"Also required: {spec.get('system', '—')}{size_text}\n\n"
+            f"The download runs in the background and its progress is shown in "
+            f"Settings → OCR Engines.{extra}",
+        ):
+            return
+
+        self._engine_install_running = True
+        self._engine_install_status_var.set(f"Installing {label} … this can take a few minutes.")
+        self._engine_install_log_line(f"===== Installing {label} =====")
+        self._refresh_engine_rows()
+        self._set_status(f"Installing {label}…", ACCENT)
+        cancel = threading.Event()
+        self._engine_install_cancel = cancel
+
+        def worker():
+            try:
+                ok, msg = oem.install_engine(key, log=self._engine_install_log_line, cancel=cancel)
+            except Exception as exc:
+                ok, msg = False, f"Unexpected installer error: {exc}"
+
+            def finish():
+                self._engine_install_running = False
+                oem.invalidate_cache()
+                self._refresh_engine_rows()
+                if ok:
+                    self._engine_install_status_var.set(f"{label} installed successfully.")
+                    self._engine_install_log_line(f"===== {label} ready =====")
+                    self._set_status(f"{label} installed successfully.", SUCCESS)
+                    try:
+                        self.cfg.setdefault("app_settings", {}).setdefault(
+                            "engine_setup_state", {}
+                        )[key] = {
+                            "installed": True,
+                            "checked_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                        }
+                        self._save_config()
+                    except Exception:
+                        pass
+                    messagebox.showinfo("Installation Complete", msg)
+                else:
+                    self._engine_install_status_var.set(f"{label} installation failed.")
+                    self._engine_install_log_line(f"!! {msg}")
+                    self._set_status(f"{label} installation failed.", ERROR)
+                    messagebox.showerror("Installation Failed", msg)
+
+            try:
+                self.after(0, finish)
+            except Exception:
+                pass
+
+        threading.Thread(target=worker, daemon=True, name=f"install-{key}").start()
+
+    def _install_all_missing_engines(self):
+        """Install every local engine that is currently missing."""
+        if not ENGINE_MANAGER_AVAILABLE:
+            messagebox.showwarning(
+                "Installer Unavailable",
+                "ocr_engine_manager.py was not found, so the automatic installer is unavailable.",
+            )
+            return
+        missing = [k for k in local_engine_keys() if not local_engine_installed(k)]
+        if not missing:
+            messagebox.showinfo("OCR Engines", "Every local OCR engine is already installed.")
+            return
+        names = ", ".join(ENGINE_LABELS.get(k, k) for k in missing)
+        if not messagebox.askyesno(
+            "Install All Missing Engines",
+            f"Install these OCR engines now?\n\n{names}\n\n"
+            f"This can take a while (EasyOCR downloads PyTorch, ~2 GB). "
+            f"Progress is shown below and the application stays usable.",
+        ):
+            return
+
+        self._engine_install_running = True
+        self._refresh_engine_rows()
+        cancel = threading.Event()
+        self._engine_install_cancel = cancel
+
+        def worker():
+            results = []
+            for key in missing:
+                label = ENGINE_LABELS.get(key, key)
+                self._engine_install_status_var_set(f"Installing {label} …")
+                self._engine_install_log_line(f"===== Installing {label} =====")
+                try:
+                    ok, msg = oem.install_engine(
+                        key, log=self._engine_install_log_line, cancel=cancel
+                    )
+                except Exception as exc:
+                    ok, msg = False, str(exc)
+                results.append((label, ok, msg))
+            summary = "\n".join(f"{'✓' if ok else '✗'} {lbl}" for lbl, ok, _m in results)
+
+            def finish():
+                self._engine_install_running = False
+                oem.invalidate_cache()
+                self._refresh_engine_rows()
+                self._engine_install_status_var.set("Finished installing missing engines.")
+                self._set_status("Engine installation finished.", SUCCESS)
+                messagebox.showinfo("OCR Engines", summary or "Nothing installed.")
+
+            try:
+                self.after(0, finish)
+            except Exception:
+                pass
+
+        threading.Thread(target=worker, daemon=True, name="install-all-engines").start()
+
+    # ------------------------------------------------------------------
+    # FIRST-RUN ENGINE SETUP WIZARD
+    # ------------------------------------------------------------------
+    def _engine_setup_required(self) -> bool:
+        """True when the first-time engine setup has never been completed."""
+        if not ENGINE_MANAGER_AVAILABLE:
+            return False
+        try:
+            return oem.first_run_needed(self.cfg)
+        except Exception:
+            return False
+
+    def _run_engine_setup_wizard(self, first_run: bool = False):
+        """Ask which OCR engines to install, then install the chosen ones.
+
+        Runs once on the very first start (before the auto-ingest watcher is
+        started) and can be re-opened any time from Settings. The answers are
+        remembered, so a skipped engine is never asked about again.
+        """
+        if not ENGINE_MANAGER_AVAILABLE:
+            if not first_run:
+                messagebox.showwarning(
+                    "Setup Unavailable",
+                    "ocr_engine_manager.py was not found, so automatic setup is unavailable.",
+                )
+            return
+
+        win = tk.Toplevel(self)
+        win.title("First-Time Setup — OCR Engines")
+        win.configure(bg=BG)
+        win.transient(self)
+        win.resizable(False, False)
+        try:
+            win.grab_set()
+        except Exception:
+            pass
+
+        tk.Label(
+            win, text="Which OCR engines should be installed?", bg=BG, fg=TEXT,
+            font=("Segoe UI", 14, "bold"),
+        ).pack(anchor="w", padx=22, pady=(20, 4))
+        tk.Label(
+            win,
+            text=("Everything is installed automatically from here. Tick only what you need — "
+                  "your choice is remembered, so you will not be asked again.\n"
+                  "More engines can be installed later: Settings → OCR Engines → Install."),
+            bg=BG, fg=MUTED, font=("Segoe UI", 9), justify="left",
+        ).pack(anchor="w", padx=22, pady=(0, 14))
+
+        tk.Label(
+            win, text=f"Running on Python {sys.version.split()[0]}  —  {sys.executable}",
+            bg=BG, fg=MUTED, font=("Segoe UI", 8), wraplength=640, justify="left",
+        ).pack(anchor="w", padx=22, pady=(0, 8))
+        _wrap = tk.Frame(win, bg=PANEL)
+        _wrap.pack(fill=tk.X, padx=22)
+        _cv = tk.Canvas(_wrap, bg=PANEL, highlightthickness=0)
+        _vsb = ttk.Scrollbar(_wrap, orient="vertical", command=_cv.yview)
+        _cv.configure(yscrollcommand=_vsb.set)
+        _vsb.pack(side=tk.RIGHT, fill=tk.Y)
+        _cv.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        body = tk.Frame(_cv, bg=PANEL, padx=18, pady=14)
+        _cv.create_window((0, 0), window=body, anchor="nw")
+        body.bind("<Configure>", lambda e: _cv.configure(scrollregion=_cv.bbox("all")))
+        _cv.bind("<Enter>", lambda e: _cv.bind_all(
+            "<MouseWheel>", lambda ev: _cv.yview_scroll(int(-ev.delta / 120), "units")))
+        _cv.bind("<Leave>", lambda e: _cv.unbind_all("<MouseWheel>"))
+
+        core_missing = oem.missing_core_dependencies()
+        core_var = tk.BooleanVar(value=bool(core_missing))
+        if core_missing:
+            names = ", ".join(lbl for _m, _p, lbl, _r in core_missing)
+            tk.Label(
+                body, text="Required application libraries", bg=PANEL, fg=TEXT,
+                font=("Segoe UI", 10, "bold"),
+            ).pack(anchor="w")
+            ttk.Checkbutton(
+                body,
+                text=f"Install missing application libraries  ({names})",
+                variable=core_var, style="TCheckbutton",
+            ).pack(anchor="w", pady=(2, 8))
+        else:
+            tk.Label(
+                body, text="✓  All required application libraries are already installed.",
+                bg=PANEL, fg=SUCCESS, font=("Segoe UI", 9, "bold"),
+            ).pack(anchor="w", pady=(0, 8))
+
+        tk.Label(
+            body, text="OCR engines", bg=PANEL, fg=TEXT, font=("Segoe UI", 10, "bold"),
+        ).pack(anchor="w")
+
+        engine_vars = {}
+        for key in local_engine_keys():
+            spec = oem.ENGINE_SPECS.get(key, {})
+            installed = local_engine_installed(key)
+            var = tk.BooleanVar(value=installed)
+            engine_vars[key] = var
+            row = tk.Frame(body, bg=PANEL)
+            row.pack(fill=tk.X, pady=4)
+            ttk.Checkbutton(
+                row, text=str(spec.get("label", key)), variable=var, style="TCheckbutton",
+            ).pack(anchor="w")
+            state = "already installed" if installed else f"~{spec.get('size_mb', 0)} MB download"
+            tk.Label(
+                row,
+                text=f"    {spec.get('description', '')}  [{state}]",
+                bg=PANEL, fg=MUTED, font=("Segoe UI", 8), wraplength=620, justify="left",
+            ).pack(anchor="w")
+
+        online_var = tk.BooleanVar(value=True)
+        orow = tk.Frame(body, bg=PANEL)
+        orow.pack(fill=tk.X, pady=(6, 0))
+        ttk.Checkbutton(
+            orow, text="OCR.space (ONLINE mode support)", variable=online_var,
+            style="TCheckbutton",
+        ).pack(anchor="w")
+        tk.Label(
+            orow,
+            text=f"    {oem.ENGINE_SPECS.get('ocr_space', {}).get('description', '')}",
+            bg=PANEL, fg=MUTED, font=("Segoe UI", 8), wraplength=620, justify="left",
+        ).pack(anchor="w")
+
+        # Cap the list height so the window (and its buttons) always fit the screen.
+        win.update_idletasks()
+        _max_h = max(200, win.winfo_screenheight() - 420)
+        _cv.configure(width=body.winfo_reqwidth(),
+                      height=min(body.winfo_reqheight(), _max_h))
+
+        status_var = tk.StringVar(value="")
+        tk.Label(win, textvariable=status_var, bg=BG, fg=ACCENT,
+                 font=("Segoe UI", 9, "bold")).pack(anchor="w", padx=22, pady=(10, 0))
+
+        btns = tk.Frame(win, bg=BG)
+        btns.pack(fill=tk.X, padx=22, pady=(10, 18))
+        cancel_event = threading.Event()
+
+        def _finish_setup(installed_keys):
+            """Remember the answers so this dialog never appears again."""
+            try:
+                oem.invalidate_cache()
+                oem.mark_setup_done(self.cfg, installed_keys)
+                # Keep the concrete engine selections valid: if the configured
+                # local engine is missing but another one was installed, switch.
+                s = self.cfg.setdefault("app_settings", {})
+                if not local_engine_installed(s.get("local_ocr_engine", "tesseract")):
+                    for cand in local_engine_keys():
+                        if local_engine_installed(cand):
+                            s["local_ocr_engine"] = cand
+                            s["ocr_engine"] = cand
+                            try:
+                                self._local_engine_var.set(cand)
+                                self._engine_var.set(cand)
+                            except Exception:
+                                pass
+                            break
+                self._save_config()
+            except Exception as e:
+                logging.error(f"Could not persist engine setup: {e}", exc_info=True)
+            self._refresh_engine_rows()
+            self._refresh_engine_badge()
+            self._refresh_processing_mode_badge()
+
+        def _start_install():
+            wanted = [
+                k for k, v in engine_vars.items()
+                if v.get() and not local_engine_installed(k)
+            ]
+            core_pkgs = oem.core_package_names(core_missing) if core_var.get() else []
+            if not wanted and not core_pkgs:
+                _finish_setup([])
+                win.destroy()
+                if not first_run:
+                    messagebox.showinfo(
+                        "OCR Engines",
+                        "Nothing needed installing — every selected engine is already available.",
+                    )
+                return
+
+            start_btn.configure(state="disabled")
+            skip_btn.configure(state="disabled")
+            status_var.set(
+                "Installing… please wait (progress is also written to the Settings install log)."
+            )
+
+            def worker():
+                installed = []
+                if core_pkgs:
+                    self._engine_install_log_line("===== Installing application libraries =====")
+                    ok, msg = oem.install_packages(
+                        core_pkgs, log=self._engine_install_log_line, cancel=cancel_event
+                    )
+                    self._engine_install_log_line(("✓ " if ok else "✗ ") + msg.splitlines()[0])
+                for key in wanted:
+                    label = ENGINE_LABELS.get(key, key)
+                    self._engine_install_status_var_set(f"Installing {label} …")
+                    self._engine_install_log_line(f"===== Installing {label} =====")
+                    try:
+                        ok, _msg = oem.install_engine(
+                            key, log=self._engine_install_log_line, cancel=cancel_event
+                        )
+                    except Exception as exc:
+                        ok = False
+                        self._engine_install_log_line(f"!! {exc}")
+                    if ok:
+                        installed.append(key)
+
+                def done():
+                    _finish_setup(installed)
+                    ok_names = ", ".join(ENGINE_LABELS.get(k, k) for k in installed)
+                    status_var.set(
+                        "Setup complete." + (f" Installed: {ok_names}." if ok_names else "")
+                    )
+                    self._engine_install_status_var.set("First-time setup finished.")
+                    win.destroy()
+                    if not first_run:
+                        messagebox.showinfo(
+                            "First-Time Setup",
+                            "Engine setup finished.\n\n"
+                            + (f"Installed: {ok_names}\n" if ok_names else "")
+                            + "More engines can be installed any time from "
+                              "Settings → OCR Engines.",
+                        )
+
+                try:
+                    self.after(0, done)
+                except Exception:
+                    pass
+
+            threading.Thread(target=worker, daemon=True, name="first-run-setup").start()
+
+        def _skip_all():
+            cancel_event.set()
+            _finish_setup([])
+            win.destroy()
+
+        start_btn = ttk.Button(
+            btns, text="⬇  Install selected", style="Accent.TButton", command=_start_install,
+        )
+        start_btn.pack(side=tk.RIGHT)
+        skip_btn = ttk.Button(
+            btns,
+            text=("Continue without installing" if first_run else "Cancel"),
+            command=_skip_all,
+        )
+        skip_btn.pack(side=tk.RIGHT, padx=(0, 8))
+        win.protocol("WM_DELETE_WINDOW", _skip_all)
+
+        # Whatever closes this window (button, title-bar X, or the application
+        # shutting down) the answers are remembered, so the setup question is
+        # only ever asked once.
+        _setup_finalised = {"done": False}
+
+        def _finalise_once(event=None):
+            # <Destroy> also fires for every CHILD widget as the window is torn
+            # down, so only react when the window itself is the target —
+            # otherwise the refresh touches widgets that no longer exist.
+            if event is not None and getattr(event, "widget", None) is not win:
+                return
+            if _setup_finalised["done"]:
+                return
+            _setup_finalised["done"] = True
+            try:
+                _finish_setup([])
+            except Exception as e:
+                # The application may already be shutting down; the answers were
+                # written to config.json when they were given, so failing here
+                # must never break the exit path.
+                logging.debug(f"Engine setup finalisation skipped during teardown: {e}")
+
+        win.bind("<Destroy>", _finalise_once)
+
+        win.update_idletasks()
+        try:
+            x = self.winfo_rootx() + max(0, (self.winfo_width() - win.winfo_width()) // 2)
+            y = self.winfo_rooty() + max(0, (self.winfo_height() - win.winfo_height()) // 3)
+            win.geometry(f"+{x}+{y}")
+        except Exception:
+            pass
+
+    def _install_engine_legacy_hint(self, key):
+        """Manual instructions shown when the automatic installer is missing."""
+        messagebox.showinfo(
+            "Install Engine",
+            f"To install {ENGINE_LABELS.get(key, key)}, run:\n\n"
+            f"  {ENGINE_INSTALL.get(key, '')}",
+        )
+
+    def _install_extra_dependency(self, name: str, pip_spec: str):
+        """Install a small optional dependency (watchdog / plyer) in the background."""
+        if not ENGINE_MANAGER_AVAILABLE:
+            messagebox.showinfo("Install", f"Run manually:\n\n  pip install {pip_spec}")
+            return
+        if self._engine_install_running:
+            messagebox.showinfo(
+                "Installation Running",
+                "Another installation is already running. Please wait for it to finish.",
+            )
+            return
+        if not messagebox.askyesno(
+            "Install " + name,
+            f"Install {name} now?\n\nCommand: pip install {pip_spec}\n\n"
+            f"Progress is shown in Settings → OCR Engines.",
+        ):
+            return
+        self._engine_install_running = True
+        self._engine_install_status_var.set(f"Installing {name} …")
+        self._engine_install_log_line(f"===== Installing {name} =====")
+
+        def worker():
+            try:
+                ok, msg = oem.install_packages([pip_spec], log=self._engine_install_log_line)
+            except Exception as exc:
+                ok, msg = False, str(exc)
+
+            def finish():
+                self._engine_install_running = False
+                self._refresh_engine_rows()
+                if ok:
+                    self._engine_install_status_var.set(f"{name} installed — restart to activate.")
+                    self._set_status(
+                        f"{name} installed — restart the application to use it.", SUCCESS
+                    )
+                    messagebox.showinfo(
+                        "Installation Complete",
+                        f"{name} was installed.\n\nRestart the application so it can be loaded.",
+                    )
+                else:
+                    self._engine_install_status_var.set(f"{name} installation failed.")
+                    messagebox.showerror("Installation Failed", msg)
+
+            try:
+                self.after(0, finish)
+            except Exception:
+                pass
+
+        threading.Thread(target=worker, daemon=True, name=f"install-{name}").start()
+
 
     def _browse_base_folder(self):
         f = filedialog.askdirectory(initialdir=self._base_var.get() or self.dirs["base"])
@@ -5689,9 +7735,20 @@ class MaafushivaruHub(tk.Tk, OCRWorkerMixin):
         s["processing_mode"] = self._processing_mode_var.get()
         s["dry_run"] = bool(self._dry_run_var.get())
         s["desktop_notifications"] = bool(self._notify_var.get())
+        s["grn_processing_engine"] = self._grn_engine_var.get()
+        s["local_ocr_engine"] = self._engine_var.get()
+        s["ocr_engine"] = self._engine_var.get()
+        try:
+            s["online_ocr_engine"] = int(self._online_engine_var.get())
+        except (TypeError, ValueError):
+            s["online_ocr_engine"] = 2
+        s["auto_ingest_enabled"] = bool(self._auto_ingest_enabled_var.get())
+        # Each mode has its own auto-ingest switch; a PDF is only auto-ingested
+        # when its own mode is active, so enabling one never enables the other.
         s["auto_ingest_offline"] = bool(self._watcher_offline_var.get())
         s["auto_ingest_api"] = bool(self._watcher_api_var.get())
-        s["auto_ingest_watcher"] = s["auto_ingest_offline"] or s["auto_ingest_api"]
+        s["auto_ingest_enabled"] = bool(s["auto_ingest_offline"] or s["auto_ingest_api"])
+        s["auto_ingest_watcher"] = s["auto_ingest_enabled"]
         s["confidence_warn_threshold"] = int(self._conf_threshold_var.get())
         s["page_scan_region_enabled"] = bool(self._page_scan_enabled_var.get())
         s["page_scan_region_percent"] = int(self._page_scan_percent_var.get())
@@ -5722,7 +7779,10 @@ class MaafushivaruHub(tk.Tk, OCRWorkerMixin):
         ocr_space["isOverlayRequired"] = False
         ocr_space["detectOrientation"] = True
         ocr_space["scale"] = True
-        ocr_space["OCREngine"] = int(self._ocr_space_engine_var.get())
+        try:
+            ocr_space["OCREngine"] = int(self._online_engine_var.get())
+        except (TypeError, ValueError):
+            ocr_space["OCREngine"] = int(self._ocr_space_engine_var.get())
         ocr_space["isTable"] = False
         ocr_space["filetype"] = "PDF"
         ocr_space["timeout_seconds"] = 30
@@ -7686,6 +9746,14 @@ class MaafushivaruHub(tk.Tk, OCRWorkerMixin):
     # ------------------------------------------------------------------
     def _cleanup_on_exit(self):
         """Stop watcher, cancel pending timers, and release resources on app exit."""
+        # Tk does not automatically suppress every scheduled callback when a
+        # root window is destroyed. Cancel all registered callbacks first so a
+        # watcher/log refresh cannot attempt to update a closed interface.
+        try:
+            for callback_id in self.tk.call("after", "info"):
+                self.after_cancel(callback_id)
+        except Exception as e:
+            logging.debug(f"Cleanup: after-cancel skipped: {e}")
         try:
             self._stop_watcher()
         except Exception as e:

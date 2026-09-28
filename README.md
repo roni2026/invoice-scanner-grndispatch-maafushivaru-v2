@@ -39,7 +39,7 @@ The app reads scanned PDFs, extracts the text, figures out *which supplier* the 
 1. **Ingest** — Pull documents straight from a scanner (Windows WIA) or from a watched `SCANNED/` folder. PDFs can be auto-renamed to a clean `Scan_001.pdf … Scan_NNN.pdf` sequence.
 2. **Read the page (OCR)** — Text is extracted using one of several engines:
    - **Tesseract** (local, default) with image enhancement, scaling and configurable PSM/OEM modes;
-   - **OCR.space API** (cloud) for the "AI Extract" workflow;
+   - **OCR.space API** (cloud) through the same **GRN Dispatch** workflow;
    - optional **PaddleOCR / EasyOCR** engines (installed on demand).
    The app can read **only the relevant zone** (fast header scan) or the **full page**, and only the pages that are actual *Receiving Reports* (detected by `RC-MAM-…` and PO-number patterns) are kept — trimming away noise.
 3. **Identify the supplier** — Raw OCR text is rarely clean, so the app uses a layered matching system:
@@ -68,9 +68,7 @@ The GUI is a single Tkinter app (`MaafushivaruHub`) organized into tabs:
 |---|---|
 | **Dashboard** | Live status, counts, and at-a-glance processing overview. |
 | **Scan** | Acquire pages directly from a scanner via Windows WIA (page size, DPI, color mode, duplex, auto-orient, preview). |
-| **Renamer** | OCR + extract from scanned PDFs and rename them consistently (with a **Dry Run** preview before committing). |
-| **AI Extract** | Trim PDFs to receiving-report pages, OCR them via OCR.space, extract fields, then *"Send to Tabs"*. |
-| **Dispatch** | Review extracted rows and **export the GRN Excel register**. |
+| **GRN Dispatch** | One review-and-finalise workspace. Select **Online — OCR.space API** or **Offline — Tesseract (Local)**, process queued PDFs serially, review/edit the shared results, then choose **Process All** to rename and register them. Offline reads the original PDFs directly at native resolution with no API-size compression. |
 | **Settings** | Choose OCR engine & mode, matching strategy, thresholds, AI provider/key, folders, notifications, auto-ingest, etc. |
 | **About** | App / version info. |
 
@@ -78,8 +76,8 @@ The GUI is a single Tkinter app (`MaafushivaruHub`) organized into tabs:
 
 | File | Role |
 |---|---|
-| `maafushivaru_hub.py` | Main application & GUI — the document-processing hub (v5.0). |
-| `aiextracttab.py` | "AI Extract" tab: page trimming + OCR.space + field extraction. |
+| `maafushivaru_hub.py` | Main application & GUI — the document-processing hub (v5.3). |
+| `aiextracttab.py` | Unified GRN Dispatch workspace: OCR.space or local Tesseract plus shared field extraction. |
 | `scan_tab.py` | Scanner acquisition tab (Windows WIA via pywin32). |
 | `ai_supplier_matcher.py` | OCR.space client + optional AI (OpenAI / local) supplier matcher. |
 | `supplier_matcher.py` | Multiple selectable fuzzy supplier-matching strategies. |
@@ -106,6 +104,7 @@ The GUI is a single Tkinter app (`MaafushivaruHub`) organized into tabs:
 - 👀 **Dry Run mode** — preview every rename/extract before anything is moved.
 - 📈 **Confidence scoring** — low-certainty results are flagged for review.
 - 🔔 **Desktop notifications** & **auto-ingest watcher** (watchdog) for hands-free processing.
+- 🔄 **Unified online/offline queue** — choose OCR.space or local Tesseract once; every rapidly scanned PDF is processed one at a time in scanner serial order.
 - 🧵 **Multi-threaded** processing for speed.
 - 🧠 **Self-learning aliases** — new supplier spellings can be remembered.
 - 📝 **Full logging** to `LOGS/` for traceability.
@@ -155,7 +154,8 @@ Open `config.json` and review:
 - `patterns` — GRN/PO prefixes & digit rules (`RC-MAM-`, `MAM-`, …);
 - `app_settings` — OCR engine/mode, matching strategy, thresholds, folders;
 - `ai_settings` — enable AI matching and add your OpenAI (or local) API key;
-- `ocr_space` — OCR.space API key for the AI Extract workflow.
+- `ocr_space` — OCR.space API key for the online GRN Dispatch engine.
+- `app_settings.grn_processing_engine` — `online` (OCR.space) or `offline` (local Tesseract); this also controls auto-ingest.
 
 ### 3. Run
 
@@ -165,8 +165,8 @@ python maafushivaru_hub.py
 
 Then:
 1. **Scan** or drop PDFs into the `SCANNED/` folder.
-2. Use **Renamer** / **AI Extract** to OCR and extract (try **Dry Run** first).
-3. Review rows in **Dispatch** and **Export to Excel**.
+2. Open **GRN Dispatch**, choose **Online — OCR.space API** or **Offline — Tesseract (Local)**, and select **Process New PDFs**.
+3. Review/edit the shared result rows, then choose **Process All** to rename and register them; use **Export Excel** whenever needed.
 
 > 💡 **Tip:** Use `pdfrename.py` to quickly standardize a folder of PDFs:
 > ```bash
@@ -180,7 +180,7 @@ Then:
 ```
 .
 ├── maafushivaru_hub.py        # Main GUI application (the Hub)
-├── aiextracttab.py            # AI Extract tab (OCR.space + extraction)
+├── aiextracttab.py            # Unified GRN Dispatch tab (OCR.space / local OCR)
 ├── scan_tab.py                # Scanner capture tab (Windows WIA)
 ├── ai_supplier_matcher.py     # OCR.space + AI supplier matcher
 ├── supplier_matcher.py        # Fuzzy matching strategies

@@ -758,7 +758,7 @@
         "grn_min_digits": 4,
         "grn_max_digits": 12,
         "po_prefix": "MAM-",
-        "po_min_digits": 3,
+        "po_min_digits": 4,
         "po_digits": 9,
         "po_variable_digits": 6,
         "grn_variable_digits": 5
@@ -769,8 +769,10 @@
         "dry_run": false,
         "desktop_notifications": true,
         "auto_ingest_watcher": true,
-        "auto_ingest_offline": false,
-        "auto_ingest_api": true,
+        "auto_ingest_offline": true,
+        "auto_ingest_api": false,
+        "auto_ingest_enabled": true,
+        "grn_processing_engine": "offline",
         "receiving_label_fuzzy": true,
         "delete_temp_after_send": true,
         "confidence_warn_threshold": 80,
@@ -780,14 +782,14 @@
         "ocr_mode": "zone",
         "ocr_word_correction_enabled": false,
         "smart_cross_match_enabled": false,
-        "ocr_engine": "tesseract",
+        "ocr_engine": "paddleocr",
         "extract_text_before_ocr": true,
-        "enhance_images": true,
+        "enhance_images": false,
         "ocr_fallback_to_tesseract": true,
         "enable_multi_threading": true,
         "max_threads": 4,
         "fuzzy_match_threshold": 85,
-        "image_scale_factor": 2,
+        "image_scale_factor": 4,
         "extraction_source": "auto",
         "processed_transfer_path": "C:\\Users\\MAM-STORES\\OneDrive - outrigger.com\\Stores Shared\\STORE\\SCAN STORES\\2026",
         "grn_next_dispatch_no": 25,
@@ -799,7 +801,31 @@
         "hp_captured_button_text": "",
         "hp_captured_button_class": "",
         "hp_captured_control_type": "Pane",
-        "auto_fix_supplier_by_invoice_pattern": true
+        "auto_fix_supplier_by_invoice_pattern": true,
+        "local_ocr_engine": "paddleocr",
+        "online_ocr_engine": 2,
+        "serial_scan_next": 11,
+        "engine_setup_completed": true,
+        "engine_setup_state": {
+            "tesseract": {
+                "installed": true,
+                "checked_at": "2026-09-28 17:35:32"
+            },
+            "paddleocr": {
+                "installed": false,
+                "checked_at": "2026-09-28 17:35:32"
+            },
+            "easyocr": {
+                "installed": false,
+                "checked_at": "2026-09-28 17:35:32"
+            },
+            "ocr_space": {
+                "installed": false,
+                "checked_at": "2026-09-28 17:35:32"
+            }
+        },
+        "paddleocr_install_dir": "C:\\PaddleOCR",
+        "paddleocr_venv_dir": "C:\\PaddleOCR\\venv"
     },
     "ai_settings": {
         "enabled": false,
